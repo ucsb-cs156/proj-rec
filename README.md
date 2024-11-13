@@ -2,6 +2,9 @@
 
 Recommendation Request Manager
 
+Sprint Planning Doc for F24:
+* <https://docs.google.com/document/d/1XsaIPgepB4uA3owsH8eszXbW2mHFTuW5_bT49K8PcuU/edit?tab=t.0>
+
 # Versions
 * Java: 21
 * node: 20.17.0
