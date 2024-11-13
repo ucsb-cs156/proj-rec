@@ -1,4 +1,4 @@
-package edu.ucsb.cs156.example;
+package edu.ucsb.cs156.rec;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

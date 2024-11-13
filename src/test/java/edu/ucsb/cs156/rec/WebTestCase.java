@@ -1,4 +1,4 @@
-package edu.ucsb.cs156.example;
+package edu.ucsb.cs156.rec;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.extension.responsetemplating.ResponseTemplateTransformer;

@@ -48,7 +48,7 @@
   <properties>
     <java.version>21</java.version>
     <mainClass>edu.ucsb.cs156.rec.ExampleApplication</mainClass>
-    <app.package>edu.ucsb.cs156.example</app.package>
+    <app.package>edu.ucsb.cs156.rec</app.package>
     <app.packagePath>edu/ucsb/cs156/example</app.packagePath>
     <targetClasses>${targetClasses:edu.ucsb.cs156.*}</targetClasses>
     <!-- https://mvnrepository.com/artifact/com.github.eirslett/frontend-maven-plugin -->
