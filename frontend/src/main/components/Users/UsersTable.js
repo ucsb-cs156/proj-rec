@@ -1,27 +1,26 @@
-import OurTable, {ButtonColumn} from "main/components/OurTable";
+import OurTable, { ButtonColumn } from "main/components/OurTable";
 import { useBackendMutation } from "main/utils/useBackend";
 
 export default function UsersTable({ users }) {
-  
   // Toggle Admin User
   function cellToAxiosParamsToggleAdmin(cell) {
     return {
       url: "/api/admin/users/toggleAdmin",
       method: "POST",
       params: {
-          id: cell.row.values.id
-      }
+        id: cell.row.values.id,
+      },
     };
   }
   // Stryker disable all : hard to test for query caching
   const toggleAdminMutation = useBackendMutation(
     cellToAxiosParamsToggleAdmin,
     {},
-    ["/api/admin/users"]
+    ["/api/admin/users"],
   );
-  // Stryker enable all 
+  // Stryker enable all
 
-  // Stryker disable next-line all 
+  // Stryker disable next-line all
   const toggleAdminCallBack = (cell) => {
     toggleAdminMutation.mutate(cell);
   };
@@ -32,8 +31,8 @@ export default function UsersTable({ users }) {
       url: "/api/admin/users/toggleProfessor",
       method: "POST",
       params: {
-          id: cell.row.values.id
-      }
+        id: cell.row.values.id,
+      },
     };
   }
 
@@ -41,11 +40,11 @@ export default function UsersTable({ users }) {
   const toggleProfessorMutation = useBackendMutation(
     cellToAxiosParamsToggleProfessor,
     {},
-    ["/api/admin/users"]
+    ["/api/admin/users"],
   );
-  // Stryker enable all 
+  // Stryker enable all
 
-  // Stryker disable next-line all 
+  // Stryker disable next-line all
   const toggleProfessorCallBack = (cell) => {
     toggleProfessorMutation.mutate(cell);
   };
@@ -56,8 +55,8 @@ export default function UsersTable({ users }) {
       url: "/api/admin/users/toggleStudent",
       method: "POST",
       params: {
-          id: cell.row.values.id
-      }
+        id: cell.row.values.id,
+      },
     };
   }
 
@@ -65,11 +64,11 @@ export default function UsersTable({ users }) {
   const toggleStudentMutation = useBackendMutation(
     cellToAxiosParamsToggleStudent,
     {},
-    ["/api/admin/users"]
+    ["/api/admin/users"],
   );
-  // Stryker enable all 
+  // Stryker enable all
 
-  // Stryker disable next-line all 
+  // Stryker disable next-line all
   const toggleStudentCallBack = (cell) => {
     toggleStudentMutation.mutate(cell);
   };
@@ -99,25 +98,33 @@ export default function UsersTable({ users }) {
     {
       Header: "Professor",
       id: "professor",
-      accessor: (row, _rowIndex) => String(row.professor), 
+      accessor: (row, _rowIndex) => String(row.professor),
     },
     {
       Header: "Student",
       id: "student",
       accessor: (row, _rowIndex) => String(row.student),
-    }
+    },
   ];
 
   const buttonColumns = [
     ...columns,
     ButtonColumn("Toggle Admin", "primary", toggleAdminCallBack, "UsersTable"),
-    ButtonColumn("Toggle Professor", "primary", toggleProfessorCallBack, "UsersTable"),
-    ButtonColumn("Toggle Student", "primary", toggleStudentCallBack, "UsersTable"),
-  ]
+    ButtonColumn(
+      "Toggle Professor",
+      "primary",
+      toggleProfessorCallBack,
+      "UsersTable",
+    ),
+    ButtonColumn(
+      "Toggle Student",
+      "primary",
+      toggleStudentCallBack,
+      "UsersTable",
+    ),
+  ];
 
-  return <OurTable 
-    data={users}
-    columns={buttonColumns} 
-    testid={"UsersTable"} 
-  />;
+  return (
+    <OurTable data={users} columns={buttonColumns} testid={"UsersTable"} />
+  );
 }

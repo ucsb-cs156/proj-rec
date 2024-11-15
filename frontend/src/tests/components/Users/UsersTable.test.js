@@ -7,27 +7,45 @@ describe("UserTable tests", () => {
   const queryClient = new QueryClient();
   test("renders without crashing for empty table", () => {
     render(
-    <QueryClientProvider client={queryClient}>
-      <UsersTable users={[]} />
-    </QueryClientProvider>);
+      <QueryClientProvider client={queryClient}>
+        <UsersTable users={[]} />
+      </QueryClientProvider>,
+    );
   });
 
   test("renders without crashing for three users", () => {
     render(
-    <QueryClientProvider client={queryClient}>
-    <UsersTable users={usersFixtures.threeUsers} />
-    </QueryClientProvider>);
+      <QueryClientProvider client={queryClient}>
+        <UsersTable users={usersFixtures.threeUsers} />
+      </QueryClientProvider>,
+    );
   });
 
   test("Has the expected colum headers and content", () => {
     render(
-    <QueryClientProvider client={queryClient}>
-    <UsersTable users={usersFixtures.threeUsers} />
-    </QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <UsersTable users={usersFixtures.threeUsers} />
+      </QueryClientProvider>,
     );
 
-    const expectedHeaders = ["id", "First Name", "Last Name", "Email", "Admin", "Professor", "Student"];
-    const expectedFields = ["id", "givenName", "familyName", "email", "admin", "professor", "student"];
+    const expectedHeaders = [
+      "id",
+      "First Name",
+      "Last Name",
+      "Email",
+      "Admin",
+      "Professor",
+      "Student",
+    ];
+    const expectedFields = [
+      "id",
+      "givenName",
+      "familyName",
+      "email",
+      "admin",
+      "professor",
+      "student",
+    ];
     const testId = "UsersTable";
 
     expectedHeaders.forEach((headerText) => {
