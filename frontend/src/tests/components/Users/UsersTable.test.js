@@ -1,18 +1,30 @@
 import { render, screen } from "@testing-library/react";
+import { QueryClient, QueryClientProvider } from "react-query";
 import usersFixtures from "fixtures/usersFixtures";
 import UsersTable from "main/components/Users/UsersTable";
 
 describe("UserTable tests", () => {
+  const queryClient = new QueryClient();
   test("renders without crashing for empty table", () => {
-    render(<UsersTable users={[]} />);
+    render(
+    <QueryClientProvider client={queryClient}>
+      <UsersTable users={[]} />
+    </QueryClientProvider>);
   });
 
   test("renders without crashing for three users", () => {
-    render(<UsersTable users={usersFixtures.threeUsers} />);
+    render(
+    <QueryClientProvider client={queryClient}>
+    <UsersTable users={usersFixtures.threeUsers} />
+    </QueryClientProvider>);
   });
 
   test("Has the expected colum headers and content", () => {
-    render(<UsersTable users={usersFixtures.threeUsers} />);
+    render(
+    <QueryClientProvider client={queryClient}>
+    <UsersTable users={usersFixtures.threeUsers} />
+    </QueryClientProvider>
+    );
 
     const expectedHeaders = ["id", "First Name", "Last Name", "Email", "Admin", "Professor", "Student"];
     const expectedFields = ["id", "givenName", "familyName", "email", "admin", "professor", "student"];
