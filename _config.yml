@@ -23,4 +23,4 @@ repo_name: "TBD"
 repo: ucsb-cs156/proj-rec
 owner: ucsb-cs156
 repo_name: proj-rec
-pull_requests: []
+pull_requests: [{"author":{"id":"MDQ6VXNlcjExMTkwMTc=","is_bot":false,"login":"pconrad","name":"Phill Conrad"},"headRefName":"pc-fix-pom-xml-causing-jacoco-errors","number":10,"title":"pc - update pom.xml to fix changing \"example\" to \"rec\" in path names","url":"https://github.com/ucsb-cs156/proj-rec/pull/10"}]
