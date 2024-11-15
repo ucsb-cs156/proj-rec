@@ -1,4 +1,4 @@
-package edu.ucsb.cs156.example.web;
+package edu.ucsb.cs156.rec.web;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,7 +10,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
-import edu.ucsb.cs156.example.WebTestCase;
+import edu.ucsb.cs156.rec.WebTestCase;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)

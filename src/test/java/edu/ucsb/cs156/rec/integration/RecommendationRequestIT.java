@@ -1,4 +1,4 @@
-package edu.ucsb.cs156.example.integration;
+package edu.ucsb.cs156.rec.integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -26,12 +26,12 @@ import java.time.LocalDateTime;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
-import edu.ucsb.cs156.example.entities.RecommendationRequest;
-import edu.ucsb.cs156.example.repositories.RecommendationRequestRepository;
-import edu.ucsb.cs156.example.repositories.UserRepository;
-import edu.ucsb.cs156.example.services.CurrentUserService;
-import edu.ucsb.cs156.example.services.GrantedAuthoritiesService;
-import edu.ucsb.cs156.example.testconfig.TestConfig;
+import edu.ucsb.cs156.rec.entities.RecommendationRequest;
+import edu.ucsb.cs156.rec.repositories.RecommendationRequestRepository;
+import edu.ucsb.cs156.rec.repositories.UserRepository;
+import edu.ucsb.cs156.rec.services.CurrentUserService;
+import edu.ucsb.cs156.rec.services.GrantedAuthoritiesService;
+import edu.ucsb.cs156.rec.testconfig.TestConfig;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
