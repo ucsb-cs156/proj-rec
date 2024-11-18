@@ -1,6 +1,5 @@
 package edu.ucsb.cs156.rec.controllers;
 
-import edu.ucsb.cs156.rec.errors.EntityAlreadyExistsException;
 import edu.ucsb.cs156.rec.errors.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -47,20 +46,6 @@ public abstract class ApiController {
   @ExceptionHandler({ EntityNotFoundException.class })
   @ResponseStatus(HttpStatus.NOT_FOUND)
   public Object handleGenericException(Throwable e) {
-    return Map.of(
-      "type", e.getClass().getSimpleName(),
-      "message", e.getMessage()
-    );
-  }
-
-  /**
-   * This method handles the EntityAlreadyExistsException.
-   * @param e the exception
-   * @return a map with the type and message of the exception
-   */
-  @ExceptionHandler({ EntityAlreadyExistsException.class })
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public Object handleGenericException(EntityAlreadyExistsException e) {
     return Map.of(
       "type", e.getClass().getSimpleName(),
       "message", e.getMessage()
