@@ -6,7 +6,7 @@ const requestTypeFixtures = {
     },
   ],
 
-  threeRequestType: [
+  threeRequestTypes: [
     {
       id: 2,
       requestType: "Scholarship or Fellowship",
