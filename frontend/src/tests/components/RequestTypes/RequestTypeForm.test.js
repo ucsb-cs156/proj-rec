@@ -40,7 +40,9 @@ describe("RequestForm tests", () => {
     render(
       <QueryClientProvider client={queryClient}>
         <Router>
-          <RequestTypeForm initialContents={requestTypeFixtures.oneRequestType} />
+          <RequestTypeForm
+            initialContents={requestTypeFixtures.oneRequestType}
+          />
         </Router>
       </QueryClientProvider>,
     );
