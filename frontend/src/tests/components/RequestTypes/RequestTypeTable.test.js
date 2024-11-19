@@ -102,6 +102,60 @@ describe("RequestTypeTable tests", () => {
     expect(deleteButton).toHaveClass("btn-danger");
   });
 
+  test("Has the expected column headers, content and buttons for instructor user", () => {
+    // arrange
+    const currentUser = currentUserFixtures.instructorUser;
+
+    // act
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <RequestTypeTable
+            requestTypes={requestTypeFixtures.threeRequestTypes}
+            currentUser={currentUser}
+          />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    // assert
+    expectedHeaders.forEach((headerText) => {
+      const header = screen.getByText(headerText);
+      expect(header).toBeInTheDocument();
+    });
+
+    expectedFields.forEach((field) => {
+      const header = screen.getByTestId(`${testId}-cell-row-0-col-${field}`);
+      expect(header).toBeInTheDocument();
+    });
+
+    expect(screen.getByTestId(`${testId}-cell-row-0-col-id`)).toHaveTextContent(
+      "2",
+    );
+    expect(
+      screen.getByTestId(`${testId}-cell-row-0-col-requestType`),
+    ).toHaveTextContent("Scholarship or Fellowship");
+
+    expect(screen.getByTestId(`${testId}-cell-row-1-col-id`)).toHaveTextContent(
+      "3",
+    );
+    expect(
+      screen.getByTestId(`${testId}-cell-row-1-col-requestType`),
+    ).toHaveTextContent("PhD program");
+
+    const editButton = screen.getByTestId(
+      `${testId}-cell-row-0-col-Edit-button`,
+    );
+    expect(editButton).toBeInTheDocument();
+    expect(editButton).toHaveClass("btn-primary");
+
+    const deleteButton = screen.getByTestId(
+      `${testId}-cell-row-0-col-Delete-button`,
+    );
+    expect(deleteButton).toBeInTheDocument();
+    expect(deleteButton).toHaveClass("btn-danger");
+  });
+
   test("Has the expected column headers, content for ordinary user", () => {
     // arrange
     const currentUser = currentUserFixtures.userOnly;
