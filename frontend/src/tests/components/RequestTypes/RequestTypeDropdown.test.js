@@ -54,9 +54,15 @@ describe("RequestTypeDropdown tests", () => {
     );
 
     // Check that blanks are replaced with hyphens
-    await waitFor(() => expect(screen.getByTestId("ssd1-option-2").toBeInTheDocument));
-    await waitFor(() => expect(screen.getByTestId("ssd1-option-3").toBeInTheDocument));
-    await waitFor(() => expect(screen.getByTestId("ssd1-option-4").toBeInTheDocument));
+    await waitFor(() =>
+      expect(screen.getByTestId("ssd1-option-2").toBeInTheDocument),
+    );
+    await waitFor(() =>
+      expect(screen.getByTestId("ssd1-option-3").toBeInTheDocument),
+    );
+    await waitFor(() =>
+      expect(screen.getByTestId("ssd1-option-4").toBeInTheDocument),
+    );
   });
 
   test("when I select an object, the value changes", async () => {

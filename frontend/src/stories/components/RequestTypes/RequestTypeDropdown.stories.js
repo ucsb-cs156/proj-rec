@@ -29,5 +29,5 @@ OneRequestType.args = {
 
 export const ThreeRequestTypes = Template.bind({});
 ThreeRequestTypes.args = {
-	requestTypes: requestTypeFixtures.threeRequestTypes,
+  requestTypes: requestTypeFixtures.threeRequestTypes,
 };
