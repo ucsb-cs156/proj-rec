@@ -62,6 +62,89 @@ public class RequestTypesControllerTests extends ControllerTestCase {
                 mockMvc.perform(get("/api/requesttypes/all"))
                                 .andExpect(status().is(200)); // logged
         }
+        @Test
+        public void logged_out_users_cannot_get_by_id() throws Exception {
+                mockMvc.perform(get("/api/requesttypes?id=7"))
+                                .andExpect(status().is(403)); // logged out users can't get by id
+        }
+
+        // // Tests with mocks for database actions
+
+        @WithMockUser(roles = { "USER" })
+        @Test
+        public void test_that_logged_in_user_can_get_by_id_when_the_id_exists() throws Exception {
+
+                // arrange
+
+                RequestType requestType = RequestType.builder()
+                                .requestType("CS Department BS/MS program")
+                                .build();
+
+                when(requestTypeRepository.findById(eq(7L))).thenReturn(Optional.of(requestType));
+
+                // act
+                MvcResult response = mockMvc.perform(get("/api/requesttypes?id=7"))
+                                .andExpect(status().isOk()).andReturn();
+
+                // assert
+
+                verify(requestTypeRepository, times(1)).findById(eq(7L));
+                String expectedJson = mapper.writeValueAsString(requestType);
+                String responseString = response.getResponse().getContentAsString();
+                assertEquals(expectedJson, responseString);
+        }
+
+        @WithMockUser(roles = { "USER" })
+        @Test
+        public void test_that_logged_in_user_can_get_by_id_when_the_id_does_not_exist() throws Exception {
+
+                // arrange
+
+                when(requestTypeRepository.findById(eq(7L))).thenReturn(Optional.empty());
+
+                // act
+                MvcResult response = mockMvc.perform(get("/api/requesttypes?id=7"))
+                                .andExpect(status().isNotFound()).andReturn();
+
+                // assert
+
+                verify(requestTypeRepository, times(1)).findById(eq(7L));
+                Map<String, Object> json = responseToJson(response);
+                assertEquals("EntityNotFoundException", json.get("type"));
+                assertEquals("RequestType with id 7 not found", json.get("message"));
+        }
+
+        @WithMockUser(roles = { "USER" })
+        @Test
+        public void logged_in_user_can_get_all_ucsbdates() throws Exception {
+
+                // arrange
+
+                RequestType requestType1 = RequestType.builder()
+                                .requestType("CS Department BS/MS program")
+                                .build();
+
+                RequestType requestType2 = RequestType.builder()
+                                .requestType("Scholarship or Fellowship")
+                                .build();
+
+                ArrayList<RequestType> expectedRequestTypes = new ArrayList<>();
+                expectedRequestTypes.addAll(Arrays.asList(requestType1, requestType2));
+
+                when(requestTypeRepository.findAll()).thenReturn(expectedRequestTypes);
+
+                // act
+                MvcResult response = mockMvc.perform(get("/api/requesttypes/all"))
+                                .andExpect(status().isOk()).andReturn();
+
+                // assert
+
+                verify(requestTypeRepository, times(1)).findAll();
+                String expectedJson = mapper.writeValueAsString(expectedRequestTypes);
+                String responseString = response.getResponse().getContentAsString();
+                assertEquals(expectedJson, responseString);
+        }
+        
         // Authorization tests for /api/phones/post
         // (Perhaps should also have these for put and delete)
 
