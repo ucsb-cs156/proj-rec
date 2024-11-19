@@ -50,6 +50,20 @@ public class RequestTypesControllerTests extends ControllerTestCase {
         // Authorization tests for /api/phones/admin/all
 
 
+        @Test
+        public void logged_out_users_cannot_get_all() throws Exception {
+                mockMvc.perform(get("/api/requesttypes/all"))
+                                .andExpect(status().is(403)); // logged out users can't get all
+        }
+        
+        @WithMockUser(roles = { "USER" })
+        @Test
+        public void logged_in_users_can_get_all() throws Exception {
+                mockMvc.perform(get("/api/requesttypes/all"))
+                                .andExpect(status().is(200)); // logged
+        }
+
+
         // Authorization tests for /api/phones/post
         // (Perhaps should also have these for put and delete)
 
