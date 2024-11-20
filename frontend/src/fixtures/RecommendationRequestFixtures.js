@@ -9,9 +9,10 @@ const recommendationRequestFixtures = {
       completionDate: "2022-02-02T12:00",
       status: "PENDING",
       details: "test details",
-      recommendationTypes: "this type",
+      recommendationTypes: "CS Department BS/MS program",
     },
   ],
+
   threeRecommendations: [
     {
       id: 2,
@@ -19,11 +20,12 @@ const recommendationRequestFixtures = {
       professorEmail: "testemail1@ucsb.edu",
       requesterName: "recname1",
       submissionDate: "2022-02-02T12:00",
-      completionDate: "2022-02-02T12:00",
+      completionDate: "",
       status: "PENDING",
       details: "test details",
-      recommendationTypes: "this type 1",
+      recommendationTypes: "CS Department BS/MS program",
     },
+
     {
       id: 3,
       professorName: "testname2",
@@ -33,8 +35,9 @@ const recommendationRequestFixtures = {
       completionDate: "2022-02-02T12:00",
       status: "COMPLETED",
       details: "test details",
-      recommendationTypes: "this type 2",
+      recommendationTypes: "MS program (other than CS Dept BS/MS)",
     },
+
     {
       id: 4,
       professorName: "testname3",
@@ -44,8 +47,9 @@ const recommendationRequestFixtures = {
       completionDate: "2022-02-02T12:00",
       status: "DENIED",
       details: "test details",
-      recommendationTypes: "this type 3",
+      recommendationTypes: "Scholarship or Fellowship",
     },
   ],
 };
+
 export { recommendationRequestFixtures };
