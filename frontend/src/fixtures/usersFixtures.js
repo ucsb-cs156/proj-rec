@@ -13,7 +13,7 @@ const usersFixtures = {
       locale: "en",
       hostedDomain: "ucsb.edu",
       admin: true,
-      professor: false, 
+      professor: false,
       student: false,
     },
     {
