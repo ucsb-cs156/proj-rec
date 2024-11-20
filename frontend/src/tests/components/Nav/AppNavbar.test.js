@@ -18,7 +18,7 @@ describe("AppNavbar tests", () => {
         <MemoryRouter>
           <AppNavbar currentUser={currentUser} doLogin={doLogin} />
         </MemoryRouter>
-      </QueryClientProvider>,
+      </QueryClientProvider>
     );
 
     await screen.findByText("Welcome, pconrad.cis@gmail.com");
@@ -33,7 +33,7 @@ describe("AppNavbar tests", () => {
         <MemoryRouter>
           <AppNavbar currentUser={currentUser} doLogin={doLogin} />
         </MemoryRouter>
-      </QueryClientProvider>,
+      </QueryClientProvider>
     );
 
     await screen.findByText("Welcome, phtcon@ucsb.edu");
@@ -56,7 +56,7 @@ describe("AppNavbar tests", () => {
             doLogin={doLogin}
           />
         </MemoryRouter>
-      </QueryClientProvider>,
+      </QueryClientProvider>
     );
 
     await screen.findByText("H2Console");
@@ -81,15 +81,15 @@ describe("AppNavbar tests", () => {
             doLogin={doLogin}
           />
         </MemoryRouter>
-      </QueryClientProvider>,
+      </QueryClientProvider>
     );
 
     await screen.findByTestId("AppNavbarLocalhost");
     expect(screen.getByTestId("AppNavbarLocalhost-message1").textContent).toBe(
-      "Running on http://localhost:3000/ with no backend.",
+      "Running on http://localhost:3000/ with no backend."
     );
     expect(screen.getByTestId("AppNavbarLocalhost-message2").textContent).toBe(
-      "You probably want http://localhost:8080 instead.",
+      "You probably want http://localhost:8080 instead."
     );
   });
 
@@ -110,7 +110,7 @@ describe("AppNavbar tests", () => {
             doLogin={doLogin}
           />
         </MemoryRouter>
-      </QueryClientProvider>,
+      </QueryClientProvider>
     );
 
     await screen.findByTestId("AppNavbarLocalhost");
@@ -133,7 +133,7 @@ describe("AppNavbar tests", () => {
             doLogin={doLogin}
           />
         </MemoryRouter>
-      </QueryClientProvider>,
+      </QueryClientProvider>
     );
 
     await screen.findByTestId("AppNavbar");
@@ -155,7 +155,7 @@ describe("AppNavbar tests", () => {
             doLogin={doLogin}
           />
         </MemoryRouter>
-      </QueryClientProvider>,
+      </QueryClientProvider>
     );
 
     await screen.findByText("Restaurants");
@@ -164,7 +164,7 @@ describe("AppNavbar tests", () => {
     expect(link.getAttribute("href")).toBe("/restaurants");
   });
 
-  test("Recommendation Requests link does NOT show when not logged in", async () => {
+  test("Placeholder link does NOT show when not logged in", async () => {
     const currentUser = null;
     const systemInfo = systemInfoFixtures.showingBoth;
     const doLogin = jest.fn();
@@ -178,12 +178,10 @@ describe("AppNavbar tests", () => {
             doLogin={doLogin}
           />
         </MemoryRouter>
-      </QueryClientProvider>,
+      </QueryClientProvider>
     );
 
-    expect(
-      screen.queryByText("Recommendation Requests"),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText("Placeholder")).not.toBeInTheDocument();
   });
 
   test("when oauthlogin undefined, default value is used", async () => {
@@ -195,13 +193,13 @@ describe("AppNavbar tests", () => {
         <MemoryRouter>
           <AppNavbar currentUser={currentUser} systemInfo={systemInfo} />
         </MemoryRouter>
-      </QueryClientProvider>,
+      </QueryClientProvider>
     );
 
     await screen.findByText("Log In");
     expect(screen.getByText("Log In")).toHaveAttribute(
       "href",
-      "/oauth2/authorization/google",
+      "/oauth2/authorization/google"
     );
   });
 });
