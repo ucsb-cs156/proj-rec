@@ -12,10 +12,10 @@ import edu.ucsb.cs156.rec.errors.EntityNotFoundException;
 public class DummyController extends ApiController {
 
     /**
-     * This method returns a single restaurant.
-     * 
-     * @param id id of the restaurant to get
-     * @return a single restaurant
+     * This method allows us to test the EntityNotFoundException and the
+     *  error handler in ApiController
+     * @param id a dummy id
+     * @return "String1" if id is 1, otherwise throw an exception
      */
     @GetMapping("")
     public String getById(@RequestParam Long id) throws EntityNotFoundException {
