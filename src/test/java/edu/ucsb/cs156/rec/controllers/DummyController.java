@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.ucsb.cs156.rec.errors.EntityNotFoundException;
 
+/** The sole purpose of this class is only to provide tests for the
+  *   ApiController and the EntityNotFoundException classes
+  **/
+
 @RequestMapping("/dummycontroller")
 @RestController
 public class DummyController extends ApiController {
