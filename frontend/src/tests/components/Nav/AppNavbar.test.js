@@ -164,7 +164,7 @@ describe("AppNavbar tests", () => {
     expect(link.getAttribute("href")).toBe("/ucsbdates");
   });
 
-  test("UCSBDates links do NOT show when not logged in", async () => {
+  test("Placeholder links do NOT show when not logged in", async () => {
     const currentUser = null;
     const systemInfo = systemInfoFixtures.showingBoth;
     const doLogin = jest.fn();
@@ -181,7 +181,7 @@ describe("AppNavbar tests", () => {
       </QueryClientProvider>,
     );
 
-    expect(screen.queryByText("UCSBDates")).not.toBeInTheDocument();
+    expect(screen.queryByText("Placeholder")).not.toBeInTheDocument();
   });
 
   test("when oauthlogin undefined, default value is used", async () => {
