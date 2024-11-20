@@ -2,29 +2,6 @@ import OurTable, { ButtonColumn } from "main/components/OurTable";
 import { useBackendMutation } from "main/utils/useBackend";
 
 export default function UsersTable({ users }) {
-  // Toggle Admin User
-  function cellToAxiosParamsToggleAdmin(cell) {
-    return {
-      url: "/api/admin/users/toggleAdmin",
-      method: "POST",
-      params: {
-        id: cell.row.values.id,
-      },
-    };
-  }
-  // Stryker disable all : hard to test for query caching
-  const toggleAdminMutation = useBackendMutation(
-    cellToAxiosParamsToggleAdmin,
-    {},
-    ["/api/admin/users"],
-  );
-  // Stryker enable all
-
-  // Stryker disable next-line all
-  const toggleAdminCallBack = (cell) => {
-    toggleAdminMutation.mutate(cell);
-  };
-
   // Toggle Professor User
   function cellToAxiosParamsToggleProfessor(cell) {
     return {
@@ -47,6 +24,29 @@ export default function UsersTable({ users }) {
   // Stryker disable next-line all
   const toggleProfessorCallBack = (cell) => {
     toggleProfessorMutation.mutate(cell);
+  };
+
+  // Toggle Admin User
+  function cellToAxiosParamsToggleAdmin(cell) {
+    return {
+      url: "/api/admin/users/toggleAdmin",
+      method: "POST",
+      params: {
+        id: cell.row.values.id,
+      },
+    };
+  }
+  // Stryker disable all : hard to test for query caching
+  const toggleAdminMutation = useBackendMutation(
+    cellToAxiosParamsToggleAdmin,
+    {},
+    ["/api/admin/users"],
+  );
+  // Stryker enable all
+
+  // Stryker disable next-line all
+  const toggleAdminCallBack = (cell) => {
+    toggleAdminMutation.mutate(cell);
   };
 
   // Toggle Student User

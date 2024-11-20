@@ -1,7 +1,7 @@
 package edu.ucsb.cs156.rec.interceptors;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -54,7 +54,7 @@ public class RoleInterceptor implements HandlerInterceptor {
                 // Retrieve currently assigned ROLES for this user
                 Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
-                // Strip user's current roles???
+                // Strip user's current roles
                 Set<GrantedAuthority> revisedAuthorities = authorities.stream().filter(
                     grantedAuth -> !grantedAuth.getAuthority().equals("ROLE_ADMIN")
                                 && !grantedAuth.getAuthority().equals("ROLE_PROFESSOR")
