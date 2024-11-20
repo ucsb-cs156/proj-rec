@@ -32,7 +32,10 @@ public class User {
   private boolean emailVerified;
   private String locale;
   private String hostedDomain;
-  private boolean admin;
-  private boolean professor;
-  private boolean student;
+  @Builder.Default
+  private boolean admin = false;
+  @Builder.Default
+  private boolean professor = false;
+  @Builder.Default
+  private boolean student = false;
 }
