@@ -1,7 +1,7 @@
 package edu.ucsb.cs156.rec.controllers;
 
-import edu.ucsb.cs156.rec.entities.UCSBDate;
 import edu.ucsb.cs156.rec.errors.EntityNotFoundException;
+import edu.ucsb.cs156.rec.errors.DuplicateArgumentException;
 import edu.ucsb.cs156.rec.repositories.RequestTypeRepository;
 import edu.ucsb.cs156.rec.entities.RequestType;
 
@@ -55,35 +55,22 @@ public class RequestTypesController extends ApiController {
             @Parameter(name="reqType") @RequestParam String reqType)
             throws JsonProcessingException {
 
-
-        RequestType requestType = new RequestType();
-        requestType.setRequestType(reqType);
-        System.out.println(requestType.getRequestType());
-
         // Checks to see if the requestType is a duplicate or not 
-        boolean duplicate = false; 
-        // Iterable<RequestType> allElements = requestTypeRepository.findAll();
-        System.out.println("Made it here");
-        // for (RequestType elem : allElements){
-        //     if (elem.getRequestType() == reqType){
-        //         duplicate = true;
-        //         break;
-        //     }
-        // }
-
-
-        System.out.println("made it here 2");
-
-        // If the requesttype is not a duplicate, it will add it to the requestType repository
-        if (!duplicate){
-            RequestType savedRequestType = requestTypeRepository.save(requestType);
-
-            System.out.println("Made it here 3");
-            return savedRequestType;
+        Iterable<RequestType> allElements = requestTypeRepository.findAll();
+        for (RequestType elem : allElements){
+            if (elem.getRequestType().equals(reqType)){
+                throw new DuplicateArgumentException(reqType);
 
         }
+    }
 
-        return requestType;
+        // Creates the new request type and returns it 
+        RequestType requestType = new RequestType();
+        requestType.setRequestType(reqType);
+        RequestType savedRequestType = requestTypeRepository.save(requestType);
+        return savedRequestType;
+
+
 
     }
 
