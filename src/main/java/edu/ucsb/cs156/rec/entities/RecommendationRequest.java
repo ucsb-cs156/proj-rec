@@ -1,4 +1,4 @@
-package edu.ucsb.cs156.rec.entities;
+package edu.ucsb.cs156.rec.entities; 
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
