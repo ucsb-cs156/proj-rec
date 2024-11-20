@@ -60,5 +60,30 @@ public class SwaggerWebIT {
                 .isVisible();
     }
 
+     /*
+     * This test checks that the Swagger page has a few of then endpoints for the
+     * System and User Information API.
+     * It is probably not necessary to test all controllers or endpoints; we are
+     * mainly checking that
+     * swagger is appropriate configured and operational. Presumably, if one
+     * controller's
+     * endpoints are present, then all controllers' endpoints are present. Think of
+     * it as
+     * a kind of "smoke test" to make sure that Swagger is working, rather than
+     * a comprehensive test of the Swagger page.
+     */
+    @Test
+    public void swagger_page_has_endpoints_for_system_information() throws Exception {
 
+
+        assertThat(
+                page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("System Information").setExact(true)))
+                .isVisible();
+
+        assertThat(page.getByText("Current User Information"))
+                .isVisible();
+
+        assertThat(page.getByText("System Information"))
+                 .isVisible();
+    }
 }
