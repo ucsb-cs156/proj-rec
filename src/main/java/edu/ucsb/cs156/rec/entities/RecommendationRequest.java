@@ -18,11 +18,14 @@ import java.time.LocalDateTime;
 @Entity(name = "recommendationrequest")
 public class RecommendationRequest {
     private String requesterEmail;
+    private String requesterName;
     private String professorEmail;
-    private String explanation;
-    private LocalDateTime dateRequested;
-    private LocalDateTime dateNeeded;
-    private boolean done;
+    private String professorName;
+    private String requestType;
+    private String details;
+    private LocalDateTime submissionDate;
+    private LocalDateTime completionDate;
+    private String status;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

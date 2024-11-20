@@ -41,32 +41,50 @@
                   },
                   {
                     "column": {
+                      "name": "REQUESTER_NAME",
+                      "type": "VARCHAR(255)"
+                    }
+                  },
+                  {
+                    "column": {
                       "name": "PROFESSOR_EMAIL",
                       "type": "VARCHAR(255)"
                     }
                   },
                   {
                     "column": {
-                      "name": "EXPLANATION",
+                      "name": "PROFESSOR_NAME",
                       "type": "VARCHAR(255)"
                     }
                   },
                   {
                     "column": {
-                      "name": "DATE_REQUESTED",
+                      "name": "REQUEST_TYPE",
+                      "type": "VARCHAR(255)"
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "DETAILS",
+                      "type": "VARCHAR(255)"
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "SUBMISSION_DATE",
                       "type": "TIMESTAMP"
                     }
                   },
                   {
                     "column": {
-                      "name": "DATE_NEEDED",
+                      "name": "COMPLETION_DATE",
                       "type": "TIMESTAMP"
                     }
                   },
                   {
                     "column": {
-                      "name": "DONE",
-                      "type": "BOOLEAN"
+                      "name": "STATUS",
+                      "type": "VARCHAR(255)"
                     }
                   }
                 ],
