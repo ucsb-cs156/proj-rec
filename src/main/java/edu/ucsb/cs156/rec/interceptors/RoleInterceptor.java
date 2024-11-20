@@ -28,6 +28,9 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 import edu.ucsb.cs156.rec.entities.User;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Slf4j
 @Component
 public class RoleInterceptor implements HandlerInterceptor {
@@ -57,7 +60,7 @@ public class RoleInterceptor implements HandlerInterceptor {
                 // Strip user's current roles
                 Set<GrantedAuthority> revisedAuthorities = authorities.stream().filter(
                     grantedAuth -> !grantedAuth.getAuthority().equals("ROLE_ADMIN")
-                                && !grantedAuth.getAuthority().equals("ROLE_PROFESSOR")
+                                && !grantedAuth.getAuthority().equals("ROLE_PROFESSOR") 
                                 && !grantedAuth.getAuthority().equals("ROLE_STUDENT"))
                     .collect(Collectors.toSet());
                 

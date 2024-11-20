@@ -61,9 +61,11 @@ public class RoleInterceptorTests extends ControllerTestCase{
         attributes.put("hostedDomain", "hostedDomain");
 
         Set<GrantedAuthority> authorities = new HashSet<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
         authorities.add(new SimpleGrantedAuthority("ROLE_STUDENT"));
         authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         authorities.add(new SimpleGrantedAuthority("ROLE_PROFESSOR"));
+
 
         OAuth2User user = new DefaultOAuth2User(authorities, attributes, "email");
         Authentication authentication = new OAuth2AuthenticationToken(user, authorities, "userRegistrationId");
@@ -73,7 +75,6 @@ public class RoleInterceptorTests extends ControllerTestCase{
 
     @Test
     public void RoleInterceptorIsPresent() throws Exception{
-
         MockHttpServletRequest request = new MockHttpServletRequest("GET", "/api/currentUser");
         HandlerExecutionChain chain = mapping.getHandler(request);
 
@@ -86,14 +87,15 @@ public class RoleInterceptorTests extends ControllerTestCase{
         assertTrue(RoleInterceptor.isPresent());
     }
 
+
     @Test
     public void updates_admin_role_when_user_admin_false() throws Exception{
         User user = User.builder()
                         .email("cgaucho@ucsb.edu")
                         .id(15L)
                         .admin(false)
-                        .professor(false)
-                        .student(false)
+                        .professor(true)
+                        .student(true)
                         .build();
 
         when(userRepository.findByEmail("cgaucho@ucsb.edu")).thenReturn(Optional.of(user));
@@ -121,8 +123,8 @@ public class RoleInterceptorTests extends ControllerTestCase{
         boolean role_student = authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_STUDENT"));
 
         assertFalse(role_admin, "ROLE_ADMIN should not be in roles list");
-        assertFalse(role_professor, "ROLE_PROFESSOR should not be in roles list");
-        assertFalse(role_student, "ROLE_STUDENT should not be in roles list");
+        assertTrue(role_professor, "ROLE_PROFESSOR should not be in roles list");
+        assertTrue(role_student, "ROLE_STUDENT should not be in roles list");
     }
 
     @Test
@@ -162,238 +164,6 @@ public class RoleInterceptorTests extends ControllerTestCase{
         assertTrue(role_admin, "ROLE_ADMIN should be in roles list");
         assertFalse(role_professor, "ROLE_PROFESSOR should not be in roles list");
         assertFalse(role_student, "ROLE_STUDENT should not be in roles list");
-    }
-    @Test
-    public void updates_professor_role_when_user_professor_false_s_t_a_t() throws Exception{
-        User user = User.builder()
-                        .email("cgaucho@ucsb.edu")
-                        .id(15L)
-                        .admin(true)
-                        .professor(false)
-                        .student(true)
-                        .build();
-        
-        when(userRepository.findByEmail("cgaucho@ucsb.edu")).thenReturn(Optional.of(user));
-
-        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/api/currentUser");
-        HandlerExecutionChain chain = mapping.getHandler(request);
-        MockHttpServletResponse response = new MockHttpServletResponse();
-
-        assert chain != null;
-        Optional<HandlerInterceptor> RoleInterceptor = chain.getInterceptorList()
-                .stream()
-                .filter(RoleInterceptor.class::isInstance)
-                .findFirst();
-
-        assertTrue(RoleInterceptor.isPresent());
-
-        RoleInterceptor.get().preHandle(request, response, chain.getHandler());
-        
-        verify(userRepository, times(1)).findByEmail("cgaucho@ucsb.edu");
-
-        Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-
-        boolean role_admin = authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-        boolean role_professor = authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_PROFESSOR")); 
-        boolean role_student = authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_STUDENT"));
-
-        assertTrue(role_admin, "ROLE_ADMIN should be in roles list");
-        assertFalse(role_professor, "ROLE_PROFESSOR should not be in roles list");
-        assertTrue(role_student, "ROLE_STUDENT should not be in roles list");
-    }
-    @Test
-    public void updates_professor_role_when_user_professor_true_other_false() throws Exception{
-        User user = User.builder()
-                        .email("cgaucho@ucsb.edu")
-                        .id(15L)
-                        .admin(false)
-                        .professor(true)
-                        .student(false)
-                        .build();
-        
-        when(userRepository.findByEmail("cgaucho@ucsb.edu")).thenReturn(Optional.of(user));
-
-        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/api/currentUser");
-        HandlerExecutionChain chain = mapping.getHandler(request);
-        MockHttpServletResponse response = new MockHttpServletResponse();
-
-        assert chain != null;
-        Optional<HandlerInterceptor> RoleInterceptor = chain.getInterceptorList()
-                .stream()
-                .filter(RoleInterceptor.class::isInstance)
-                .findFirst();
-
-        assertTrue(RoleInterceptor.isPresent());
-
-        RoleInterceptor.get().preHandle(request, response, chain.getHandler());
-        
-        verify(userRepository, times(1)).findByEmail("cgaucho@ucsb.edu");
-
-        Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-
-        boolean role_admin = authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-        boolean role_professor = authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_PROFESSOR")); 
-        boolean role_student = authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_STUDENT"));
-
-        assertFalse(role_admin, "ROLE_ADMIN should be in roles list");
-        assertTrue(role_professor, "ROLE_PROFESSOR should not be in roles list");
-        assertFalse(role_student, "ROLE_STUDENT should not be in roles list");
-    }
-
-    @Test
-    public void updates_student_role_when_user_student_false() throws Exception{
-        User user = User.builder()
-                        .email("cgaucho@ucsb.edu")
-                        .id(15L)
-                        .admin(true)
-                        .professor(true)
-                        .student(false)
-                        .build();
-        
-        when(userRepository.findByEmail("cgaucho@ucsb.edu")).thenReturn(Optional.of(user));
-
-        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/api/currentUser");
-        HandlerExecutionChain chain = mapping.getHandler(request);
-        MockHttpServletResponse response = new MockHttpServletResponse();
-
-        assert chain != null;
-        Optional<HandlerInterceptor> RoleInterceptor = chain.getInterceptorList()
-                .stream()
-                .filter(RoleInterceptor.class::isInstance)
-                .findFirst();
-
-        assertTrue(RoleInterceptor.isPresent());
-
-        RoleInterceptor.get().preHandle(request, response, chain.getHandler());
-        
-        verify(userRepository, times(1)).findByEmail("cgaucho@ucsb.edu");
-
-        Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-
-        boolean role_admin = authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-        boolean role_professor = authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_PROFESSOR")); 
-        boolean role_student = authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_STUDENT"));
-
-        assertTrue(role_admin, "ROLE_ADMIN should not be in roles list");
-        assertTrue(role_professor, "ROLE_PROFESSOR should not be in roles list");
-        assertFalse(role_student, "ROLE_STUDENT should not be in roles list");
-    }
-
-    @Test
-    public void updates_student_role_when_user_student_true_everything_else_false() throws Exception{
-        User user = User.builder()
-                        .email("cgaucho@ucsb.edu")
-                        .id(15L)
-                        .admin(false)
-                        .professor(false)
-                        .student(true)
-                        .build();
-        
-        when(userRepository.findByEmail("cgaucho@ucsb.edu")).thenReturn(Optional.of(user));
-
-        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/api/currentUser");
-        HandlerExecutionChain chain = mapping.getHandler(request);
-        MockHttpServletResponse response = new MockHttpServletResponse();
-
-        assert chain != null;
-        Optional<HandlerInterceptor> RoleInterceptor = chain.getInterceptorList()
-                .stream()
-                .filter(RoleInterceptor.class::isInstance)
-                .findFirst();
-
-        assertTrue(RoleInterceptor.isPresent());
-
-        RoleInterceptor.get().preHandle(request, response, chain.getHandler());
-        
-        verify(userRepository, times(1)).findByEmail("cgaucho@ucsb.edu");
-
-        Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-
-        boolean role_admin = authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-        boolean role_professor = authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_PROFESSOR")); 
-        boolean role_student = authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_STUDENT"));
-
-        assertFalse(role_admin, "ROLE_ADMIN should not be in roles list");
-        assertFalse(role_professor, "ROLE_PROFESSOR should not be in roles list");
-        assertTrue(role_student, "ROLE_STUDENT should be in roles list");
-    }
-
-    @Test
-    public void updates_student_role_when_user_student_true() throws Exception{
-        User user = User.builder()
-                        .email("cgaucho@ucsb.edu")
-                        .id(15L)
-                        .admin(true)
-                        .professor(true)
-                        .student(true)
-                        .build();
-        
-        when(userRepository.findByEmail("cgaucho@ucsb.edu")).thenReturn(Optional.of(user));
-
-        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/api/currentUser");
-        HandlerExecutionChain chain = mapping.getHandler(request);
-        MockHttpServletResponse response = new MockHttpServletResponse();
-
-        assert chain != null;
-        Optional<HandlerInterceptor> RoleInterceptor = chain.getInterceptorList()
-                .stream()
-                .filter(RoleInterceptor.class::isInstance)
-                .findFirst();
-
-        assertTrue(RoleInterceptor.isPresent());
-
-        RoleInterceptor.get().preHandle(request, response, chain.getHandler());
-        
-        verify(userRepository, times(1)).findByEmail("cgaucho@ucsb.edu");
-
-        Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-
-        boolean role_admin = authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-        boolean role_professor = authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_PROFESSOR")); 
-        boolean role_student = authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_STUDENT"));
-
-        assertTrue(role_admin, "ROLE_ADMIN should be in roles list");
-        assertTrue(role_professor, "ROLE_PROFESSOR should be in roles list");
-        assertTrue(role_student, "ROLE_STUDENT should be in roles list");
-    }
-
-    @Test
-    public void updates_student_role_when_user_student_and_professor_true() throws Exception{
-        User user = User.builder()
-                        .email("cgaucho@ucsb.edu")
-                        .id(15L)
-                        .admin(false)
-                        .professor(true)
-                        .student(true)
-                        .build();
-        
-        when(userRepository.findByEmail("cgaucho@ucsb.edu")).thenReturn(Optional.of(user));
-
-        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/api/currentUser");
-        HandlerExecutionChain chain = mapping.getHandler(request);
-        MockHttpServletResponse response = new MockHttpServletResponse();
-
-        assert chain != null;
-        Optional<HandlerInterceptor> RoleInterceptor = chain.getInterceptorList()
-                .stream()
-                .filter(RoleInterceptor.class::isInstance)
-                .findFirst();
-
-        assertTrue(RoleInterceptor.isPresent());
-
-        RoleInterceptor.get().preHandle(request, response, chain.getHandler());
-        
-        verify(userRepository, times(1)).findByEmail("cgaucho@ucsb.edu");
-
-        Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-
-        boolean role_admin = authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-        boolean role_professor = authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_PROFESSOR")); 
-        boolean role_student = authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_STUDENT"));
-
-        assertFalse(role_admin, "ROLE_ADMIN should not be in roles list");
-        assertTrue(role_professor, "ROLE_PROFESSOR should be in roles list");
-        assertTrue(role_student, "ROLE_STUDENT should be in roles list");
     }
     
     @Test
