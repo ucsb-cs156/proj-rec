@@ -19,6 +19,7 @@ import edu.ucsb.cs156.rec.entities.User;
 import edu.ucsb.cs156.rec.repositories.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Parameter;
 
 /**
  * This is a REST controller for getting information about the users.
@@ -89,7 +90,7 @@ public class UsersController extends ApiController {
     }
 
 
-    @Operation(summary = "Toggle the driver field")
+    @Operation(summary = "Toggle the professor field")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/toggleDriver")
     public Object toggleDriver( @Parameter(name = "id", description = "Long, id number of user to toggle their driver field", example = "1", required = true) @RequestParam Long id){
@@ -97,20 +98,20 @@ public class UsersController extends ApiController {
         User user = userRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(User.class, id));
 
-        user.setDriver(!user.getDriver());
+        user.setProfessor(!user.getProfessor());
         userRepository.save(user);
-        return genericMessage("User with id %s has toggled driver status to %s".formatted(id, user.getDriver()));
+        return genericMessage("User with id %s has toggled driver status to %s".formatted(id, user.getProfessor()));
     }
 
-    @Operation(summary = "Toggle the rider field")
+    @Operation(summary = "Toggle the student field")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/toggleRider")
     public Object toggleRider( @Parameter(name = "id") @RequestParam Long id){
         User user = userRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(User.class, id));
 
-        user.setRider(!user.getRider());
+        user.setStudent(!user.getStudent());
         userRepository.save(user);
-        return genericMessage("User with id %s has toggled rider status to %s".formatted(id, user.getRider()));
+        return genericMessage("User with id %s has toggled rider status to %s".formatted(id, user.getStudent()));
     }
 }
