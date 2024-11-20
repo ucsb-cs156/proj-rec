@@ -3,7 +3,7 @@
       {
         "changeSet": {
           "id": "RequestType-1",
-          "requestType": "CS Department BS/MS program",
+          "author": "ryanzanone",
           "preConditions": [
             {
               "onFail": "MARK_RAN"
