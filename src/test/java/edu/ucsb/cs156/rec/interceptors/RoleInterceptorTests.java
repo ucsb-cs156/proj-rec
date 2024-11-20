@@ -237,6 +237,49 @@ public class RoleInterceptorTests extends ControllerTestCase{
         assertTrue(role_student, "ROLE_STUDENT should be in roles list");
         assertTrue(role_user, "ROLE_USER should be in roles list");
     }
+
+    @Test
+    public void updates_prof_when_user_not_prof() throws Exception{
+        User user = User.builder()
+                .email("joegaucho@ucsb.edu")
+                .id(15L)
+                .admin(true)
+                .student(false)
+                .professor(false)
+                .build();
+
+        when(userRepository.findByEmail("joegaucho@ucsb.edu")).thenReturn(Optional.of(user));  
+        
+        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/api/currentUser");
+        HandlerExecutionChain chain = mapping.getMatchableHandlerMapping(request).getHandler(request);
+        MockHttpServletResponse response = new MockHttpServletResponse();
+
+        assert chain != null;
+        Optional<HandlerInterceptor> RoleInterceptor = chain.getInterceptorList()
+                        .stream()
+                        .filter(RoleInterceptor.class::isInstance)
+                        .findFirst();
+
+        RoleInterceptor.get().preHandle(request, response, chain.getHandler());
+
+        verify(userRepository, times(1)).findByEmail("joegaucho@ucsb.edu");
+
+        Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext()
+            .getAuthentication().getAuthorities();
+
+        boolean role_admin = authorities.stream()
+            .anyMatch(grantedAuth -> grantedAuth.getAuthority().equals("ROLE_ADMIN"));
+        boolean role_professor = authorities.stream()
+            .anyMatch(grantedAuth -> grantedAuth.getAuthority().equals("ROLE_PROFESSOR"));
+        boolean role_student = authorities.stream()
+            .anyMatch(grantedAuth -> grantedAuth.getAuthority().equals("ROLE_STUDENT"));
+        boolean role_user = authorities.stream()
+            .anyMatch(grantedAuth -> grantedAuth.getAuthority().equals("ROLE_USER"));
+        assertTrue(role_admin, "ROLE_ADMIN should be in roles list");
+        assertFalse(role_professor, "ROLE_PROFESSOR should not be in roles list");
+        assertFalse(role_student, "ROLE_STUDENT should be not in roles list");
+        assertTrue(role_user, "ROLE_USER should be in roles list");
+    }
             
 }
 
