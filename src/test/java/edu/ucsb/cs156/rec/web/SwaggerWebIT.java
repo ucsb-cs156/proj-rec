@@ -15,7 +15,6 @@ import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
-import com.microsoft.playwright.options.AriaRole;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
@@ -61,8 +60,7 @@ public class SwaggerWebIT {
     }
 
     /**
-     * This test checks that the Swagger page has a few of then endpoints for the
-     * RecommendationRequest API.
+     * This test checks that the Swagger page exists.
      * It is probably not necessary to test all controllers or endpoints; we are
      * mainly checking that
      * swagger is appropriate configured and operational. Presumably, if one
@@ -73,7 +71,7 @@ public class SwaggerWebIT {
      * a comprehensive test of the Swagger page.
      */
     @Test
-    public void swagger_page_has_endpoints_for_recommendationRequest() throws Exception {
+    public void swagger_page_exists() throws Exception {
         assertThat(page.getByText("System Information"))
                 .isVisible();
     }
