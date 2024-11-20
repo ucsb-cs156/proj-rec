@@ -1,4 +1,4 @@
-const recommendationRequestsFixtures = {
+const recommendationRequestFixtures = {
     oneRecommendation: [
       {
         id: 1,
