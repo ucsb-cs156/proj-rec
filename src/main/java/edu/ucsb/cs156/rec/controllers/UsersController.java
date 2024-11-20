@@ -77,7 +77,7 @@ public class UsersController extends ApiController {
     }
 
     
-    @Operation(summary = "Toggle the admin field")
+    @Operation(summary = "Toggle the admin field") 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/toggleAdmin")
     public Object toggleAdmin( @Parameter(name = "id", description = "Long, id number of user to toggle their admin field", example = "1", required = true) @RequestParam Long id){
@@ -90,28 +90,28 @@ public class UsersController extends ApiController {
     }
 
 
-    @Operation(summary = "Toggle the professor field")
+    @Operation(summary = "Toggle the professor field") 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/toggleDriver")
-    public Object toggleDriver( @Parameter(name = "id", description = "Long, id number of user to toggle their driver field", example = "1", required = true) @RequestParam Long id){
+    @PostMapping("/toggleProfessor")
+    public Object toggleProfessor( @Parameter(name = "id", description = "Long, id number of user to toggle their professor field", example = "1", required = true) @RequestParam Long id){
 
         User user = userRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(User.class, id));
 
         user.setProfessor(!user.getProfessor());
         userRepository.save(user);
-        return genericMessage("User with id %s has toggled driver status to %s".formatted(id, user.getProfessor()));
+        return genericMessage("User with id %s has toggled professor status to %s".formatted(id, user.getProfessor()));
     }
 
-    @Operation(summary = "Toggle the student field")
+    @Operation(summary = "Toggle the student field") 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/toggleRider")
-    public Object toggleRider( @Parameter(name = "id") @RequestParam Long id){
+    @PostMapping("/toggleStudent")
+    public Object toggleStudent( @Parameter(name = "id") @RequestParam Long id){
         User user = userRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(User.class, id));
 
         user.setStudent(!user.getStudent());
         userRepository.save(user);
-        return genericMessage("User with id %s has toggled rider status to %s".formatted(id, user.getStudent()));
+        return genericMessage("User with id %s has toggled student status to %s".formatted(id, user.getStudent()));
     }
 }
