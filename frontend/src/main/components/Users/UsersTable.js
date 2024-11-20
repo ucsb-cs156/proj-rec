@@ -1,8 +1,6 @@
 import OurTable, { ButtonColumn } from "main/components/OurTable";
 import { useBackendMutation } from "main/utils/useBackend";
 
-
-
 export default function UsersTable({ users }) {
   // Stryker disable all : hard to test for query caching
   const toggleProfessorMutation = useBackendMutation(
