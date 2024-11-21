@@ -1,9 +1,9 @@
 import { QueryClient, QueryClientProvider } from "react-query";
-import { renderHook, waitFor  } from "@testing-library/react";
+import { renderHook, waitFor } from "@testing-library/react";
 
 import axios from "axios";
 import AxiosMockAdapter from "axios-mock-adapter";
-import { useBackend  } from "main/utils/useBackend";
+import { useBackend } from "main/utils/useBackend";
 
 jest.mock("react-router-dom");
 
