@@ -14,9 +14,11 @@ public interface UserRepository extends CrudRepository<User, Long> {
   /**
    * This method returns a User entity with a given email.
    * @param email email address of the user
+   * @param name name of user
    * @return Optional of User (empty if not found)
    */
   Optional<User> findByEmail(String email);
   Iterable<User> findByProfessor(boolean professor);
 
+  Optional<User> findByName(String name);
 }
