@@ -299,6 +299,45 @@ public class RequestTypeControllerTests extends ControllerTestCase {
 
     @WithMockUser(roles = { "ADMIN" })
     @Test
+    public void admin_can_update_request_type_with_same_description() throws Exception {
+        // Arrange
+        String description = "Type A";
+    
+        RequestType existingRequestType = RequestType.builder()
+                .id(1L)
+                .requestType(description)
+                .build();
+    
+        when(requestTypeRepository.findById(eq(1L))).thenReturn(Optional.of(existingRequestType));
+        when(requestTypeRepository.findByRequestType(description)).thenReturn(Optional.of(existingRequestType));
+        when(requestTypeRepository.save(any(RequestType.class))).thenAnswer(invocation -> {
+            RequestType rt = invocation.getArgument(0);
+            rt.setId(1L); // Preserve ID
+            return rt;
+        });
+    
+        // Act
+        MvcResult response = mockMvc.perform(
+                        put("/api/request-types")
+                                .param("id", "1")
+                                .param("description", description)
+                                .with(csrf()))
+                .andExpect(status().isOk())
+                .andReturn();
+    
+        // Assert
+        verify(requestTypeRepository, times(1)).findById(1L);
+        verify(requestTypeRepository, times(1)).findByRequestType(description);
+        verify(requestTypeRepository, times(1)).save(any(RequestType.class));
+    
+        String responseString = response.getResponse().getContentAsString();
+        String expectedJson = mapper.writeValueAsString(existingRequestType);
+        assertEquals(expectedJson, responseString);
+    }
+    
+
+    @WithMockUser(roles = { "ADMIN" })
+    @Test
     public void admin_cannot_update_nonexistent_request_type() throws Exception {
         // Arrange
         when(requestTypeRepository.findById(eq(1L))).thenReturn(Optional.empty());

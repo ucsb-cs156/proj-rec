@@ -60,21 +60,6 @@ public class RequestTypeController extends ApiController {
      * @param description description of the request type
      * @return the saved request type (with its id field set by the database)
      */
-    // @Operation(summary = "Create a new request type")
-    // @PreAuthorize("hasRole('ROLE_ADMIN')")
-    // @PostMapping("/post")
-    // public RequestType postRequestType(
-    //         @Parameter(name = "description") @RequestParam String description) {
-    //     if (requestTypeRepository.findByRequestType(description).isPresent()) {
-    //         throw new IllegalArgumentException("Request Type with this description already exists");
-    //     }
-
-    //     RequestType requestType = RequestType.builder()
-    //             .requestType(description)
-    //             .build();
-
-    //     return requestTypeRepository.save(requestType);
-    // }
     @Operation(summary = "Create a new request type")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/post")
@@ -119,25 +104,6 @@ public class RequestTypeController extends ApiController {
      * @param description the new description for the request type
      * @return the updated request type object
      */
-    // @Operation(summary = "Update a single request type")
-    // @PreAuthorize("hasRole('ROLE_ADMIN')")
-    // @PutMapping("")
-    // public RequestType updateRequestType(
-    //         @Parameter(name = "id") @RequestParam Long id,
-    //         @Parameter(name = "description") @RequestParam String description) {
-
-    //     RequestType requestType = requestTypeRepository.findById(id)
-    //             .orElseThrow(() -> new EntityNotFoundException(RequestType.class, id));
-
-    //     if (requestTypeRepository.findByRequestType(description).isPresent() && 
-    //         !requestType.getRequestType().equals(description)) {
-    //         throw new IllegalArgumentException("Request Type with this description already exists");
-    //     }
-
-    //     requestType.setRequestType(description);
-
-    //     return requestTypeRepository.save(requestType);
-    // }
     @Operation(summary = "Update a single request type")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("")
@@ -148,7 +114,8 @@ public class RequestTypeController extends ApiController {
         RequestType requestType = requestTypeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(RequestType.class, id));
 
-        if (requestTypeRepository.findByRequestType(description).isPresent() && !requestType.getRequestType().equals(description)) {
+        if (requestTypeRepository.findByRequestType(description).isPresent() && 
+            !requestType.getRequestType().equals(description)) {
             return ResponseEntity.badRequest().body(Map.of(
                 "type", "IllegalArgumentException",
                 "message", "Request Type with this description already exists"
