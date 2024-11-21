@@ -105,7 +105,7 @@ public class RequestTypesControllerTests extends ControllerTestCase {
 
                 // act
                 MvcResult response = mockMvc.perform(
-                                delete("/api/requesttype?id=15")
+                                delete("/api/requesttypes?id=15")
                                                 .with(csrf()))
                                 .andExpect(status().isNotFound()).andReturn();
 
