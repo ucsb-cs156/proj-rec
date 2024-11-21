@@ -3,7 +3,7 @@
     {
       "changeSet": {
         "id": "RecommendationRequest-1",
-        "author": "MichaelJ",
+        "author": "MattP",
         "preConditions": [
           {
             "onFail": "MARK_RAN"
@@ -12,7 +12,7 @@
             "not": [
               {
                 "tableExists": {
-                  "tableName": "recommendationrequest"
+                  "tableName": "RECOMMENDATIONREQUEST"
                 }
               }
             ]
@@ -35,6 +35,18 @@
                 },
                 {
                   "column": {
+                    "name": "SUBMISSION_DATE",
+                    "type": "DATE"
+                  }
+                },
+                {
+                  "column": {
+                    "name": "COMPLETION_DATE",
+                    "type": "DATE"
+                  }
+                },
+                {
+                  "column": {
                     "name": "PROFESSOR_NAME",
                     "type": "VARCHAR(255)"
                   }
@@ -53,7 +65,7 @@
                 },
                 {
                   "column": {
-                    "name": "RECOMMENDATION_TYPE",
+                    "name": "RECOMMENDATION_TYPES",
                     "type": "VARCHAR(255)"
                   }
                 },
@@ -65,24 +77,12 @@
                 },
                 {
                   "column": {
-                    "name": "SUBMISSION_DATE",
-                    "type": "DATE"
-                  }
-                },
-                {
-                  "column": {
-                    "name": "COMPLETION_DATE",
-                    "type": "DATE"
-                  }
-                },
-                {
-                  "column": {
                     "name": "STATUS",
                     "type": "VARCHAR(255)"
                   }
                 }
               ],
-              "tableName": "recommendationrequest"
+              "tableName": "RECOMMENDATIONREQUEST"
             }
           }
         ]
