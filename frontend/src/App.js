@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "main/pages/HomePage";
 import ProfilePage from "main/pages/ProfilePage";
 import AdminUsersPage from "main/pages/AdminUsersPage";
+import AdminRequestsPage from "main/pages/AdminRequestsPage";
 
 import UCSBDatesIndexPage from "main/pages/UCSBDates/UCSBDatesIndexPage";
 import UCSBDatesCreatePage from "main/pages/UCSBDates/UCSBDatesCreatePage";
@@ -30,6 +31,9 @@ function App() {
         <Route exact path="/profile" element={<ProfilePage />} />
         {hasRole(currentUser, "ROLE_ADMIN") && (
           <Route exact path="/admin/users" element={<AdminUsersPage />} />
+        )}
+        {hasRole(currentUser, "ROLE_ADMIN") && (
+          <Route exact path="/admin/requests" element={<AdminRequestsPage />} />
         )}
         {hasRole(currentUser, "ROLE_USER") && (
           <>
