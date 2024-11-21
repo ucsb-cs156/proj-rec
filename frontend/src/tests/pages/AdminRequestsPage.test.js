@@ -13,8 +13,6 @@ import AxiosMockAdapter from "axios-mock-adapter";
 describe("AdminRequestsPage tests", () => {
   const axiosMock = new AxiosMockAdapter(axios);
 
-  const testId = "RequestsTable";
-
   beforeEach(() => {
     axiosMock.reset();
     axiosMock.resetHistory();
@@ -28,11 +26,8 @@ describe("AdminRequestsPage tests", () => {
 
   // add tests for frontend table when backend its done
 
-  test("renders empty page when backend unavailable", async () => {
+  test("renders empty page with title", async () => {
     const queryClient = new QueryClient();
-    axiosMock.onGet("/api/admin/requests").timeout();
-
-    const restoreConsole = mockConsole();
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -42,6 +37,6 @@ describe("AdminRequestsPage tests", () => {
       </QueryClientProvider>,
     );
 
-    expect(screen.getByText(/All Recommendation Requests/)).toBeInTheDocument();
+    await screen.findByText("All Recommendation Requests");
   });
 });
