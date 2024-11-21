@@ -1,7 +1,7 @@
 package edu.ucsb.cs156.rec.errors;
 
 /**
- * This is an error class for a custom RuntimeException in Java that is used to indicate
+ * This is an error class for a 9custom RuntimeException in Java that is used to indicate
  * when an entity of a specific type with a given ID is not found.
  */
 public class EntityNotFoundException extends RuntimeException {
