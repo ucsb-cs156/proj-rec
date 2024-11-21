@@ -282,20 +282,3 @@ public class RoleInterceptorTests extends ControllerTestCase{
     }
             
 }
-
-// private long id;
-//   private String email;
-//   private String googleSub;
-//   private String pictureUrl;
-//   private String fullName;
-//   private String givenName;
-//   private String familyName;
-//   private boolean emailVerified;
-//   private String locale;
-//   private String hostedDomain;
-//   @Builder.Default
-//   private boolean admin=false;
-//   @Builder.Default
-//   private boolean student=false;
-//   @Builder.Default
-//   private boolean professor=false;
