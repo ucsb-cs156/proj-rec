@@ -13,6 +13,7 @@ const apiCurrentUserFixtures = {
       locale: "en",
       hostedDomain: "ucsb.edu",
       admin: true,
+      instructor: false,
     },
     roles: [
       {
@@ -47,6 +48,51 @@ const apiCurrentUserFixtures = {
       },
     ],
   },
+  instructorUser: {
+    user: {
+      id: 2,
+      email: "pconrad.cis@gmail.com",
+      googleSub: "102656447703889917227",
+      pictureUrl:
+        "https://lh3.googleusercontent.com/a-/AOh14GhpDBUt8eCEqiRT45hrFbcimsX_h1ONn0dc3HV8Bp8=s96-c",
+      fullName: "Phillip Conrad",
+      givenName: "Phillip",
+      familyName: "Conrad",
+      emailVerified: true,
+      locale: "en",
+      hostedDomain: null,
+      admin: false,
+      instructor: true,
+    },
+    roles: [
+      {
+        authority: "SCOPE_openid",
+      },
+      {
+        authority: "ROLE_USER",
+        attributes: {
+          sub: "102656447703889917227",
+          name: "Phillip Conrad",
+          given_name: "Phillip",
+          family_name: "Conrad",
+          picture:
+            "https://lh3.googleusercontent.com/a-/AOh14GhpDBUt8eCEqiRT45hrFbcimsX_h1ONn0dc3HV8Bp8=s96-c",
+          email: "pconrad.cis@gmail.com",
+          email_verified: true,
+          locale: "en",
+        },
+      },
+      {
+        authority: "SCOPE_https://www.googleapis.com/auth/userinfo.profile",
+      },
+      {
+        authority: "SCOPE_https://www.googleapis.com/auth/userinfo.email",
+      },
+      {
+        authority: "ROLE_INSTRUCTOR",
+      },
+    ],
+  },
   userOnly: {
     user: {
       id: 2,
@@ -61,6 +107,7 @@ const apiCurrentUserFixtures = {
       locale: "en",
       hostedDomain: null,
       admin: false,
+      instructor: false,
     },
     roles: [
       {
@@ -102,11 +149,26 @@ const apiCurrentUserFixtures = {
       locale: "en",
       hostedDomain: null,
       admin: false,
+      instructor: false,
     },
   },
 };
 
 const currentUserFixtures = {
+  instructorUser: {
+    loggedIn: true,
+    root: {
+      ...apiCurrentUserFixtures.instructorUser,
+      rolesList: [
+        "ROLE_MEMBER",
+        "SCOPE_openid",
+        "SCOPE_https://www.googleapis.com/auth/userinfo.profile",
+        "SCOPE_https://www.googleapis.com/auth/userinfo.email",
+        "ROLE_USER",
+        "ROLE_INSTRUCTOR",
+      ],
+    },
+  },
   adminUser: {
     loggedIn: true,
     root: {
