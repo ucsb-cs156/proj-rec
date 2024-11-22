@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
 
 
 /**
@@ -69,5 +70,43 @@ public class RequestTypesController extends ApiController {
         return savedRequestType;
 
     }
+
+    /**
+     * Update a single request type
+     * 
+     * @param reqType  the name of the request type 
+     * @return the saved requesttype
+     * @throws DuplicateArgumentException if the request type already exists.
+     * @throws EntityNotFoundException if the id does not exist in the table 
+     */
+    @Operation(summary= "Update a single request type")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("")
+    public RequestType updateRequestType(
+            @Parameter(name="requestType") @RequestParam Long id,
+            @RequestBody @Valid RequestType incoming) {
+
+
+        String new_request_type = incoming.getRequestType();
+
+        // Checks to see if the requestType is a duplicate or not 
+        // If duplicate, it throws a DuplicateArgumentException
+        Optional<RequestType> allElements = requestTypeRepository.findByRequestType(new_request_type);
+        if (allElements.isPresent()){
+            throw new DuplicateArgumentException(new_request_type);
+        }
+
+        // Attempts to find the requestType in the table 
+        RequestType modifiedRequestType = requestTypeRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(RequestType.class, id));
+
+
+        // Updates the instance in the table and returns it 
+        modifiedRequestType.setRequestType(new_request_type);
+        requestTypeRepository.save(modifiedRequestType);
+        return modifiedRequestType;
+    }
+
+    
 
 }
