@@ -49,28 +49,26 @@ public class RequestTypesController extends ApiController {
      * @return the saved requesttype
      */
     @Operation(summary= "Create a new request type")
-    // @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/post")
     public RequestType postRequestType(
-            @Parameter(name="reqType") @RequestParam String reqType)
+            @Parameter(name="reqType") @RequestParam String requestType)
             throws JsonProcessingException {
 
         // Checks to see if the requestType is a duplicate or not 
         Iterable<RequestType> allElements = requestTypeRepository.findAll();
         for (RequestType elem : allElements){
-            if (elem.getRequestType().equals(reqType)){
-                throw new DuplicateArgumentException(reqType);
+            if (elem.getRequestType().equals(requestType)){
+                throw new DuplicateArgumentException(requestType);
 
         }
     }
 
         // Creates the new request type and returns it 
-        RequestType requestType = new RequestType();
-        requestType.setRequestType(reqType);
-        RequestType savedRequestType = requestTypeRepository.save(requestType);
+        RequestType requestType1 = new RequestType();
+        requestType1.setRequestType(requestType);
+        RequestType savedRequestType = requestTypeRepository.save(requestType1);
         return savedRequestType;
-
-
 
     }
 
