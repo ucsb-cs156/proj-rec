@@ -26,21 +26,21 @@ public class RecommendationRequestController extends ApiController {
     RecommendationRequestRepository recommendationRequestRepository;
 
     /**
-     * This method returns a list of all restaurants.
+     * This method returns a list of all recommendationrequests.
      * @return a list of all restaurants
      */
     @Operation(summary = "List all recommendation request")
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/all")
-    public Iterable<RecommendationRequest> allRestaurants() {
+    public Iterable<RecommendationRequest> allRecommendationRequests() {
         Iterable<RecommendationRequest> restaurants = recommendationRequestRepository.findAll();
         return restaurants;
     }
 
     /**
-     * This method returns a single restaurant.
-     * @param id id of the restaurant to get
-     * @return a single restaurant
+     * This method returns a single recommendationrequests.
+     * @param id id of the recommendationrequests to get
+     * @return a single recommendationrequests
      */
     @Operation(summary = "Get a single recommendation request")
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -54,18 +54,18 @@ public class RecommendationRequestController extends ApiController {
     }
 
     /**
-     * This method creates a new restaurant. Accessible only to users with the role "ROLE_ADMIN".
+     * This method creates a new recommendationrequests. Accessible only to users with the role "ROLE_ADMIN" until our roles can be configured.
      * @param professorName professor name of request
      * @param professorEmail professor email of request
      * @param recommendationTypes recommendation types of request
      * @param details details of request
      * @param submissionDate submission date of request
-     * @return the save restaurant (with it's id field set by the database)
+     * @return the save recommendationrequests (with it's id field set by the database)
      */
-    @Operation(summary = "Create a new restaurant")
+    @Operation(summary = "Create a new recommendationrequests")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/post")
-    public RecommendationRequest postRestaurant(
+    public RecommendationRequest postRecommendationRequests(
             @Parameter(name = "professorName") @RequestParam String professorName,
             @Parameter(name = "professorEmail") @RequestParam String professorEmail,
             @Parameter(name = "recommendationTypes") @RequestParam String recommendationTypes,

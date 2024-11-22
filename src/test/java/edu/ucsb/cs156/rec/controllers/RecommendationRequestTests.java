@@ -167,7 +167,7 @@ public class RecommendationRequestTests extends ControllerTestCase {
 
         @WithMockUser(roles = { "ADMIN", "USER" })
         @Test
-        public void an_admin_user_can_post_a_new_restaurant() throws Exception {
+        public void an_admin_user_can_post_a_new_recommendationrequests() throws Exception {
                 // arrange
                 User u = currentUserService.getCurrentUser().getUser();
                 LocalDateTime now = LocalDateTime.now();
