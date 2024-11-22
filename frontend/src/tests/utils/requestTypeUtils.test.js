@@ -42,7 +42,7 @@ import {
   
         // assert
         expect(result).toEqual({
-          url: "/api/requesttype",
+          url: "/api/requesttypes",
           method: "DELETE",
           params: { id: 17 },
         });
