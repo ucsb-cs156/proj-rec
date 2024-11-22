@@ -1,7 +1,7 @@
 const requestTypeFixtures = {
   oneRequestType: [
     {
-      id: 1, 
+      id: 1,
       requestType: "Advising Meeting",
     },
   ],
