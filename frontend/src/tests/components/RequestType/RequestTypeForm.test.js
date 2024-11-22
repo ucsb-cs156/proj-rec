@@ -96,5 +96,25 @@ describe("RequestTypeForm tests", () => {
     await waitFor(() => {
       expect(screen.getByText(/Description is required/)).toBeInTheDocument();
     });
+
+    fireEvent.change(descriptionInput, { target: { value: "a".repeat(101) } });
+    fireEvent.click(submitButton);
+    await waitFor(() => {
+      expect(screen.getByText(/Max length 100 characters/)).toBeInTheDocument();
+    });
+  });
+
+  test("renders submit button with correct data-testid", async () => {
+    render(
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <RequestTypeForm />
+        </Router>
+      </QueryClientProvider>,
+    );
+
+    const submitButton = screen.getByTestId("RequestTypeForm-submit");
+    expect(submitButton).toBeInTheDocument();
+    expect(submitButton).toHaveTextContent("Create"); // Ensure label is correct
   });
 });
