@@ -204,6 +204,7 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
 
         User mockUser = User.builder().fullName("prof").build();
         when(userRepository.findByFullName("prof")).thenReturn(Optional.of(mockUser));
+        when(!prof.getProfessor()).thenReturn(false);
         when(recommendationRequestRepository.save(eq(recReq1))).thenReturn(recReq1);
 
         // act
