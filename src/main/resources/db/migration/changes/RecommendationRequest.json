@@ -35,6 +35,12 @@
                   },
                   {
                     "column": {
+                      "name": "USER_ID",
+                      "type": "BIGINT"
+                    }
+                  },
+                  {
+                    "column": {
                       "name": "PROFESSOR_NAME",
                       "type": "VARCHAR(255)"
                     }
@@ -86,6 +92,27 @@
               }
             }
           ]
+        }
+      },
+      {
+        "changeSet": {
+          "id": "changeset-1",
+          "author": "obenedek",
+          "changes": [
+            {
+              "addForeignKeyConstraint": {
+                "baseColumnNames": "USER_ID",
+                "baseTableName": "RECOMMENDATIONREQUEST",
+                "constraintName": "RECOMMENDATIONREQUEST_USER_ID_FK",
+                "deferrable": false,
+                "initiallyDeferred": false,
+                "onDelete": "RESTRICT",
+                "onUpdate": "RESTRICT",
+                "referencedColumnNames": "ID",
+                "referencedTableName": "USERS",
+                "validate": true
+              }
+            }]
         }
       }
     ]
