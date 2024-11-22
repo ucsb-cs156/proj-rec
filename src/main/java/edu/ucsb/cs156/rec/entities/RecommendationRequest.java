@@ -31,8 +31,6 @@ public class RecommendationRequest {
   @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
   private User user;
 
-  private Long userId;
-
   private String professorName;
   private String professorEmail;
   private String requesterName;
