@@ -80,6 +80,38 @@ public class RequestTypesControllerTests extends ControllerTestCase {
                                 .andExpect(status().is(403)); // only admins can post
         }
 
+        
+        @WithMockUser(roles = { "USER" })
+        @Test
+        public void logged_in_user_can_get_all_ucsbdates() throws Exception {
+
+                // arrange
+
+                RequestType requestType1 = RequestType.builder()
+                                .requestType("CS Department BS/MS program")
+                                .build();
+
+                RequestType requestType2 = RequestType.builder()
+                                .requestType("Scholarship or Fellowship")
+                                .build();
+
+                ArrayList<RequestType> expectedRequestTypes = new ArrayList<>();
+                expectedRequestTypes.addAll(Arrays.asList(requestType1, requestType2));
+
+                when(requestTypeRepository.findAll()).thenReturn(expectedRequestTypes);
+
+                // act
+                MvcResult response = mockMvc.perform(get("/api/requesttypes/all"))
+                                .andExpect(status().isOk()).andReturn();
+
+                // assert
+
+                verify(requestTypeRepository, times(1)).findAll();
+                String expectedJson = mapper.writeValueAsString(expectedRequestTypes);
+                String responseString = response.getResponse().getContentAsString();
+                assertEquals(expectedJson, responseString);
+        }
+
 
         @WithMockUser(roles = { "ADMIN", "USER" })
         @Test
