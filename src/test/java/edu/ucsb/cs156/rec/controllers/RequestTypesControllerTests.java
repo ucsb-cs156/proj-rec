@@ -47,8 +47,7 @@ public class RequestTypesControllerTests extends ControllerTestCase {
         @MockBean
         UserRepository userRepository;
 
-        // Authorization tests for /api/phones/admin/all
-
+        // Authorization tests for /api/requesttypes/admin/all
 
         @Test
         public void logged_out_users_cannot_get_all() throws Exception {
