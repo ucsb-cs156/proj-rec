@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import java.util.Optional;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -24,9 +26,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.validation.Valid;
-
-import java.time.LocalDateTime;
 
 /**
  * This is a REST controller for RequestTypes
@@ -47,22 +46,21 @@ public class RequestTypesController extends ApiController {
      * 
      * @param reqType  the name of the request type 
      * @return the saved requesttype
+     * @throws DuplicateArgumentException if the request type already exists.
      */
     @Operation(summary= "Create a new request type")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/post")
     public RequestType postRequestType(
-            @Parameter(name="reqType") @RequestParam String requestType)
-            throws JsonProcessingException {
+            @Parameter(name="requestType") @RequestParam String requestType){
 
         // Checks to see if the requestType is a duplicate or not 
-        Iterable<RequestType> allElements = requestTypeRepository.findAll();
-        for (RequestType elem : allElements){
-            if (elem.getRequestType().equals(requestType)){
-                throw new DuplicateArgumentException(requestType);
+        Optional<RequestType> allElements = requestTypeRepository.findByRequestType(requestType);
 
+        if (allElements.isPresent()){
+            throw new DuplicateArgumentException(requestType);
         }
-    }
+    
 
         // Creates the new request type and returns it 
         RequestType requestType1 = new RequestType();

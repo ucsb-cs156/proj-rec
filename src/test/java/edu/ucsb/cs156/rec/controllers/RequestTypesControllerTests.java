@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -26,6 +27,8 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
@@ -84,6 +87,35 @@ public class RequestTypesControllerTests extends ControllerTestCase {
                 String expectedJson = mapper.writeValueAsString(requestType1);
                 String responseString = response.getResponse().getContentAsString();
                 assertEquals(expectedJson, responseString);
+        }
+
+        @WithMockUser(roles = { "ADMIN" })
+        @Test
+        public void admin_cannot_post_duplicate_request_type() throws Exception {
+            // Arrange
+            String requestType = "Advice";
+    
+            RequestType existingRequestType = RequestType.builder()
+                    .id(1L)
+                    .requestType(requestType)
+                    .build();
+    
+            when(requestTypeRepository.findByRequestType(requestType)).thenReturn(Optional.of(existingRequestType));
+    
+            // Act
+            MvcResult response = mockMvc.perform(
+                            post("/api/requesttypes/post?requestType=Advice")
+                                    .with(csrf()))
+                    .andExpect(status().isBadRequest()) 
+                    .andReturn();
+    
+            // Assert
+            Map<String, Object> json = responseToJson(response);
+            assertEquals("DuplicateArgumentException", json.get("type"));
+            assertEquals("The request type of Advice has already been added to the database", json.get("message"));
+    
+            verify(requestTypeRepository, times(1)).findByRequestType(requestType);
+            verify(requestTypeRepository, times(0)).save(any(RequestType.class));
         }
 
         
