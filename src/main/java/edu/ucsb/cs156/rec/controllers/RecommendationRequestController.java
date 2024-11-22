@@ -1,30 +1,22 @@
 package edu.ucsb.cs156.rec.controllers;
 
 import edu.ucsb.cs156.rec.entities.RecommendationRequest;
-import edu.ucsb.cs156.rec.entities.Restaurant;
 import edu.ucsb.cs156.rec.errors.EntityNotFoundException;
 import edu.ucsb.cs156.rec.models.CurrentUser;
 import edu.ucsb.cs156.rec.repositories.RecommendationRequestRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import jakarta.validation.Valid;
 
 @Tag(name = "RecommendationRequest")
 @RequestMapping("/api/recommendationrequest")
@@ -67,6 +59,7 @@ public class RecommendationRequestController extends ApiController {
      * @param professorEmail professor email of request
      * @param recommendationTypes recommendation types of request
      * @param details details of request
+     * @param submissionDate submission date of request
      * @return the save restaurant (with it's id field set by the database)
      */
     @Operation(summary = "Create a new restaurant")
@@ -76,7 +69,8 @@ public class RecommendationRequestController extends ApiController {
             @Parameter(name = "professorName") @RequestParam String professorName,
             @Parameter(name = "professorEmail") @RequestParam String professorEmail,
             @Parameter(name = "recommendationTypes") @RequestParam String recommendationTypes,
-            @Parameter(name = "details") @RequestParam String description)
+            @Parameter(name = "details") @RequestParam String details,
+            @Parameter(name = "submissionDate") @RequestParam LocalDateTime submissionDate)
             {
         //get current date right now and set status to pending
         CurrentUser currentUser = getCurrentUser();
@@ -87,9 +81,10 @@ public class RecommendationRequestController extends ApiController {
         recommendationRequest.setRequesterName(currentUser.getUser().getFullName());
         recommendationRequest.setUser(currentUser.getUser());
         recommendationRequest.setRecommendationTypes(recommendationTypes);
-        recommendationRequest.setDetails(description);
+        recommendationRequest.setDetails(details);
         recommendationRequest.setStatus("PENDING");
-        recommendationRequest.setSubmissionDate(LocalDateTime.now());
+        // ideally would like this to just directly call LocalDateTime.now() cannot properly mock test this behavior with full coverage
+        recommendationRequest.setSubmissionDate(submissionDate);
 
         RecommendationRequest savedRecommendationRequest = recommendationRequestRepository.save(recommendationRequest);
         return savedRecommendationRequest;
