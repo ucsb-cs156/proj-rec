@@ -6,10 +6,11 @@ const recommendationRequestFixtures = {
       professorEmail: "testemail@ucsb.edu",
       requesterName: "recname",
       submissionDate: "2022-02-02T12:00",
-      completionDate: "2022-02-02T12:00",
+      completionDate: "",
       status: "PENDING",
       details: "test details",
       recommendationTypes: "CS Department BS/MS program",
+      user_id: 1,
     },
   ],
 
@@ -24,6 +25,7 @@ const recommendationRequestFixtures = {
       status: "PENDING",
       details: "test details",
       recommendationTypes: "CS Department BS/MS program",
+      user_id: 2,
     },
 
     {
@@ -36,6 +38,7 @@ const recommendationRequestFixtures = {
       status: "COMPLETED",
       details: "test details",
       recommendationTypes: "MS program (other than CS Dept BS/MS)",
+      user_id: 3,
     },
 
     {
@@ -48,6 +51,7 @@ const recommendationRequestFixtures = {
       status: "DENIED",
       details: "test details",
       recommendationTypes: "Scholarship or Fellowship",
+      user_id: 4,
     },
   ],
 };
