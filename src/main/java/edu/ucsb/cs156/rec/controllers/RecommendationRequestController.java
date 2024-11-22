@@ -27,14 +27,14 @@ public class RecommendationRequestController extends ApiController {
 
     /**
      * This method returns a list of all recommendationrequests.
-     * @return a list of all restaurants
+     * @return a list of all recommendationrequests
      */
     @Operation(summary = "List all recommendation request")
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/all")
     public Iterable<RecommendationRequest> allRecommendationRequests() {
-        Iterable<RecommendationRequest> restaurants = recommendationRequestRepository.findAll();
-        return restaurants;
+        Iterable<RecommendationRequest> recommendationRequests = recommendationRequestRepository.findAll();
+        return recommendationRequests;
     }
 
     /**
