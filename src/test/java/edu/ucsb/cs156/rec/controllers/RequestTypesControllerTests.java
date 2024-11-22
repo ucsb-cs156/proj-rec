@@ -62,8 +62,6 @@ public class RequestTypesControllerTests extends ControllerTestCase {
                 mockMvc.perform(get("/api/requesttypes/all"))
                                 .andExpect(status().is(200)); // logged
         }
-
-
         // Authorization tests for /api/phones/post
         // (Perhaps should also have these for put and delete)
 
@@ -79,11 +77,9 @@ public class RequestTypesControllerTests extends ControllerTestCase {
                 mockMvc.perform(post("/api/requesttypes/post"))
                                 .andExpect(status().is(403)); // only admins can post
         }
-
-        
         @WithMockUser(roles = { "USER" })
         @Test
-        public void logged_in_user_can_get_all_ucsbdates() throws Exception {
+        public void logged_in_user_can_get_all_requesttypes() throws Exception {
 
                 // arrange
 
