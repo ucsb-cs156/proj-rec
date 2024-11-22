@@ -133,7 +133,6 @@ public class RecommendationRequestController extends ApiController {
 
         recommendationRequest.setProfessorName(incoming.getProfessorName());
         recommendationRequest.setProfessorEmail(incoming.getProfessorEmail());
-        recommendationRequest.setRequesterName(incoming.getRequesterName());
         recommendationRequest.setRecommendationTypes(incoming.getRecommendationTypes());
         recommendationRequest.setDetails(incoming.getDetails());
         recommendationRequest.setStatus(incoming.getStatus());
