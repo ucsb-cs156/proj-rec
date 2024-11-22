@@ -24,8 +24,8 @@ describe("HomePage tests", () => {
         <MemoryRouter>
           <HomePage />
         </MemoryRouter>
-      </QueryClientProvider>,
+      </QueryClientProvider>
     );
-    await screen.findByText(/Hello, world!/);
+    await screen.findByText(/Welcome!/);
   });
 });
