@@ -107,7 +107,7 @@ public class RecommendationRequestController extends ApiController{
 
             log.info("submissionDate{}", submissionDate);
 
-            userRepository.findByName(professorName)
+            userRepository.findByFullName(professorName)
                 .orElseThrow(() -> new EntityNotFoundException(User.class, professorName));
 
 

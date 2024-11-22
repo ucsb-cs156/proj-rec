@@ -203,7 +203,7 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
                 .build();
 
         User mockUser = User.builder().fullName("prof").build();
-        when(userRepository.findByName("prof")).thenReturn(Optional.of(mockUser));
+        when(userRepository.findByFullName("prof")).thenReturn(Optional.of(mockUser));
         when(recommendationRequestRepository.save(eq(recReq1))).thenReturn(recReq1);
 
         // act
@@ -237,7 +237,7 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
                 .status("pending")
                 .build();
 
-        when(userRepository.findByName("prof")).thenReturn(Optional.empty());
+        when(userRepository.findByFullName("prof")).thenReturn(Optional.empty());
         when(recommendationRequestRepository.save(eq(recReq1))).thenReturn(recReq1);
 
         // act
@@ -247,7 +247,7 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
                         .andExpect(status().isNotFound()).andReturn();
 
         // assert
-        verify(userRepository, times(1)).findByName("prof");
+        verify(userRepository, times(1)).findByFullName("prof");
         verify(recommendationRequestRepository, times(0)).save(recReq1);
 
         String responseString = response.getResponse().getContentAsString();
