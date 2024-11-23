@@ -139,5 +139,4 @@ describe("AppNavbar tests", () => {
     await screen.findByTestId("AppNavbar");
     expect(screen.queryByTestId(/AppNavbarLocalhost/i)).toBeNull();
   });
-
 });
