@@ -83,7 +83,7 @@ public class RequestTypesController extends ApiController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("")
     public RequestType updateRequestType(
-            @Parameter(name="requestType") @RequestParam Long id,
+            @Parameter(name="id") @RequestParam Long id,
             @RequestBody @Valid RequestType incoming) {
 
 
