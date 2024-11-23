@@ -1,34 +1,29 @@
-const restaurantFixtures = {
-  oneRestaurant: [
+const requestTypeFixtures = {
+  oneRequestType: [
     {
       id: 1,
-      name: "CS Department BS/MS program",
-      description: "Request for recommendation for CS Department BS/MS program",
+      requestType: "CS Department BS/MS program",
     },
   ],
 
-  threeRestaurants: [
+  threeRequestTypes: [
     {
       id: 2,
-      name: "Scholarship or Fellowship",
-      description: "Request for recommendation for a scholarship or fellowship",
+      requestType: "Scholarship or Fellowship",
     },
 
     {
       id: 3,
-      name: "MS program (other than CS Dept BS/MS)",
-      description: "Request for recommendation for MS program",
+      requestType: "MS program (other than CS Dept BS/MS)",
     },
 
     {
       id: 4,
-      name: "PhD program",
-      description: "Request for recommendation for PhD program",
+      requestType: "PhD program",
     },
     {
       id: 5,
-      name: "Other",
-      description: "Any other request type not listed",
+      requestType: "Other",
     },
   ],
 };
