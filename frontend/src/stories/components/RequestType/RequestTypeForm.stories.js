@@ -3,7 +3,7 @@ import RequestTypeForm from "main/components/RequestType/RequestTypeForm";
 import { requesttypeFixtures } from "fixtures/requesttypeFixtures";
 
 export default {
-  title: "components/RequestTypes/RequestTypeForm",
+  title: "components/RequestType/RequestTypeForm",
   component: RequestTypeForm,
 };
 
