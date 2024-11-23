@@ -1,5 +1,5 @@
 import React from "react";
-import RequestTypeForm from "main/components/RequestType/RequestTypeForm";
+import RequestTypeForm from "main/components/RequestTypes/RequestTypeForm";
 import { requestTypeFixtures } from "fixtures/requestTypeFixtures";
 
 export default {
