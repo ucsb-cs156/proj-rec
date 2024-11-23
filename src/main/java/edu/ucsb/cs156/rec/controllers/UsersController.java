@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -64,17 +67,17 @@ public class UsersController extends ApiController {
 
     @Operation(summary= "Delete a user (admin)")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/delete")
+    @DeleteMapping("/delete")
     public Object deleteUser_Admin(
         @Parameter(name="id", description="Long, id number of user to delete", example="1", required=true) @RequestParam Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(User.class, id));
         userRepository.delete(user);
-        return ResponseEntity.ok().body("User with id " + id + " has been deleted.");
+        return genericMessage("User with id %s has been deleted.".formatted(id));
     }
 
     @Operation(summary = "Toggle the admin field")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/toggleAdmin")
+    @PostMapping("/toggleAdmin")
     public Object toggleAdmin( @Parameter(name = "id", description = "Long, id number of user to toggle their admin field", example = "1", required = true) @RequestParam Long id){
         User user = userRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(User.class, id));
@@ -86,7 +89,7 @@ public class UsersController extends ApiController {
 
     @Operation(summary = "Toggle the professor field")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/toggleProfessor")
+    @PostMapping("/toggleProfessor")
     public Object toggleProfessor( @Parameter(name = "id", description = "Long, id number of user to toggle their professor field", example = "1", required = true) @RequestParam Long id){
         User user = userRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(User.class, id));
@@ -98,7 +101,7 @@ public class UsersController extends ApiController {
 
     @Operation(summary = "Toggle the student field")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/toggleStudent")
+    @PostMapping("/toggleStudent")
     public Object toggleStudent( @Parameter(name = "id", description = "Long, id number of user to toggle their student field", example = "1", required = true) @RequestParam Long id){
         User user = userRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(User.class, id));
