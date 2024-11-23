@@ -80,14 +80,14 @@ describe("RequestTypeTable tests", () => {
     );
     expect(
       screen.getByTestId(`${testId}-cell-row-0-col-requestType`),
-    ).toHaveTextContent("Undergraduate Programs");
+    ).toHaveTextContent("Scholarship or Fellowship");
 
     expect(screen.getByTestId(`${testId}-cell-row-1-col-id`)).toHaveTextContent(
       "3",
     );
     expect(
       screen.getByTestId(`${testId}-cell-row-1-col-requestType`),
-    ).toHaveTextContent("Graduate Programs");
+    ).toHaveTextContent("MS program (other than CS Dept BS/MS)");
 
     const editButton = screen.getByTestId(
       `${testId}-cell-row-0-col-Edit-button`,
@@ -134,14 +134,14 @@ describe("RequestTypeTable tests", () => {
     );
     expect(
       screen.getByTestId(`${testId}-cell-row-0-col-requestType`),
-    ).toHaveTextContent("Undergraduate Programs");
+    ).toHaveTextContent("Scholarship or Fellowship");
 
     expect(screen.getByTestId(`${testId}-cell-row-1-col-id`)).toHaveTextContent(
       "3",
     );
     expect(
       screen.getByTestId(`${testId}-cell-row-1-col-requestType`),
-    ).toHaveTextContent("Graduate Programs");
+    ).toHaveTextContent("MS program (other than CS Dept BS/MS)");
 
     expect(screen.queryByText("Delete")).not.toBeInTheDocument();
     expect(screen.queryByText("Edit")).not.toBeInTheDocument();
@@ -169,7 +169,7 @@ describe("RequestTypeTable tests", () => {
     ).toHaveTextContent("2");
     expect(
       screen.getByTestId(`${testId}-cell-row-0-col-requestType`),
-    ).toHaveTextContent("Undergraduate Programs");
+    ).toHaveTextContent("Scholarship or Fellowship");
 
     const editButton = screen.getByTestId(
       `${testId}-cell-row-0-col-Edit-button`,
@@ -212,7 +212,7 @@ describe("RequestTypeTable tests", () => {
     ).toHaveTextContent("2");
     expect(
       screen.getByTestId(`${testId}-cell-row-0-col-requestType`),
-    ).toHaveTextContent("Undergraduate Programs");
+    ).toHaveTextContent("Scholarship or Fellowship");
 
     const deleteButton = screen.getByTestId(
       `${testId}-cell-row-0-col-Delete-button`,

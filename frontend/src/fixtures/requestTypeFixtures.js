@@ -2,24 +2,28 @@ const requestTypeFixtures = {
   oneRequestType: [
     {
       id: 1,
-      requestType: "Advising Meeting",
+      requestType: "CS Department BS/MS program",
     },
   ],
 
   threeRequestTypes: [
     {
       id: 2,
-      requestType: "Undergraduate Programs",
+      requestType: "Scholarship or Fellowship",
     },
 
     {
       id: 3,
-      requestType: "Graduate Programs",
+      requestType: "MS program (other than CS Dept BS/MS)",
     },
 
     {
       id: 4,
-      requestType: "Scholarship",
+      requestType: "PhD program",
+    },
+    {
+      id: 5,
+      requestType: "Other",
     },
   ],
 };
