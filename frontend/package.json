@@ -34,7 +34,6 @@
     "format": "prettier --write \"src/**/*.{js,jsx}\"",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "chromatic": "npx chromatic --project-token=chpt_70630482feb0e8b --patch-build=Caleb-B1...main"
   },
   "browserslist": {
     "production": [
