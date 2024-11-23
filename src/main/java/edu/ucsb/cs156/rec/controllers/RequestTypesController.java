@@ -41,7 +41,7 @@ public class RequestTypesController extends ApiController {
     @Autowired
     RequestTypeRepository requestTypeRepository;
 
-        /**
+    /**
      * List all Request Types
      * 
      * @return an iterable of RequestType
@@ -53,6 +53,7 @@ public class RequestTypesController extends ApiController {
         Iterable<RequestType> types = requestTypeRepository.findAll();
         return types;
     }
+
     /**
      * Get a single request type by id
      * 
