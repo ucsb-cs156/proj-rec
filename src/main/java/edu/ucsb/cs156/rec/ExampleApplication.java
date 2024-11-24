@@ -58,7 +58,7 @@ public class ExampleApplication {
    * @param args command line arguments, typically unused for Spring Boot applications
    */
   public static void main(String[] args) {
-    SpringApplication.run(RecApplication.class, args);
+    SpringApplication.run(ExampleApplication.class, args);
   }
 
   @Bean
