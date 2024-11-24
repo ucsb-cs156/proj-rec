@@ -35,7 +35,8 @@
                   },
                   {
                     "column": {
-                      "name": "REQUESTTYPE",
+
+                      "name": "REQUEST_TYPE",
                       "type": "VARCHAR(255)"
                     }
                   }
@@ -48,3 +49,4 @@
       }
     ]
   }
+
