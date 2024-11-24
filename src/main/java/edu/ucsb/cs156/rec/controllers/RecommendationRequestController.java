@@ -95,7 +95,7 @@ public class RecommendationRequestController extends ApiController{
     */
     
     @Operation(summary= "Create a new recommendation request")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STUDENT')")
     @PostMapping("/post")
     public RecommendationRequest postRecommendationRequest(
         @Parameter(name="professorName") @RequestParam String professorName,
@@ -157,7 +157,7 @@ public class RecommendationRequestController extends ApiController{
      * @return the updated recommendation request object
      */
     @Operation(summary= "Update a single recommendation request")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')")
     @PutMapping("")
     public RecommendationRequest updateRecommendationRequest(
             @Parameter(name="id") @RequestParam Long id,
@@ -187,7 +187,7 @@ public class RecommendationRequestController extends ApiController{
      * @return an iterable of RecommendationRequest with name of the professor
      */
     @Operation(summary= "Get all recommendation requests by Professor Name")
-    @PreAuthorize("hasRole('ROLE_ADMIN')") // Change to ROLE_PROFESSOR LATER
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')") // Change to ROLE_PROFESSOR LATER
     @GetMapping("/professor/{professorName}")
     public Iterable<RecommendationRequest> getRecommendationRequestsByProfessorName(
             @Parameter(name = "professorName") @PathVariable String professorName) {
@@ -202,7 +202,7 @@ public class RecommendationRequestController extends ApiController{
      * @return 
      */
     @Operation(summary= "Get all recommendation requests by Requester Name")
-    @PreAuthorize("hasRole('ROLE_ADMIN')") // Change to ROLE_PROFESSOR LATER
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STUDENT')") // Change to ROLE_PROFESSOR LATER
     @GetMapping("/requester/{requesterName}")
     public Iterable<RecommendationRequest> getRecommendationRequestsByRequesterName(
             @Parameter(name = "requesterName") @PathVariable String requesterName) {
