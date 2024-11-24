@@ -35,13 +35,13 @@
                   },
                   {
                     "column": {
-                      "name": "PROFESSOR",
+                      "name": "PROFESSOR_ID",
                       "type": "BIGINT"
                     }
                   },
                   {
                     "column": {
-                      "name": "REQUESTER",
+                      "name": "REQUESTER_ID",
                       "type": "BIGINT"
                     }
                   },
