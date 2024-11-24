@@ -2,8 +2,8 @@
     "databaseChangeLog": [
       {
         "changeSet": {
-          "id": "UCSBDates-1",
-          "author": "MattP",
+          "id": "RequestTypes-1",
+          "author": "lodetrick",
           "preConditions": [
             {
               "onFail": "MARK_RAN"
@@ -12,7 +12,7 @@
               "not": [
                 {
                   "tableExists": {
-                    "tableName": "UCSBDATES"
+                    "tableName": "REQUESTTYPES"
                   }
                 }
               ]
@@ -27,7 +27,7 @@
                       "autoIncrement": true,
                       "constraints": {
                         "primaryKey": true,
-                        "primaryKeyName": "CONSTRAINT_5"
+                        "primaryKeyName": "REQUESTTYPES_PK"
                       },
                       "name": "ID",
                       "type": "BIGINT"
@@ -35,24 +35,12 @@
                   },
                   {
                     "column": {
-                      "name": "LOCAL_DATE_TIME",
-                      "type": "TIMESTAMP"
-                    }
-                  },
-                  {
-                    "column": {
-                      "name": "NAME",
-                      "type": "VARCHAR(255)"
-                    }
-                  },
-                  {
-                    "column": {
-                      "name": "QUARTERYYYYQ",
+                      "name": "REQUEST_TYPE",
                       "type": "VARCHAR(255)"
                     }
                   }
                 ],
-                "tableName": "UCSBDATES"
+                "tableName": "REQUESTTYPES"
               }
             }
           ]
