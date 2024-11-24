@@ -29,7 +29,6 @@ import org.springframework.data.annotation.CreatedDate;
 @NoArgsConstructor
 @Builder
 @Entity(name = "recommendationrequest")
-@EntityListeners(AuditingEntityListener.class)
 public class RecommendationRequest {
 
   @Id
@@ -47,7 +46,6 @@ public class RecommendationRequest {
   private String recommendationType;
   private String details;
 
-  @CreatedDate
   private LocalDateTime submissionDate;
 
   private LocalDateTime completionDate; 

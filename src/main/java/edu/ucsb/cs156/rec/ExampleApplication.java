@@ -19,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
  * The ExampleApplication class is the main entry point for the application.
  */
 @SpringBootApplication
-@EnableJpaAuditing(dateTimeProviderRef = "utcDateTimeProvider")
 @Slf4j
 public class ExampleApplication {
 
@@ -53,16 +52,6 @@ public class ExampleApplication {
     };
   }
 
-  /**
-   * Allows localDateTime object to be automatically populated with the current time 
-   */
-  @Bean
-  public DateTimeProvider utcDateTimeProvider() {
-     return () -> {
-       ZonedDateTime now = ZonedDateTime.now();
-       return Optional.of(now);
-     };
-  }
 
    /**
    * The main method is the entry point for the application.
