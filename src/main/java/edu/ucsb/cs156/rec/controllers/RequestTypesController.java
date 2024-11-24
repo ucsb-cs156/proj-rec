@@ -41,6 +41,35 @@ public class RequestTypesController extends ApiController {
     @Autowired
     RequestTypeRepository requestTypeRepository;
 
+    /**
+     * List all Request Types
+     * 
+     * @return an iterable of RequestType
+     */
+    @Operation(summary= "List all request types")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("/all")
+    public Iterable<RequestType> allRequestTypes() {
+        Iterable<RequestType> types = requestTypeRepository.findAll();
+        return types;
+    }
+
+    /**
+     * Get a single request type by id
+     * 
+     * @param id the id of the request type
+     * @return a RequestType
+     */
+    @Operation(summary= "Get a single request type")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("")
+    public RequestType getById(
+            @Parameter(name="id") @RequestParam Long id) {
+        RequestType requestType = requestTypeRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(RequestType.class, id));
+
+        return requestType;
+    }
   
     /**
      * Create a new request type
@@ -107,7 +136,4 @@ public class RequestTypesController extends ApiController {
         requestTypeRepository.save(modifiedRequestType);
         return modifiedRequestType;
     }
-
-    
-
 }
