@@ -35,10 +35,10 @@
                   },
                   {
                     "column": {
-                      "name": "USER_ID",
+                      "name": "REQUESTER_ID",
                       "type": "BIGINT",
                       "constraints": {
-                        "foreignKeyName": "RECOMMENDATIONREQUEST_USER_ID_FK",
+                        "foreignKeyName": "RECOMMENDATIONREQUEST_REQUESTER_ID_FK",
                         "references": "USERS(ID)",
                         "onDelete": "RESTRICT",
                         "onUpdate": "RESTRICT"
@@ -47,25 +47,19 @@
                   },
                   {
                     "column": {
-                      "name": "PROFESSOR_NAME",
-                      "type": "VARCHAR(255)"
+                      "name": "PROFESSOR_ID",
+                      "type": "BIGINT",
+                      "constraints": {
+                        "foreignKeyName": "RECOMMENDATIONREQUEST_PROFESSOR_ID_FK",
+                        "references": "USERS(ID)",
+                        "onDelete": "RESTRICT",
+                        "onUpdate": "RESTRICT"
+                      }
                     }
                   },
                   {
                     "column": {
-                      "name": "PROFESSOR_EMAIL",
-                      "type": "VARCHAR(255)"
-                    }
-                  },
-                  {
-                    "column": {
-                      "name": "REQUESTER_NAME",
-                      "type": "VARCHAR(255)"
-                    }
-                  },
-                  {
-                    "column": {
-                      "name": "RECOMMENDATION_TYPES",
+                      "name": "RECOMMENDATION_TYPE",
                       "type": "VARCHAR(255)"
                     }
                   },

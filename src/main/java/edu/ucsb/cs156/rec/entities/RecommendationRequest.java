@@ -28,7 +28,7 @@ public class RecommendationRequest {
   private long id;
 
   @ManyToOne
-  @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
+  @JoinColumn(name = "requester_id", referencedColumnName = "id", insertable = false, updatable = false)
   private User requester;
 
   @ManyToOne
