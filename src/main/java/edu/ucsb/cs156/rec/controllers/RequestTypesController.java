@@ -75,6 +75,7 @@ public class RequestTypesController extends ApiController {
      * Update a single request type
      * 
      * @param id  the name of the request type 
+     * @param incoming the new RequestType
      * @return the saved requesttype
      * @throws DuplicateArgumentException if the request type already exists.
      * @throws EntityNotFoundException if the id does not exist in the table 
