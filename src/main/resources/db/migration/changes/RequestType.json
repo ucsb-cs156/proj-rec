@@ -2,8 +2,8 @@
     "databaseChangeLog": [
       {
         "changeSet": {
-          "id": "Restaurants-1",
-          "author": "phtcon",
+          "id": "RequestType-1",
+          "author": "ChrisL",
           "preConditions": [
             {
               "onFail": "MARK_RAN"
@@ -12,7 +12,7 @@
               "not": [
                 {
                   "tableExists": {
-                    "tableName": "RESTAURANTS"
+                    "tableName": "REQUEST_TYPES"
                   }
                 }
               ]
@@ -27,7 +27,7 @@
                       "autoIncrement": true,
                       "constraints": {
                         "primaryKey": true,
-                        "primaryKeyName": "RESTAURANTS_PK"
+                        "primaryKeyName": "PK_REQUEST_TYPES"
                       },
                       "name": "ID",
                       "type": "BIGINT"
@@ -35,18 +35,15 @@
                   },
                   {
                     "column": {
-                      "name": "NAME",
-                      "type": "VARCHAR(255)"
-                    }
-                  },
-                  {
-                    "column": {
-                      "name": "DESCRIPTION",
+                      "constraints": {
+                        "nullable": false
+                      },
+                      "name": "REQUEST_TYPE",
                       "type": "VARCHAR(255)"
                     }
                   }
                 ],
-                "tableName": "RESTAURANTS"
+                "tableName": "REQUEST_TYPES"
               }
             }
           ]
@@ -54,3 +51,4 @@
       }
     ]
   }
+  
