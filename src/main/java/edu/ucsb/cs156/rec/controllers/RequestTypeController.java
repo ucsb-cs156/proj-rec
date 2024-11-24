@@ -71,7 +71,7 @@ public class RequestTypeController extends ApiController {
     /**
      * Create a new request type
      * 
-     * @param requestType          the type of the request
+     * @param requestType   the title of the request type
      * @return the saved requesttype
      */
     @Operation(summary= "Create a new request type")
@@ -88,8 +88,8 @@ public class RequestTypeController extends ApiController {
         for (RequestType existing : existingRequestTypes) {
             if (existing.getRequestType().equals(requestType)) {
                 throw new IllegalArgumentException("Duplicate request type: " + requestType);
+            }
         }
-    }
 
         // Create new request type
         RequestType requestTypeNew = new RequestType();
@@ -98,5 +98,56 @@ public class RequestTypeController extends ApiController {
         RequestType savedRequestType = requestTypeRepository.save(requestTypeNew);
 
         return savedRequestType;
+    }
+
+    /**
+     * Delete a UCSBDate
+     * 
+     * @param id the id of the request type to delete
+     * @return a message indicating the date was deleted
+     */
+    @Operation(summary= "Delete a request type")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("")
+    public Object deleteRequestType(
+            @Parameter(name="id") @RequestParam Long id) {
+        RequestType requestType = requestTypeRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(RequestType.class, id));
+
+        requestTypeRepository.delete(requestType);
+        return genericMessage("Request type with id %s deleted".formatted(id));
+    }
+
+    /**
+     * Update a single request type
+     * 
+     * @param id       id of the request to update
+     * @param incoming the new request type
+     * @return the updated request type object
+     */
+    @Operation(summary= "Update a single request type")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("")
+    public RequestType updateRequestType(
+            @Parameter(name="id") @RequestParam Long id,
+            @RequestBody @Valid RequestType incoming) {
+
+        RequestType requestType = requestTypeRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(RequestType.class, id));
+
+
+        // Check for duplicates
+        Iterable<RequestType> existingRequestTypes = requestTypeRepository.findAll();
+        for (RequestType existing : existingRequestTypes) {
+            if (!existing.equals(incoming) && existing.getRequestType().equals(incoming.getRequestType())) {
+                throw new IllegalArgumentException("Duplicate request type: " + incoming);
+            }
+        }
+
+        // Update and save the request type
+        requestType.setRequestType(incoming.getRequestType());
+        requestTypeRepository.save(requestType);
+
+        return requestType;
     }
 }
