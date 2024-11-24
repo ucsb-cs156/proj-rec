@@ -53,6 +53,17 @@ public class ExampleApplication {
     };
   }
 
+  /**
+   * Allows localDateTime object to be automatically populated with the current time 
+   */
+  @Bean
+  public DateTimeProvider utcDateTimeProvider() {
+     return () -> {
+       ZonedDateTime now = ZonedDateTime.now();
+       return Optional.of(now);
+     };
+  }
+
    /**
    * The main method is the entry point for the application.
    * @param args command line arguments, typically unused for Spring Boot applications
@@ -61,11 +72,5 @@ public class ExampleApplication {
     SpringApplication.run(ExampleApplication.class, args);
   }
 
-  @Bean
-  public DateTimeProvider utcDateTimeProvider() {
-     return () -> {
-       ZonedDateTime now = ZonedDateTime.now();
-       return Optional.of(now);
-     };
-  }
+
 }
