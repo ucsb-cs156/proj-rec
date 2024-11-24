@@ -4,8 +4,10 @@ import edu.ucsb.cs156.rec.repositories.UserRepository;
 import edu.ucsb.cs156.rec.testconfig.TestConfig;
 import edu.ucsb.cs156.rec.ControllerTestCase;
 import edu.ucsb.cs156.rec.entities.RequestType;
+import edu.ucsb.cs156.rec.entities.UCSBDate;
 import edu.ucsb.cs156.rec.repositories.RequestTypeRepository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
@@ -118,5 +120,100 @@ public class RequestTypesControllerTests extends ControllerTestCase {
             verify(requestTypeRepository, times(0)).save(any(RequestType.class));
         }
 
+        @WithMockUser(roles = { "ADMIN", "USER" })
+        @Test
+        public void admin_can_edit_an_existing_request_type() throws Exception {
+                // arrange
+
+                RequestType requestTypeOrig = RequestType.builder()
+                                .requestType("Advice")
+                                .build();
+
+                RequestType requestTypeEdited = RequestType.builder()
+                                .requestType("New Advice")
+                                .build();
+
+                String requestBody = mapper.writeValueAsString(requestTypeEdited);
+
+                when(requestTypeRepository.findById(eq(67L))).thenReturn(Optional.of(requestTypeOrig));
+
+                // act
+                MvcResult response = mockMvc.perform(
+                                put("/api/requesttypes?id=67")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .characterEncoding("utf-8")
+                                                .content(requestBody)
+                                                .with(csrf()))
+                                .andExpect(status().isOk()).andReturn();
+
+                // assert
+                verify(requestTypeRepository, times(1)).findById(67L);
+                verify(requestTypeRepository, times(1)).save(requestTypeEdited); // should be saved with correct user
+                String responseString = response.getResponse().getContentAsString();
+                assertEquals(requestBody, responseString);
+        }
+
+        @WithMockUser(roles = { "ADMIN", "USER" })
+        @Test
+        public void admin_cannot_edit_request_type_that_does_not_exist() throws Exception {
+                // arrange
+
+
+                RequestType requestTypeEdited = RequestType.builder()
+                                .requestType("New Advice")
+                                .build();
+
+                String requestBody = mapper.writeValueAsString(requestTypeEdited);
+
+                when(requestTypeRepository.findById(eq(67L))).thenReturn(Optional.empty());
+
+                // act
+                MvcResult response = mockMvc.perform(
+                                put("/api/requesttypes?id=67")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .characterEncoding("utf-8")
+                                                .content(requestBody)
+                                                .with(csrf()))
+                                .andExpect(status().isNotFound()).andReturn();
+
+                // assert
+                verify(requestTypeRepository, times(1)).findById(67L);
+                Map<String, Object> json = responseToJson(response);
+                assertEquals("RequestType with id 67 not found", json.get("message"));
+
+        }
+
+
+        @WithMockUser(roles = { "ADMIN" })
+        @Test
+        public void admin_cannot_update_to_a_duplicate_request_type() throws Exception {
+            // Arrange
+            String requestType = "Advice";
+    
+            RequestType requestTypeEdited = RequestType.builder()
+                                .requestType(requestType)
+                                .build();
+
+        String requestBody = mapper.writeValueAsString(requestTypeEdited);
+
+    
+            when(requestTypeRepository.findByRequestType(requestType)).thenReturn(Optional.of(requestTypeEdited));
+
+                // act
+                MvcResult response = mockMvc.perform(
+                                put("/api/requesttypes?id=67")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .characterEncoding("utf-8")
+                                                .content(requestBody)
+                                                .with(csrf()))
+                                .andExpect(status().isBadRequest()).andReturn();
+    
+    
+            // Assert
+            Map<String, Object> json = responseToJson(response);
+            assertEquals("DuplicateArgumentException", json.get("type"));
+            assertEquals("The request type of Advice has already been added to the database", json.get("message"));
+    
+        }
         
 }
