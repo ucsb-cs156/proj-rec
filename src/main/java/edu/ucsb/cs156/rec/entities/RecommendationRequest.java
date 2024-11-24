@@ -47,7 +47,6 @@ public class RecommendationRequest {
   private String details;
 
   private LocalDateTime submissionDate;
-
   private LocalDateTime completionDate; 
 
   private String status; 
