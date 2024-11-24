@@ -37,7 +37,7 @@ const recommendationRequestFixtures = {
       completionDate: "2022-02-02T12:00",
       status: "COMPLETED",
       details: "test details",
-      recommendationTypes: "MS program (other than CS Dept BS/MS)",
+      recommendationType: "MS program (other than CS Dept BS/MS)",
       user_id: 3,
     },
 
@@ -50,7 +50,7 @@ const recommendationRequestFixtures = {
       completionDate: "2022-02-02T12:00",
       status: "DENIED",
       details: "test details",
-      recommendationTypes: "Scholarship or Fellowship",
+      recommendationType: "Scholarship or Fellowship",
       user_id: 4,
     },
   ],
