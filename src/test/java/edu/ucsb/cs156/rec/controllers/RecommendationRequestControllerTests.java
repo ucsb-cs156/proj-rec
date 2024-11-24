@@ -202,9 +202,8 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
                 .status("pending")
                 .build();
 
-        User mockUser = User.builder().fullName("prof").build();
+        User mockUser = User.builder().fullName("prof").professor(true).build();
         when(userRepository.findByFullName("prof")).thenReturn(Optional.of(mockUser));
-        when(!prof.getProfessor()).thenReturn(false);
         when(recommendationRequestRepository.save(eq(recReq1))).thenReturn(recReq1);
 
         // act
@@ -222,7 +221,7 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
 
     @WithMockUser(roles = { "ADMIN", "STUDENT" })
     @Test
-    public void an_admin_user_cant_post_a_new_recommendation_request_with_non_existent_professor() throws Exception {
+    public void an_admin_user_cant_post_a_new_recommendation_request_with_non_existent_professor_user() throws Exception {
         // arrange
 
         LocalDate ld1 = LocalDate.parse("2022-01-03");
@@ -239,6 +238,42 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
                 .build();
 
         when(userRepository.findByFullName("prof")).thenReturn(Optional.empty());
+        when(recommendationRequestRepository.save(eq(recReq1))).thenReturn(recReq1);
+
+        // act
+        MvcResult response = mockMvc.perform(
+                        post("/api/recommendationrequest/post?requesterName=student&professorEmail=email&professorName=prof&recommendationTypes=type&details=&submissionDate=2022-01-03&completionDate=2022-01-03")
+                                        .with(csrf()))
+                        .andExpect(status().isNotFound()).andReturn();
+
+        // assert
+        verify(userRepository, times(1)).findByFullName("prof");
+        verify(recommendationRequestRepository, times(0)).save(recReq1);
+
+        String responseString = response.getResponse().getContentAsString();
+        assertTrue(responseString.contains("EntityNotFoundException"));
+    }
+
+    @WithMockUser(roles = { "ADMIN", "STUDENT" })
+    @Test
+    public void an_admin_user_cant_post_a_new_recommendation_request_with_user_whos_not_a_professor() throws Exception {
+        // arrange
+
+        LocalDate ld1 = LocalDate.parse("2022-01-03");
+
+        RecommendationRequest recReq1 = RecommendationRequest.builder()
+                        .requesterName("student")
+                .professorEmail("email")
+                .professorName("prof")
+                .recommendationTypes("type")
+                .details("")
+                .submissionDate(ld1)
+                .completionDate(ld1)
+                .status("pending")
+                .build();
+
+        User mockUser = User.builder().fullName("prof").professor(false).build();
+        when(userRepository.findByFullName("prof")).thenReturn(Optional.of(mockUser));
         when(recommendationRequestRepository.save(eq(recReq1))).thenReturn(recReq1);
 
         // act
