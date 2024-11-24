@@ -1,6 +1,7 @@
 package edu.ucsb.cs156.rec.controllers;
 
 import edu.ucsb.cs156.rec.entities.RecommendationRequest;
+import edu.ucsb.cs156.rec.entities.User;
 import edu.ucsb.cs156.rec.errors.EntityNotFoundException;
 import edu.ucsb.cs156.rec.models.CurrentUser;
 import edu.ucsb.cs156.rec.repositories.RecommendationRequestRepository;
@@ -26,14 +27,31 @@ public class RecommendationRequestController extends ApiController {
     RecommendationRequestRepository recommendationRequestRepository;
 
     /**
-     * This method returns a list of all recommendationrequests.
-     * @return a list of all recommendationrequests
+     * This method returns a list of all recommendation requests requested by current student.
+     * @return a list of all recommendation requests requested by the current user
      */
-    @Operation(summary = "List all recommendation request")
+    @Operation(summary = "List all recommendation requests requested by current user")
     @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping("/all")
-    public Iterable<RecommendationRequest> allRecommendationRequests() {
-        Iterable<RecommendationRequest> recommendationRequests = recommendationRequestRepository.findAll();
+    @GetMapping("/requester/all")
+    public Iterable<RecommendationRequest> allRequesterRecommendationRequests(
+    ) {
+        // toyed with having this only be ROLE_STUDENT but I think even professors should be able to submit requests so they can see which ones they have submitted too
+        User currentUser = getCurrentUser().getUser();
+        Iterable<RecommendationRequest> recommendationRequests = recommendationRequestRepository.findAllByRequesterId(currentUser.getId());
+        return recommendationRequests;
+    }
+
+    /**
+     * This method returns a list of all recommendation requests intended for current user who is a professor.
+     * @return a list of all recommendation requests intended for the current user who is a professor
+     */
+    @Operation(summary = "List all recommendation requests for professor")
+    @PreAuthorize("hasRole('ROLE_PROFESSOR')")
+    @GetMapping("/professor/all")
+    public Iterable<RecommendationRequest> allProfessorRecommendationRequests(
+    ) {
+        User currentUser = getCurrentUser().getUser();
+        Iterable<RecommendationRequest> recommendationRequests = recommendationRequestRepository.findAllByRequesterId(currentUser.getId());
         return recommendationRequests;
     }
 
