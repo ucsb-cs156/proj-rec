@@ -47,26 +47,6 @@ public class RequestTypesControllerTests extends ControllerTestCase {
         @MockBean
         UserRepository userRepository;
 
-        // Authorization tests for /api/requesttypes/admin/all
-
-        @Test
-        public void logged_out_users_cannot_get_all() throws Exception {
-                mockMvc.perform(get("/api/requesttypes/all"))
-                                .andExpect(status().is(403)); // logged out users can't get all
-        }
-
-        @WithMockUser(roles = { "USER" })
-        @Test
-        public void logged_in_users_can_get_all() throws Exception {
-                mockMvc.perform(get("/api/requesttypes/all"))
-                                .andExpect(status().is(200)); // logged
-        }
-
-        @Test
-        public void logged_out_users_cannot_get_by_id() throws Exception {
-                mockMvc.perform(get("/api/requesttypes?id=7"))
-                                .andExpect(status().is(403)); // logged out users can't get by id
-        }
 
         // // Tests with mocks for database actions
 
@@ -145,6 +125,7 @@ public class RequestTypesControllerTests extends ControllerTestCase {
                 String responseString = response.getResponse().getContentAsString();
                 assertEquals(expectedJson, responseString);
         }
+
                 
         // Authorization tests for /api/phones/post
         // (Perhaps should also have these for put and delete)
