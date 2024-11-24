@@ -27,7 +27,7 @@
                       "autoIncrement": true,
                       "constraints": {
                         "primaryKey": true,
-                        "primaryKeyName": "REQUESTTYPES_PK"
+                        "primaryKeyName": "PK_REQUESTTYPES_ID"
                       },
                       "name": "ID",
                       "type": "BIGINT"

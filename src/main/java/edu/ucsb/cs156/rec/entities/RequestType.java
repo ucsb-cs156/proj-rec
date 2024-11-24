@@ -10,7 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * This is a JPA entity that represents a RequestType
+ * This is a JPA entity that represents a RequestType (i.e., CS Department BS/MS program, Scholarship or Fellowship, etc.)
  */
 
 @Data
