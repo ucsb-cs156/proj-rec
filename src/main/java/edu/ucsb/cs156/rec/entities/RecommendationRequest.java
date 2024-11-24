@@ -29,11 +29,12 @@ public class RecommendationRequest {
 
   @ManyToOne
   @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
-  private User user;
+  private User requester;
 
-  private String professorName;
-  private String professorEmail;
-  private String requesterName;
+  @ManyToOne
+  @JoinColumn(name = "professor_id", referencedColumnName = "id", insertable = false, updatable = false)
+  private User professor;
+
   private String recommendationTypes;
   private String details;
   private String status;
