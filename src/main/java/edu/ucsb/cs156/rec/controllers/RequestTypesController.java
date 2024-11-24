@@ -41,6 +41,19 @@ public class RequestTypesController extends ApiController {
     @Autowired
     RequestTypeRepository requestTypeRepository;
 
+        /**
+     * List all Request Types
+     * 
+     * @return an iterable of RequestType
+     */
+    @Operation(summary= "List all request types")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("/all")
+    public Iterable<RequestType> allRequestTypes() {
+        Iterable<RequestType> types = requestTypeRepository.findAll();
+        return types;
+    }
+
   
     /**
      * Create a new request type
@@ -107,7 +120,4 @@ public class RequestTypesController extends ApiController {
         requestTypeRepository.save(modifiedRequestType);
         return modifiedRequestType;
     }
-
-    
-
 }
