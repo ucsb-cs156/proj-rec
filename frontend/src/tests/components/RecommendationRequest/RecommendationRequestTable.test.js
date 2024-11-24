@@ -36,7 +36,7 @@ describe("UserTable tests", () => {
       "Professor Name",
       "Professor Email",
       "Requester Name",
-      "Recommendation Types",
+      "Recommendation Type",
       "Details",
       "Status",
       "Submission Date",
