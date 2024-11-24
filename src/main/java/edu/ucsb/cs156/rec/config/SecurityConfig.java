@@ -118,9 +118,12 @@ public class SecurityConfig {
           if (getAdmin(email)) {
             mappedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
           }
+          if (getProfessor(email)) {
+            mappedAuthorities.add(new SimpleGrantedAuthority("ROLE_PROFESSOR"));
+          }
 
-          if (email.endsWith("@ucsb.edu")) {
-            mappedAuthorities.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
+          if (getStudent(email)) {
+            mappedAuthorities.add(new SimpleGrantedAuthority("ROLE_STUDENT"));
           }
         }
 
@@ -144,6 +147,29 @@ public class SecurityConfig {
     }
     Optional<User> u = userRepository.findByEmail(email);
     return u.isPresent() && u.get().getAdmin();
+  }
+  /**
+   * This method checks if the given email belongs to a professor user by querying
+   * the user repository.
+   * 
+   * @param email email address of the user
+   * @return whether the user with the given email is a professor
+   */
+  public boolean getProfessor(String email) {
+    Optional<User> u = userRepository.findByEmail(email);
+    return u.isPresent() && u.get().getProfessor();
+  }
+
+  /**
+   * This method checks if the given email belongs to a student user by querying
+   * the user repository.
+   * 
+   * @param email email address of the user
+   * @return whether the user with the given email is a student
+   */
+  public boolean getStudent(String email) {
+    Optional<User> u = userRepository.findByEmail(email);
+    return u.isPresent() && u.get().getStudent();
   }
 }
 
