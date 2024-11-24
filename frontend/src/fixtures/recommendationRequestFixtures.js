@@ -2,9 +2,7 @@ const recommendationRequestFixtures = {
   oneRecommendation: [
     {
       id: 1,
-      professorName: "testname",
-      professorEmail: "testemail@ucsb.edu",
-      requesterName: "recname",
+      professor_id: 1,
       submissionDate: "2022-02-02T12:00",
       completionDate: "",
       status: "PENDING",
@@ -17,9 +15,7 @@ const recommendationRequestFixtures = {
   threeRecommendations: [
     {
       id: 2,
-      professorName: "testname1",
-      professorEmail: "testemail1@ucsb.edu",
-      requesterName: "recname1",
+      professor_id: 2,
       submissionDate: "2022-02-02T12:00",
       completionDate: "",
       status: "PENDING",
@@ -30,9 +26,7 @@ const recommendationRequestFixtures = {
 
     {
       id: 3,
-      professorName: "testname2",
-      professorEmail: "testemail2@ucsb.edu",
-      requesterName: "recname2",
+      professor_id: 3,
       submissionDate: "2022-02-02T12:00",
       completionDate: "2022-02-02T12:00",
       status: "COMPLETED",
@@ -43,9 +37,7 @@ const recommendationRequestFixtures = {
 
     {
       id: 4,
-      professorName: "testname3",
-      professorEmail: "testemail3@ucsb.edu",
-      requesterName: "recname3",
+      professor_id: 4,
       submissionDate: "2022-02-02T12:00",
       completionDate: "2022-02-02T12:00",
       status: "DENIED",
