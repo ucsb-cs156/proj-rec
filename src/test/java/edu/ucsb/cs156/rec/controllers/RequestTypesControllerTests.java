@@ -50,6 +50,18 @@ public class RequestTypesControllerTests extends ControllerTestCase {
         // Authorization tests for /api/phones/admin/all
 
 
+        @Test
+        public void logged_out_users_cannot_get_all() throws Exception {
+                mockMvc.perform(get("/api/requesttypes/all"))
+                                .andExpect(status().is(403)); // logged out users can't get all
+        }
+        
+        @WithMockUser(roles = { "USER" })
+        @Test
+        public void logged_in_users_can_get_all() throws Exception {
+                mockMvc.perform(get("/api/requesttypes/all"))
+                                .andExpect(status().is(200)); // logged
+        }
         // Authorization tests for /api/phones/post
         // (Perhaps should also have these for put and delete)
 
@@ -64,6 +76,36 @@ public class RequestTypesControllerTests extends ControllerTestCase {
         public void logged_in_regular_users_cannot_post() throws Exception {
                 mockMvc.perform(post("/api/requesttypes/post"))
                                 .andExpect(status().is(403)); // only admins can post
+        }
+        @WithMockUser(roles = { "USER" })
+        @Test
+        public void logged_in_user_can_get_all_requesttypes() throws Exception {
+
+                // arrange
+
+                RequestType requestType1 = RequestType.builder()
+                                .requestType("CS Department BS/MS program")
+                                .build();
+
+                RequestType requestType2 = RequestType.builder()
+                                .requestType("Scholarship or Fellowship")
+                                .build();
+
+                ArrayList<RequestType> expectedRequestTypes = new ArrayList<>();
+                expectedRequestTypes.addAll(Arrays.asList(requestType1, requestType2));
+
+                when(requestTypeRepository.findAll()).thenReturn(expectedRequestTypes);
+
+                // act
+                MvcResult response = mockMvc.perform(get("/api/requesttypes/all"))
+                                .andExpect(status().isOk()).andReturn();
+
+                // assert
+
+                verify(requestTypeRepository, times(1)).findAll();
+                String expectedJson = mapper.writeValueAsString(expectedRequestTypes);
+                String responseString = response.getResponse().getContentAsString();
+                assertEquals(expectedJson, responseString);
         }
 
 
