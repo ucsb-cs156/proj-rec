@@ -141,6 +141,7 @@ describe("AppNavbar tests", () => {
   });
 
   test("renders the ucsbdates link correctly", async () => {
+
     const currentUser = currentUserFixtures.userOnly;
     const systemInfo = systemInfoFixtures.showingBoth;
 
@@ -165,6 +166,7 @@ describe("AppNavbar tests", () => {
   });
 
   test("Placeholder links do NOT show when not logged in", async () => {
+
     const currentUser = null;
     const systemInfo = systemInfoFixtures.showingBoth;
     const doLogin = jest.fn();
