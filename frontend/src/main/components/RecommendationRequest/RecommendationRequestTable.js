@@ -48,8 +48,8 @@ export default function RecommendationRequestTable({ requests, currentUser }) {
       accessor: "requesterName",
     },
     {
-      Header: "Recommendation Types",
-      accessor: "recommendationTypes",
+      Header: "Recommendation Type",
+      accessor: "recommendationType",
     },
     {
       Header: "Details",
