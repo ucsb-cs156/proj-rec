@@ -56,22 +56,10 @@ export default function AppNavbar({
                   data-testid="appnavbar-admin-dropdown"
                 >
                   <NavDropdown.Item href="/admin/users">Users</NavDropdown.Item>
+                  <NavDropdown.Item href="/admin/requests">
+                    Requests
+                  </NavDropdown.Item>
                 </NavDropdown>
-              )}
-              {currentUser && currentUser.loggedIn ? (
-                <>
-                  <Nav.Link as={Link} to="/restaurants">
-                    Restaurants
-                  </Nav.Link>
-                  <Nav.Link as={Link} to="/ucsbdates">
-                    UCSB Dates
-                  </Nav.Link>
-                  <Nav.Link as={Link} to="/placeholder">
-                    Placeholder
-                  </Nav.Link>
-                </>
-              ) : (
-                <></>
               )}
             </Nav>
 

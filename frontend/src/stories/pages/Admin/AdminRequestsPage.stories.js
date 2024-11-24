@@ -3,14 +3,14 @@ import { apiCurrentUserFixtures } from "fixtures/currentUserFixtures";
 import { systemInfoFixtures } from "fixtures/systemInfoFixtures";
 import { http, HttpResponse } from "msw";
 
-import UCSBDatesCreatePage from "main/pages/UCSBDates/UCSBDatesCreatePage";
+import AdminRequestsPage from "main/pages/AdminRequestsPage";
 
 export default {
-  title: "pages/UCSBDates/UCSBDatesCreatePage",
-  component: UCSBDatesCreatePage,
+  title: "pages/AdminRequestsPage",
+  component: AdminRequestsPage,
 };
 
-const Template = () => <UCSBDatesCreatePage storybook={true} />;
+const Template = () => <AdminRequestsPage storybook={true} />;
 
 export const Default = Template.bind({});
 Default.parameters = {
@@ -25,8 +25,6 @@ Default.parameters = {
         status: 200,
       });
     }),
-    http.post("/api/ucsbdates/post", () => {
-      return HttpResponse.json({}, { status: 200 });
-    }),
+    // post requests when backend is done
   ],
 };
