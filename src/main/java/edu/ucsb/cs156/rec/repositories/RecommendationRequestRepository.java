@@ -6,7 +6,6 @@ import org.springframework.beans.propertyeditors.StringArrayPropertyEditor;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
 import java.util.List;
 
 
@@ -16,6 +15,12 @@ import java.util.List;
  */
 @Repository
 public interface RecommendationRequestRepository extends CrudRepository<RecommendationRequest, Long> {
+    /**
+     * Find a recommendation request by the professor's user id
+     * 
+     * @param id the id of the professor user
+     * @return an Optional of the recommendation request
+     */
     List<RecommendationRequest> findAllByProfessorId(Long id);
 
     

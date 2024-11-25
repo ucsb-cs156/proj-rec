@@ -69,6 +69,7 @@ public class RecommendationRequestController extends ApiController{
      * Get a single recommendation request by id
      * 
      * @param id the id of the recommendation request
+     * @throws EntityNotFoundException if the recommendation request is not found
      * @return a recommendation request
      */
     @Operation(summary= "Get a single recommendation request")
@@ -91,6 +92,7 @@ public class RecommendationRequestController extends ApiController{
      * @param details the other details of the request
      * @param submissionDate the date the request was submitted
      * @param completionDate the date the request was completed
+     * @throws EntityNotFoundException if the professor is not found or is hte user does not have the professor role
      * @return the created RecommendationRequest
     */
     
@@ -134,6 +136,7 @@ public class RecommendationRequestController extends ApiController{
      * Delete a recommendation request
      * 
      * @param id the id of the recommendation request to delete
+     * @throws EntityNotFoundException if the recommendation request is not found
      * @return a message indicating the recommedation request was deleted
      */
     @Operation(summary= "Delete a recommendation request")
@@ -153,6 +156,7 @@ public class RecommendationRequestController extends ApiController{
      * 
      * @param id       id of the recommendation request to update
      * @param incoming the new recommendation request
+     * @throws EntityNotFoundException if the recommendation request is not found
      * @return the updated recommendation request object
      */
     @Operation(summary= "Update a single recommendation request")
@@ -181,8 +185,9 @@ public class RecommendationRequestController extends ApiController{
     /**
      * Get all recommendation requests by Professor Name
      * 
-     * @param professorName the name of the professor
-     * @return an iterable of RecommendationRequest with name of the professor
+     * @param userId the user Id of the professor
+     * @throws EntityNotFoundException if the professor is not found
+     * @return a list of all rec reqs directed towards the professor with the given userId
      */
     @Operation(summary= "Get all recommendation requests by Professor Name")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')") 
