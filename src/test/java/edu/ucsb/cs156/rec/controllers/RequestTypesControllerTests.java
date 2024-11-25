@@ -70,6 +70,50 @@ public class RequestTypesControllerTests extends ControllerTestCase {
 
         // // Tests with mocks for database actions
 
+        @WithMockUser(roles = { "USER" })
+        @Test
+        public void test_that_logged_in_user_can_get_by_id_when_the_id_exists() throws Exception {
+
+                // arrange
+
+                RequestType requestType = RequestType.builder()
+                                .requestType("CS Department BS/MS program")
+                                .build();
+
+                when(requestTypeRepository.findById(eq(7L))).thenReturn(Optional.of(requestType));
+
+                // act
+                MvcResult response = mockMvc.perform(get("/api/requesttypes?id=7"))
+                                .andExpect(status().isOk()).andReturn();
+
+                // assert
+
+                verify(requestTypeRepository, times(1)).findById(eq(7L));
+                String expectedJson = mapper.writeValueAsString(requestType);
+                String responseString = response.getResponse().getContentAsString();
+                assertEquals(expectedJson, responseString);
+        }
+
+        @WithMockUser(roles = { "USER" })
+        @Test
+        public void test_that_logged_in_user_can_get_by_id_when_the_id_does_not_exist() throws Exception {
+
+                // arrange
+
+                when(requestTypeRepository.findById(eq(7L))).thenReturn(Optional.empty());
+
+                // act
+                MvcResult response = mockMvc.perform(get("/api/requesttypes?id=7"))
+                                .andExpect(status().isNotFound()).andReturn();
+
+                // assert
+
+                verify(requestTypeRepository, times(1)).findById(eq(7L));
+                Map<String, Object> json = responseToJson(response);
+                assertEquals("EntityNotFoundException", json.get("type"));
+                assertEquals("RequestType with id 7 not found", json.get("message"));
+        }
+
         @WithMockUser(roles = { "ADMIN", "USER" })
         @Test
         public void admin_can_delete_a_request_type() throws Exception {
