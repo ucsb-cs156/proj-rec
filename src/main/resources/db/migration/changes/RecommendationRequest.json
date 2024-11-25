@@ -47,8 +47,8 @@
                 },
                 {
                   "column": {
-                    "name": "PROFESSOR_NAME",
-                    "type": "VARCHAR(255)"
+                    "name": "USER_ID",
+                    "type": "BIGINT"
                   }
                 },
                 {
