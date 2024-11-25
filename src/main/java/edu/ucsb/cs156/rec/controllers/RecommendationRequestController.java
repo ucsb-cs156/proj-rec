@@ -34,6 +34,7 @@ import jakarta.validation.Valid;
 
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.List;
 
 /**
  * This is a REST controller for RecommendationRequest
@@ -84,7 +85,6 @@ public class RecommendationRequestController extends ApiController{
     /**
      * Create a new recommendation request
      * 
-     * @param professorName the name of the professor
      * @param professorEmail the email of the professor
      * @param requesterName the name of the requester
      * @param recommendationTypes the type of recommendations
@@ -98,7 +98,6 @@ public class RecommendationRequestController extends ApiController{
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STUDENT')")
     @PostMapping("/post")
     public RecommendationRequest postRecommendationRequest(
-        @Parameter(name="professorName") @RequestParam String professorName,
         @Parameter(name="professorEmail") @RequestParam String professorEmail,
         @Parameter(name="requesterName") @RequestParam String requesterName,
         @Parameter(name="recommendationTypes") @RequestParam String recommendationTypes,
@@ -109,15 +108,15 @@ public class RecommendationRequestController extends ApiController{
 
             log.info("submissionDate{}", submissionDate);
 
-            User prof = userRepository.findByFullName(professorName)
-                .orElseThrow(() -> new EntityNotFoundException(User.class, professorName));
+            User prof = userRepository.findByEmail(professorEmail)
+                .orElseThrow(() -> new EntityNotFoundException(User.class, professorEmail));
             
             if (!prof.getProfessor()) {
-                throw new EntityNotFoundException(User.class, professorName);
+                throw new EntityNotFoundException(User.class, professorEmail);
             }
 
             RecommendationRequest recommendationRequest = new RecommendationRequest();
-            recommendationRequest.setProfessorName(professorName);
+            recommendationRequest.setProfessor(prof);
             recommendationRequest.setProfessorEmail(professorEmail);
             recommendationRequest.setRequesterName(requesterName);
             recommendationRequest.setRecommendationTypes(recommendationTypes);
@@ -166,7 +165,6 @@ public class RecommendationRequestController extends ApiController{
         RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(RecommendationRequest.class, id));
 
-        recommendationRequest.setProfessorName(incoming.getProfessorName());
         recommendationRequest.setProfessorEmail(incoming.getProfessorEmail());
         recommendationRequest.setRequesterName(incoming.getRequesterName());
         recommendationRequest.setRecommendationTypes(incoming.getRecommendationTypes());
@@ -187,26 +185,16 @@ public class RecommendationRequestController extends ApiController{
      * @return an iterable of RecommendationRequest with name of the professor
      */
     @Operation(summary= "Get all recommendation requests by Professor Name")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')") // Change to ROLE_PROFESSOR LATER
-    @GetMapping("/professor/{professorName}")
-    public Iterable<RecommendationRequest> getRecommendationRequestsByProfessorName(
-            @Parameter(name = "professorName") @PathVariable String professorName) {
-        Iterable<RecommendationRequest> recommendationRequests = recommendationRequestRepository.findAllByProfessorName(professorName);
-        return recommendationRequests;
-    }
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')") 
+    @GetMapping("/professor/{userId}")
+    public List<RecommendationRequest> getAllRecommendationRequestsByProfessor(
+        @PathVariable(value="userId") long userId) {
 
-    /**
-     * Get all recommendation requests by Student Name
-     * 
-     * @param requesterName the name of the student
-     * @return 
-     */
-    @Operation(summary= "Get all recommendation requests by Requester Name")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STUDENT')") // Change to ROLE_PROFESSOR LATER
-    @GetMapping("/requester/{requesterName}")
-    public Iterable<RecommendationRequest> getRecommendationRequestsByRequesterName(
-            @Parameter(name = "requesterName") @PathVariable String requesterName) {
-        Iterable<RecommendationRequest> recommendationRequests = recommendationRequestRepository.findAllByRequesterName(requesterName);
+        if( !userRepository.existsById(userId)) {
+            throw new EntityNotFoundException(User.class, userId);
+        }
+        List<RecommendationRequest> recommendationRequests = recommendationRequestRepository.findAllByProfessorId(userId);
         return recommendationRequests;
+
     }
 }

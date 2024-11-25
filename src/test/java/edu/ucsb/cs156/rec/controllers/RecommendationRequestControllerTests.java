@@ -26,6 +26,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import java.time.LocalDate;
 
 import java.util.Optional;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -87,14 +88,14 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
     @WithMockUser(roles = { "ADMIN" })
     @Test
     public void test_that_logged_in_user_can_get_by_id_when_the_id_exists() throws Exception {
-
             // arrange
             LocalDate ld = LocalDate.parse("2022-01-03");
 
+            User mockUser = User.builder().fullName("test").professor(true).build();
             RecommendationRequest recReq = RecommendationRequest.builder()
+                            .professor(mockUser)
                             .requesterName("student")
-                            .professorEmail("email")
-                            .professorName("prof")
+                            .professorEmail("email.com")
                             .recommendationTypes("type")
                             .details("")
                             .submissionDate(ld)
@@ -142,11 +143,11 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
 
             // arrange
             LocalDate ld1 = LocalDate.parse("2022-01-03");
-
+            User mockUser = User.builder().fullName("test").professor(true).build();
             RecommendationRequest recReq1 = RecommendationRequest.builder()
+                        .professor(mockUser)
                         .requesterName("student")
-                        .professorEmail("email")
-                        .professorName("prof")
+                        .professorEmail("email.com")
                         .recommendationTypes("type")
                         .details("")
                         .submissionDate(ld1)
@@ -157,9 +158,9 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
             LocalDate ld2 = LocalDate.parse("2022-03-11");
 
             RecommendationRequest recReq2 = RecommendationRequest.builder()
+                        .professor(mockUser)
                         .requesterName("student")
-                        .professorEmail("email")
-                        .professorName("prof")
+                        .professorEmail("email.com")
                         .recommendationTypes("type")
                         .details("")
                         .submissionDate(ld2)
@@ -191,10 +192,11 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
 
         LocalDate ld1 = LocalDate.parse("2022-01-03");
 
+        User mockUser1 = User.builder().email("email.com").fullName("prof").professor(true).build();
         RecommendationRequest recReq1 = RecommendationRequest.builder()
-                        .requesterName("student")
-                .professorEmail("email")
-                .professorName("prof")
+                .professor(mockUser1)
+                .requesterName("student")
+                .professorEmail("email.com")
                 .recommendationTypes("type")
                 .details("")
                 .submissionDate(ld1)
@@ -202,13 +204,13 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
                 .status("pending")
                 .build();
 
-        User mockUser = User.builder().fullName("prof").professor(true).build();
-        when(userRepository.findByFullName("prof")).thenReturn(Optional.of(mockUser));
+        User mockUser = User.builder().email("email.com").fullName("prof").professor(true).build();
+        when(userRepository.findByEmail("email.com")).thenReturn(Optional.of(mockUser));
         when(recommendationRequestRepository.save(eq(recReq1))).thenReturn(recReq1);
 
         // act
         MvcResult response = mockMvc.perform(
-                        post("/api/recommendationrequest/post?requesterName=student&professorEmail=email&professorName=prof&recommendationTypes=type&details=&submissionDate=2022-01-03&completionDate=2022-01-03")
+                        post("/api/recommendationrequest/post?requesterName=student&professorEmail=email.com&recommendationTypes=type&details=&submissionDate=2022-01-03&completionDate=2022-01-03")
                                         .with(csrf()))
                         .andExpect(status().isOk()).andReturn();
 
@@ -225,11 +227,12 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
         // arrange
 
         LocalDate ld1 = LocalDate.parse("2022-01-03");
+        User mockUser = User.builder().email("email.com").fullName("test").professor(false).build();
 
         RecommendationRequest recReq1 = RecommendationRequest.builder()
-                        .requesterName("student")
-                .professorEmail("email")
-                .professorName("prof")
+                .professor(mockUser)
+                .requesterName("student")
+                .professorEmail("email.com")
                 .recommendationTypes("type")
                 .details("")
                 .submissionDate(ld1)
@@ -237,17 +240,17 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
                 .status("pending")
                 .build();
 
-        when(userRepository.findByFullName("prof")).thenReturn(Optional.empty());
+        when(userRepository.findByEmail("email.com")).thenReturn(Optional.empty());
         when(recommendationRequestRepository.save(eq(recReq1))).thenReturn(recReq1);
 
         // act
         MvcResult response = mockMvc.perform(
-                        post("/api/recommendationrequest/post?requesterName=student&professorEmail=email&professorName=prof&recommendationTypes=type&details=&submissionDate=2022-01-03&completionDate=2022-01-03")
+                        post("/api/recommendationrequest/post?requesterName=student&professorEmail=email.com&recommendationTypes=type&details=&submissionDate=2022-01-03&completionDate=2022-01-03")
                                         .with(csrf()))
                         .andExpect(status().isNotFound()).andReturn();
 
         // assert
-        verify(userRepository, times(1)).findByFullName("prof");
+        verify(userRepository, times(1)).findByEmail("email.com");
         verify(recommendationRequestRepository, times(0)).save(recReq1);
 
         String responseString = response.getResponse().getContentAsString();
@@ -260,11 +263,13 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
         // arrange
 
         LocalDate ld1 = LocalDate.parse("2022-01-03");
+        User mockUser1 = User.builder().email("email.com").fullName("test").professor(false).build();
+
 
         RecommendationRequest recReq1 = RecommendationRequest.builder()
+                .professor(mockUser1)
                         .requesterName("student")
-                .professorEmail("email")
-                .professorName("prof")
+                .professorEmail("email.com")
                 .recommendationTypes("type")
                 .details("")
                 .submissionDate(ld1)
@@ -273,17 +278,17 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
                 .build();
 
         User mockUser = User.builder().fullName("prof").professor(false).build();
-        when(userRepository.findByFullName("prof")).thenReturn(Optional.of(mockUser));
+        when(userRepository.findByEmail("email.com")).thenReturn(Optional.of(mockUser));
         when(recommendationRequestRepository.save(eq(recReq1))).thenReturn(recReq1);
 
         // act
         MvcResult response = mockMvc.perform(
-                        post("/api/recommendationrequest/post?requesterName=student&professorEmail=email&professorName=prof&recommendationTypes=type&details=&submissionDate=2022-01-03&completionDate=2022-01-03")
+                        post("/api/recommendationrequest/post?requesterName=student&professorEmail=email.com&recommendationTypes=type&details=&submissionDate=2022-01-03&completionDate=2022-01-03")
                                         .with(csrf()))
                         .andExpect(status().isNotFound()).andReturn();
 
         // assert
-        verify(userRepository, times(1)).findByFullName("prof");
+        verify(userRepository, times(1)).findByEmail("email.com");
         verify(recommendationRequestRepository, times(0)).save(recReq1);
 
         String responseString = response.getResponse().getContentAsString();
@@ -297,11 +302,13 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
 
             LocalDate ld1 = LocalDate.parse("2022-01-03");
             LocalDate ld2 = LocalDate.parse("2023-01-04");
+            User mockUser = User.builder().fullName("test").professor(true).build();
+
 
             RecommendationRequest recReqOrig = RecommendationRequest.builder()
+                        .professor(mockUser)
                         .requesterName("student")
-                        .professorEmail("email")
-                        .professorName("prof")
+                        .professorEmail("email.com")
                         .recommendationTypes("type")
                         .details("")
                         .submissionDate(ld1)
@@ -310,9 +317,9 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
                         .build();
 
             RecommendationRequest recReqEdited = RecommendationRequest.builder()
+                        .professor(mockUser)
                         .requesterName("edit")
                         .professorEmail("edit")
-                        .professorName("edit")
                         .recommendationTypes("edit")
                         .details("edit")
                         .submissionDate(ld2)
@@ -344,11 +351,12 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
             // arrange
 
             LocalDate ld1 = LocalDate.parse("2022-01-03");
+            User mockUser = User.builder().fullName("test").professor(true).build();
 
             RecommendationRequest recReqEdited = RecommendationRequest.builder()
+                        .professor(mockUser)
                         .requesterName("student")
-                        .professorEmail("email")
-                        .professorName("prof")
+                        .professorEmail("email.com")
                         .recommendationTypes("type")
                         .details("")
                         .submissionDate(ld1)
@@ -381,11 +389,11 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
             // arrange
 
             LocalDate ld1 = LocalDate.parse("2022-01-03");
-
+            User mockUser = User.builder().fullName("test").professor(true).build();
             RecommendationRequest recommendationRequest = RecommendationRequest.builder()
+                        .professor(mockUser)                        
                         .requesterName("student")
-                        .professorEmail("email")
-                        .professorName("prof")
+                        .professorEmail("email.com")
                         .recommendationTypes("type")
                         .details("")
                         .submissionDate(ld1)
@@ -430,15 +438,15 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
     }
     @WithMockUser(roles = { "ADMIN" })
     @Test
-    public void logged_in_user_can_get_all_recommendation_requests_by_professor_name() throws Exception {
+    public void logged_in_user_can_get_all_recommendation_requests_by_professor_id() throws Exception {
 
             // arrange
+            User mockUser = User.builder().id(15L).fullName("prof").professor(true).build();
             LocalDate ld1 = LocalDate.parse("2022-01-03");
-
             RecommendationRequest recReq1 = RecommendationRequest.builder()
+                        .professor(mockUser)
                         .requesterName("student")
-                        .professorEmail("email")
-                        .professorName("prof1")
+                        .professorEmail("email.com")
                         .recommendationTypes("type")
                         .details("")
                         .submissionDate(ld1)
@@ -449,9 +457,9 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
             LocalDate ld2 = LocalDate.parse("2022-03-11");
 
             RecommendationRequest recReq2 = RecommendationRequest.builder()
+                        .professor(mockUser)
                         .requesterName("student")
-                        .professorEmail("email")
-                        .professorName("prof1")
+                        .professorEmail("email.com")
                         .recommendationTypes("type")
                         .details("")
                         .submissionDate(ld2)
@@ -459,10 +467,11 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
                         .status("pending")
                         .build();
 
+        User mockUser2 = User.builder().id(16L).fullName("prof").professor(true).build();
             RecommendationRequest recReq3 = RecommendationRequest.builder()
+                        .professor(mockUser2)
                         .requesterName("student")
-                        .professorEmail("email")
-                        .professorName("prof3")
+                        .professorEmail("email.com")
                         .recommendationTypes("type")
                         .details("")
                         .submissionDate(ld2)
@@ -470,67 +479,42 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
                         .status("pending")
                         .build();
 
-            Iterable<RecommendationRequest> expectedRecReqs = Arrays.asList(recReq1, recReq2);
+            List<RecommendationRequest> expectedRecReqs = Arrays.asList(recReq1, recReq2);
 
-            when(recommendationRequestRepository.findAllByProfessorName("prof1")).thenReturn(expectedRecReqs);
+            when(recommendationRequestRepository.findAllByProfessorId(15L)).thenReturn(expectedRecReqs);
+            when(userRepository.existsById(15L)).thenReturn(true);
 
             // act
-            MvcResult response = mockMvc.perform(get("/api/recommendationrequest/professor/prof1"))
+            MvcResult response = mockMvc.perform(get("/api/recommendationrequest/professor/15"))
                             .andExpect(status().isOk()).andReturn();
 
             // assert
 
         //     verify(recommendationRequestRepository, times(1)).findAll();
-            verify(recommendationRequestRepository, times(1)).findAllByProfessorName("prof1");
+            verify(recommendationRequestRepository, times(1)).findAllByProfessorId(15L);
             String expectedJson = mapper.writeValueAsString(expectedRecReqs);
             String responseString = response.getResponse().getContentAsString();
             assertEquals(expectedJson, responseString);
     }
-
     @WithMockUser(roles = { "ADMIN" })
     @Test
-    public void logged_in_user_can_get_all_recommendation_requests_by_student_name() throws Exception {
+    public void logged_in_user_cant_get_all_recommendation_requests_by_non_existent_professor_id() throws Exception {
 
             // arrange
-            LocalDate ld1 = LocalDate.parse("2022-01-03");
-
-            RecommendationRequest recReq1 = RecommendationRequest.builder()
-                        .requesterName("student")
-                        .professorEmail("email")
-                        .professorName("prof")
-                        .recommendationTypes("type")
-                        .details("")
-                        .submissionDate(ld1)
-                        .completionDate(ld1)
-                        .status("pending")
-                        .build();
-
-            LocalDate ld2 = LocalDate.parse("2022-03-11");
-
-            RecommendationRequest recReq2 = RecommendationRequest.builder()
-                        .requesterName("student")
-                        .professorEmail("email")
-                        .professorName("prof")
-                        .recommendationTypes("type")
-                        .details("")
-                        .submissionDate(ld2)
-                        .completionDate(ld2)
-                        .status("pending")
-                        .build();
-
-            Iterable<RecommendationRequest> expectedRecReqs = Arrays.asList(recReq1, recReq2);
-
-            when(recommendationRequestRepository.findAllByRequesterName("student")).thenReturn(expectedRecReqs);
+            when(userRepository.existsById(15L)).thenReturn(false);
 
             // act
-            MvcResult response = mockMvc.perform(get("/api/recommendationrequest/requester/student"))
-                            .andExpect(status().isOk()).andReturn();
+            MvcResult response = mockMvc.perform(get("/api/recommendationrequest/professor/15"))
+                            .andExpect(status().isNotFound()).andReturn();
 
             // assert
 
-            verify(recommendationRequestRepository, times(1)).findAllByRequesterName("student");
-            String expectedJson = mapper.writeValueAsString(expectedRecReqs);
+        //     verify(recommendationRequestRepository, times(1)).findAll();
+            verify(userRepository, times(1)).existsById(15L);
             String responseString = response.getResponse().getContentAsString();
-            assertEquals(expectedJson, responseString);
+            assertTrue(responseString.contains("EntityNotFoundException"));
     }
+
+
+
 }
