@@ -1,6 +1,7 @@
 package edu.ucsb.cs156.rec.entities;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,31 +14,40 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 /**
  * This is a JPA entity that represents a Recommendation Request
  */
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity(name = "recommendationrequest")
+@EntityListeners(AuditingEntityListener.class)
 public class RecommendationRequest {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
   @ManyToOne
-  @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
-  private User user;
+  @JoinColumn(name = "requester_id", referencedColumnName = "id", insertable = false, updatable = false)
+  private User requester;
 
-  private String professorName;
-  private String professorEmail;
-  private String requesterName;
-  private String recommendationTypes;
+  @ManyToOne
+  @JoinColumn(name = "professor_id", referencedColumnName = "id", insertable = false, updatable = false)
+  private User professor;
+
+  private String recommendationType;
   private String details;
   private String status;
 
-  private LocalDateTime submissionDate;
   private LocalDateTime completionDate;
+  private LocalDateTime dueDate;
+  @CreatedDate
+  private LocalDateTime submissionDate;
+  @LastModifiedDate
+  private LocalDateTime lastModifiedDate;
 }
