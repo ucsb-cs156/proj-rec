@@ -35,8 +35,6 @@ public class RecommendationRequestController extends ApiController {
     @Autowired
     RecommendationRequestRepository recommendationRequestRepository;
 
-
-
     /**
      * Any admin can delete a RecommendationRequest
      * 
@@ -79,39 +77,6 @@ public class RecommendationRequestController extends ApiController {
     }
 
     /**
-     * Any admin can update a single Recommendation Request
-     * 
-     * @param id       the id of the Recommendation Request to update
-     * @param incoming the updated Recommendation Request
-     * @return the updated Recommendation Request object
-     */
-    @Operation(summary = "An admin can update a single recommendation request")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping("/admin")
-    public RecommendationRequest updateRecommendationRequestAsAdmin(
-        @Parameter(name = "id") @RequestParam Long id,
-        @RequestBody @Valid RecommendationRequest incoming) {
-
-        RecommendationRequest recommendationRequest = 
-            recommendationRequestRepository
-                .findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(RecommendationRequest.class, id));
-
-        recommendationRequest.setProfessorName(incoming.getProfessorName());
-        recommendationRequest.setProfessorEmail(incoming.getProfessorEmail());
-        recommendationRequest.setRequesterName(incoming.getRequesterName());
-        recommendationRequest.setRecommendationTypes(incoming.getRecommendationTypes());
-        recommendationRequest.setDetails(incoming.getDetails());
-        recommendationRequest.setStatus(incoming.getStatus());
-        recommendationRequest.setSubmissionDate(incoming.getSubmissionDate());
-        recommendationRequest.setCompletionDate(incoming.getCompletionDate());
-
-        recommendationRequestRepository.save(recommendationRequest);
-
-        return recommendationRequest;
-    }
-
-    /**
      * The user who posted a RecommendationRequest can update their RecommendationRequest
      * 
      * @param id       the id of the Recommendation Request to update
@@ -131,16 +96,37 @@ public class RecommendationRequestController extends ApiController {
                 .findByIdAndUser(id, currentUser)
                 .orElseThrow(() -> new EntityNotFoundException(RecommendationRequest.class, id));
 
-        recommendationRequest.setProfessorName(incoming.getProfessorName());
-        recommendationRequest.setProfessorEmail(incoming.getProfessorEmail());
-        recommendationRequest.setRecommendationTypes(incoming.getRecommendationTypes());
         recommendationRequest.setDetails(incoming.getDetails());
-        recommendationRequest.setStatus(incoming.getStatus());
-        recommendationRequest.setSubmissionDate(incoming.getSubmissionDate());
-        recommendationRequest.setCompletionDate(incoming.getCompletionDate());
 
         recommendationRequestRepository.save(recommendationRequest);
            
         return recommendationRequest;    
     }
+
+     /**
+     * Prof can update a Recommendation Request's status
+     * 
+     * @param id       the id of the Recommendation Request to update
+     * @param incoming the updated Recommendation Request
+     * @return the updated Recommendation Request object
+     */
+    @Operation(summary = "A Professor can update a recommendation request's status")
+    @PreAuthorize("hasRole('ROLE_PROFESSOR')")
+    @PutMapping("/professor")
+    public RecommendationRequest updateRecommendationRequestAsAdmin(
+        @Parameter(name = "id") @RequestParam Long id,
+        @RequestBody @Valid RecommendationRequest incoming) {
+
+        RecommendationRequest recommendationRequest = 
+            recommendationRequestRepository
+                .findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(RecommendationRequest.class, id));
+
+        recommendationRequest.setStatus(incoming.getStatus());
+
+        recommendationRequestRepository.save(recommendationRequest);
+
+        return recommendationRequest;
+    }
+
 }
