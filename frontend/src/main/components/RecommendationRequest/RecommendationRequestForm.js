@@ -1,5 +1,5 @@
 import { Button, Form, Row, Col } from "react-bootstrap";
-
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
@@ -15,6 +15,27 @@ function RecommendationRequestForm({
     handleSubmit,
   } = useForm({ defaultValues: initialContents || {} });
   // Stryker restore all
+
+  const [professors, setProfessors] = useState([]);
+
+  //queries endpoint to get list of professors
+  useEffect(() => {
+    const getProfessors = async () => {
+      try {
+        const response = await fetch("/api/admin/users");
+        if (!response.ok) {
+          throw new Error("Failed to fetch professors");
+        }
+        const data = await response.json();
+        const professorUsers = data.filter(user => user.professor === true);
+        setProfessors(professorUsers); // Assuming `data` is an array of professors
+      } catch (error) {
+        console.error("Error fetching professors:", error);
+      }
+    };
+
+    getProfessors();
+  }, []);
 
   const navigate = useNavigate();
 
@@ -41,39 +62,20 @@ function RecommendationRequestForm({
             </Form.Group>
           </Col>
         )}
-
         <Col>
           <Form.Group className="mb-3">
-            <Form.Label htmlFor="professorName">Professor Name</Form.Label>
-            <Form.Control
-              data-testid="RecommendationRequestForm-professorName"
-              id="professorName"
-              type="text"
-              isInvalid={Boolean(errors.professorName)}
-              {...register("professorName", {
-                required: true,
-              })}
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.professorName && "Professor Name is required. "}
-            </Form.Control.Feedback>
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group className="mb-3">
-            <Form.Label htmlFor="professorEmail">Professor Email</Form.Label>
-            <Form.Control
-              data-testid="RecommendationRequestForm-professorEmail"
-              id="professorEmail"
-              type="email"
-              isInvalid={Boolean(errors.professorEmail)}
-              {...register("professorEmail", {
-                required: true,
-              })}
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.professorEmail && "Professor Email is required. "}
-            </Form.Control.Feedback>
+            <Form.Label htmlFor="professor">
+              Professor
+            </Form.Label>
+            <Form.Select
+              data-testid="RecommendationRequestForm-professor"
+              id="professor"
+              type="string"
+              isInvalid={Boolean(errors.professor)}
+              {...register("professor", {})}
+            >
+              
+            </Form.Select>
           </Form.Group>
         </Col>
       </Row>
