@@ -281,7 +281,7 @@ public class RequestTypeControllerTests extends ControllerTestCase {
 
         @WithMockUser(roles = { "ADMIN", "USER" })
         @Test
-        public void admin_can_edit_an_existing_ucsbdate() throws Exception {
+        public void admin_can_edit_an_existing_requesttype() throws Exception {
                 
                 // arrange
                 RequestType requestTypeOrig = RequestType.builder()
@@ -310,6 +310,79 @@ public class RequestTypeControllerTests extends ControllerTestCase {
                 verify(requestTypeRepository, times(1)).save(requestTypeEdited); // should be saved with correct user
                 String responseString = response.getResponse().getContentAsString();
                 assertEquals(requestBody, responseString);
+        }
+
+        @WithMockUser(roles = { "ADMIN", "USER" })
+        @Test
+        public void admin_cannot_edit_a_duplicate_requesttype() throws Exception {
+                
+                // arrange
+                RequestType requestType1 = RequestType.builder()
+                                .requestType("Internship")
+                                .build();
+
+                RequestType requestTypeOrig = RequestType.builder()
+                                .requestType("Grad School")
+                                .build();
+
+                RequestType requestTypeEdited = RequestType.builder()
+                                .id(67)
+                                .requestType("Internship")
+                                .build();
+
+                String requestBody = mapper.writeValueAsString(requestTypeEdited);
+
+                ArrayList<RequestType> expectedRequests = new ArrayList<>();
+                expectedRequests.addAll(Arrays.asList(requestType1, requestTypeOrig));
+
+                when(requestTypeRepository.findAll()).thenReturn(expectedRequests);
+
+                when(requestTypeRepository.findById(eq(67L))).thenReturn(Optional.of(requestTypeOrig));
+
+                // act
+                MvcResult response = mockMvc.perform(
+                                put("/api/requesttypes?id=67")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .characterEncoding("utf-8")
+                                                .content(requestBody)
+                                                .with(csrf()))
+                                .andExpect(status().is(400)).andReturn();
+
+                // assert
+                verify(requestTypeRepository, times(1)).findAll();
+                Map<String, Object> json = responseToJson(response);
+                assertEquals("IllegalArgumentException", json.get("type"));
+                assertEquals("Duplicate request type: RequestType(id=67, requestType=Internship)", json.get("message"));
+        }
+
+
+        @WithMockUser(roles = { "ADMIN", "USER" })
+        @Test
+        public void admin_cannot_edit_requesttype_that_does_not_exist() throws Exception {
+                
+                // arrange
+                RequestType requestTypeEdited = RequestType.builder()
+                                .requestType("PhD")
+                                .build();
+
+                String requestBody = mapper.writeValueAsString(requestTypeEdited);
+
+                when(requestTypeRepository.findById(eq(67L))).thenReturn(Optional.empty());
+
+                // act
+                MvcResult response = mockMvc.perform(
+                                put("/api/requesttypes?id=67")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .characterEncoding("utf-8")
+                                                .content(requestBody)
+                                                .with(csrf()))
+                                .andExpect(status().isNotFound()).andReturn();
+
+                // assert
+                verify(requestTypeRepository, times(1)).findById(67L);
+                Map<String, Object> json = responseToJson(response);
+                assertEquals("RequestType with id 67 not found", json.get("message"));
+
         }
 
 }
