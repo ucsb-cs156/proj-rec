@@ -50,6 +50,11 @@ function App() {
             />
           </>
         )}
+        {(hasRole(currentUser, "ROLE_USER") || hasRole(currentUser, "ROLE_INSTRUCTOR")) && (
+          <>
+            <Route exact path="/requesttypes/create" element={<RestaurantCreatePage />} />
+          </>
+        )}
         {hasRole(currentUser, "ROLE_USER") && (
           <>
             <Route
