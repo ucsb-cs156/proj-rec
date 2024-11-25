@@ -59,6 +59,7 @@ export default function AppNavbar({
                   <NavDropdown.Item href="/admin/requests">
                     Requests
                   </NavDropdown.Item>
+                  <NavDropdown.Item href="/requests/pending">Pending Requests</NavDropdown.Item>
                 </NavDropdown>
               )}
             </Nav>
