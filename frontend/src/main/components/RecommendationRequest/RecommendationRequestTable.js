@@ -37,15 +37,15 @@ export default function RecommendationRequestTable({ requests, currentUser }) {
     },
     {
       Header: "Professor Name",
-      accessor: "professorName",
+      accessor: "professor.fullName",
     },
     {
       Header: "Professor Email",
-      accessor: "professorEmail",
+      accessor: "professor.email",
     },
     {
       Header: "Requester Name",
-      accessor: "requesterName",
+      accessor: "requester.fullName",
     },
     {
       Header: "Recommendation Type",
@@ -62,6 +62,10 @@ export default function RecommendationRequestTable({ requests, currentUser }) {
     {
       Header: "Submission Date",
       accessor: "submissionDate",
+    },
+    {
+      Header: "Last Modified Date",
+      accessor: "lastModifiedDate",
     },
     {
       Header: "Completion Date",
@@ -91,7 +95,6 @@ export default function RecommendationRequestTable({ requests, currentUser }) {
       ),
     );
   }
-
 
   return (
     <OurTable

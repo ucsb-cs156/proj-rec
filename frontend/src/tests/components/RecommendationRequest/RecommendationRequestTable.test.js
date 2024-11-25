@@ -7,6 +7,7 @@ import { currentUserFixtures } from "fixtures/currentUserFixtures";
 import axios from "axios";
 import AxiosMockAdapter from "axios-mock-adapter";
 import { hasRole } from "main/utils/currentUser";
+import { hasRole } from "main/utils/currentUser";
 
 const mockedNavigate = jest.fn();
 
@@ -44,17 +45,19 @@ describe("UserTable tests", () => {
       "Details",
       "Status",
       "Submission Date",
+      "Last Modified Date",
       "Completion Date",
     ];
     const expectedFields = [
       "id",
-      "professorName",
-      "professorEmail",
-      "requesterName",
+      "professor.fullName",
+      "professor.email",
+      "requester.fullName",
       "recommendationType",
       "details",
       "status",
       "submissionDate",
+      "lastModifiedDate",
       "completionDate",
     ];
     const testId = "RecommendationRequestTable";
@@ -116,17 +119,19 @@ describe("UserTable tests", () => {
       "Details",
       "Status",
       "Submission Date",
+      "Last Modified Date",
       "Completion Date",
     ];
     const expectedFields = [
       "id",
-      "professorName",
-      "professorEmail",
-      "requesterName",
+      "professor.fullName",
+      "professor.email",
+      "requester.fullName",
       "recommendationType",
       "details",
       "status",
       "submissionDate",
+      "lastModifiedDate",
       "completionDate",
     ];
     const testId = "RecommendationRequestTable";
@@ -164,6 +169,7 @@ describe("UserTable tests", () => {
     const currentUser = currentUserFixtures.userOnly;
 
     expect(hasRole(currentUser, "ROLE_USER" )).toBe(true); 
+    expect(hasRole(currentUser, "ROLE_ADMIN" )).toBe(false); 
 
     render(
       <QueryClientProvider client={queryClient}>
