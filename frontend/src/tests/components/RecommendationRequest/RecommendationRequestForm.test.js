@@ -105,18 +105,9 @@ describe("RecommendationRequestForm tests", () => {
     // Assert: Check that fetch was called with the correct URLs
     expect(global.fetch).toHaveBeenCalledWith('/api/admin/users/professors');
     expect(global.fetch).toHaveBeenCalledWith('/api/requesttype/all');
-
-    // expect(screen.getByText('Craig Zzyxx')).toBeInTheDocument();
-    // expect(screen.getByText('Phill Conrad')).toBeInTheDocument();
-    // expect(screen.getByText('CS Department BS/MS program')).toBeInTheDocument();
-    // expect(screen.getByText('Scholarship or Fellowship')).toBeInTheDocument();
-    // expect(screen.getByText('MS program (other than CS Dept BS/MS)')).toBeInTheDocument();
-    // expect(screen.getByText('PhD program')).toBeInTheDocument();
     await waitFor(() => {
-      // Ensure the professor options are rendered after fetch resolves
       usersFixtures.twoProfessors.forEach((professor) => {
         expect(screen.getByText(professor.fullName)).toBeInTheDocument();
-        // expect(screen.getByDisplayValue(professor.id.toString())).toBeInTheDocument();
       });
     });
   });
