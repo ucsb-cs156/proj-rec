@@ -34,7 +34,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import edu.ucsb.cs156.rec.ControllerTestCase;
 import edu.ucsb.cs156.rec.entities.RecommendationRequest;
 import edu.ucsb.cs156.rec.repositories.RecommendationRequestRepository;
-import edu.ucsb.cs156.rec.repositories.UserRepository;
 import edu.ucsb.cs156.rec.testconfig.TestConfig;
 import joptsimple.internal.OptionNameMap;
 

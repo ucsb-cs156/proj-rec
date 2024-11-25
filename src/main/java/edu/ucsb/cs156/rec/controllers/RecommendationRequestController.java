@@ -1,5 +1,4 @@
 package edu.ucsb.cs156.rec.controllers;
-import edu.ucsb.cs156.rec.entities.User;
 
 import java.time.LocalDateTime;
 
@@ -18,15 +17,18 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import edu.ucsb.cs156.rec.entities.RecommendationRequest;
+import edu.ucsb.cs156.rec.entities.User;
 import edu.ucsb.cs156.rec.errors.EntityNotFoundException;
+import edu.ucsb.cs156.rec.models.CurrentUser;
 import edu.ucsb.cs156.rec.repositories.RecommendationRequestRepository;
+import edu.ucsb.cs156.rec.repositories.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
-@Tag(name = "RecommendationRequests")
+@Tag(name = "RecommendationRequest")
 @RequestMapping("/api/recommendationrequest")
 @RestController
 @Slf4j
@@ -34,6 +36,9 @@ public class RecommendationRequestController extends ApiController {
 
     @Autowired
     RecommendationRequestRepository recommendationRequestRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     /**
      * Any admin can delete a RecommendationRequest

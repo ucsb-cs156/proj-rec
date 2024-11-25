@@ -12,5 +12,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RecommendationRequestRepository extends CrudRepository<RecommendationRequest, Long> {
-    Optional<RecommendationRequest> findByIdAndUser(long id, User user);
+    Optional<RecommendationRequest> findByIdAndUser(long id, User requester_id);
 }
