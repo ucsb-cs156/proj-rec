@@ -52,9 +52,14 @@ function App() {
             />
           </>
         )}
-        {(hasRole(currentUser, "ROLE_USER") || hasRole(currentUser, "ROLE_INSTRUCTOR")) && (
+        {(hasRole(currentUser, "ROLE_USER") ||
+          hasRole(currentUser, "ROLE_INSTRUCTOR")) && (
           <>
-            <Route exact path="/requesttypes/create" element={<RequestTypeCreatePage />} />
+            <Route
+              exact
+              path="/requesttypes/create"
+              element={<RequestTypeCreatePage />}
+            />
           </>
         )}
         {hasRole(currentUser, "ROLE_USER") && (
