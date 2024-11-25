@@ -10,7 +10,7 @@ const recommendationRequestFixtures = {
       status: "PENDING",
       details: "test details",
       recommendationType: "CS Department BS/MS program",
-      user_id: 1,
+      requester_id: 1,
     },
   ],
 
@@ -25,7 +25,7 @@ const recommendationRequestFixtures = {
       status: "PENDING",
       details: "test details",
       recommendationType: "CS Department BS/MS program",
-      user_id: 2,
+      requester_id: 2,
     },
 
     {
@@ -38,7 +38,7 @@ const recommendationRequestFixtures = {
       status: "COMPLETED",
       details: "test details",
       recommendationType: "MS program (other than CS Dept BS/MS)",
-      user_id: 3,
+      requester_id: 3,
     },
 
     {
@@ -51,7 +51,7 @@ const recommendationRequestFixtures = {
       status: "DENIED",
       details: "test details",
       recommendationType: "Scholarship or Fellowship",
-      user_id: 4,
+      requester_id: 4,
     },
   ],
 };
