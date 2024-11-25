@@ -55,6 +55,23 @@ public class RequestTypesController extends ApiController {
     }
 
     /**
+     * Get a single request type by id
+     * 
+     * @param id the id of the request type
+     * @return a RequestType
+     */
+    @Operation(summary= "Get a single request type")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("")
+    public RequestType getById(
+            @Parameter(name="id") @RequestParam Long id) {
+        RequestType requestType = requestTypeRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(RequestType.class, id));
+
+        return requestType;
+    }
+
+    /**
      * Delete a RequestType
      * 
      * @param id the id of the request type to delete
