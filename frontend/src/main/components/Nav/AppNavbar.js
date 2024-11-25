@@ -61,15 +61,21 @@ export default function AppNavbar({
                   </NavDropdown.Item>
                 </NavDropdown>
               )}
-             {hasRole(currentUser, "ROLE_PROFESSOR") && (
+              {hasRole(currentUser, "ROLE_PROFESSOR") && (
                 <NavDropdown
                   title="Professor"
                   id="appnavbar-professor-dropdown"
                   data-testid="appnavbar-professor-dropdown"
                 >
-                  <NavDropdown.Item href="/requests/pending">Pending Requests</NavDropdown.Item>
-                  <NavDropdown.Item href="/requests/completed">Completed Requests</NavDropdown.Item>
-                  <NavDropdown.Item href="/requests/statistics">Statistics</NavDropdown.Item>
+                  <NavDropdown.Item href="/requests/pending">
+                    Pending Requests
+                  </NavDropdown.Item>
+                  <NavDropdown.Item href="/requests/completed">
+                    Completed Requests
+                  </NavDropdown.Item>
+                  <NavDropdown.Item href="/requests/statistics">
+                    Statistics
+                  </NavDropdown.Item>
                 </NavDropdown>
               )}
             </Nav>
