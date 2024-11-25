@@ -17,24 +17,37 @@ function RecommendationRequestForm({
   // Stryker restore all
 
   const [professors, setProfessors] = useState([]);
+  const [recommendationTypes, setRecommendationTypes] = useState([]);
 
   //queries endpoint to get list of professors
   useEffect(() => {
     const getProfessors = async () => {
       try {
-        const response = await fetch("/api/admin/users");
+        const response = await fetch("/api/admin/users/professors");
         if (!response.ok) {
           throw new Error("Failed to fetch professors");
         }
         const data = await response.json();
-        const professorUsers = data.filter(user => user.professor === true);
-        setProfessors(professorUsers); // Assuming `data` is an array of professors
+        setProfessors(data);
       } catch (error) {
         console.error("Error fetching professors:", error);
       }
     };
+    const getRequestTypes = async () => {
+      try {
+        const response = await fetch("/api/requesttype/all");
+        if (!response.ok) {
+          throw new Error("Failed to fetch request types");
+        }
+        const data = await response.json();
+        setRecommendationTypes(data);
+      } catch (error) {
+        console.error("Error fetching request types:", error);
+      }
+    };
 
     getProfessors();
+    getRequestTypes();
   }, []);
 
   const navigate = useNavigate();
@@ -74,7 +87,11 @@ function RecommendationRequestForm({
               isInvalid={Boolean(errors.professor)}
               {...register("professor", {})}
             >
-              
+              {professors.map((professor) => (
+                <option key={professor.id} value={professor.id}>
+                  {professor.name}
+                </option>
+              ))}
             </Form.Select>
           </Form.Group>
         </Col>
@@ -83,26 +100,21 @@ function RecommendationRequestForm({
       <Row>
         <Col>
           <Form.Group className="mb-3">
-            <Form.Label htmlFor="recommendationTypes">
-              Recommendation Types
+            <Form.Label htmlFor="recommendationType">
+              Recommendation Type
             </Form.Label>
             <Form.Select
-              data-testid="RecommendationRequestForm-recommendationTypes"
-              id="recommendationTypes"
+              data-testid="RecommendationRequestForm-recommendationType"
+              id="recommendationType"
               type="string"
-              isInvalid={Boolean(errors.recommendationTypes)}
-              {...register("recommendationTypes", {})}
+              isInvalid={Boolean(errors.recommendationType)}
+              {...register("recommendationType", {})}
             >
-              <option value="CS Department BS/MS program">
-                CS Department BS/MS program
-              </option>
-              <option value="Scholarship or Fellowship">
-                Scholarship or Fellowship
-              </option>
-              <option value="MS program (other than CS Dept BS/MS)">
-                MS program (other than CS Dept BS/MS)
-              </option>
-              <option value="PhD program">PhD program</option>
+              {recommendationTypes.map((recommendationType) => (
+                <option key={recommendationType.id} value={recommendationType.id}>
+                  {recommendationType.requestType}
+                </option>
+              ))}
               <option value="Other">Other</option>
             </Form.Select>
           </Form.Group>

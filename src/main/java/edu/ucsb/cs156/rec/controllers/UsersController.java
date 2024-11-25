@@ -3,6 +3,11 @@ package edu.ucsb.cs156.rec.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,8 +18,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.ucsb.cs156.rec.entities.RecommendationRequest;
 import edu.ucsb.cs156.rec.entities.User;
 import edu.ucsb.cs156.rec.repositories.UserRepository;
+import io.swagger.v3.core.util.Json;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -52,6 +59,28 @@ public class UsersController extends ApiController {
         Iterable<User> users = userRepository.findAll();
         String body = mapper.writeValueAsString(users);
         return ResponseEntity.ok().body(body);
+    }
+
+    /**
+     * This method returns a list of all Recommendation Requests requested by current student.
+     * @return a list of all Recommendation Requests requested by the current user
+     */
+    @Operation(summary = "List all professors")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("/professors")
+    public Iterable<Map<String, Object>> allProfessors(
+    ) {
+        // toyed with having this only be ROLE_STUDENT but I think even professors should be able to submit requests so they can see which ones they have submitted too
+        Iterable<User> professors = userRepository.findAllProfessors();
+        // to add privacy, only return professor_id and professor_name
+        List<Map<String, Object>> limited_list = new ArrayList<>();
+        for (User professor : professors) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", professor.getId());
+            map.put("name", professor.getFullName());
+            limited_list.add(map);
+        }
+        return limited_list;
     }
 
     @Operation(summary= "Get user by id")
