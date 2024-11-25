@@ -7,6 +7,8 @@ import RestaurantIndexPage from "main/pages/Restaurants/RestaurantIndexPage";
 import RestaurantCreatePage from "main/pages/Restaurants/RestaurantCreatePage";
 import RestaurantEditPage from "main/pages/Restaurants/RestaurantEditPage";
 
+import RequestTypeCreatePage from "main/pages/RequestTypes/RequestTypeCreatePage";
+
 import PlaceholderIndexPage from "main/pages/Placeholder/PlaceholderIndexPage";
 import PlaceholderCreatePage from "main/pages/Placeholder/PlaceholderCreatePage";
 import PlaceholderEditPage from "main/pages/Placeholder/PlaceholderEditPage";
@@ -52,7 +54,7 @@ function App() {
         )}
         {(hasRole(currentUser, "ROLE_USER") || hasRole(currentUser, "ROLE_INSTRUCTOR")) && (
           <>
-            <Route exact path="/requesttypes/create" element={<RestaurantCreatePage />} />
+            <Route exact path="/requesttypes/create" element={<RequestTypeCreatePage />} />
           </>
         )}
         {hasRole(currentUser, "ROLE_USER") && (
