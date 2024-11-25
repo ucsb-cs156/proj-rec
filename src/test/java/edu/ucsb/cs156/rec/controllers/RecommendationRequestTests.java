@@ -5,16 +5,13 @@ import edu.ucsb.cs156.rec.testconfig.TestConfig;
 import edu.ucsb.cs156.rec.ControllerTestCase;
 import edu.ucsb.cs156.rec.entities.RecommendationRequest;
 import edu.ucsb.cs156.rec.entities.User;
-import edu.ucsb.cs156.rec.errors.EntityNotFoundException;
 import edu.ucsb.cs156.rec.repositories.RecommendationRequestRepository;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -28,8 +25,6 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -119,7 +114,7 @@ public class RecommendationRequestTests extends ControllerTestCase {
                                 .dueDate(now)
                                 .build();
 
-                when(recommendationRequestRepository.findByIdAndProfessorOrRequester(eq(7L), eq(currentUser), eq(currentUser))).thenReturn(Optional.of(recommendationRequest));  // Check not sure why id is 7
+                when(recommendationRequestRepository.findById(eq(7L))).thenReturn(Optional.of(recommendationRequest));  // Check not sure why id is 7
 
                 // act
                 MvcResult response = mockMvc.perform(get("/api/recommendationrequest?id=7"))
@@ -127,7 +122,7 @@ public class RecommendationRequestTests extends ControllerTestCase {
 
                 // assert
 
-                verify(recommendationRequestRepository, times(1)).findByIdAndProfessorOrRequester(eq(7L), eq(currentUser), eq(currentUser));
+                verify(recommendationRequestRepository, times(1)).findById(eq(7L));
                 String expectedJson = mapper.writeValueAsString(recommendationRequest);
                 String responseString = response.getResponse().getContentAsString();
                 assertEquals(expectedJson, responseString);
@@ -149,7 +144,7 @@ public class RecommendationRequestTests extends ControllerTestCase {
                                 .dueDate(now)
                                 .build();
 
-                when(recommendationRequestRepository.findByIdAndProfessorOrRequester(eq(7L), eq(currentUser), eq(currentUser))).thenReturn(Optional.of(recommendationRequest));  // Check not sure why id is 7
+                when(recommendationRequestRepository.findById(eq(7L))).thenReturn(Optional.of(recommendationRequest));  // Check not sure why id is 7
 
                 // act
                 MvcResult response = mockMvc.perform(get("/api/recommendationrequest?id=7"))
@@ -157,7 +152,7 @@ public class RecommendationRequestTests extends ControllerTestCase {
 
                 // assert
 
-                verify(recommendationRequestRepository, times(1)).findByIdAndProfessorOrRequester(eq(7L), eq(currentUser), eq(currentUser));
+                verify(recommendationRequestRepository, times(1)).findById(eq(7L));
                 String expectedJson = mapper.writeValueAsString(recommendationRequest);
                 String responseString = response.getResponse().getContentAsString();
                 assertEquals(expectedJson, responseString);
@@ -168,8 +163,7 @@ public class RecommendationRequestTests extends ControllerTestCase {
         public void test_that_logged_in_user_can_get_by_id_when_the_id_does_not_exist() throws Exception {
 
                 // arrange
-                User currentUser = currentUserService.getCurrentUser().getUser();
-                when(recommendationRequestRepository.findByIdAndProfessorOrRequester(eq(7L), eq(currentUser), eq(currentUser))).thenReturn(Optional.empty());
+                when(recommendationRequestRepository.findById(eq(7L))).thenReturn(Optional.empty());
 
                 // act
                 MvcResult response = mockMvc.perform(get("/api/recommendationrequest?id=7"))
@@ -177,7 +171,7 @@ public class RecommendationRequestTests extends ControllerTestCase {
 
                 // assert
 
-                verify(recommendationRequestRepository, times(1)).findByIdAndProfessorOrRequester(eq(7L), eq(currentUser), eq(currentUser));
+                verify(recommendationRequestRepository, times(1)).findById(eq(7L));
                 Map<String, Object> json = responseToJson(response);
                 assertEquals("EntityNotFoundException", json.get("type"));
                 assertEquals("RecommendationRequest with id 7 not found", json.get("message"));

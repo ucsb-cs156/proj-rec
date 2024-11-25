@@ -32,20 +32,6 @@ public class RecommendationRequestController extends ApiController {
     UserRepository userRepository;
 
     /**
-     * This method returns a list of all Recommendation Requests 
-     * @return a list of all Recommendation Requests
-     */
-    @Operation(summary = "List all Recommendation Requests")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping("/all")
-    public Iterable<RecommendationRequest> all(
-    ) {
-        // toyed with having this only be ROLE_STUDENT but I think even professors should be able to submit requests so they can see which ones they have submitted too
-        Iterable<RecommendationRequest> recommendationRequests = recommendationRequestRepository.findAll();
-        return recommendationRequests;
-    }
-
-    /**
      * This method returns a list of all Recommendation Requests requested by current student.
      * @return a list of all Recommendation Requests requested by the current user
      */
@@ -84,10 +70,12 @@ public class RecommendationRequestController extends ApiController {
     @GetMapping("")
     public RecommendationRequest getById(
             @Parameter(name = "id") @RequestParam Long id) {
-            User currentUser = getCurrentUser().getUser();
-            RecommendationRequest recommendationRequest = recommendationRequestRepository.findByIdAndProfessorOrRequester(id, currentUser, currentUser)
+            Long currentUserId = getCurrentUser().getUser().getId();
+            RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(RecommendationRequest.class, id));
-
+            if (recommendationRequest.getRequester().getId() != currentUserId && recommendationRequest.getProfessor().getId() != currentUserId) {
+                throw new EntityNotFoundException(RecommendationRequest.class, id);
+            }
         return recommendationRequest;
     }
 
@@ -113,9 +101,9 @@ public class RecommendationRequestController extends ApiController {
         RecommendationRequest recommendationRequest = new RecommendationRequest();
         User professor = userRepository.findById(professorId).orElseThrow(() -> new EntityNotFoundException(User.class, professorId));
         recommendationRequest.setProfessor(professor);
-        recommendationRequest.setProfessor_id(professorId);
+        // recommendationRequest.setProfessor_id(professorId);
         recommendationRequest.setRequester(currentUser.getUser());
-        recommendationRequest.setRequester_id(currentUser.getUser().getId());
+        // recommendationRequest.setRequester_id(currentUser.getUser().getId());
         recommendationRequest.setRecommendationType(recommendationType);
         recommendationRequest.setDetails(details);
         recommendationRequest.setStatus("PENDING");

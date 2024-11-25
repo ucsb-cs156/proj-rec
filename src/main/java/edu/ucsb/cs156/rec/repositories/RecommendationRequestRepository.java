@@ -1,9 +1,6 @@
 package edu.ucsb.cs156.rec.repositories;
 
 import edu.ucsb.cs156.rec.entities.RecommendationRequest;
-import edu.ucsb.cs156.rec.entities.User;
-
-import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -28,12 +25,4 @@ public interface RecommendationRequestRepository extends CrudRepository<Recommen
    */
   Iterable<RecommendationRequest> findAllByProfessorId(Long professor_id);
 
-    /**
-   * This method returns an Optional recommendation request where the current user is either the requester or the professor in the request.
-   * @param id id within RecommendationRequest
-   * @param professor current user
-   * @param requester current user
-   * @return Recommendation Request with matching id and same requester or same professor
-   */
-  Optional<RecommendationRequest> findByIdAndProfessorOrRequester(Long id, User professor, User requester);
 }
