@@ -35,10 +35,12 @@ public class RecommendationRequest {
   @ManyToOne
   @JoinColumn(name = "requester_id", referencedColumnName = "id", insertable = false, updatable = false)
   private User requester;
+  private Long requester_id;
 
   @ManyToOne
   @JoinColumn(name = "professor_id", referencedColumnName = "id", insertable = false, updatable = false)
   private User professor;
+  private Long professor_id;
 
   private String recommendationType;
   private String details;
