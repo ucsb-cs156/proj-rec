@@ -42,16 +42,43 @@ public class RecommendationRequestTests extends ControllerTestCase {
         // Authorization tests for /api/phones/admin/all
 
         @Test
-        public void logged_out_users_cannot_get_all() throws Exception {
-                mockMvc.perform(get("/api/recommendationrequest/all"))
+        public void logged_out_users_cannot_get_all_requester() throws Exception {
+                mockMvc.perform(get("/api/recommendationrequest/requester/all"))
+                                .andExpect(status().is(403)); // logged out users can't get all
+        }
+
+        @Test
+        public void logged_out_users_cannot_get_all_professor() throws Exception {
+                mockMvc.perform(get("/api/recommendationrequest/professor/all"))
                                 .andExpect(status().is(403)); // logged out users can't get all
         }
 
         @WithMockUser(roles = { "USER" })
         @Test
-        public void logged_in_users_can_get_all() throws Exception {
-                mockMvc.perform(get("/api/recommendationrequest/all"))
+        public void logged_in_users_can_get_all_requester() throws Exception {
+                mockMvc.perform(get("/api/recommendationrequest/requester/all"))
                                 .andExpect(status().is(200)); // logged
+        }
+
+        @WithMockUser(roles = { "USER" })
+        @Test
+        public void logged_in_users_cannot_get_all_professor() throws Exception {
+                mockMvc.perform(get("/api/recommendationrequest/professor/all"))
+                                .andExpect(status().is(403)); // not correct role
+        }
+
+        @WithMockUser(roles = { "USER", "PROFESSOR" })
+        @Test
+        public void logged_in_professors_can_get_all_professor() throws Exception {
+                mockMvc.perform(get("/api/recommendationrequest/professor/all"))
+                                .andExpect(status().is(200)); // correct role
+        }
+
+        @WithMockUser(roles = { "USER", "PROFESSOR" })
+        @Test
+        public void logged_in_professors_can_get_all_requester() throws Exception {
+                mockMvc.perform(get("/api/recommendationrequest/requester/all"))
+                                .andExpect(status().is(200)); // correct role
         }
 
         @Test
@@ -71,28 +98,60 @@ public class RecommendationRequestTests extends ControllerTestCase {
 
         @WithMockUser(roles = { "USER" })
         @Test
-        public void logged_in_regular_users_cannot_post() throws Exception {
+        public void logged_in_regular_users_can_post() throws Exception {
                 mockMvc.perform(post("/api/recommendationrequest/post"))
-                                .andExpect(status().is(403)); // only admins can post
+                                .andExpect(status().is(200)); // users can post
         }
 
         // // Tests with mocks for database actions
 
         @WithMockUser(roles = { "USER" })
         @Test
-        public void test_that_logged_in_user_can_get_by_id_when_the_id_exists() throws Exception {
+        public void test_that_logged_in_user_can_get_by_id_when_the_id_exists_and_they_are_requester() throws Exception {
 
                 // arrange
-
+                User professor = User.builder().email("testemail@ucsb.edu").fullName("Test Prof").build();
+                User currentUser = currentUserService.getCurrentUser().getUser();
+                LocalDateTime now = LocalDateTime.now();
                 RecommendationRequest recommendationRequest = RecommendationRequest.builder()
-                                .professorName("Prof D")
-                                .professorEmail("profd@ucsb.edu")
-                                .requesterName("Student A")
-                                .recommendationTypes("PhD program")
+                                .professor(professor)
+                                .requester(currentUser)
+                                .recommendationType("PhD program")
                                 .details("other details")
+                                .dueDate(now)
                                 .build();
 
-                when(recommendationRequestRepository.findById(eq(7L))).thenReturn(Optional.of(recommendationRequest));  // Check not sure why id is 7
+                when(recommendationRequestRepository.findByIdAndProfessorOrRequester(eq(7L), eq(currentUser))).thenReturn(Optional.of(recommendationRequest));  // Check not sure why id is 7
+
+                // act
+                MvcResult response = mockMvc.perform(get("/api/recommendationrequest?id=7"))
+                                .andExpect(status().isOk()).andReturn();
+
+                // assert
+
+                verify(recommendationRequestRepository, times(1)).findById(eq(7L));
+                String expectedJson = mapper.writeValueAsString(recommendationRequest);
+                String responseString = response.getResponse().getContentAsString();
+                assertEquals(expectedJson, responseString);
+        }
+
+        @WithMockUser(roles = { "USER" })
+        @Test
+        public void test_that_logged_in_user_can_get_by_id_when_the_id_exists_and_they_are_professor() throws Exception {
+
+                // arrange
+                User currentUser = currentUserService.getCurrentUser().getUser();
+                User requester = User.builder().email("testemail@ucsb.edu").fullName("Test Prof").build();
+                LocalDateTime now = LocalDateTime.now();
+                RecommendationRequest recommendationRequest = RecommendationRequest.builder()
+                                .professor(currentUser)
+                                .requester(requester)
+                                .recommendationType("PhD program")
+                                .details("other details")
+                                .dueDate(now)
+                                .build();
+
+                when(recommendationRequestRepository.findByIdAndProfessorOrRequester(eq(7L), eq(currentUser))).thenReturn(Optional.of(recommendationRequest));  // Check not sure why id is 7
 
                 // act
                 MvcResult response = mockMvc.perform(get("/api/recommendationrequest?id=7"))
@@ -128,24 +187,28 @@ public class RecommendationRequestTests extends ControllerTestCase {
 
         @WithMockUser(roles = { "USER" })
         @Test
-        public void logged_in_user_can_get_all_recommendationrequests() throws Exception {
+        public void logged_in_user_can_get_all_recommendation_requests_by_them() throws Exception {
 
                 // arrange
 
+                User other = User.builder().email("testemail@ucsb.edu").fullName("Test User").build();
+                User other2 = User.builder().email("testemail2@ucsb.edu").fullName("Test User2").build();
+                User currentUser = currentUserService.getCurrentUser().getUser();
+                LocalDateTime now = LocalDateTime.now();
                 RecommendationRequest recommendationRequest1 = RecommendationRequest.builder()
-                                .professorName("Prof D")
-                                .professorEmail("profd@ucsb.edu")
-                                .requesterName("Student A")
-                                .recommendationTypes("PhD program")
+                                .professor(other)
+                                .requester(currentUser)
+                                .recommendationType("PhD program")
                                 .details("other details")
+                                .dueDate(now)
                                 .build();
 
                 RecommendationRequest recommendationRequest2 = RecommendationRequest.builder()
-                                .professorName("Prof C")
-                                .professorEmail("profd@ucsb.edu")
-                                .requesterName("Student A")
-                                .recommendationTypes("PhD program")
+                                .professor(other2)
+                                .requester(currentUser)
+                                .recommendationType("PhD program")
                                 .details("other details")
+                                .dueDate(now)
                                 .build();
 
                 ArrayList<RecommendationRequest> expectedRecommendationRequests = new ArrayList<>();
@@ -154,7 +217,7 @@ public class RecommendationRequestTests extends ControllerTestCase {
                 when(recommendationRequestRepository.findAll()).thenReturn(expectedRecommendationRequests);
 
                 // act
-                MvcResult response = mockMvc.perform(get("/api/recommendationrequest/all"))
+                MvcResult response = mockMvc.perform(get("/api/recommendationrequest/requester/all"))
                                 .andExpect(status().isOk()).andReturn();
 
                 // assert
@@ -165,28 +228,69 @@ public class RecommendationRequestTests extends ControllerTestCase {
                 assertEquals(expectedJson, responseString);
         }
 
-        @WithMockUser(roles = { "ADMIN", "USER" })
+        @WithMockUser(roles = { "USER", "PROFESSOR" })
         @Test
-        public void an_admin_user_can_post_a_new_recommendationrequests() throws Exception {
+        public void logged_in_professors_can_get_all_recommendation_requests_for_them() throws Exception {
+
                 // arrange
-                User u = currentUserService.getCurrentUser().getUser();
+
+                User other = User.builder().email("testemail@ucsb.edu").fullName("Test User").build();
+                User other2 = User.builder().email("testemail2@ucsb.edu").fullName("Test User2").build();
+                User currentUser = currentUserService.getCurrentUser().getUser();
                 LocalDateTime now = LocalDateTime.now();
                 RecommendationRequest recommendationRequest1 = RecommendationRequest.builder()
-                                .professorName("ProfD")
-                                .professorEmail("profd@ucsb.edu")
-                                .requesterName(u.getFullName())
-                                .recommendationTypes("PhDprogram")
+                                .professor(currentUser)
+                                .requester(other)
+                                .recommendationType("PhD program")
+                                .details("other details")
+                                .dueDate(now)
+                                .build();
+
+                RecommendationRequest recommendationRequest2 = RecommendationRequest.builder()
+                                .professor(currentUser)
+                                .requester(other2)
+                                .recommendationType("PhD program")
+                                .details("other details")
+                                .dueDate(now)
+                                .build();
+
+                ArrayList<RecommendationRequest> expectedRecommendationRequests = new ArrayList<>();
+                expectedRecommendationRequests.addAll(Arrays.asList(recommendationRequest1, recommendationRequest2));
+
+                when(recommendationRequestRepository.findAll()).thenReturn(expectedRecommendationRequests);
+
+                // act
+                MvcResult response = mockMvc.perform(get("/api/recommendationrequest/professor/all"))
+                                .andExpect(status().isOk()).andReturn();
+
+                // assert
+
+                verify(recommendationRequestRepository, times(1)).findAll();
+                String expectedJson = mapper.writeValueAsString(expectedRecommendationRequests);
+                String responseString = response.getResponse().getContentAsString();
+                assertEquals(expectedJson, responseString);
+        }
+
+        @WithMockUser(roles = { "USER" })
+        @Test
+        public void a_user_can_post_a_new_recommendation_requests() throws Exception {
+                // arrange
+                User u = currentUserService.getCurrentUser().getUser();
+                User other = User.builder().email("testemail@ucsb.edu").fullName("Test User").build();
+                LocalDateTime now = LocalDateTime.now();
+                RecommendationRequest recommendationRequest1 = RecommendationRequest.builder()
+                                .professor(other)
+                                .requester(u)
+                                .recommendationType("PhDprogram")
                                 .details("otherdetails")
-                                .status("PENDING")
-                                .completionDate(null)
-                                .user(u)
-                                .submissionDate(now)
+                                .dueDate(now)
                                 .build();
 
                 when(recommendationRequestRepository.save(eq(recommendationRequest1))).thenReturn(recommendationRequest1);
 
                 // act
-                String api_call = String.format("/api/recommendationrequest/post?professorName=ProfD&professorEmail=profd@ucsb.edu&recommendationTypes=PhDprogram&details=otherdetails&submissionDate=%s",
+                // TODO: this needs to be changed
+                String api_call = String.format("/api/recommendationrequest/post?recommendationType=PhDprogram&details=otherdetails&dueDate=%s",
                                 now.toString());
                 MvcResult response = mockMvc.perform(
                                 post(api_call)

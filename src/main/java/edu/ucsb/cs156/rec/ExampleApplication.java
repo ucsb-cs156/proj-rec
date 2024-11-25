@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.auditing.DateTimeProvider;
@@ -19,12 +20,20 @@ import lombok.extern.slf4j.Slf4j;
  * The ExampleApplication class is the main entry point for the application.
  */
 @SpringBootApplication
-@Slf4j
 @EnableJpaAuditing(dateTimeProviderRef = "utcDateTimeProvider")
+@Slf4j
 public class ExampleApplication {
 
   @Autowired
   WiremockService wiremockService;
+
+  @Bean
+  public DateTimeProvider utcDateTimeProvider() {
+      return () -> {
+        ZonedDateTime now = ZonedDateTime.now();
+        return Optional.of(now);
+      };
+  }
 
   /**
    * When using the wiremock profile, this method will call the code needed to set up the wiremock services
@@ -57,13 +66,5 @@ public class ExampleApplication {
    */
   public static void main(String[] args) {
     SpringApplication.run(ExampleApplication.class, args);
-  }
-
-  @Bean
-  public DateTimeProvider utcDateTimeProvider() {
-      return () -> {
-        ZonedDateTime now = ZonedDateTime.now();
-        return Optional.of(now);
-      };
   }
 }
