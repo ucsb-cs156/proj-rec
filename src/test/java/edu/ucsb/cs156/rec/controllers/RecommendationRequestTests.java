@@ -121,7 +121,7 @@ public class RecommendationRequestTests extends ControllerTestCase {
                                 .dueDate(now)
                                 .build();
 
-                when(recommendationRequestRepository.findByIdAndProfessorOrRequester(eq(7L), eq(currentUser))).thenReturn(Optional.of(recommendationRequest));  // Check not sure why id is 7
+                when(recommendationRequestRepository.findByIdAndProfessorOrRequester(eq(7L), eq(currentUser), eq(currentUser))).thenReturn(Optional.of(recommendationRequest));  // Check not sure why id is 7
 
                 // act
                 MvcResult response = mockMvc.perform(get("/api/recommendationrequest?id=7"))
@@ -151,7 +151,7 @@ public class RecommendationRequestTests extends ControllerTestCase {
                                 .dueDate(now)
                                 .build();
 
-                when(recommendationRequestRepository.findByIdAndProfessorOrRequester(eq(7L), eq(currentUser))).thenReturn(Optional.of(recommendationRequest));  // Check not sure why id is 7
+                when(recommendationRequestRepository.findByIdAndProfessorOrRequester(eq(7L), eq(currentUser), eq(currentUser))).thenReturn(Optional.of(recommendationRequest));  // Check not sure why id is 7
 
                 // act
                 MvcResult response = mockMvc.perform(get("/api/recommendationrequest?id=7"))
@@ -273,7 +273,7 @@ public class RecommendationRequestTests extends ControllerTestCase {
 
         @WithMockUser(roles = { "USER" })
         @Test
-        public void a_user_can_post_a_new_recommendation_requests() throws Exception {
+        public void a_user_can_post_a_new_recommendation_request() throws Exception {
                 // arrange
                 User u = currentUserService.getCurrentUser().getUser();
                 User other = User.builder().email("testemail@ucsb.edu").fullName("Test User").build();

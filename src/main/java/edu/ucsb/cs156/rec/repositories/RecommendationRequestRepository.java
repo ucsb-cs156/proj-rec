@@ -32,9 +32,9 @@ public interface RecommendationRequestRepository extends CrudRepository<Recommen
     /**
    * This method returns an Optional recommendation request where the current user is either the requester or the professor in the request.
    * @param id id within RecommendationRequest
-   * @param user current user
+   * @param professor current user
+   * @param requester current user
    * @return Recommendation Request with matching id and same requester or same professor
    */
-  @Query("SELECT r FROM RecommendationRequest r WHERE r.id = :id AND (r.requester = :user OR r.professor = :user)")
-  Optional<RecommendationRequest> findByIdAndProfessorOrRequester(Long id, User user);
+  Optional<RecommendationRequest> findByIdAndProfessorOrRequester(Long id, User professor, User requester);
 }

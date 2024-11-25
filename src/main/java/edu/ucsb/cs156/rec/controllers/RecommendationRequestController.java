@@ -70,7 +70,7 @@ public class RecommendationRequestController extends ApiController {
     public RecommendationRequest getById(
             @Parameter(name = "id") @RequestParam Long id) {
             User currentUser = getCurrentUser().getUser();
-            RecommendationRequest recommendationRequest = recommendationRequestRepository.findByIdAndProfessorOrRequester(id, currentUser)
+            RecommendationRequest recommendationRequest = recommendationRequestRepository.findByIdAndProfessorOrRequester(id, currentUser, currentUser)
                 .orElseThrow(() -> new EntityNotFoundException(RecommendationRequest.class, id));
 
         return recommendationRequest;
