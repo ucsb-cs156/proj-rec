@@ -30,7 +30,7 @@ import jakarta.validation.Valid;
  */
 
 @Tag(name = "RequestType")
-@RequestMapping("/api/requesttype")
+@RequestMapping("/api/requesttypes")
 @RestController
 @Slf4j
 public class RequestTypeController extends ApiController {
