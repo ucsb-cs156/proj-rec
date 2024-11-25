@@ -110,6 +110,51 @@ describe("RecommendationRequestForm tests", () => {
         expect(screen.getByText(professor.fullName)).toBeInTheDocument();
       });
     });
+    await waitFor(() => {
+      recommendationTypeFixtures.fourTypes.forEach((type) => {
+        expect(screen.getByText(type.requestType)).toBeInTheDocument();
+      });
+    });
+  });
+
+  test("that the correct error appears when the gets are called for the options", async () => {
+    const consoleErrorMock = jest.spyOn(console, 'error').mockImplementation(() => {});
+    global.fetch = jest.fn().mockRejectedValueOnce(new Error('Network error'));
+    render(
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <RecommendationRequestForm />
+        </Router>
+      </QueryClientProvider>,
+    );
+    await waitFor(() => {
+      // Here, you can check for side effects or verify the console error is called.
+      // In this case, we assume the error is logged to the console.
+      expect(global.console.error).toHaveBeenCalledWith('Error fetching request types');
+    });
+    await waitFor(() => {
+      // Here, you can check for side effects or verify the console error is called.
+      // In this case, we assume the error is logged to the console.
+      expect(global.console.error).toHaveBeenCalledWith('Error fetching professors');
+    });
+    consoleErrorMock.mockRestore();
+  });
+
+  test("that the initial value of professors and recommendationTypes is only defaults", async () => {
+    render(
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <RecommendationRequestForm />
+        </Router>
+      </QueryClientProvider>,
+    );
+    expect(screen.getByText('Select a professor')).toBeInTheDocument();
+    expect(screen.getByText('Select a recommendation type')).toBeInTheDocument();
+    expect(screen.getByText('Other')).toBeInTheDocument();
+
+    // Assert that no professor options are rendered yet
+    const options = screen.queryAllByRole('option');
+    expect(options).toHaveLength(3);
   });
 
   test("that navigate(-1) is called when Cancel is clicked", async () => {

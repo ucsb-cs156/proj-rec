@@ -27,7 +27,7 @@ function RecommendationRequestForm({
         const data = await response.json();
         setProfessors(data);
       } catch (error) {
-        console.error("Error fetching professors:", error);
+        console.error("Error fetching professors");
       }
     };
     const getRequestTypes = async () => {
@@ -36,13 +36,13 @@ function RecommendationRequestForm({
         const data = await response.json();
         setRecommendationTypes(data);
       } catch (error) {
-        console.error("Error fetching request types:", error);
+        console.error("Error fetching request types");
       }
     };
 
     getProfessors();
     getRequestTypes();
-  }, []);
+  });
 
   const navigate = useNavigate();
 
