@@ -6,6 +6,12 @@ import RecommendationRequestForm from "main/components/RecommendationRequest/Rec
 import { recommendationRequestFixtures } from "fixtures/recommendationRequestFixtures";
 
 import { QueryClient, QueryClientProvider } from "react-query";
+import axios from "axios";
+import AxiosMockAdapter from "axios-mock-adapter";
+import usersFixtures from "fixtures/usersFixtures";
+import recommendationTypeFixtures from "fixtures/recommendationTypeFixtures";
+
+
 
 const mockedNavigate = jest.fn();
 
@@ -15,12 +21,27 @@ jest.mock("react-router-dom", () => ({
 }));
 
 describe("RecommendationRequestForm tests", () => {
+  const axiosMock = new AxiosMockAdapter(axios);
+  beforeEach(() => {
+    jest.clearAllMocks();
+    axiosMock.reset();
+    axiosMock.resetHistory();
+    axiosMock
+      .onGet("/api/admin/users/professors")
+      .reply(200, usersFixtures.userOnly);
+    axiosMock
+      .onGet("/api/requesttype/all")
+      .reply(200, recommendationTypeFixtures.fourTypes);
+    global.fetch = jest.fn();
+  });
+  afterEach(() => {
+    jest.resetAllMocks();
+  })
   const queryClient = new QueryClient();
 
   const expectedHeaders = [
-    "Professor Name",
-    "Professor Email",
-    "Recommendation Types",
+    "Professor",
+    "Recommendation Type",
     "Details",
   ];
   const testId = "RecommendationRequestForm";
@@ -64,6 +85,42 @@ describe("RecommendationRequestForm tests", () => {
     expect(screen.getByText(`Id`)).toBeInTheDocument();
   });
 
+  test("that the options are filled correctly", async () => {
+    global.fetch
+      .mockResolvedValueOnce({
+        json: () => Promise.resolve(usersFixtures.twoProfessors), // for professors
+      })
+      .mockResolvedValueOnce({
+        json: () => Promise.resolve(recommendationTypeFixtures.fourTypes), // for recommendation types
+      });
+    render(
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <RecommendationRequestForm />
+        </Router>
+      </QueryClientProvider>,
+    );
+    await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(2)); // Ensure fetch was called twice
+
+    // Assert: Check that fetch was called with the correct URLs
+    expect(global.fetch).toHaveBeenCalledWith('/api/admin/users/professors');
+    expect(global.fetch).toHaveBeenCalledWith('/api/requesttype/all');
+
+    // expect(screen.getByText('Craig Zzyxx')).toBeInTheDocument();
+    // expect(screen.getByText('Phill Conrad')).toBeInTheDocument();
+    // expect(screen.getByText('CS Department BS/MS program')).toBeInTheDocument();
+    // expect(screen.getByText('Scholarship or Fellowship')).toBeInTheDocument();
+    // expect(screen.getByText('MS program (other than CS Dept BS/MS)')).toBeInTheDocument();
+    // expect(screen.getByText('PhD program')).toBeInTheDocument();
+    await waitFor(() => {
+      // Ensure the professor options are rendered after fetch resolves
+      usersFixtures.twoProfessors.forEach((professor) => {
+        expect(screen.getByText(professor.fullName)).toBeInTheDocument();
+        // expect(screen.getByDisplayValue(professor.id.toString())).toBeInTheDocument();
+      });
+    });
+  });
+
   test("that navigate(-1) is called when Cancel is clicked", async () => {
     render(
       <QueryClientProvider client={queryClient}>
@@ -93,7 +150,7 @@ describe("RecommendationRequestForm tests", () => {
     const submitButton = screen.getByText(/Create/);
     fireEvent.click(submitButton);
 
-    await screen.findByText(/Professor Name is required/);
-    expect(screen.getByText(/Professor Email is required/)).toBeInTheDocument();
+    await screen.findByText(/Please select a professor/);
+    expect(screen.getByText(/Please select a recommendation type/)).toBeInTheDocument();
   });
 });

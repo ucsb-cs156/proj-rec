@@ -24,9 +24,6 @@ function RecommendationRequestForm({
     const getProfessors = async () => {
       try {
         const response = await fetch("/api/admin/users/professors");
-        if (!response.ok) {
-          throw new Error("Failed to fetch professors");
-        }
         const data = await response.json();
         setProfessors(data);
       } catch (error) {
@@ -36,9 +33,6 @@ function RecommendationRequestForm({
     const getRequestTypes = async () => {
       try {
         const response = await fetch("/api/requesttype/all");
-        if (!response.ok) {
-          throw new Error("Failed to fetch request types");
-        }
         const data = await response.json();
         setRecommendationTypes(data);
       } catch (error) {
@@ -85,14 +79,23 @@ function RecommendationRequestForm({
               id="professor"
               type="string"
               isInvalid={Boolean(errors.professor)}
-              {...register("professor", {})}
+              {...register("professor", {
+                required: "Please select a professor",
+              })}
+              defaultValue=""
             >
+              <option disabled value="">Select a professor</option>
               {professors.map((professor) => (
                 <option key={professor.id} value={professor.id}>
-                  {professor.name}
+                  {professor.fullName}
                 </option>
               ))}
             </Form.Select>
+            {errors.professor && (
+              <Form.Control.Feedback type="invalid">
+                {errors.professor.message}
+              </Form.Control.Feedback>
+            )}
           </Form.Group>
         </Col>
       </Row>
@@ -108,8 +111,12 @@ function RecommendationRequestForm({
               id="recommendationType"
               type="string"
               isInvalid={Boolean(errors.recommendationType)}
-              {...register("recommendationType", {})}
+              {...register("recommendationType", {
+                required: "Please select a recommendation type"
+              })}
+              defaultValue=""
             >
+              <option disabled value="">Select a recommendation type</option>
               {recommendationTypes.map((recommendationType) => (
                 <option key={recommendationType.id} value={recommendationType.id}>
                   {recommendationType.requestType}
@@ -117,6 +124,11 @@ function RecommendationRequestForm({
               ))}
               <option value="Other">Other</option>
             </Form.Select>
+            {errors.recommendationType && (
+              <Form.Control.Feedback type="invalid">
+                {errors.recommendationType.message}
+              </Form.Control.Feedback>
+            )}
           </Form.Group>
         </Col>
         <Col>
