@@ -16,12 +16,19 @@ import java.util.List;
 @Repository
 public interface RecommendationRequestRepository extends CrudRepository<RecommendationRequest, Long> {
     /**
-     * Find a recommendation request by the professor's user id
+     * Find all recommendation request by the professor's user id
      * 
      * @param id the id of the professor user
-     * @return an Optional of the recommendation request
+     * @return a List of the recommendation request
      */
     List<RecommendationRequest> findAllByProfessorId(Long id);
+
+    /*
+     * Find all recommendation requests by the requester's user id
+     * @param id the id of the professor user
+     * @return a List of recommendaiton requests
+     */
+    List<RecommendationRequest> findAllByRequesterId(Long id);
 
     
 }
