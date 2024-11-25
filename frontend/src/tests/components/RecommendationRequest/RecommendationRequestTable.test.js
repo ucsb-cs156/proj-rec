@@ -7,7 +7,6 @@ import { currentUserFixtures } from "fixtures/currentUserFixtures";
 import axios from "axios";
 import AxiosMockAdapter from "axios-mock-adapter";
 import { hasRole } from "main/utils/currentUser";
-import { hasRole } from "main/utils/currentUser";
 
 const mockedNavigate = jest.fn();
 
@@ -22,8 +21,8 @@ describe("UserTable tests", () => {
   test("Has the expected column headers and content for ordinary user", () => {
     const currentUser = currentUserFixtures.userOnly;
 
-    expect(hasRole(currentUser, "ROLE_USER" )).toBe(true); 
-    expect(hasRole(currentUser, "ROLE_ADMIN" )).toBe(false); 
+    expect(hasRole(currentUser, "ROLE_USER")).toBe(true);
+    expect(hasRole(currentUser, "ROLE_ADMIN")).toBe(false);
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -79,7 +78,6 @@ describe("UserTable tests", () => {
       "3",
     );
 
-
     const editButton = screen.queryByTestId(
       `${testId}-cell-row-0-col-Edit-button`,
     );
@@ -94,10 +92,10 @@ describe("UserTable tests", () => {
   });
 
   test("Has the expected column headers and content for adminUser", () => {
-    const currentUser = currentUserFixtures.adminUser; 
+    const currentUser = currentUserFixtures.adminUser;
 
-    expect(hasRole(currentUser, "ROLE_ADMIN" )).toBe(true); 
-    expect(hasRole(currentUser, "ROLE_USER" )).toBe(true); 
+    expect(hasRole(currentUser, "ROLE_ADMIN")).toBe(true);
+    expect(hasRole(currentUser, "ROLE_USER")).toBe(true);
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -168,8 +166,8 @@ describe("UserTable tests", () => {
   test("Edit button navigates to the edit page for user", async () => {
     const currentUser = currentUserFixtures.userOnly;
 
-    expect(hasRole(currentUser, "ROLE_USER" )).toBe(true); 
-    expect(hasRole(currentUser, "ROLE_ADMIN" )).toBe(false); 
+    expect(hasRole(currentUser, "ROLE_USER")).toBe(true);
+    expect(hasRole(currentUser, "ROLE_ADMIN")).toBe(false);
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -204,7 +202,7 @@ describe("UserTable tests", () => {
   test("A user with no roles has expected content", () => {
     const currentUser = currentUserFixtures.notLoggedIn;
 
-    expect(hasRole(currentUser, "ROLE_USER" )).toBe(undefined); 
+    expect(hasRole(currentUser, "ROLE_USER")).toBe(undefined);
 
     render(
       <QueryClientProvider client={queryClient}>

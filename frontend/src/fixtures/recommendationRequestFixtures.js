@@ -4,7 +4,7 @@ const recommendationRequestFixtures = {
       id: 1,
       professor_id: 1,
       professor: {
-        fullName: "Phil Conrad", 
+        fullName: "Phil Conrad",
         email: "phtcon@ucsb.edu",
       },
       submissionDate: "2022-02-02T12:00",
@@ -16,7 +16,7 @@ const recommendationRequestFixtures = {
       recommendationType: "CS Department BS/MS program",
       requester_id: 1,
       requester: {
-        fullName: "Divyani Punj", 
+        fullName: "Divyani Punj",
         email: "divyanipunj@ucsb.edu",
       },
     },
@@ -27,7 +27,7 @@ const recommendationRequestFixtures = {
       id: 2,
       professor_id: 2,
       professor: {
-        fullName: "Chaewon Bang", 
+        fullName: "Chaewon Bang",
         email: "chaewonbang@ucsb.edu",
       },
       submissionDate: "2022-02-02T12:00",
@@ -39,7 +39,7 @@ const recommendationRequestFixtures = {
       recommendationType: "CS Department BS/MS program",
       requester_id: 2,
       requester: {
-        fullName: "Mia Scott", 
+        fullName: "Mia Scott",
         email: "mscott@ucsb.edu",
       },
     },
@@ -48,7 +48,7 @@ const recommendationRequestFixtures = {
       id: 3,
       professor_id: 3,
       professor: {
-        fullName: "Lithika Anabarasan", 
+        fullName: "Lithika Anabarasan",
         email: "lithika@ucsb.edu",
       },
       submissionDate: "2022-02-02T12:00",
@@ -60,7 +60,7 @@ const recommendationRequestFixtures = {
       recommendationType: "CS Department BS/MS program",
       requester_id: 3,
       requester: {
-        fullName: "Shrena Punj", 
+        fullName: "Shrena Punj",
         email: "shrenapunj@ucsb.edu",
       },
     },
@@ -69,7 +69,7 @@ const recommendationRequestFixtures = {
       id: 4,
       professor_id: 4,
       professor: {
-        fullName: "Riya Seghal", 
+        fullName: "Riya Seghal",
         email: "riya@ucsb.edu",
       },
       submissionDate: "2022-02-02T12:00",
@@ -81,7 +81,7 @@ const recommendationRequestFixtures = {
       recommendationType: "CS Department BS/MS program",
       requester_id: 4,
       requester: {
-        fullName: "Krish Seghal", 
+        fullName: "Krish Seghal",
         email: "krishseghal@ucsb.edu",
       },
     },
