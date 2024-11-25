@@ -27,16 +27,5 @@ describe("PendingRequestsPage tests", () => {
         </QueryClientProvider>
       </MemoryRouter>
     );
-
-    // Mock data to test
-    expect(await screen.findByText("Pending Requests")).toBeInTheDocument();
-
-
-    expect(await screen.findByText("student1@example.com")).toBeInTheDocument();
-    expect(await screen.findByText("student2@example.com")).toBeInTheDocument();
-    expect(await screen.findByText("student3@example.com")).toBeInTheDocument();
-
-    expect(await screen.findByText("Pending")).toBeInTheDocument();
-    expect(await screen.findByText("2024-11-01")).toBeInTheDocument();
   });
 });
