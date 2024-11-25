@@ -281,9 +281,10 @@ public class RecommendationRequestTests extends ControllerTestCase {
                                 .recommendationType("PhDprogram")
                                 .details("otherdetails")
                                 .dueDate(LocalDateTime.parse("2024-11-25T16:46:28"))
+                                .status("PENDING")
                                 .build();
 
-                when(recommendationRequestRepository.save(any(RecommendationRequest.class))).thenReturn(recommendationRequest1);
+                when(recommendationRequestRepository.save(eq(recommendationRequest1))).thenReturn(recommendationRequest1);
                 when(userRepository.findById(7L)).thenReturn(Optional.of(other));
                 // act
                 MvcResult response = mockMvc.perform(
@@ -296,7 +297,7 @@ public class RecommendationRequestTests extends ControllerTestCase {
                                 .andExpect(status().isOk())
                                 .andReturn();
                 // assert
-                verify(recommendationRequestRepository, times(1)).save(any(RecommendationRequest.class));
+                verify(recommendationRequestRepository, times(1)).save(eq(recommendationRequest1));
                 String expectedJson = mapper.writeValueAsString(recommendationRequest1);
                 String responseString = response.getResponse().getContentAsString();
                 assertEquals(expectedJson, responseString);
