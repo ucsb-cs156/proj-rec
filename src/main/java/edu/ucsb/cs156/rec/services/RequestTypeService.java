@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,21 +25,13 @@ public class RequestTypeService {
 	@Autowired
 	private RequestTypeRepository requestTypeRepository;
 
-	private boolean requestTypeExists(String type, Iterable<RequestType> typeList) {
-		for (RequestType requestType : typeList) {
-			if (requestType.getRequestType().equals(type)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	public RequestType trySave(RequestType requestType) throws EntityAlreadyExistsException {
 		Iterable<RequestType> typeList = requestTypeRepository.findAll();
 
-		boolean alreadyContains = requestTypeExists(requestType.getRequestType(), typeList);
+		Optional<RequestType> alreadyContains = requestTypeRepository.findByRequestType(requestType.getRequestType());
 
-		if (alreadyContains) {
+
+		if (alreadyContains.isPresent()) {
 			throw new EntityAlreadyExistsException(RequestType.class, requestType.getRequestType());
 		}
 
@@ -50,8 +43,9 @@ public class RequestTypeService {
 		Iterable<RequestType> typeList = requestTypeRepository.findAll();
 
 		toSave.forEach((requestType) -> {
-			boolean alreadyContains = requestTypeExists(requestType.getRequestType(), typeList);
-			if (!alreadyContains) {
+			Optional<RequestType> alreadyContains = requestTypeRepository.findByRequestType(requestType.getRequestType());
+
+			if (!alreadyContains.isPresent()) {
 				savedTypes.add(requestTypeRepository.save(requestType));
 			}
 		});

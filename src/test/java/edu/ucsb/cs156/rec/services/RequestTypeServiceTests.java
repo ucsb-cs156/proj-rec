@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,7 +40,7 @@ class RequestTypeServiceTests extends ControllerTestCase {
 		RequestType req = RequestType.builder().requestType("Colloquia").build();
 		RequestType requestType1 = RequestType.builder().requestType("Colloquia").build();
 
-		when(requestTypeRepository.findAll()).thenReturn(List.of(req));
+		when(requestTypeRepository.findByRequestType("Colloquia")).thenReturn(Optional.of(req));
 
 		// Make sure that the bad request throws an exception
 		assertThrows(EntityAlreadyExistsException.class, () -> requestTypeService.trySave(requestType1));
@@ -54,7 +55,7 @@ class RequestTypeServiceTests extends ControllerTestCase {
 		RequestType req = RequestType.builder().requestType("CS Major").build();
 		RequestType requestType1 = RequestType.builder().requestType("Colloquia").build();
 
-		when(requestTypeRepository.findAll()).thenReturn(List.of(req));
+		when(requestTypeRepository.findByRequestType("Colloquia")).thenReturn(Optional.empty());
 		when(requestTypeRepository.save(eq(requestType1))).thenReturn(requestType1);
 
 		// Make it a list in order to extract the return value of trySave from the function
@@ -76,7 +77,9 @@ class RequestTypeServiceTests extends ControllerTestCase {
 		RequestType requestType1 = RequestType.builder().requestType("Office Hours").build();
 		RequestType requestType2 = RequestType.builder().requestType("PhD").build();
 
-		when(requestTypeRepository.findAll()).thenReturn(List.of(req0, req1, req2));
+		when(requestTypeRepository.findByRequestType("Colloquia")).thenReturn(Optional.empty());
+		when(requestTypeRepository.findByRequestType("Office Hours")).thenReturn(Optional.of(req2));
+		when(requestTypeRepository.findByRequestType("PhD")).thenReturn(Optional.empty());
 		when(requestTypeRepository.save(eq(requestType0))).thenReturn(requestType0);
 		when(requestTypeRepository.save(eq(requestType2))).thenReturn(requestType2);
 
