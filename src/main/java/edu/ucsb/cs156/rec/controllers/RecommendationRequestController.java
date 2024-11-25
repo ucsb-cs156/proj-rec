@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,7 +56,7 @@ public class RecommendationRequestController extends ApiController {
     public Iterable<RecommendationRequest> allProfessorRecommendationRequests(
     ) {
         User currentUser = getCurrentUser().getUser();
-        Iterable<RecommendationRequest> recommendationRequests = recommendationRequestRepository.findAllByRequesterId(currentUser.getId());
+        Iterable<RecommendationRequest> recommendationRequests = recommendationRequestRepository.findAllByProfessorId(currentUser.getId());
         return recommendationRequests;
     }
 
@@ -81,17 +82,17 @@ public class RecommendationRequestController extends ApiController {
      * @param professorId id from a dropdown of professors from the form in create page
      * @param recommendationType recommendation types of request
      * @param details details of request
-     * @param submissionDate submission date of request
+     * @param dueDate submission date of request
      * @return the save recommendationrequests (with it's id field set by the database)
      */
-    @Operation(summary = "Create a new recommendationrequests")
+    @Operation(summary = "Create a new recommendation request")
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/post")
     public RecommendationRequest postRecommendationRequests(
-            @Parameter(name = "professorId") @RequestParam long professorId,
+            @Parameter(name = "professorId") @RequestParam Long professorId,
             @Parameter(name = "recommendationType") @RequestParam String recommendationType,
             @Parameter(name = "details") @RequestParam String details,
-            @Parameter(name = "dueDate") @RequestParam LocalDateTime dueDate)
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dueDate)
             {
         //get current date right now and set status to pending
         CurrentUser currentUser = getCurrentUser();
