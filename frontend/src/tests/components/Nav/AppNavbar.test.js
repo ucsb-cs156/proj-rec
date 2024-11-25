@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter } from "react-router-dom";
 import { currentUserFixtures } from "fixtures/currentUserFixtures";
+import usersFixtures from "fixtures/usersFixtures";
 
 import AppNavbar from "main/components/Nav/AppNavbar";
 import { systemInfoFixtures } from "fixtures/systemInfoFixtures";
@@ -38,6 +39,23 @@ describe("AppNavbar tests", () => {
 
     await screen.findByText("Welcome, phtcon@ucsb.edu");
     const adminMenu = screen.getByTestId("appnavbar-admin-dropdown");
+    expect(adminMenu).toBeInTheDocument();
+  });
+
+  test("renders correctly for professor user", async () => {
+    const currentUser = currentUserFixtures.adminUser;
+    const doLogin = jest.fn();
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <AppNavbar currentUser={currentUser} doLogin={doLogin} />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    await screen.findByText("Welcome, phtcon@ucsb.edu");
+    const adminMenu = screen.getByTestId("appnavbar-professor-dropdown");
     expect(adminMenu).toBeInTheDocument();
   });
 
