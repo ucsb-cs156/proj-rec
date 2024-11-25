@@ -59,8 +59,8 @@
                 },
                 {
                   "column": {
-                    "name": "REQUESTER_NAME",
-                    "type": "VARCHAR(255)"
+                    "name": "REQUESTER_ID",
+                    "type": "BIGINT"
                   }
                 },
                 {

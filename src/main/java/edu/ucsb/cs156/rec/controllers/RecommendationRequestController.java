@@ -33,7 +33,6 @@ import org.springframework.http.HttpStatus;
 import jakarta.validation.Valid;
 
 import java.time.LocalDate;
-import java.util.Optional;
 import java.util.List;
 
 /**
@@ -85,13 +84,9 @@ public class RecommendationRequestController extends ApiController{
 
     /**
      * Create a new recommendation request
-     * 
      * @param professorEmail the email of the professor
-     * @param requesterName the name of the requester
      * @param recommendationTypes the type of recommendations
      * @param details the other details of the request
-     * @param submissionDate the date the request was submitted
-     * @param completionDate the date the request was completed
      * @throws EntityNotFoundException if the professor is not found or is hte user does not have the professor role
      * @return the created RecommendationRequest
     */
@@ -101,14 +96,9 @@ public class RecommendationRequestController extends ApiController{
     @PostMapping("/post")
     public RecommendationRequest postRecommendationRequest(
         @Parameter(name="professorEmail") @RequestParam String professorEmail,
-        @Parameter(name="requesterName") @RequestParam String requesterName,
         @Parameter(name="recommendationTypes") @RequestParam String recommendationTypes,
-        @Parameter(name="details") @RequestParam String details,
-        @Parameter(name="submissionDate") @RequestParam("submissionDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate submissionDate,
-        @Parameter(name="completionDate") @RequestParam("completionDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate completionDate)
+        @Parameter(name="details") @RequestParam String details)
         throws JsonProcessingException {
-
-            log.info("submissionDate{}", submissionDate);
 
             User prof = userRepository.findByEmail(professorEmail)
                 .orElseThrow(() -> new EntityNotFoundException(User.class, professorEmail));
@@ -117,14 +107,15 @@ public class RecommendationRequestController extends ApiController{
                 throw new EntityNotFoundException(User.class, professorEmail);
             }
 
+            LocalDate currDate = LocalDate.now();
+
             RecommendationRequest recommendationRequest = new RecommendationRequest();
             recommendationRequest.setProfessor(prof);
             recommendationRequest.setProfessorEmail(professorEmail);
-            recommendationRequest.setRequesterName(requesterName);
+            recommendationRequest.setRequester(getCurrentUser().getUser());
             recommendationRequest.setRecommendationTypes(recommendationTypes);
             recommendationRequest.setDetails(details);
-            recommendationRequest.setSubmissionDate(submissionDate);
-            recommendationRequest.setCompletionDate(completionDate);
+            recommendationRequest.setSubmissionDate(currDate);
             recommendationRequest.setStatus("pending");
 
             RecommendationRequest savedRecommendationRequest = recommendationRequestRepository.save(recommendationRequest);
@@ -169,12 +160,12 @@ public class RecommendationRequestController extends ApiController{
         RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(RecommendationRequest.class, id));
 
+        LocalDate currDate = LocalDate.now();
+
         recommendationRequest.setProfessorEmail(incoming.getProfessorEmail());
-        recommendationRequest.setRequesterName(incoming.getRequesterName());
         recommendationRequest.setRecommendationTypes(incoming.getRecommendationTypes());
         recommendationRequest.setDetails(incoming.getDetails());
-        recommendationRequest.setSubmissionDate(incoming.getSubmissionDate());
-        recommendationRequest.setCompletionDate(incoming.getCompletionDate());
+        recommendationRequest.setCompletionDate(currDate);
         recommendationRequest.setStatus(incoming.getStatus());
 
         recommendationRequestRepository.save(recommendationRequest);
@@ -183,13 +174,13 @@ public class RecommendationRequestController extends ApiController{
     }
 
     /**
-     * Get all recommendation requests by Professor Name
+     * Get all recommendation requests by Professor id
      * 
      * @param userId the user Id of the professor
      * @throws EntityNotFoundException if the professor is not found
      * @return a list of all rec reqs directed towards the professor with the given userId
      */
-    @Operation(summary= "Get all recommendation requests by Professor Name")
+    @Operation(summary= "Get all recommendation requests by Professor's user id")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')") 
     @GetMapping("/professor/{userId}")
     public List<RecommendationRequest> getAllRecommendationRequestsByProfessor(
@@ -199,6 +190,25 @@ public class RecommendationRequestController extends ApiController{
             throw new EntityNotFoundException(User.class, userId);
         }
         List<RecommendationRequest> recommendationRequests = recommendationRequestRepository.findAllByProfessorId(userId);
+        return recommendationRequests;
+    }
+
+    /** 
+     * Get all recommendation requests by Requester id
+     * @param userId the user Id of the requester
+     * @throws EntityNotFoundException if the requester is not found
+     * @return a list of all rec reqs made by the requester with the given userId
+     */
+    @Operation(summary = "Get all recommendation requests by Requester's user id")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STUDENT')")
+    @GetMapping("/requester/{userId}")
+    public List<RecommendationRequest> getAllRecommendationRequestsByRequester(
+        @PathVariable(value="userId") long userId){
+
+        if( !userRepository.existsById(userId)) {
+            throw new EntityNotFoundException(User.class, userId);
+        }
+        List<RecommendationRequest> recommendationRequests = recommendationRequestRepository.findAllByRequesterId(userId);
         return recommendationRequests;
 
     }

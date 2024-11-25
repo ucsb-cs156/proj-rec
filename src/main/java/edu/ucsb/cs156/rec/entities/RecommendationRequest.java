@@ -14,6 +14,10 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+import org.springframework.data.annotation.CreatedDate;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 /**
  * This is a JPA entity that represents a RecommendationRequest, i.e. an entry
  * that comes from the UCSB API for academic calendar dates.
@@ -35,13 +39,18 @@ public class RecommendationRequest {
 
   private String professorEmail;
 
-  private String requesterName;
+  @ManyToOne(fetch = FetchType.EAGER, optional = false)
+  @JoinColumn(name = "requester_id", nullable = false)
+  private User requester;
   private String recommendationTypes; //dropdown, may want to make this id from recommendationtypes (come back to)
   private String details;
+
+  @Schema( allowableValues = {"pending", "accepted", "denied"} )
   private String status;
 
-
+  @CreatedDate
   private LocalDate submissionDate;
+  
   private LocalDate completionDate;
 
 }
