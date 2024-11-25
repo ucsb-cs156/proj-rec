@@ -160,6 +160,34 @@ public class RecommendationRequestTests extends ControllerTestCase {
 
         @WithMockUser(roles = { "USER" })
         @Test
+        public void test_that_logged_in_user_cannot_get_by_id_when_the_id_exists_and_they_arent_professor_or_requester() throws Exception {
+
+                // arrange
+                User requester = User.builder().email("testemail@ucsb.edu").fullName("Test Prof").build();
+                LocalDateTime now = LocalDateTime.now();
+                RecommendationRequest recommendationRequest = RecommendationRequest.builder()
+                                .professor(requester)
+                                .requester(requester)
+                                .recommendationType("PhD program")
+                                .details("other details")
+                                .dueDate(now)
+                                .build();
+
+                when(recommendationRequestRepository.findById(eq(7L))).thenReturn(Optional.of(recommendationRequest));  // Check not sure why id is 7
+
+                MvcResult response = mockMvc.perform(get("/api/recommendationrequest?id=7"))
+                                .andExpect(status().isNotFound()).andReturn();
+
+                // assert
+
+                verify(recommendationRequestRepository, times(1)).findById(eq(7L));
+                Map<String, Object> json = responseToJson(response);
+                assertEquals("EntityNotFoundException", json.get("type"));
+                assertEquals("RecommendationRequest with id 7 not found", json.get("message"));
+        }
+
+        @WithMockUser(roles = { "USER" })
+        @Test
         public void test_that_logged_in_user_can_get_by_id_when_the_id_does_not_exist() throws Exception {
 
                 // arrange
