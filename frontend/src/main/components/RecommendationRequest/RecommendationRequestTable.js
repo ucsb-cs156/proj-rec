@@ -69,15 +69,8 @@ export default function RecommendationRequestTable({ requests, currentUser }) {
     },
   ];
 
-  if (hasRole(currentUser, "ROLE_ADMIN")) {
-    columns.push(
-      ButtonColumn(
-        "Edit",
-        "primary",
-        editCallback,
-        "RecommendationRequestTable",
-      ),
-    );
+  //since all admins have the role of a user, we can just check if the current user has the role ROLE_USER
+  if (hasRole(currentUser, "ROLE_USER")){
     columns.push(
       ButtonColumn(
         "Delete",
@@ -87,6 +80,18 @@ export default function RecommendationRequestTable({ requests, currentUser }) {
       ),
     );
   }
+  
+  if ((hasRole(currentUser, "ROLE_USER")) && !(hasRole(currentUser, "ROLE_ADMIN"))) {
+    columns.push(
+      ButtonColumn(
+        "Edit",
+        "primary",
+        editCallback,
+        "RecommendationRequestTable",
+      ),
+    );
+  }
+
 
   return (
     <OurTable
