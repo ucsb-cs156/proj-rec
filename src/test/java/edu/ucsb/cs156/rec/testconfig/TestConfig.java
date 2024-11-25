@@ -12,7 +12,6 @@ import edu.ucsb.cs156.rec.services.GrantedAuthoritiesService;
 import org.springframework.context.annotation.Import;
 
 @TestConfiguration
-@AutoConfigureDataJpa
 @Import(SecurityConfig.class)
 public class TestConfig {
 
