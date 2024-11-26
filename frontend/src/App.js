@@ -58,12 +58,12 @@ function App() {
           <>
             <Route
               exact
-              path="/admin/requesttypes"
+              path="/settings/requesttypes"
               element={<PlaceholderRequestTypeIndexPage />}
             />
             <Route
               exact
-              path="/admin/requesttypes/create"
+              path="/settings/requesttypes/create"
               element={<RequestTypeCreatePage />}
             />
           </>

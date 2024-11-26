@@ -43,7 +43,15 @@ export default function AppNavbar({
                   data-testid="appnavbar-admin-dropdown"
                 >
                   <NavDropdown.Item href="/admin/users">Users</NavDropdown.Item>
-                  <NavDropdown.Item href="/admin/requesttypes">
+                </NavDropdown>
+              )}
+              {(hasRole(currentUser, "ROLE_ADMIN") || hasRole(currentUser, "ROLE_INSTRUCTOR")) && (
+                <NavDropdown
+                  title="Settings"
+                  id="appnavbar-settings-dropdown"
+                  data-testid="appnavbar-settings-dropdown"
+                >
+                  <NavDropdown.Item href="/settings/requesttypes">
                     Request Types
                   </NavDropdown.Item>
                 </NavDropdown>

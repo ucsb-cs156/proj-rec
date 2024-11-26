@@ -33,7 +33,7 @@ export default function RequestTypeCreatePage({ storybook = false }) {
   };
 
   if (isSuccess && !storybook) {
-    return <Navigate to="/admin/requesttypes" />;
+    return <Navigate to="/settings/requesttypes" />;
   }
 
   return (

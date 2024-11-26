@@ -62,7 +62,7 @@ describe("RequestTypeCreatePage tests", () => {
     });
   });
 
-  test("on submit, makes request to backend, and redirects to /admin/requesttypes", async () => {
+  test("on submit, makes request to backend, and redirects to /settings/requesttypes", async () => {
     const queryClient = new QueryClient();
     const requestType = {
       id: 3,
@@ -102,6 +102,6 @@ describe("RequestTypeCreatePage tests", () => {
     expect(mockToast).toBeCalledWith(
       "New Request Type Created - id: 3 value: Study Session",
     );
-    expect(mockNavigate).toBeCalledWith({ to: "/admin/requesttypes" });
+    expect(mockNavigate).toBeCalledWith({ to: "/settings/requesttypes" });
   });
 });

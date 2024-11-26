@@ -7,10 +7,10 @@ export default function PlaceholderRequestTypeIndexPage() {
       <div className="pt-2">
         <h1>Index page not yet implemented</h1>
         <p>
-          <a href="/admin/requesttypes/create">Create</a>
+          <a href="/settings/requesttypes/create">Create</a>
         </p>
         <p>
-          <a href="/admin/requesttypes/edit/1">Edit (not yet implemented)</a>
+          <a href="/settings/requesttypes/edit/1">Edit (not yet implemented)</a>
         </p>
       </div>
     </BasicLayout>
