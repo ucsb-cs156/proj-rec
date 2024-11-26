@@ -127,14 +127,15 @@ function RecommendationRequestForm({
               <option disabled value="">
                 Select a recommendation type
               </option>
-              {recommendationTypes.map((recommendationType) => (
+              {Array.isArray(recommendationTypes) && recommendationTypes.length > 0 ? (
+                recommendationTypes.map((recommendationType) => (
                 <option
                   key={recommendationType.id}
                   value={recommendationType.id}
                 >
                   {recommendationType.requestType}
                 </option>
-              ))}
+              )) ) : (<></>)}
               <option value="Other">Other</option>
             </Form.Select>
             {errors.recommendationType && (
