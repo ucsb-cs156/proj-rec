@@ -11,7 +11,21 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RecommendationRequestRepository extends CrudRepository<RecommendationRequest, Long> {
-    /**
+ /**
+   * This method returns an iterable of recommendation requests with given requester_id.
+   * @param requester_id requester_id within RecommendationRequest that maps to id in User table
+   * @return iterable of RecommendationRequests with requester_id == requester_id
+   */
+  Iterable<RecommendationRequest> findAllByRequesterId(Long requester_id);
+
+  /**
+   * This method returns an iterable of recommendation requests with given professor_id.
+   * @param professor_id professor_id within RecommendationRequest that maps to id in User table
+   * @return iterable of RecommendationRequests with professor_id == professor_id
+   */
+  Iterable<RecommendationRequest> findAllByProfessorId(Long professor_id);
+
+  /**
      * Find all recommendation requests by professor ID and status.
      *
      * @param professor_id professor_id within RecommendationRequest that maps to id in User table
@@ -19,4 +33,6 @@ public interface RecommendationRequestRepository extends CrudRepository<Recommen
      * @return a list of recommendation requests matching the criteria
      */
     Iterable<RecommendationRequest> findAllByProfessorIdAndStatus(Long professor_id, String status);
+
+
 }
