@@ -25,6 +25,7 @@ function RecommendationRequestForm({
 
   //queries endpoint to get list of professors
   useEffect(() => {
+    if (!professors || professors.length === 0) {
     const getProfessors = async () => {
       try {
         const response = await fetch("/api/admin/users/professors");
@@ -34,6 +35,11 @@ function RecommendationRequestForm({
         console.error("Error fetching professors");
       }
     };
+    getProfessors();
+  } else {
+    setProfessors(professorVals);
+  }
+  if (!recommendationTypes || recommendationTypes.length === 0) {
     const getRequestTypes = async () => {
       try {
         const response = await fetch("/api/requesttype/all");
@@ -43,9 +49,10 @@ function RecommendationRequestForm({
         console.error("Error fetching request types");
       }
     };
-
-    getProfessors();
     getRequestTypes();
+  } else {
+    setRecommendationTypes(recommendationTypeVals);
+  }
   });
 
   const navigate = useNavigate();
