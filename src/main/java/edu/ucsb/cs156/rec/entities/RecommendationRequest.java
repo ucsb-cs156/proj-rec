@@ -21,23 +21,23 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 /**
  * This is a JPA entity that represents a Recommendation Request
  */
-@EntityListeners(AuditingEntityListener.class)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity(name = "recommendationrequest")
+@EntityListeners(AuditingEntityListener.class)
 public class RecommendationRequest {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
   @ManyToOne
-  @JoinColumn(name = "requester_id", referencedColumnName = "id", insertable = false, updatable = false)
+  @JoinColumn(name = "requester_id", referencedColumnName = "id", insertable = true, updatable = true)
   private User requester;
 
   @ManyToOne
-  @JoinColumn(name = "professor_id", referencedColumnName = "id", insertable = false, updatable = false)
+  @JoinColumn(name = "professor_id", referencedColumnName = "id", insertable = true, updatable = true)
   private User professor;
 
   private String recommendationType;
