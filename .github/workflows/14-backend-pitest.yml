@@ -11,6 +11,11 @@ on:
     branches: [ main ]
     paths: [src/**, pom.xml, lombok.config, .github/workflows/14-backend-pitest.yml]
 
+env:
+    # See: https://github.com/actions/setup-java#supported-distributions
+    JAVA_DISTRIBUTION: ${{ vars.JAVA_DISTRIBUTION || 'temurin' }} 
+
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -33,8 +38,10 @@ jobs:
     - name: Set up Java (version from .java-version file)
       uses: actions/setup-java@v4
       with:
-         distribution: temurin # See: https://github.com/actions/setup-java#supported-distributions
+         distribution: ${{ env.JAVA_DISTRIBUTION }} 
          java-version-file: ./.java-version
+         cache: 'maven'
+         cache-dependency-path: 'pom.xml' 
     - name: Build with Maven
       run: mvn -B test 
     
