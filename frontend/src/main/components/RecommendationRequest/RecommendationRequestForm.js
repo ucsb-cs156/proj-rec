@@ -124,21 +124,25 @@ function RecommendationRequestForm({
               })}
               defaultValue=""
             >
-              <option disabled value="">
-                Select a recommendation type
-              </option>
               {Array.isArray(recommendationTypes) &&
               recommendationTypes.length > 0 ? (
-                recommendationTypes.map((recommendationType) => (
+                <>
+                  <option disabled value="">
+                    Select a recommendation type
+                  </option>
+                {recommendationTypes.map((recommendationType) => (
                   <option
                     key={recommendationType.id}
                     value={recommendationType.id}
                   >
                     {recommendationType.requestType}
                   </option>
-                ))
+                ))}
+                </>
               ) : (
-                <></>
+                <option disabled value="">
+                  No recommendation types available, use Other in details
+                </option>
               )}
               <option value="Other">Other</option>
             </Form.Select>
