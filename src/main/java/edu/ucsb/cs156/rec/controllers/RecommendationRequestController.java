@@ -5,6 +5,8 @@ import edu.ucsb.cs156.rec.errors.EntityNotFoundException;
 import edu.ucsb.cs156.rec.repositories.RecommendationRequestRepository;
 import edu.ucsb.cs156.rec.repositories.UserRepository;
 import edu.ucsb.cs156.rec.entities.User;
+import edu.ucsb.cs156.rec.entities.RequestType;
+import edu.ucsb.cs156.rec.repositories.RequestTypeRepository;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -17,6 +19,7 @@ import org.checkerframework.checker.units.qual.g;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.source.IterableConfigurationPropertySource;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,11 +30,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
 
 import jakarta.validation.Valid;
 
 import java.time.LocalDate;
-import java.util.Optional;
+import java.util.List;
 
 /**
  * This is a REST controller for RecommendationRequest
@@ -48,6 +52,9 @@ public class RecommendationRequestController extends ApiController{
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    RequestTypeRepository requestTypeRepository;
 
     /**
      * List all recommendation requests
@@ -66,6 +73,7 @@ public class RecommendationRequestController extends ApiController{
      * Get a single recommendation request by id
      * 
      * @param id the id of the recommendation request
+     * @throws EntityNotFoundException if the recommendation request is not found
      * @return a recommendation request
      */
     @Operation(summary= "Get a single recommendation request")
@@ -81,44 +89,41 @@ public class RecommendationRequestController extends ApiController{
 
     /**
      * Create a new recommendation request
-     * 
-     * @param professorName the name of the professor
      * @param professorEmail the email of the professor
-     * @param requesterName the name of the requester
-     * @param recommendationTypes the type of recommendations
+     * @param recommendationType the type of recommendations
      * @param details the other details of the request
-     * @param submissionDate the date the request was submitted
-     * @param completionDate the date the request was completed
+     * @throws EntityNotFoundException if the professor is not found or is hte user does not have the professor role
      * @return the created RecommendationRequest
     */
     
     @Operation(summary= "Create a new recommendation request")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STUDENT')")
     @PostMapping("/post")
     public RecommendationRequest postRecommendationRequest(
-        @Parameter(name="professorName") @RequestParam String professorName,
         @Parameter(name="professorEmail") @RequestParam String professorEmail,
-        @Parameter(name="requesterName") @RequestParam String requesterName,
-        @Parameter(name="recommendationTypes") @RequestParam String recommendationTypes,
-        @Parameter(name="details") @RequestParam String details,
-        @Parameter(name="submissionDate") @RequestParam("submissionDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate submissionDate,
-        @Parameter(name="completionDate") @RequestParam("completionDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate completionDate)
+        @Parameter(name="recommendationType") @RequestParam String recommendationType,
+        @Parameter(name="details") @RequestParam String details)
         throws JsonProcessingException {
 
-            log.info("submissionDate{}", submissionDate);
+            User prof = userRepository.findByEmail(professorEmail)
+                .orElseThrow(() -> new EntityNotFoundException(User.class, professorEmail));
+            
+            if (!prof.getProfessor()) {
+                throw new EntityNotFoundException(User.class, professorEmail);
+            }
 
-            userRepository.findByName(professorName)
-                .orElseThrow(() -> new EntityNotFoundException(User.class, professorName));
+            RequestType type = requestTypeRepository.findByRequestType(recommendationType)
+                .orElseThrow(() -> new EntityNotFoundException(RequestType.class, recommendationType));
 
+            LocalDate currDate = LocalDate.now();
 
             RecommendationRequest recommendationRequest = new RecommendationRequest();
-            recommendationRequest.setProfessorName(professorName);
+            recommendationRequest.setProfessor(prof);
             recommendationRequest.setProfessorEmail(professorEmail);
-            recommendationRequest.setRequesterName(requesterName);
-            recommendationRequest.setRecommendationTypes(recommendationTypes);
+            recommendationRequest.setRequester(getCurrentUser().getUser());
+            recommendationRequest.setRecommendationType(type);
             recommendationRequest.setDetails(details);
-            recommendationRequest.setSubmissionDate(submissionDate);
-            recommendationRequest.setCompletionDate(completionDate);
+            recommendationRequest.setSubmissionDate(currDate);
             recommendationRequest.setStatus("pending");
 
             RecommendationRequest savedRecommendationRequest = recommendationRequestRepository.save(recommendationRequest);
@@ -130,6 +135,7 @@ public class RecommendationRequestController extends ApiController{
      * Delete a recommendation request
      * 
      * @param id the id of the recommendation request to delete
+     * @throws EntityNotFoundException if the recommendation request is not found
      * @return a message indicating the recommedation request was deleted
      */
     @Operation(summary= "Delete a recommendation request")
@@ -149,10 +155,11 @@ public class RecommendationRequestController extends ApiController{
      * 
      * @param id       id of the recommendation request to update
      * @param incoming the new recommendation request
+     * @throws EntityNotFoundException if the recommendation request is not found
      * @return the updated recommendation request object
      */
     @Operation(summary= "Update a single recommendation request")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')")
     @PutMapping("")
     public RecommendationRequest updateRecommendationRequest(
             @Parameter(name="id") @RequestParam Long id,
@@ -161,13 +168,12 @@ public class RecommendationRequestController extends ApiController{
         RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(RecommendationRequest.class, id));
 
-        recommendationRequest.setProfessorName(incoming.getProfessorName());
+        LocalDate currDate = LocalDate.now();
+
         recommendationRequest.setProfessorEmail(incoming.getProfessorEmail());
-        recommendationRequest.setRequesterName(incoming.getRequesterName());
-        recommendationRequest.setRecommendationTypes(incoming.getRecommendationTypes());
+        recommendationRequest.setRecommendationType(incoming.getRecommendationType());
         recommendationRequest.setDetails(incoming.getDetails());
-        recommendationRequest.setSubmissionDate(incoming.getSubmissionDate());
-        recommendationRequest.setCompletionDate(incoming.getCompletionDate());
+        recommendationRequest.setCompletionDate(currDate);
         recommendationRequest.setStatus(incoming.getStatus());
 
         recommendationRequestRepository.save(recommendationRequest);
@@ -176,32 +182,42 @@ public class RecommendationRequestController extends ApiController{
     }
 
     /**
-     * Get all recommendation requests by Professor Name
+     * Get all recommendation requests by Professor id
      * 
-     * @param professorName the name of the professor
-     * @return an iterable of RecommendationRequest with name of the professor
+     * @param userId the user Id of the professor
+     * @throws EntityNotFoundException if the professor is not found
+     * @return a list of all rec reqs directed towards the professor with the given userId
      */
-    @Operation(summary= "Get all recommendation requests by Professor Name")
-    @PreAuthorize("hasRole('ROLE_ADMIN')") // Change to ROLE_PROFESSOR LATER
-    @GetMapping("/professor/{professorName}")
-    public Iterable<RecommendationRequest> getRecommendationRequestsByProfessorName(
-            @Parameter(name = "professorName") @PathVariable String professorName) {
-        Iterable<RecommendationRequest> recommendationRequests = recommendationRequestRepository.findAllByProfessorName(professorName);
+    @Operation(summary= "Get all recommendation requests by Professor's user id")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')") 
+    @GetMapping("/professor/{userId}")
+    public List<RecommendationRequest> getAllRecommendationRequestsByProfessor(
+        @PathVariable(value="userId") long userId) {
+
+        if( !userRepository.existsById(userId)) {
+            throw new EntityNotFoundException(User.class, userId);
+        }
+        List<RecommendationRequest> recommendationRequests = recommendationRequestRepository.findAllByProfessorId(userId);
         return recommendationRequests;
     }
 
-    /**
-     * Get all recommendation requests by Student Name
-     * 
-     * @param requesterName the name of the student
-     * @return 
+    /** 
+     * Get all recommendation requests by Requester id
+     * @param userId the user Id of the requester
+     * @throws EntityNotFoundException if the requester is not found
+     * @return a list of all rec reqs made by the requester with the given userId
      */
-    @Operation(summary= "Get all recommendation requests by Requester Name")
-    @PreAuthorize("hasRole('ROLE_ADMIN')") // Change to ROLE_PROFESSOR LATER
-    @GetMapping("/requester/{requesterName}")
-    public Iterable<RecommendationRequest> getRecommendationRequestsByRequesterName(
-            @Parameter(name = "requesterName") @PathVariable String requesterName) {
-        Iterable<RecommendationRequest> recommendationRequests = recommendationRequestRepository.findAllByRequesterName(requesterName);
+    @Operation(summary = "Get all recommendation requests by Requester's user id")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STUDENT')")
+    @GetMapping("/requester/{userId}")
+    public List<RecommendationRequest> getAllRecommendationRequestsByRequester(
+        @PathVariable(value="userId") long userId){
+
+        if( !userRepository.existsById(userId)) {
+            throw new EntityNotFoundException(User.class, userId);
+        }
+        List<RecommendationRequest> recommendationRequests = recommendationRequestRepository.findAllByRequesterId(userId);
         return recommendationRequests;
+
     }
 }

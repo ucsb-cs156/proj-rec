@@ -47,8 +47,8 @@
                 },
                 {
                   "column": {
-                    "name": "PROFESSOR_NAME",
-                    "type": "VARCHAR(255)"
+                    "name": "USER_ID",
+                    "type": "BIGINT"
                   }
                 },
                 {
@@ -59,14 +59,14 @@
                 },
                 {
                   "column": {
-                    "name": "REQUESTER_NAME",
-                    "type": "VARCHAR(255)"
+                    "name": "REQUESTER_ID",
+                    "type": "BIGINT"
                   }
                 },
                 {
                   "column": {
-                    "name": "RECOMMENDATION_TYPES",
-                    "type": "VARCHAR(255)"
+                    "name": "REQTYPE_ID",
+                    "type": "BIGINT"
                   }
                 },
                 {

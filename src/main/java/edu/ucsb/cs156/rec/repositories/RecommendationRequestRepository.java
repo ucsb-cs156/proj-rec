@@ -6,7 +6,7 @@ import org.springframework.beans.propertyeditors.StringArrayPropertyEditor;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 
 
 
@@ -16,16 +16,19 @@ import java.util.Optional;
 @Repository
 public interface RecommendationRequestRepository extends CrudRepository<RecommendationRequest, Long> {
     /**
-     * This method returns all RecommendationRequest entities with a given professor name
-     * @param professorName the name of the professor
-     * @return  an iterable of RecommendationRequest entities
+     * Find all recommendation request by the professor's user id
+     * 
+     * @param id the id of the professor user
+     * @return a List of the recommendation request
      */
-    Iterable<RecommendationRequest> findAllByProfessorName(String professorName);
-    /**
-     * This method returns all RecommendationRequest entities with a given requester name
-     * @param requesterName the name of the requester
-     * @return  an iterable of RecommendationRequest entities
+    List<RecommendationRequest> findAllByProfessorId(Long id);
+
+    /*
+     * Find all recommendation requests by the requester's user id
+     * @param id the id of the professor user
+     * @return a List of recommendaiton requests
      */
-    Iterable<RecommendationRequest> findAllByRequesterName(String requesterName);
+    List<RecommendationRequest> findAllByRequesterId(Long id);
+
     
 }
