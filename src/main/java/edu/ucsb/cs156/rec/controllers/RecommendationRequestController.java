@@ -73,7 +73,7 @@ public class RecommendationRequestController extends ApiController {
         User currentUser = getCurrentUser().getUser(); 
         RecommendationRequest recommendationRequest = 
         recommendationRequestRepository
-            .findByIdAndUser(id, currentUser)
+            .findByIdAndRequester(id, currentUser)
             .orElseThrow(() -> new EntityNotFoundException(RecommendationRequest.class, id));
 
         recommendationRequestRepository.delete(recommendationRequest);
@@ -98,7 +98,7 @@ public class RecommendationRequestController extends ApiController {
         User currentUser = getCurrentUser().getUser(); 
         RecommendationRequest recommendationRequest = 
             recommendationRequestRepository
-                .findByIdAndUser(id, currentUser)
+                .findByIdAndRequester(id, currentUser)
                 .orElseThrow(() -> new EntityNotFoundException(RecommendationRequest.class, id));
 
         recommendationRequest.setDetails(incoming.getDetails());

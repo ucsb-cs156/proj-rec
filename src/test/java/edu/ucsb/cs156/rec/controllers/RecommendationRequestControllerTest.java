@@ -77,7 +77,7 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
                 .lastModifiedDate(LocalDateTime.parse("2022-01-03T00:00:00"))
                 .build();
 
-        when(recommendationRequestRepository.findByIdAndUser(eq(15L), eq(user))).thenReturn(Optional.of(recReq));
+        when(recommendationRequestRepository.findByIdAndRequester(eq(15L), eq(user))).thenReturn(Optional.of(recReq));
 
         // act
         MvcResult response = mockMvc.perform(
@@ -86,7 +86,7 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
                 .andExpect(status().isOk()).andReturn();
 
         // assert
-        verify(recommendationRequestRepository, times(1)).findByIdAndUser(15L, user);
+        verify(recommendationRequestRepository, times(1)).findByIdAndRequester(15L, user);
         verify(recommendationRequestRepository, times(1)).delete(recReq);
 
         Map<String, Object> json = responseToJson(response);
@@ -125,7 +125,7 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
                 .lastModifiedDate(LocalDateTime.parse("2022-01-03T00:00:00"))
                 .build();
                 
-        when(recommendationRequestRepository.findByIdAndUser(eq(15L),eq(user2))).thenReturn(Optional.of(rec1));
+        when(recommendationRequestRepository.findByIdAndRequester(eq(15L),eq(user2))).thenReturn(Optional.of(rec1));
 
         // act
         MvcResult response = mockMvc.perform(
@@ -134,7 +134,7 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
                 .andExpect(status().isNotFound()).andReturn();
 
         // assert
-        verify(recommendationRequestRepository, times(1)).findByIdAndUser(15L, user1);
+        verify(recommendationRequestRepository, times(1)).findByIdAndRequester(15L, user1);
         Map<String, Object> json = responseToJson(response);
         assertEquals("RecommendationRequest with id 15 not found", json.get("message"));
     }
@@ -181,7 +181,7 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
                 .andExpect(status().isNotFound()).andReturn();
 
         // assert
-        verify(recommendationRequestRepository, times(1)).findByIdAndUser(67L, user1);
+        verify(recommendationRequestRepository, times(1)).findByIdAndRequester(67L, user1);
         Map<String, Object> json = responseToJson(response);
         assertEquals("RecommendationRequest with id 67 not found", json.get("message"));
     }
@@ -312,7 +312,7 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
         String requestBody = mapper.writeValueAsString(rec_updated); 
         String expectedReturn = mapper.writeValueAsString(rec_corrected); 
 
-        when(recommendationRequestRepository.findByIdAndUser(eq(63L), eq(user1))).thenReturn(Optional.of(rec)); 
+        when(recommendationRequestRepository.findByIdAndRequester(eq(63L), eq(user1))).thenReturn(Optional.of(rec)); 
 
         // act
         MvcResult response = mockMvc
@@ -325,7 +325,7 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
                 .andReturn();
 
         // assert
-        verify(recommendationRequestRepository, times(1)).findByIdAndUser(63L, user1);
+        verify(recommendationRequestRepository, times(1)).findByIdAndRequester(63L, user1);
         verify(recommendationRequestRepository, times(1))
                 .save(rec_corrected); 
         String responseString = response.getResponse().getContentAsString();
@@ -364,7 +364,7 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
                 .build();
 
         String requestBody = mapper.writeValueAsString(rec); 
-        when(recommendationRequestRepository.findByIdAndUser(eq(67L), eq(user1))).thenReturn(Optional.empty());
+        when(recommendationRequestRepository.findByIdAndRequester(eq(67L), eq(user1))).thenReturn(Optional.empty());
 
         // act
         MvcResult response = mockMvc
@@ -376,7 +376,7 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
                 .andExpect(status().isNotFound())
                 .andReturn();
         // assert
-        verify(recommendationRequestRepository, times(1)).findByIdAndUser(67L, user1);
+        verify(recommendationRequestRepository, times(1)).findByIdAndRequester(67L, user1);
         Map<String, Object> output = responseToJson(response);
         assertEquals("RecommendationRequest with id 67 not found", output.get("message"));
     }
@@ -423,7 +423,7 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
                 .submissionDate(LocalDateTime.parse("2022-01-03T00:00:00"))
                 .lastModifiedDate(LocalDateTime.parse("2022-01-03T00:00:00"))
                 .build();
-        when(recommendationRequestRepository.findByIdAndUser(eq(31L), eq(user2)))
+        when(recommendationRequestRepository.findByIdAndRequester(eq(31L), eq(user2)))
         .thenReturn(Optional.of(rec));
 
         String requestBody = mapper.writeValueAsString(rec_updated);
@@ -440,7 +440,7 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
 
         
         // assert
-        verify(recommendationRequestRepository, times(1)).findByIdAndUser(67, user1);
+        verify(recommendationRequestRepository, times(1)).findByIdAndRequester(67, user1);
         Map<String, Object> json = responseToJson(response);
         assertEquals("EntityNotFoundException", json.get("type"));
         assertEquals("RecommendationRequest with id 67 not found", json.get("message"));
