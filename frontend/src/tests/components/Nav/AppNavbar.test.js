@@ -175,4 +175,34 @@ describe("AppNavbar tests", () => {
       "/oauth2/authorization/google",
     );
   });
+
+  test("renders Request Types link for logged-in user", async () => {
+    const currentUser = currentUserFixtures.userOnly;
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <AppNavbar currentUser={currentUser} />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    const requestTypesLink = await screen.findByText("Request Types");
+    expect(requestTypesLink).toBeInTheDocument();
+    expect(requestTypesLink).toHaveAttribute("href", "/requesttype");
+  });
+
+  test("does not render Request Types link for logged-out user", async () => {
+    const currentUser = currentUserFixtures.notLoggedIn;
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <AppNavbar currentUser={currentUser} />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    expect(screen.queryByText("Request Types")).toBeNull();
+  });
 });

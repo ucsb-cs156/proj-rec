@@ -78,6 +78,15 @@ export default function AppNavbar({
                   </NavDropdown.Item>
                 </NavDropdown>
               )}
+              {currentUser && currentUser.loggedIn ? (
+                <>
+                  <Nav.Link as={Link} to="/requesttype">
+                    Request Types
+                  </Nav.Link>
+                </>
+              ) : (
+                <></>
+              )}
             </Nav>
 
             <Nav className="ml-auto">
