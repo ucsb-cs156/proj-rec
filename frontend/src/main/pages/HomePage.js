@@ -11,9 +11,17 @@ export default function HomePage() {
         <p>
           This is a webapp that allows students to submit different types of
           requests to professors at the University of California, Santa Barbara.
-          {currentUser && currentUser.loggedIn
-            ? " Navigate to the requests tab to get started."
-            : " Please log in to get started."}
+          {currentUser && currentUser.loggedIn ? (
+            <span data-testid="home-page-text-navigate">
+              {" "}
+              Navigate to the requests tab to get started.
+            </span>
+          ) : (
+            <span data-testid="home-page-text-log-in">
+              {" "}
+              Please log in to get started.
+            </span>
+          )}
         </p>
       </div>
     </BasicLayout>

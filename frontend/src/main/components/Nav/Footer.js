@@ -6,9 +6,7 @@ export default function Footer() {
       <Container>
         <p>
           Built by students using React and Spring Boot ❤️ See the source code
-          on{" "}
-          <a href="https://github.com/ucsb-cs156-f24/proj-rec-f24-07">Github</a>
-          .
+          on <a href="https://github.com/ucsb-cs156-f24/proj-rec">Github</a>.
         </p>
       </Container>
     </footer>
