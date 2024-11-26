@@ -1,4 +1,3 @@
-import React from "react";
 import OurTable from "main/components/OurTable";
 
 export default function PendingRequestsTable({ requests }) {
@@ -25,7 +24,7 @@ export default function PendingRequestsTable({ requests }) {
     <OurTable
       data={requests}
       columns={columns}
-      testid="PendingRequestsTable"
+      testid={"PendingRequestsTable"}
     />
   );
 }
