@@ -140,6 +140,30 @@ describe("AppNavbar tests", () => {
     expect(screen.queryByTestId(/AppNavbarLocalhost/i)).toBeNull();
   });
 
+  test("renders the Placeholder link correctly", async () => {
+    const currentUser = currentUserFixtures.userOnly;
+    const systemInfo = systemInfoFixtures.showingBoth;
+
+    const doLogin = jest.fn();
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <AppNavbar
+            currentUser={currentUser}
+            systemInfo={systemInfo}
+            doLogin={doLogin}
+          />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    await screen.findByText("Placeholder");
+    const link = screen.getByText("Placeholder");
+    expect(link).toBeInTheDocument();
+    expect(link.getAttribute("href")).toBe("/placeholder");
+  });
+
   test("Placeholder links do NOT show when not logged in", async () => {
     const currentUser = null;
     const systemInfo = systemInfoFixtures.showingBoth;
