@@ -137,7 +137,7 @@ function RecommendationRequestForm({
                   {recommendationTypes.map((recommendationType) => (
                     <option
                       key={recommendationType.id}
-                      value={recommendationType.id}
+                      value={recommendationType.requestType}
                     >
                       {recommendationType.requestType}
                     </option>
