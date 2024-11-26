@@ -82,14 +82,22 @@ function RecommendationRequestForm({
               })}
               defaultValue=""
             >
-              <option disabled value="">
-                Select a professor
-              </option>
-              {professors.map((professor) => (
-                <option key={professor.id} value={professor.id}>
-                  {professor.fullName}
+              {Array.isArray(professors) && professors.length > 0 ? (
+                <>
+                  <option disabled value="">
+                    Select a professor
+                  </option>
+                  {professors.map((professor) => (
+                    <option key={professor.id} value={professor.id}>
+                      {professor.fullName}
+                    </option>
+                  ))}
+                </>
+              ) : (
+                <option disabled value="">
+                  No professors available
                 </option>
-              ))}
+              )}
             </Form.Select>
             {errors.professor && (
               <Form.Control.Feedback type="invalid">

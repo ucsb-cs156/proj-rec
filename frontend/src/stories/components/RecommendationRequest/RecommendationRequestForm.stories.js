@@ -1,6 +1,8 @@
 import React from "react";
 import { recommendationRequestFixtures } from "../../../fixtures/recommendationRequestFixtures";
 import RecommendationRequestForm from "main/components/RecommendationRequest/RecommendationRequestForm";
+import recommendationTypeFixtures from "fixtures/recommendationTypeFixtures";
+import usersFixtures from "fixtures/usersFixtures";
 
 export default {
   title: "components/RecommendationRequest/RecommendationRequestForm",
@@ -19,6 +21,8 @@ Create.args = {
     console.log("Submit was clicked with data: ", data);
     window.alert("Submit was clicked with data: " + JSON.stringify(data));
   },
+  recommendationTypesInserted: [recommendationTypeFixtures.fourTypes],
+  professorsInserted: [usersFixtures.twoProfessors],
 };
 
 export const Update = Template.bind({});
@@ -30,4 +34,6 @@ Update.args = {
     console.log("Submit was clicked with data: ", data);
     window.alert("Submit was clicked with data: " + JSON.stringify(data));
   },
+  recommendationTypesInserted: [recommendationTypeFixtures.fourTypes],
+  professorsInserted: [usersFixtures.twoProfessors],
 };

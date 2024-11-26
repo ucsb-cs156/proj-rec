@@ -9,7 +9,7 @@ const recommendationRequestFixtures = {
       completionDate: "",
       status: "PENDING",
       details: "test details",
-      recommendationType: "CS Department BS/MS program",
+      recommendationType: "Other",
       requester_id: 1,
     },
   ],
