@@ -71,9 +71,7 @@ function RecommendationRequestForm({
         )}
         <Col>
           <Form.Group className="mb-3">
-            <Form.Label htmlFor="professor">
-              Professor
-            </Form.Label>
+            <Form.Label htmlFor="professor">Professor</Form.Label>
             <Form.Select
               data-testid="RecommendationRequestForm-professor"
               id="professor"
@@ -84,7 +82,9 @@ function RecommendationRequestForm({
               })}
               defaultValue=""
             >
-              <option disabled value="">Select a professor</option>
+              <option disabled value="">
+                Select a professor
+              </option>
               {professors.map((professor) => (
                 <option key={professor.id} value={professor.id}>
                   {professor.fullName}
@@ -112,13 +112,18 @@ function RecommendationRequestForm({
               type="string"
               isInvalid={Boolean(errors.recommendationType)}
               {...register("recommendationType", {
-                required: "Please select a recommendation type"
+                required: "Please select a recommendation type",
               })}
               defaultValue=""
             >
-              <option disabled value="">Select a recommendation type</option>
+              <option disabled value="">
+                Select a recommendation type
+              </option>
               {recommendationTypes.map((recommendationType) => (
-                <option key={recommendationType.id} value={recommendationType.id}>
+                <option
+                  key={recommendationType.id}
+                  value={recommendationType.id}
+                >
                   {recommendationType.requestType}
                 </option>
               ))}

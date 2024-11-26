@@ -11,8 +11,6 @@ import AxiosMockAdapter from "axios-mock-adapter";
 import usersFixtures from "fixtures/usersFixtures";
 import recommendationTypeFixtures from "fixtures/recommendationTypeFixtures";
 
-
-
 const mockedNavigate = jest.fn();
 
 jest.mock("react-router-dom", () => ({
@@ -36,14 +34,10 @@ describe("RecommendationRequestForm tests", () => {
   });
   afterEach(() => {
     jest.resetAllMocks();
-  })
+  });
   const queryClient = new QueryClient();
 
-  const expectedHeaders = [
-    "Professor",
-    "Recommendation Type",
-    "Details",
-  ];
+  const expectedHeaders = ["Professor", "Recommendation Type", "Details"];
   const testId = "RecommendationRequestForm";
 
   test("renders correctly with no initialContents", async () => {
@@ -103,8 +97,8 @@ describe("RecommendationRequestForm tests", () => {
     await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(2)); // Ensure fetch was called twice
 
     // Assert: Check that fetch was called with the correct URLs
-    expect(global.fetch).toHaveBeenCalledWith('/api/admin/users/professors');
-    expect(global.fetch).toHaveBeenCalledWith('/api/requesttype/all');
+    expect(global.fetch).toHaveBeenCalledWith("/api/admin/users/professors");
+    expect(global.fetch).toHaveBeenCalledWith("/api/requesttype/all");
     await waitFor(() => {
       usersFixtures.twoProfessors.forEach((professor) => {
         expect(screen.getByText(professor.fullName)).toBeInTheDocument();
@@ -118,8 +112,10 @@ describe("RecommendationRequestForm tests", () => {
   });
 
   test("that the correct error appears when the gets are called for the options", async () => {
-    const consoleErrorMock = jest.spyOn(console, 'error').mockImplementation(() => {});
-    global.fetch = jest.fn().mockRejectedValueOnce(new Error('Network error'));
+    const consoleErrorMock = jest
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+    global.fetch = jest.fn().mockRejectedValueOnce(new Error("Network error"));
     render(
       <QueryClientProvider client={queryClient}>
         <Router>
@@ -130,12 +126,16 @@ describe("RecommendationRequestForm tests", () => {
     await waitFor(() => {
       // Here, you can check for side effects or verify the console error is called.
       // In this case, we assume the error is logged to the console.
-      expect(global.console.error).toHaveBeenCalledWith('Error fetching request types');
+      expect(global.console.error).toHaveBeenCalledWith(
+        "Error fetching request types",
+      );
     });
     await waitFor(() => {
       // Here, you can check for side effects or verify the console error is called.
       // In this case, we assume the error is logged to the console.
-      expect(global.console.error).toHaveBeenCalledWith('Error fetching professors');
+      expect(global.console.error).toHaveBeenCalledWith(
+        "Error fetching professors",
+      );
     });
     consoleErrorMock.mockRestore();
   });
@@ -148,12 +148,14 @@ describe("RecommendationRequestForm tests", () => {
         </Router>
       </QueryClientProvider>,
     );
-    expect(screen.getByText('Select a professor')).toBeInTheDocument();
-    expect(screen.getByText('Select a recommendation type')).toBeInTheDocument();
-    expect(screen.getByText('Other')).toBeInTheDocument();
+    expect(screen.getByText("Select a professor")).toBeInTheDocument();
+    expect(
+      screen.getByText("Select a recommendation type"),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Other")).toBeInTheDocument();
 
     // Assert that no professor options are rendered yet
-    const options = screen.queryAllByRole('option');
+    const options = screen.queryAllByRole("option");
     expect(options).toHaveLength(3);
   });
 
@@ -187,6 +189,8 @@ describe("RecommendationRequestForm tests", () => {
     fireEvent.click(submitButton);
 
     await screen.findByText(/Please select a professor/);
-    expect(screen.getByText(/Please select a recommendation type/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Please select a recommendation type/),
+    ).toBeInTheDocument();
   });
 });
