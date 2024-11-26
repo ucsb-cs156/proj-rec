@@ -7,8 +7,8 @@ function RecommendationRequestForm({
   initialContents,
   submitAction,
   buttonLabel = "Create",
-  recommendationTypeVals,
-  professorVals,
+  recommendationTypeVals = [],
+  professorVals = [],
 }) {
   // Stryker disable all
   const {
