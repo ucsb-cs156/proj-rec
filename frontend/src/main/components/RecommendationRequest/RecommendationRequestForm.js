@@ -19,7 +19,9 @@ function RecommendationRequestForm({
   // Stryker restore all
 
   const [professors, setProfessors] = useState(professorVals);
-  const [recommendationTypes, setRecommendationTypes] = useState(recommendationTypeVals);
+  const [recommendationTypes, setRecommendationTypes] = useState(
+    recommendationTypeVals,
+  );
 
   //queries endpoint to get list of professors
   useEffect(() => {
