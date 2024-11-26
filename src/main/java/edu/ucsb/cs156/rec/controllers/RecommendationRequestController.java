@@ -106,11 +106,9 @@ public class RecommendationRequestController extends ApiController {
         RecommendationRequest recommendationRequest = new RecommendationRequest();
         if (!recommendationType.equals("Other")) {
             requestTypeRepository.findByRequestType(recommendationType).orElseThrow(() -> new EntityNotFoundException(RequestType.class, recommendationType));
-            recommendationRequest.setRecommendationType(recommendationType);
-            recommendationRequest.setDetails(details);
-        } else {
-            recommendationRequest.setRecommendationType(details);
         }
+        recommendationRequest.setRecommendationType(recommendationType);
+        recommendationRequest.setDetails(details);
         User professor = userRepository.findById(professorId).orElseThrow(() -> new EntityNotFoundException(User.class, professorId));
         recommendationRequest.setProfessor(professor);
         recommendationRequest.setRequester(currentUser.getUser());

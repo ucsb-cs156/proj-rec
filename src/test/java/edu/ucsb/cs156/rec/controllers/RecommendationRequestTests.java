@@ -305,8 +305,8 @@ public class RecommendationRequestTests extends ControllerTestCase {
                 RecommendationRequest recommendationRequest1 = RecommendationRequest.builder()
                                 .professor(other)
                                 .requester(u)
-                                .recommendationType("otherdetails")
-                                .details(null)
+                                .recommendationType("Other")
+                                .details("otherdetails")
                                 .dueDate(LocalDateTime.parse("2024-11-25T16:46:28"))
                                 .status("PENDING")
                                 .build();
