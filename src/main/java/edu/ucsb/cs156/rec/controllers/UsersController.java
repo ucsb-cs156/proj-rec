@@ -36,7 +36,7 @@ import edu.ucsb.cs156.rec.errors.EntityNotFoundException;
  * These endpoints are only accessible to users with the role "ROLE_ADMIN".
  */
 
-@Tag(name="User information (admin only)")
+@Tag(name="User information (admin only except for /professors)")
 @RequestMapping("/api/admin/users")
 @RestController
 public class UsersController extends ApiController {
@@ -70,14 +70,13 @@ public class UsersController extends ApiController {
     @GetMapping("/professors")
     public Iterable<Map<String, Object>> allProfessors(
     ) {
-        // toyed with having this only be ROLE_STUDENT but I think even professors should be able to submit requests so they can see which ones they have submitted too
-        Iterable<User> professors = userRepository.findAllProfessors();
+        Iterable<User> professors = userRepository.professorIsTrue();
         // to add privacy, only return professor_id and professor_name
         List<Map<String, Object>> limited_list = new ArrayList<>();
         for (User professor : professors) {
             Map<String, Object> map = new HashMap<>();
             map.put("id", professor.getId());
-            map.put("name", professor.getFullName());
+            map.put("fullName", professor.getFullName());
             limited_list.add(map);
         }
         return limited_list;

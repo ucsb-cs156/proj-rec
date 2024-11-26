@@ -22,5 +22,5 @@ public interface UserRepository extends CrudRepository<User, Long> {
    * This method returns a an iterable of User entities that have professor=true.
    * @return Iterable of user entities with professor=true (empty if not found)
    */
-  Iterable<User> findAllProfessors();
+  Iterable<User> professorIsTrue();
 }
