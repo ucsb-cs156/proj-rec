@@ -101,9 +101,7 @@ public class RecommendationRequestController extends ApiController {
         RecommendationRequest recommendationRequest = new RecommendationRequest();
         User professor = userRepository.findById(professorId).orElseThrow(() -> new EntityNotFoundException(User.class, professorId));
         recommendationRequest.setProfessor(professor);
-        // recommendationRequest.setProfessor_id(professorId);
         recommendationRequest.setRequester(currentUser.getUser());
-        // recommendationRequest.setRequester_id(currentUser.getUser().getId());
         recommendationRequest.setRecommendationType(recommendationType);
         recommendationRequest.setDetails(details);
         recommendationRequest.setStatus("PENDING");
