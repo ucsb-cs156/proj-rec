@@ -46,12 +46,6 @@ function RecommendationRequestForm({
 
     getProfessors();
     getRequestTypes();
-    if (professors === undefined || professors.length === 0) {
-      setProfessors(professorVals);
-    }
-    if (recommendationTypes === undefined || recommendationTypes.length === 0) {
-      setRecommendationTypes(recommendationTypeVals);
-    }
   });
 
   const navigate = useNavigate();
