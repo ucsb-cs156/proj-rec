@@ -25,9 +25,8 @@ describe('RequestTypeDropdown Component', () => {
   });
 
   test('calls onChange when an option is selected', () => {
-    const handleChange = (event) => {
-      setSelectedValue(event.target.value);
-    };
+    const handleChange = jest.fn()
+    
     render(<RequestTypeDropdown options={options} requests={requestTypeFixtures.threeRequestTypes} onChange={handleChange} />);
     const dropdown = screen.getByRole('combobox');
     fireEvent.mouseDown(dropdown);
