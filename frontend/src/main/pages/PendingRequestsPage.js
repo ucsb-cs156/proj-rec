@@ -8,10 +8,11 @@ const PendingRequestsPage = () => {
     error: _error,
     status: _status,
   } = useBackend(
-    // Stryker disable next-line all : don't test internal caching of React Query
+    /* Stryker disable mutation */
     ["/api/requests/pending"],
     { method: "GET", url: "/api/requests/pending" },
     [],
+    /* Stryker enable mutation */
   );
 
   return (

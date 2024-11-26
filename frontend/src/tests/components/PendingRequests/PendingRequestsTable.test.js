@@ -153,12 +153,13 @@ describe("PendingRequestsTable tests", () => {
 
     await waitFor(() => {
       expect(axiosMock.history.post.length).toBe(1);
-      const postRequest = axiosMock.history.post[0];
-      const requestData = JSON.parse(postRequest.data);
-      expect(requestData).toEqual({
-        id: 1,
-        status: "Accepted",
-      });
+    });
+
+    const postRequest = axiosMock.history.post[0];
+    const requestData = JSON.parse(postRequest.data);
+    expect(requestData).toEqual({
+      id: 1,
+      status: "Accepted",
     });
 
     expect(toast.success).toHaveBeenCalledWith("Request successfully accepted");
@@ -183,12 +184,13 @@ describe("PendingRequestsTable tests", () => {
 
     await waitFor(() => {
       expect(axiosMock.history.post.length).toBe(1);
-      const postRequest = axiosMock.history.post[0];
-      const requestData = JSON.parse(postRequest.data);
-      expect(requestData).toEqual({
-        id: 1,
-        status: "Denied",
-      });
+    });
+
+    const postRequest = axiosMock.history.post[0];
+    const requestData = JSON.parse(postRequest.data);
+    expect(requestData).toEqual({
+      id: 1,
+      status: "Denied",
     });
 
     expect(toast.success).toHaveBeenCalledWith("Request successfully denied");
