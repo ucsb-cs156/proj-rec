@@ -52,7 +52,7 @@ function App() {
             />
           </>
         )}
-        {(hasRole(currentUser, "ROLE_USER") ||
+        {(hasRole(currentUser, "ROLE_ADMIN") ||
           hasRole(currentUser, "ROLE_INSTRUCTOR")) && (
           <>
             <Route
