@@ -13,7 +13,6 @@ describe("PendingRequestsTable tests", () => {
       </QueryClientProvider>,
     );
 
-    // Check for the presence of the header group or any header
     const headerGroup = screen.getByTestId("PendingRequestsTable-header-group-0");
     expect(headerGroup).toBeInTheDocument();
   });
@@ -25,14 +24,12 @@ describe("PendingRequestsTable tests", () => {
       </QueryClientProvider>,
     );
 
-    // Verify headers
     const expectedHeaders = ["ID", "Student Email", "Status", "Request Date"];
     expectedHeaders.forEach((headerText) => {
       const header = screen.getByText(headerText);
       expect(header).toBeInTheDocument();
     });
 
-    // Verify content for the single row
     expect(screen.getByTestId("PendingRequestsTable-cell-row-0-col-id")).toHaveTextContent("1");
     expect(screen.getByTestId("PendingRequestsTable-cell-row-0-col-studentEmail")).toHaveTextContent(
       "student1@example.com",
@@ -54,13 +51,11 @@ describe("PendingRequestsTable tests", () => {
 
     const expectedHeaders = ["ID", "Student Email", "Status", "Request Date"];
 
-    // Verify headers
     expectedHeaders.forEach((headerText) => {
       const header = screen.getByText(headerText);
       expect(header).toBeInTheDocument();
     });
 
-    // Verify content for the first row
     expect(screen.getByTestId("PendingRequestsTable-cell-row-0-col-id")).toHaveTextContent("1");
     expect(screen.getByTestId("PendingRequestsTable-cell-row-0-col-studentEmail")).toHaveTextContent(
       "student1@example.com",
@@ -72,7 +67,6 @@ describe("PendingRequestsTable tests", () => {
       "2024-11-01T10:00:00",
     );
 
-    // Verify content for the second row
     expect(screen.getByTestId("PendingRequestsTable-cell-row-1-col-id")).toHaveTextContent("2");
     expect(screen.getByTestId("PendingRequestsTable-cell-row-1-col-studentEmail")).toHaveTextContent(
       "student2@example.com",
@@ -84,7 +78,6 @@ describe("PendingRequestsTable tests", () => {
       "2024-11-02T12:00:00",
     );
 
-    // Verify content for the third row
     expect(screen.getByTestId("PendingRequestsTable-cell-row-2-col-id")).toHaveTextContent("3");
     expect(screen.getByTestId("PendingRequestsTable-cell-row-2-col-studentEmail")).toHaveTextContent(
       "student3@example.com",
