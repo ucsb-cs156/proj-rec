@@ -42,7 +42,11 @@ public class RecommendationRequest {
   @ManyToOne(fetch = FetchType.EAGER, optional = false)
   @JoinColumn(name = "requester_id", nullable = false)
   private User requester;
-  private String recommendationTypes; //dropdown, may want to make this id from recommendationtypes (come back to)
+
+  @ManyToOne(fetch = FetchType.EAGER, optional = false)
+  @JoinColumn(name = "reqtype_id", nullable = false)
+  private RequestType recommendationType; //dropdown, may want to make this id from recommendationtypes (come back to)
+
   private String details;
 
   @Schema( allowableValues = {"pending", "accepted", "denied"} )

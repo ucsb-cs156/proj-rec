@@ -65,8 +65,8 @@
                 },
                 {
                   "column": {
-                    "name": "RECOMMENDATION_TYPES",
-                    "type": "VARCHAR(255)"
+                    "name": "REQTYPE_ID",
+                    "type": "BIGINT"
                   }
                 },
                 {

@@ -5,6 +5,8 @@ import edu.ucsb.cs156.rec.errors.EntityNotFoundException;
 import edu.ucsb.cs156.rec.repositories.RecommendationRequestRepository;
 import edu.ucsb.cs156.rec.repositories.UserRepository;
 import edu.ucsb.cs156.rec.entities.User;
+import edu.ucsb.cs156.rec.entities.RequestType;
+import edu.ucsb.cs156.rec.repositories.RequestTypeRepository;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -51,6 +53,9 @@ public class RecommendationRequestController extends ApiController{
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    RequestTypeRepository requestTypeRepository;
+
     /**
      * List all recommendation requests
      * 
@@ -96,7 +101,7 @@ public class RecommendationRequestController extends ApiController{
     @PostMapping("/post")
     public RecommendationRequest postRecommendationRequest(
         @Parameter(name="professorEmail") @RequestParam String professorEmail,
-        @Parameter(name="recommendationTypes") @RequestParam String recommendationTypes,
+        @Parameter(name="recommendationType") @RequestParam String recommendationType,
         @Parameter(name="details") @RequestParam String details)
         throws JsonProcessingException {
 
@@ -107,13 +112,16 @@ public class RecommendationRequestController extends ApiController{
                 throw new EntityNotFoundException(User.class, professorEmail);
             }
 
+            RequestType type = requestTypeRepository.findByRequestType(recommendationType)
+                .orElseThrow(() -> new EntityNotFoundException(RequestType.class, recommendationType));
+
             LocalDate currDate = LocalDate.now();
 
             RecommendationRequest recommendationRequest = new RecommendationRequest();
             recommendationRequest.setProfessor(prof);
             recommendationRequest.setProfessorEmail(professorEmail);
             recommendationRequest.setRequester(getCurrentUser().getUser());
-            recommendationRequest.setRecommendationTypes(recommendationTypes);
+            recommendationRequest.setRecommendationType(type);
             recommendationRequest.setDetails(details);
             recommendationRequest.setSubmissionDate(currDate);
             recommendationRequest.setStatus("pending");
@@ -163,7 +171,7 @@ public class RecommendationRequestController extends ApiController{
         LocalDate currDate = LocalDate.now();
 
         recommendationRequest.setProfessorEmail(incoming.getProfessorEmail());
-        recommendationRequest.setRecommendationTypes(incoming.getRecommendationTypes());
+        recommendationRequest.setRecommendationType(incoming.getRecommendationType());
         recommendationRequest.setDetails(incoming.getDetails());
         recommendationRequest.setCompletionDate(currDate);
         recommendationRequest.setStatus(incoming.getStatus());
