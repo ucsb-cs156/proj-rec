@@ -236,6 +236,42 @@ public class RequestTypeControllerTests extends ControllerTestCase {
 
         @WithMockUser(roles = { "ADMIN", "USER" })
         @Test
+        public void an_admin_user_can_post_a_non_duplicate_requesttype() throws Exception {
+                
+                // arrange
+                RequestType requestType1 = RequestType.builder()
+                                .requestType("Internship")
+                                .build();
+                
+                RequestType requestType2 = RequestType.builder()
+                                .requestType("Research")
+                                .build();
+
+
+                ArrayList<RequestType> expectedRequests = new ArrayList<>();
+                expectedRequests.addAll(Arrays.asList(requestType1));
+
+                when(requestTypeRepository.findAll()).thenReturn(expectedRequests);
+
+                when(requestTypeRepository.save(eq(requestType2))).thenReturn(requestType2);
+                
+
+                // act
+                MvcResult response = mockMvc.perform(
+                                post("/api/requesttypes/post?requestType=Research")
+                                                .with(csrf()))
+                                .andExpect(status().isOk()).andReturn();
+
+
+                verify(requestTypeRepository, times(1)).findAll();
+                verify(requestTypeRepository, times(1)).save(requestType2);
+                String expectedJson = mapper.writeValueAsString(requestType2);
+                String responseString = response.getResponse().getContentAsString();
+                assertEquals(expectedJson, responseString);
+        }
+
+        @WithMockUser(roles = { "ADMIN", "USER" })
+        @Test
         public void admin_can_delete_a_requesttype() throws Exception {
                 
                 // arrange
