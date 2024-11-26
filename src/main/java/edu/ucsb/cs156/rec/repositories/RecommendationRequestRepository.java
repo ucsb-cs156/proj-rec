@@ -18,6 +18,4 @@ public interface RecommendationRequestRepository extends CrudRepository<Recommen
    * @return Iterable of RecommendationRequests
    */
   Iterable<RecommendationRequest> findAllByRequesterId(long requesterId);
-  Optional<RecommendationRequest> findAllById(long id);
-
 }
