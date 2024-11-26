@@ -355,6 +355,153 @@ public class RequestTypeControllerTests extends ControllerTestCase {
                 assertEquals("Duplicate request type: RequestType(id=67, requestType=Internship)", json.get("message"));
         }
 
+        @WithMockUser(roles = { "ADMIN", "USER" })
+        @Test
+        public void admin_can_edit_a_non_duplicate_requesttype() throws Exception {
+                
+                // arrange
+                RequestType requestType1 = RequestType.builder()
+                                .requestType("Internship")
+                                .build();
+
+                RequestType requestTypeOrig = RequestType.builder()
+                                .id(67)
+                                .requestType("Grad School")
+                                .build();
+
+                RequestType requestTypeEdited = RequestType.builder()
+                                .id(67)
+                                .requestType("Research")
+                                .build();
+
+                String requestBody = mapper.writeValueAsString(requestTypeEdited);
+
+                ArrayList<RequestType> expectedRequests = new ArrayList<>();
+                expectedRequests.addAll(Arrays.asList(requestType1, requestTypeOrig));
+
+                when(requestTypeRepository.findAll()).thenReturn(expectedRequests);
+
+                when(requestTypeRepository.findById(eq(67L))).thenReturn(Optional.of(requestTypeOrig));
+
+                // act
+                MvcResult response = mockMvc.perform(
+                                put("/api/requesttypes?id=67")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .characterEncoding("utf-8")
+                                                .content(requestBody)
+                                                .with(csrf()))
+                                .andExpect(status().is(200)).andReturn();
+
+                // assert
+                verify(requestTypeRepository, times(1)).findById(67L);
+                verify(requestTypeRepository, times(1)).save(requestTypeEdited); // should be saved with correct user
+                String responseString = response.getResponse().getContentAsString();
+                assertEquals(requestBody, responseString);
+        }
+
+        @WithMockUser(roles = { "ADMIN", "USER" })
+        @Test
+        public void requesttype_can_duplicate_itself() throws Exception {
+                
+                // arrange
+                RequestType requestTypeOrig = RequestType.builder()
+                                .requestType("Internship")
+                                .build();
+
+                RequestType requestTypeEdited = RequestType.builder()
+                                .requestType("Internship")
+                                .build();
+
+                String requestBody = mapper.writeValueAsString(requestTypeEdited);
+
+                when(requestTypeRepository.findById(eq(67L))).thenReturn(Optional.of(requestTypeOrig));
+
+                // act
+                MvcResult response = mockMvc.perform(
+                                put("/api/requesttypes?id=67")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .characterEncoding("utf-8")
+                                                .content(requestBody)
+                                                .with(csrf()))
+                                .andExpect(status().isOk()).andReturn();
+
+                // assert
+                verify(requestTypeRepository, times(1)).findById(67L);
+                verify(requestTypeRepository, times(1)).save(requestTypeEdited); // should be saved with correct user
+                String responseString = response.getResponse().getContentAsString();
+                assertEquals(requestBody, responseString);
+        }
+
+        @WithMockUser(roles = { "ADMIN", "USER" })
+        @Test
+        public void an_admin_user_cannot_put_an_empty_requesttype() throws Exception {
+                // arrange
+                RequestType requestType1 = RequestType.builder()
+                                .requestType("Internship")
+                                .build();
+
+                RequestType requestTypeOrig = RequestType.builder()
+                                .requestType("Grad School")
+                                .build();
+
+                RequestType requestTypeEdited = RequestType.builder()
+                                .id(67)
+                                .requestType("")
+                                .build();
+
+                String requestBody = mapper.writeValueAsString(requestTypeEdited);
+
+                ArrayList<RequestType> expectedRequests = new ArrayList<>();
+                expectedRequests.addAll(Arrays.asList(requestType1, requestTypeOrig));
+
+                when(requestTypeRepository.findAll()).thenReturn(expectedRequests);
+
+                when(requestTypeRepository.findById(eq(67L))).thenReturn(Optional.of(requestTypeOrig));
+
+                // act
+                MvcResult response = mockMvc.perform(
+                                put("/api/requesttypes?id=67")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .characterEncoding("utf-8")
+                                                .content(requestBody)
+                                                .with(csrf()))
+                                .andExpect(status().is(400)).andReturn();
+
+                // assert
+                verify(requestTypeRepository, times(1)).findAll();
+                Map<String, Object> json = responseToJson(response);
+                assertEquals("IllegalArgumentException", json.get("type"));
+                assertEquals("Request type cannot be empty", json.get("message"));
+        }
+
+        @WithMockUser(roles = { "ADMIN", "USER" })
+        @Test
+        public void non_duplicates_do_not_throw_exception() throws Exception {
+                
+                // arrange
+                RequestType requestType1 = RequestType.builder()
+                                .requestType("PhD")
+                                .build();
+
+                RequestType requestType2 = RequestType.builder()
+                                .requestType("Masters")
+                                .build();
+
+                ArrayList<RequestType> expectedRequests = new ArrayList<>();
+                expectedRequests.addAll(Arrays.asList(requestType1, requestType2));
+
+                when(requestTypeRepository.findAll()).thenReturn(expectedRequests);
+
+                // act
+                MvcResult response = mockMvc.perform(get("/api/requesttypes/all"))
+                                .andExpect(status().isOk()).andReturn();
+
+                // assert
+                verify(requestTypeRepository, times(1)).findAll();
+                String responseString = response.getResponse().getContentAsString();
+                assertEquals("[{\"id\":0,\"requestType\":\"PhD\"},{\"id\":0,\"requestType\":\"Masters\"}]", responseString);
+
+        }
 
         @WithMockUser(roles = { "ADMIN", "USER" })
         @Test
@@ -382,7 +529,6 @@ public class RequestTypeControllerTests extends ControllerTestCase {
                 verify(requestTypeRepository, times(1)).findById(67L);
                 Map<String, Object> json = responseToJson(response);
                 assertEquals("RequestType with id 67 not found", json.get("message"));
-
         }
 
 }

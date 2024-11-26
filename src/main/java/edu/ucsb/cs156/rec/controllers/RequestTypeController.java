@@ -139,7 +139,10 @@ public class RequestTypeController extends ApiController {
         // Check for duplicates
         Iterable<RequestType> existingRequestTypes = requestTypeRepository.findAll();
         for (RequestType existing : existingRequestTypes) {
-            if (!existing.equals(incoming) && existing.getRequestType().equals(incoming.getRequestType())) {
+            if (incoming.getRequestType().isEmpty() || incoming.getRequestType() == null){
+                throw new IllegalArgumentException("Request type cannot be empty");
+            }
+            if (existing.getRequestType().equals(incoming.getRequestType())) {
                 throw new IllegalArgumentException("Duplicate request type: " + incoming);
             }
         }
