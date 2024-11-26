@@ -3,12 +3,9 @@ const recommendationRequestFixtures = {
       {
         id: 1,
   
-        requesterEmail: "ramonwang@ucsb.edu",
-        requesterName: "Ramon Wang",
+        requesterId: 6,
   
         professorId: 1,
-        professorEmail: "pconrad@ucsb.edu",
-        professorName: "Phil Conrad",
   
         requestType: "CS Department BS/MS program",
         details: "Extension deadline request :)",
@@ -25,12 +22,9 @@ const recommendationRequestFixtures = {
       {
         id: 2,
   
-        requesterEmail: "noahwang@ucsb.edu",
-        requesterName: "Noah Wang",
+        requesterId: 7,
   
         professorId: 2,
-        professorEmail: "dimirza@cs.ucsb.edu",
-        professorName: "Diba Mirza",
   
         requestType: "Scholarship or Fellowship",
         details: "scholarship details",
@@ -44,12 +38,9 @@ const recommendationRequestFixtures = {
       {
         id: 3,
   
-        requesterEmail: "kanav@ucsb.edu",
-        requesterName: "Kanav Arora",
+        requesterId: 9,
   
-        professorId: 3,
-        professorEmail: "mbeyeler@ucsb.edu",
-        professorName: "Michael Beyeler",
+        professorId: 1,
   
         requestType: "PhD program",
         details: "PHD deadline details",
@@ -63,12 +54,9 @@ const recommendationRequestFixtures = {
       {
         id: 4,
   
-        requesterEmail: "logandetrick@ucsb.edu",
-        requesterName: "Logan Detrick",
+        requesterId: 10,
   
-        professorId: 4,
-        professorEmail: "ziad.matni@ucsb.edu",
-        professorName: "Ziad Matni",
+        professorId: 2,
   
         requestType: "Other",
         details: "Regrade final exam",
