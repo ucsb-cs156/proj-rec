@@ -12,6 +12,7 @@ import edu.ucsb.cs156.rec.services.GrantedAuthoritiesService;
 import org.springframework.context.annotation.Import;
 
 @TestConfiguration
+@AutoConfigureDataJpa //added so that automatic lastModifiedDate and createdDate fields are set with jpa auditing (@EnableJpaAuditing(dateTimeProviderRef = "utcDateTimeProvider"))
 @Import(SecurityConfig.class)
 public class TestConfig {
 
