@@ -31,7 +31,7 @@ describe("HomePage tests", () => {
         <MemoryRouter>
           <HomePage />
         </MemoryRouter>
-      </QueryClientProvider>
+      </QueryClientProvider>,
     );
 
     await screen.findByText(/Welcome!/);
@@ -52,14 +52,14 @@ describe("HomePage tests", () => {
         <MemoryRouter>
           <HomePage />
         </MemoryRouter>
-      </QueryClientProvider>
+      </QueryClientProvider>,
     );
 
     await screen.findByText("Log Out");
     const navigateText = screen.getByTestId("home-page-text-navigate");
     expect(navigateText).toBeInTheDocument();
     expect(navigateText.textContent).toEqual(
-      " Navigate to the requests tab to get started."
+      " Navigate to the requests tab to get started.",
     );
   });
 });
