@@ -1,15 +1,12 @@
-// src/main/components/PendingRequests/PendingRequestsTable.js
-
 import OurTable from "main/components/OurTable";
 import { useBackendMutation } from "main/utils/useBackend";
 import { Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 
 export default function PendingRequestsTable({ requests }) {
-  // Callback to update status to "Accepted"
   function cellToAxiosParamsAccept(cell) {
     return {
-      url: "/api/requests/updateStatus", // Ensure this endpoint exists in your backend
+      url: "/api/requests/updateStatus",
       method: "POST",
       data: {
         id: cell.row.values.id,
@@ -18,7 +15,6 @@ export default function PendingRequestsTable({ requests }) {
     };
   }
 
-  // Callback to update status to "Denied"
   function cellToAxiosParamsDeny(cell) {
     return {
       url: "/api/requests/updateStatus",
@@ -34,11 +30,10 @@ export default function PendingRequestsTable({ requests }) {
   const acceptMutation = useBackendMutation(cellToAxiosParamsAccept, {
     onSuccess: () => {
       toast.success("Request successfully accepted");
-      // Optionally, trigger a refetch or update cache here
     },
     onError: (error) => {
-      // Utilize the error parameter for detailed feedback
-      const errorMessage = error.response?.data?.message || "Failed to accept request";
+      const errorMessage =
+        error.response?.data?.message || "Failed to accept request";
       toast.error(`Error: ${errorMessage}`);
     },
   });
@@ -46,11 +41,10 @@ export default function PendingRequestsTable({ requests }) {
   const denyMutation = useBackendMutation(cellToAxiosParamsDeny, {
     onSuccess: () => {
       toast.success("Request successfully denied");
-      // Optionally, trigger a refetch or update cache here
     },
     onError: (error) => {
-      // Utilize the error parameter for detailed feedback
-      const errorMessage = error.response?.data?.message || "Failed to deny request";
+      const errorMessage =
+        error.response?.data?.message || "Failed to deny request";
       toast.error(`Error: ${errorMessage}`);
     },
   });

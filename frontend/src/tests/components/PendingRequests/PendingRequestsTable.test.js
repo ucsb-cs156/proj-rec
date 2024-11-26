@@ -1,5 +1,3 @@
-// src/tests/components/PendingRequests/PendingRequestsTable.test.js
-
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import PendingRequestsTable from "main/components/PendingRequests/PendingRequestsTable";
@@ -8,8 +6,7 @@ import axios from "axios";
 import AxiosMockAdapter from "axios-mock-adapter";
 import { toast } from "react-toastify";
 
-// Mock react-toastify to prevent actual toasts during tests
-jest.mock('react-toastify', () => ({
+jest.mock("react-toastify", () => ({
   toast: {
     success: jest.fn(),
     error: jest.fn(),
@@ -33,7 +30,9 @@ describe("PendingRequestsTable tests", () => {
       </QueryClientProvider>,
     );
 
-    const headerGroup = screen.getByTestId("PendingRequestsTable-header-group-0");
+    const headerGroup = screen.getByTestId(
+      "PendingRequestsTable-header-group-0",
+    );
     expect(headerGroup).toBeInTheDocument();
   });
 
@@ -50,10 +49,18 @@ describe("PendingRequestsTable tests", () => {
       expect(header).toBeInTheDocument();
     });
 
-    expect(screen.getByTestId("PendingRequestsTable-cell-row-0-col-id")).toHaveTextContent("1");
-    expect(screen.getByTestId("PendingRequestsTable-cell-row-0-col-studentEmail")).toHaveTextContent("student1@example.com");
-    expect(screen.getByTestId("PendingRequestsTable-cell-row-0-col-status")).toHaveTextContent("Pending");
-    expect(screen.getByTestId("PendingRequestsTable-cell-row-0-col-requestDate")).toHaveTextContent("2024-11-01T10:00:00");
+    expect(
+      screen.getByTestId("PendingRequestsTable-cell-row-0-col-id"),
+    ).toHaveTextContent("1");
+    expect(
+      screen.getByTestId("PendingRequestsTable-cell-row-0-col-studentEmail"),
+    ).toHaveTextContent("student1@example.com");
+    expect(
+      screen.getByTestId("PendingRequestsTable-cell-row-0-col-status"),
+    ).toHaveTextContent("Pending");
+    expect(
+      screen.getByTestId("PendingRequestsTable-cell-row-0-col-requestDate"),
+    ).toHaveTextContent("2024-11-01T10:00:00");
   });
 
   test("renders the correct headers and content for three requests", () => {
@@ -71,35 +78,57 @@ describe("PendingRequestsTable tests", () => {
       expect(header).toBeInTheDocument();
     });
 
-    // Row 0
-    expect(screen.getByTestId("PendingRequestsTable-cell-row-0-col-id")).toHaveTextContent("1");
-    expect(screen.getByTestId("PendingRequestsTable-cell-row-0-col-studentEmail")).toHaveTextContent("student1@example.com");
-    expect(screen.getByTestId("PendingRequestsTable-cell-row-0-col-status")).toHaveTextContent("Pending");
-    expect(screen.getByTestId("PendingRequestsTable-cell-row-0-col-requestDate")).toHaveTextContent("2024-11-01T10:00:00");
+    expect(
+      screen.getByTestId("PendingRequestsTable-cell-row-0-col-id"),
+    ).toHaveTextContent("1");
+    expect(
+      screen.getByTestId("PendingRequestsTable-cell-row-0-col-studentEmail"),
+    ).toHaveTextContent("student1@example.com");
+    expect(
+      screen.getByTestId("PendingRequestsTable-cell-row-0-col-status"),
+    ).toHaveTextContent("Pending");
+    expect(
+      screen.getByTestId("PendingRequestsTable-cell-row-0-col-requestDate"),
+    ).toHaveTextContent("2024-11-01T10:00:00");
 
-    // Row 1
-    expect(screen.getByTestId("PendingRequestsTable-cell-row-1-col-id")).toHaveTextContent("2");
-    expect(screen.getByTestId("PendingRequestsTable-cell-row-1-col-studentEmail")).toHaveTextContent("student2@example.com");
-    expect(screen.getByTestId("PendingRequestsTable-cell-row-1-col-status")).toHaveTextContent("Pending");
-    expect(screen.getByTestId("PendingRequestsTable-cell-row-1-col-requestDate")).toHaveTextContent("2024-11-02T12:00:00");
+    expect(
+      screen.getByTestId("PendingRequestsTable-cell-row-1-col-id"),
+    ).toHaveTextContent("2");
+    expect(
+      screen.getByTestId("PendingRequestsTable-cell-row-1-col-studentEmail"),
+    ).toHaveTextContent("student2@example.com");
+    expect(
+      screen.getByTestId("PendingRequestsTable-cell-row-1-col-status"),
+    ).toHaveTextContent("Pending");
+    expect(
+      screen.getByTestId("PendingRequestsTable-cell-row-1-col-requestDate"),
+    ).toHaveTextContent("2024-11-02T12:00:00");
 
-    // Row 2
-    expect(screen.getByTestId("PendingRequestsTable-cell-row-2-col-id")).toHaveTextContent("3");
-    expect(screen.getByTestId("PendingRequestsTable-cell-row-2-col-studentEmail")).toHaveTextContent("student3@example.com");
-    expect(screen.getByTestId("PendingRequestsTable-cell-row-2-col-status")).toHaveTextContent("Accepted");
-    expect(screen.getByTestId("PendingRequestsTable-cell-row-2-col-requestDate")).toHaveTextContent("2024-11-03T14:00:00");
+    expect(
+      screen.getByTestId("PendingRequestsTable-cell-row-2-col-id"),
+    ).toHaveTextContent("3");
+    expect(
+      screen.getByTestId("PendingRequestsTable-cell-row-2-col-studentEmail"),
+    ).toHaveTextContent("student3@example.com");
+    expect(
+      screen.getByTestId("PendingRequestsTable-cell-row-2-col-status"),
+    ).toHaveTextContent("Accepted");
+    expect(
+      screen.getByTestId("PendingRequestsTable-cell-row-2-col-requestDate"),
+    ).toHaveTextContent("2024-11-03T14:00:00");
   });
 
   test("renders Accept and Deny buttons only for Pending requests", () => {
     render(
       <QueryClientProvider client={queryClient}>
-        <PendingRequestsTable requests={pendingrequestsFixtures.threeRequests} />
+        <PendingRequestsTable
+          requests={pendingrequestsFixtures.threeRequests}
+        />
       </QueryClientProvider>,
     );
 
-    // Only two Pending requests should have "Accept" and "Deny" buttons
-    const acceptButtons = screen.getAllByRole('button', { name: 'Accept' });
-    const denyButtons = screen.getAllByRole('button', { name: 'Deny' });
+    const acceptButtons = screen.getAllByRole("button", { name: "Accept" });
+    const denyButtons = screen.getAllByRole("button", { name: "Deny" });
 
     expect(acceptButtons).toHaveLength(2);
     expect(denyButtons).toHaveLength(2);
@@ -119,7 +148,7 @@ describe("PendingRequestsTable tests", () => {
       </QueryClientProvider>,
     );
 
-    const acceptButtons = screen.getAllByRole('button', { name: 'Accept' });
+    const acceptButtons = screen.getAllByRole("button", { name: "Accept" });
     fireEvent.click(acceptButtons[0]);
 
     await waitFor(() => {
@@ -149,7 +178,7 @@ describe("PendingRequestsTable tests", () => {
       </QueryClientProvider>,
     );
 
-    const denyButtons = screen.getAllByRole('button', { name: 'Deny' });
+    const denyButtons = screen.getAllByRole("button", { name: "Deny" });
     fireEvent.click(denyButtons[0]);
 
     await waitFor(() => {
