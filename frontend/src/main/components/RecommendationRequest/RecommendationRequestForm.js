@@ -7,6 +7,8 @@ function RecommendationRequestForm({
   initialContents,
   submitAction,
   buttonLabel = "Create",
+  recommendationTypeVals = [],
+  professorVals = [],
 }) {
   // Stryker disable all
   const {
@@ -16,8 +18,8 @@ function RecommendationRequestForm({
   } = useForm({ defaultValues: initialContents || {} });
   // Stryker restore all
 
-  const [professors, setProfessors] = useState([]);
-  const [recommendationTypes, setRecommendationTypes] = useState([]);
+  const [professors, setProfessors] = useState(professorVals);
+  const [recommendationTypes, setRecommendationTypes] = useState(recommendationTypeVals);
 
   //queries endpoint to get list of professors
   useEffect(() => {

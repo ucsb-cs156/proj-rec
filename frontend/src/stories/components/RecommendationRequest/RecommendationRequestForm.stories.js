@@ -21,8 +21,8 @@ Create.args = {
     console.log("Submit was clicked with data: ", data);
     window.alert("Submit was clicked with data: " + JSON.stringify(data));
   },
-  recommendationTypesInserted: [recommendationTypeFixtures.fourTypes],
-  professorsInserted: [usersFixtures.twoProfessors],
+  recommendationTypeVals: recommendationTypeFixtures.fourTypes,
+  professorVals: usersFixtures.twoProfessors,
 };
 
 export const Update = Template.bind({});
@@ -34,6 +34,6 @@ Update.args = {
     console.log("Submit was clicked with data: ", data);
     window.alert("Submit was clicked with data: " + JSON.stringify(data));
   },
-  recommendationTypesInserted: [recommendationTypeFixtures.fourTypes],
-  professorsInserted: [usersFixtures.twoProfessors],
+  recommendationTypeVals: recommendationTypeFixtures.fourTypes,
+  professorVals: usersFixtures.twoProfessors,
 };
