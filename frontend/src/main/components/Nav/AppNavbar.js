@@ -43,6 +43,7 @@ export default function AppNavbar({
                   data-testid="appnavbar-admin-dropdown"
                 >
                   <NavDropdown.Item href="/admin/users">Users</NavDropdown.Item>
+                  <NavDropdown.Item href="/admin/requesttypes">Request Types</NavDropdown.Item>
                 </NavDropdown>
               )}
               {currentUser && currentUser.loggedIn ? (

@@ -17,6 +17,7 @@ import { hasRole, useCurrentUser } from "main/utils/currentUser";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "react-toastify/dist/ReactToastify.css";
+import PlaceholderRequestTypeIndexPage from "main/pages/RequestTypes/PlaceholderRequestTypeIndexPage";
 
 function App() {
   const { data: currentUser } = useCurrentUser();
@@ -57,7 +58,12 @@ function App() {
           <>
             <Route
               exact
-              path="/requesttypes/create"
+              path="/admin/requesttypes"
+              element={<PlaceholderRequestTypeIndexPage />}
+            />
+            <Route
+              exact
+              path="/admin/requesttypes/create"
               element={<RequestTypeCreatePage />}
             />
           </>
