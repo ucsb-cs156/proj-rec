@@ -1,10 +1,12 @@
 package edu.ucsb.cs156.rec.controllers;
 
 import edu.ucsb.cs156.rec.entities.RecommendationRequest;
+import edu.ucsb.cs156.rec.entities.RequestType;
 import edu.ucsb.cs156.rec.entities.User;
 import edu.ucsb.cs156.rec.errors.EntityNotFoundException;
 import edu.ucsb.cs156.rec.models.CurrentUser;
 import edu.ucsb.cs156.rec.repositories.RecommendationRequestRepository;
+import edu.ucsb.cs156.rec.repositories.RequestTypeRepository;
 import edu.ucsb.cs156.rec.repositories.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -21,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.jknack.handlebars.internal.lang3.ObjectUtils.Null;
+
 @Tag(name = "RecommendationRequest")
 @RequestMapping("/api/recommendationrequest")
 @RestController
@@ -30,6 +34,9 @@ public class RecommendationRequestController extends ApiController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    RequestTypeRepository requestTypeRepository;
 
     /**
      * This method returns a list of all Recommendation Requests requested by current student.
@@ -99,11 +106,17 @@ public class RecommendationRequestController extends ApiController {
         //get current date right now and set status to pending
         CurrentUser currentUser = getCurrentUser();
         RecommendationRequest recommendationRequest = new RecommendationRequest();
+        if (recommendationType != "Other") {
+            requestTypeRepository.findByRequestType(recommendationType).orElseThrow(() -> new EntityNotFoundException(RequestType.class, recommendationType));
+            recommendationRequest.setRecommendationType(recommendationType);
+            recommendationRequest.setDetails(details);
+        } else {
+            recommendationRequest.setRecommendationType(details);
+            recommendationRequest.setDetails(null);
+        }
         User professor = userRepository.findById(professorId).orElseThrow(() -> new EntityNotFoundException(User.class, professorId));
         recommendationRequest.setProfessor(professor);
         recommendationRequest.setRequester(currentUser.getUser());
-        recommendationRequest.setRecommendationType(recommendationType);
-        recommendationRequest.setDetails(details);
         recommendationRequest.setStatus("PENDING");
         recommendationRequest.setDueDate(dueDate);
 
