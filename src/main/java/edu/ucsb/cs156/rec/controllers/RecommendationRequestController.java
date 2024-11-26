@@ -90,7 +90,7 @@ public class RecommendationRequestController extends ApiController{
     /**
      * Create a new recommendation request
      * @param professorEmail the email of the professor
-     * @param recommendationTypes the type of recommendations
+     * @param recommendationType the type of recommendations
      * @param details the other details of the request
      * @throws EntityNotFoundException if the professor is not found or is hte user does not have the professor role
      * @return the created RecommendationRequest
