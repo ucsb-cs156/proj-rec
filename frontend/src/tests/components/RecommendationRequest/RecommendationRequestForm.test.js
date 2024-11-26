@@ -103,6 +103,7 @@ describe("RecommendationRequestForm tests", () => {
       usersFixtures.twoProfessors.forEach((professor) => {
         expect(screen.getByText(professor.fullName)).toBeInTheDocument();
       });
+      expect(screen.getByText("Select a professor")).toBeInTheDocument();
     });
     await waitFor(() => {
       recommendationTypeFixtures.fourTypes.forEach((type) => {
@@ -148,7 +149,7 @@ describe("RecommendationRequestForm tests", () => {
         </Router>
       </QueryClientProvider>,
     );
-    expect(screen.getByText("Select a professor")).toBeInTheDocument();
+    expect(screen.getByText("No professors available")).toBeInTheDocument();
     expect(
       screen.getByText("Select a recommendation type"),
     ).toBeInTheDocument();
