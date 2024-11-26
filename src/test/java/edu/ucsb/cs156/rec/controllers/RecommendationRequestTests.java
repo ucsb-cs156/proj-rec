@@ -4,8 +4,10 @@ import edu.ucsb.cs156.rec.repositories.UserRepository;
 import edu.ucsb.cs156.rec.testconfig.TestConfig;
 import edu.ucsb.cs156.rec.ControllerTestCase;
 import edu.ucsb.cs156.rec.entities.RecommendationRequest;
+import edu.ucsb.cs156.rec.entities.RequestType;
 import edu.ucsb.cs156.rec.entities.User;
 import edu.ucsb.cs156.rec.repositories.RecommendationRequestRepository;
+import edu.ucsb.cs156.rec.repositories.RequestTypeRepository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -38,6 +40,9 @@ public class RecommendationRequestTests extends ControllerTestCase {
 
         @MockBean
         UserRepository userRepository;
+
+        @MockBean
+        RequestTypeRepository requestTypeRepository;
 
         // Authorization tests for /api/phones/admin/all
 
@@ -300,8 +305,8 @@ public class RecommendationRequestTests extends ControllerTestCase {
                 RecommendationRequest recommendationRequest1 = RecommendationRequest.builder()
                                 .professor(other)
                                 .requester(u)
-                                .recommendationType("PhDprogram")
-                                .details("otherdetails")
+                                .recommendationType("otherdetails")
+                                .details(null)
                                 .dueDate(LocalDateTime.parse("2024-11-25T16:46:28"))
                                 .status("PENDING")
                                 .build();
@@ -311,7 +316,7 @@ public class RecommendationRequestTests extends ControllerTestCase {
                 // act
                 MvcResult response = mockMvc.perform(
                                 post("/api/recommendationrequest/post")
-                                .param("recommendationType", "PhDprogram")
+                                .param("recommendationType", "Other")
                                 .param("details", "otherdetails")
                                 .param("professorId", "7")
                                 .param("dueDate", "2024-11-25T16:46:28")
@@ -329,9 +334,11 @@ public class RecommendationRequestTests extends ControllerTestCase {
         @Test
         public void a_user_can_post_a_new_recommendation_request_without_existing_professor() throws Exception {
                 // act
+                RequestType r = RequestType.builder().requestType("PhD program").build();
+                when(requestTypeRepository.findByRequestType("PhD program")).thenReturn(Optional.of(r));
                 mockMvc.perform(
                                 post("/api/recommendationrequest/post")
-                                .param("recommendationType", "PhDprogram")
+                                .param("recommendationType", "PhD program")
                                 .param("details", "otherdetails")
                                 .param("professorId", "7")
                                 .param("dueDate", "2024-11-25T16:46:28")
@@ -339,5 +346,60 @@ public class RecommendationRequestTests extends ControllerTestCase {
                                 .andExpect(status().isNotFound())
                                 .andExpect(result -> assertEquals("User with id 7 not found",
                                                                 result.getResolvedException().getMessage()));
+        }
+
+        @WithMockUser(roles = { "USER" })
+        @Test
+        public void rec_type_in_table_and_not_other() throws Exception {
+                // arrange
+                User u = currentUserService.getCurrentUser().getUser();
+                User other = User.builder().id(7L).email("testemail@ucsb.edu").fullName("Test User").build();
+                RecommendationRequest recommendationRequest1 = RecommendationRequest.builder()
+                                .professor(other)
+                                .requester(u)
+                                .recommendationType("CS Department BS/MS program")
+                                .details("test")
+                                .dueDate(LocalDateTime.parse("2024-11-25T16:46:28"))
+                                .status("PENDING")
+                                .build();
+
+                when(recommendationRequestRepository.save(eq(recommendationRequest1))).thenReturn(recommendationRequest1);
+                when(userRepository.findById(7L)).thenReturn(Optional.of(other));
+                RequestType r = RequestType.builder().requestType("CS Department BS/MS program").build();
+                when(requestTypeRepository.findByRequestType("CS Department BS/MS program")).thenReturn(Optional.of(r));
+                // act
+                MvcResult response = mockMvc.perform(
+                                post("/api/recommendationrequest/post")
+                                .param("recommendationType", "CS Department BS/MS program")
+                                .param("details", "test")
+                                .param("professorId", "7")
+                                .param("dueDate", "2024-11-25T16:46:28")
+                                .with(csrf()))
+                                .andExpect(status().isOk())
+                                .andReturn();
+                // assert
+                verify(recommendationRequestRepository, times(1)).save(eq(recommendationRequest1));
+                String expectedJson = mapper.writeValueAsString(recommendationRequest1);
+                String responseString = response.getResponse().getContentAsString();
+                assertEquals(expectedJson, responseString);
+        }
+
+        @WithMockUser(roles = { "USER" })
+        @Test
+        public void rec_type_not_table_and_not_other() throws Exception {
+                // act
+                when(requestTypeRepository.findByRequestType("Not correct")).thenReturn(Optional.empty());
+                MvcResult response = mockMvc.perform(
+                                post("/api/recommendationrequest/post")
+                                .param("recommendationType", "CS Department BS/MS program")
+                                .param("details", "otherdetails")
+                                .param("professorId", "7")
+                                .param("dueDate", "2024-11-25T16:46:28")
+                                .with(csrf()))
+                                .andExpect(status().isNotFound()).andReturn();
+                // assert
+                Map<String, Object> json = responseToJson(response);
+                assertEquals("EntityNotFoundException", json.get("type"));
+                assertEquals("RequestType with id CS Department BS/MS program not found", json.get("message"));
         }
 }
