@@ -25,7 +25,11 @@ function App() {
           <Route exact path="/admin/requests" element={<AdminRequestsPage />} />
         )}
         {hasRole(currentUser, "ROLE_PROFESSOR") && (
-          <Route exact path="/requests/pending" element={<PendingRequestsPage />} />
+          <Route
+            exact
+            path="/requests/pending"
+            element={<PendingRequestsPage />}
+          />
         )}
       </Routes>
     </BrowserRouter>
