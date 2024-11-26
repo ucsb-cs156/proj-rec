@@ -28,7 +28,9 @@ describe("PendingRequestsPage tests", () => {
 
   test("renders without crashing with three pending requests", async () => {
     const queryClient = new QueryClient();
-    axiosMock.onGet("/api/requests/pending").reply(200, pendingrequestsFixtures.threeRequests);
+    axiosMock
+      .onGet("/api/requests/pending")
+      .reply(200, pendingrequestsFixtures.threeRequests);
 
     render(
       <QueryClientProvider client={queryClient}>
