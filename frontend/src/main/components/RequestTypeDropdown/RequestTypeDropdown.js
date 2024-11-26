@@ -5,8 +5,8 @@ import { Form } from "react-bootstrap";
 const SingleRequestDropdown = ({
   requests,
   request,
-  setrequest,
-  controlId,
+  setrequest=null,
+  controlId=null,
   onChange = null,
   label = "Request Area",
 }) => {
