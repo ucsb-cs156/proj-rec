@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.http.HttpStatus;
 
 import jakarta.validation.Valid;
@@ -97,7 +98,7 @@ public class RecommendationRequestController extends ApiController{
     */
     
     @Operation(summary= "Create a new recommendation request")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STUDENT')")
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
     @PostMapping("/post")
     public RecommendationRequest postRecommendationRequest(
         @Parameter(name="professorEmail") @RequestParam String professorEmail,
@@ -119,7 +120,6 @@ public class RecommendationRequestController extends ApiController{
 
             RecommendationRequest recommendationRequest = new RecommendationRequest();
             recommendationRequest.setProfessor(prof);
-            recommendationRequest.setProfessorEmail(professorEmail);
             recommendationRequest.setRequester(getCurrentUser().getUser());
             recommendationRequest.setRecommendationType(type);
             recommendationRequest.setDetails(details);
@@ -139,12 +139,16 @@ public class RecommendationRequestController extends ApiController{
      * @return a message indicating the recommedation request was deleted
      */
     @Operation(summary= "Delete a recommendation request")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @DeleteMapping("")
     public Object deleteRecommendationRequest(
             @Parameter(name="id") @RequestParam Long id) {
         RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(RecommendationRequest.class, id));
+
+        if( recommendationRequest.getRequester().getId() != getCurrentUser().getUser().getId()) {
+            throw new AccessDeniedException(null);
+        }
 
         recommendationRequestRepository.delete(recommendationRequest);
         return genericMessage("RecommendationRequest with id %s deleted".formatted(id));
@@ -170,7 +174,6 @@ public class RecommendationRequestController extends ApiController{
 
         LocalDate currDate = LocalDate.now();
 
-        recommendationRequest.setProfessorEmail(incoming.getProfessorEmail());
         recommendationRequest.setRecommendationType(incoming.getRecommendationType());
         recommendationRequest.setDetails(incoming.getDetails());
         recommendationRequest.setCompletionDate(currDate);
