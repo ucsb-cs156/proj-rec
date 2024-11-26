@@ -37,11 +37,10 @@ const SingleRequestDropdown = ({
         onChange={handleRequestOnChange}
       >
         {requests.map(function (object) {
-          const requestCode = object.requestCode.replace(/ /g, "-");
-          const key = `${controlId}-option-${requestCode}`;
+          const key = `${controlId}-option-${object.id}`;
           return (
-            <option key={key} data-testid={key} value={object.requestCode}>
-              {object.requestCode} - {object.requestTranslation}
+            <option key={key} data-testid={key}>
+              {object.requestType}
             </option>
           );
         })}

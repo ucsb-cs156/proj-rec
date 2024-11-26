@@ -2,9 +2,7 @@ import React, { useState } from "react";
 
 import SingleRequestDropdown from "main/components/RequestTypeDropdown/RequestTypeDropdown";
 import {
-  oneRequest,
-  threeRequests,
-  allTheRequests,
+  requestTypeFixtures
 } from "fixtures/requestFixtures";
 
 export default {
@@ -28,15 +26,10 @@ const Template = (args) => {
 
 export const OneRequest = Template.bind({});
 OneRequest.args = {
-  requests: oneRequest,
+  requests: requestTypeFixtures.oneRequestType,
 };
 
 export const ThreeRequests = Template.bind({});
 ThreeRequests.args = {
-    requests: threeRequests,
-};
-
-export const AllTheRequests = Template.bind({});
-AllTheRequests.args = {
-    requests: allTheRequests,
+    requests: requestTypeFixtures.threeRequestTypes,
 };

@@ -5,8 +5,8 @@ import { useState } from "react";
 
 import SingleSubjectDropdown from "main/components/RequestTypeDropdown/RequestTypeDropdown";
 import { oneSubject } from "fixtures/requestFixtures";
-import { threeSubjects } from "fixtures/requestFixtures";
-import { outOfOrderSubjects } from "fixtures/requestFixtures";
+import { threerequests } from "fixtures/requestFixtures";
+import { outOfOrderrequests } from "fixtures/requestFixtures";
 
 jest.mock("react", () => ({
   ...jest.requireActual("react"),
@@ -38,7 +38,7 @@ describe("SingleSubjectDropdown tests", () => {
   test("renders without crashing on one subject", () => {
     render(
       <SingleSubjectDropdown
-        subjects={oneSubject}
+        requests={oneSubject}
         subject={oneSubject}
         setSubject={setSubject}
         controlId="ssd1"
@@ -46,10 +46,10 @@ describe("SingleSubjectDropdown tests", () => {
     );
   });
 
-  test("renders without crashing on three subjects", async () => {
+  test("renders without crashing on three requests", async () => {
     render(
       <SingleSubjectDropdown
-        subjects={[threeSubjects[2], threeSubjects[0], threeSubjects[1]]}
+        requests={[threeRequests[2], threeRequests[0], threeRequests[1]]}
         subject={subject}
         setSubject={setSubject}
         controlId="ssd1"
@@ -78,7 +78,7 @@ describe("SingleSubjectDropdown tests", () => {
   test("sorts and puts hyphens in testids", () => {
     render(
       <SingleSubjectDropdown
-        subjects={threeSubjects}
+        requests={threerequests}
         subject={subject}
         setSubject={setSubject}
         controlId="ssd1"
@@ -89,7 +89,7 @@ describe("SingleSubjectDropdown tests", () => {
   test("when I select an object, the value changes", async () => {
     render(
       <SingleSubjectDropdown
-        subjects={threeSubjects}
+        requests={threerequests}
         subject={subject}
         setSubject={setSubject}
         controlId="ssd1"
@@ -103,10 +103,10 @@ describe("SingleSubjectDropdown tests", () => {
     expect(setSubject).toBeCalledWith("ARTHI");
   });
 
-  test("out of order subjects is sorted by subjectCode", async () => {
+  test("out of order requests is sorted by subjectCode", async () => {
     render(
       <SingleSubjectDropdown
-        subjects={outOfOrderSubjects}
+        requests={outOfOrderrequests}
         subject={subject}
         setSubject={setSubject}
         controlId="ssd1"
@@ -124,7 +124,7 @@ describe("SingleSubjectDropdown tests", () => {
     const onChange = jest.fn();
     render(
       <SingleSubjectDropdown
-        subjects={threeSubjects}
+        requests={threerequests}
         subject={subject}
         setSubject={setSubject}
         controlId="ssd1"
@@ -147,7 +147,7 @@ describe("SingleSubjectDropdown tests", () => {
   test("default label is Subject Area", async () => {
     render(
       <SingleSubjectDropdown
-        subjects={threeSubjects}
+        requests={threerequests}
         subject={subject}
         setSubject={setSubject}
         controlId="ssd1"
@@ -160,7 +160,7 @@ describe("SingleSubjectDropdown tests", () => {
   test("keys / testids are set correctly on options", async () => {
     render(
       <SingleSubjectDropdown
-        subjects={threeSubjects}
+        requests={threerequests}
         subject={subject}
         setSubject={setSubject}
         controlId="ssd1"
@@ -177,12 +177,12 @@ describe("SingleSubjectDropdown tests", () => {
     const getItemSpy = jest.spyOn(Storage.prototype, "getItem");
     getItemSpy.mockImplementation(() => "ARTHI");
 
-    const setSubjectStateSpy = jest.fn();
-    useState.mockImplementation((x) => [x, setSubjectStateSpy]);
+    const setrequeststateSpy = jest.fn();
+    useState.mockImplementation((x) => [x, setrequeststateSpy]);
 
     render(
       <SingleSubjectDropdown
-        subjects={threeSubjects}
+        requests={threerequests}
         subject={subject}
         setSubject={setSubject}
         controlId="ssd1"
@@ -196,12 +196,12 @@ describe("SingleSubjectDropdown tests", () => {
     const getItemSpy = jest.spyOn(Storage.prototype, "getItem");
     getItemSpy.mockImplementation(() => null);
 
-    const setSubjectStateSpy = jest.fn();
-    useState.mockImplementation((x) => [x, setSubjectStateSpy]);
+    const setrequeststateSpy = jest.fn();
+    useState.mockImplementation((x) => [x, setrequeststateSpy]);
 
     render(
       <SingleSubjectDropdown
-        subjects={threeSubjects}
+        requests={threerequests}
         subject={subject}
         setSubject={setSubject}
         controlId="ssd1"
@@ -213,10 +213,10 @@ describe("SingleSubjectDropdown tests", () => {
     );
   });
 
-  test("When no subjects, dropdown is blank", async () => {
+  test("When no requests, dropdown is blank", async () => {
     render(
       <SingleSubjectDropdown
-        subjects={[]}
+        requests={[]}
         subject={subject}
         setSubject={setSubject}
         controlId="ssd1"
