@@ -130,14 +130,14 @@ function RecommendationRequestForm({
                   <option disabled value="">
                     Select a recommendation type
                   </option>
-                {recommendationTypes.map((recommendationType) => (
-                  <option
-                    key={recommendationType.id}
-                    value={recommendationType.id}
-                  >
-                    {recommendationType.requestType}
-                  </option>
-                ))}
+                  {recommendationTypes.map((recommendationType) => (
+                    <option
+                      key={recommendationType.id}
+                      value={recommendationType.id}
+                    >
+                      {recommendationType.requestType}
+                    </option>
+                  ))}
                 </>
               ) : (
                 <option disabled value="">

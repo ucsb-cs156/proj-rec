@@ -151,7 +151,9 @@ describe("RecommendationRequestForm tests", () => {
     );
     expect(screen.getByText("No professors available")).toBeInTheDocument();
     expect(
-      screen.getByText("No recommendation types available, use Other in details"),
+      screen.getByText(
+        "No recommendation types available, use Other in details",
+      ),
     ).toBeInTheDocument();
     expect(screen.getByText("Other")).toBeInTheDocument();
 
