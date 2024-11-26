@@ -81,7 +81,7 @@ function RecommendationRequestForm({
               id="professor"
               type="string"
               isInvalid={Boolean(errors.professor)}
-              {...register("professor", {
+              {...register("professor_id", {
                 required: "Please select a professor",
               })}
               defaultValue=""

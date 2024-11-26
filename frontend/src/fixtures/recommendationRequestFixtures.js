@@ -2,7 +2,7 @@ const recommendationRequestFixtures = {
   oneRecommendation: [
     {
       id: 1,
-      professor_id: 1,
+      professor_id: 3,
       submissionDate: "2022-02-02T12:00",
       dueDate: "2022-04-02T12:00",
       lastModifiedDate: "2022-02-02T12:00",
