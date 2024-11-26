@@ -5,6 +5,8 @@ import edu.ucsb.cs156.rec.entities.RequestType;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  * The RequestTypeRepository is a repository for RequestType entities.
  */
@@ -17,4 +19,5 @@ public interface RequestTypeRepository extends CrudRepository<RequestType, Long>
    * @return all RequestType entities with a given requestType
    */
   Iterable<RequestType> findAllByRequestType(String requestType);
+  Optional<RequestType> findByRequestType(String requestType);
 }
