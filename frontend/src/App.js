@@ -3,7 +3,7 @@ import HomePage from "main/pages/HomePage";
 import ProfilePage from "main/pages/ProfilePage";
 import AdminUsersPage from "main/pages/AdminUsersPage";
 import AdminRequestsPage from "main/pages/AdminRequestsPage";
-import PendingRequestsPage from "main/pages/PendingRequestsPage";
+// import PendingRequestsPage from "main/pages/PendingRequestsPage";
 
 import RequestTypeIndexPage from "main/pages/RequestType/RequestTypeIndexPage";
 import RequestTypeCreatePage from "main/pages/RequestType/RequestTypeCreatePage";
@@ -51,13 +51,13 @@ function App() {
         {hasRole(currentUser, "ROLE_ADMIN") && (
           <Route exact path="/admin/requests" element={<AdminRequestsPage />} />
         )}
-        {hasRole(currentUser, "ROLE_PROFESSOR") && (
+        {/* {hasRole(currentUser, "ROLE_PROFESSOR") && (
           <Route
             exact
             path="/requests/pending"
             element={<PendingRequestsPage />}
           />
-        )}
+        )} */}
       </Routes>
     </BrowserRouter>
   );
