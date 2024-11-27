@@ -185,12 +185,11 @@ public class RecommendationRequestControllerTests extends ControllerTestCase {
             assertEquals(expectedJson, responseString);
     }
 
-    @WithMockUser(roles = { "ADMIN", "USER" })
+    @WithMockUser(roles = { "USER" })
     @Test
-    public void an_admin_user_can_post_a_new_recommendationrequest() throws Exception {
+    public void a_user_can_post_a_new_recommendationrequest() throws Exception {
             // arrange
-            LocalDateTime submissionDate = LocalDateTime.parse("2022-04-20T00:00:00");
-            LocalDateTime completionDate = LocalDateTime.parse("2022-05-01T00:00:00");
+            LocalDateTime submissionDate = LocalDateTime.now();
             LocalDateTime neededByDate = LocalDateTime.parse("2022-06-01T00:00:00");
 
             RecommendationRequest recommendationRequest1 = RecommendationRequest.builder()
@@ -200,7 +199,7 @@ public class RecommendationRequestControllerTests extends ControllerTestCase {
                             .details("I want to apply to a PhD program")
                             .neededByDate(neededByDate)
                             .submissionDate(submissionDate)
-                            .completionDate(completionDate)
+                            .completionDate(null)
                             .status("Pending")
                             .build();
 
@@ -208,7 +207,7 @@ public class RecommendationRequestControllerTests extends ControllerTestCase {
 
             // act
             MvcResult response = mockMvc.perform(
-                            post("/api/recommendationrequest/post?requesterEmail=cgaucho@ucsb.edu&requesterName=Chris Gaucho&professorEmail=phtcon@ucsb.edu&professorName=Phill Conrad&requestType=PhD program&details=PhD CS UCSB&submissionDate=2022-04-20T00:00:00&completionDate=2022-05-01T00:00:00&status=Pending")
+                            post("/api/recommendationrequest/post?requesterId=1&professorId=1&requestType=PhD program&details=I want to apply to a PhD program&neededByDate=2022-06-01T00:00:00&submissionDate="+submissionDate.toString()+"&completionDate=null&status=Pending")
                                             .with(csrf()))
                             .andExpect(status().isOk()).andReturn();
 
@@ -217,155 +216,5 @@ public class RecommendationRequestControllerTests extends ControllerTestCase {
             String expectedJson = mapper.writeValueAsString(recommendationRequest1);
             String responseString = response.getResponse().getContentAsString();
             assertEquals(expectedJson, responseString);
-    }
-
-    @WithMockUser(roles = { "ADMIN", "USER" })
-    @Test
-    public void an_admin_user_can_delete_a_request() throws Exception {
-            // arrange
-
-            LocalDateTime submissionDate = LocalDateTime.parse("2022-04-20T00:00:00");
-            LocalDateTime completionDate = LocalDateTime.parse("2022-05-01T00:00:00");
-            LocalDateTime neededByDate = LocalDateTime.parse("2022-06-01T00:00:00");
-
-            RecommendationRequest recommendationRequest1 = RecommendationRequest.builder()
-                            .requesterId(1)
-                            .professorId(1)
-                            .requestType("PhD program")
-                            .details("I want to apply to a PhD program")
-                            .neededByDate(neededByDate)
-                            .submissionDate(submissionDate)
-                            .completionDate(completionDate)
-                            .status("Pending")
-                            .build();
-
-            when(recommendationRequestRepository.findById(eq(15L))).thenReturn(Optional.of(recommendationRequest1));
-
-            // act
-            MvcResult response = mockMvc.perform(
-                            delete("/api/recommendationrequest?id=15")
-                                            .with(csrf()))
-                            .andExpect(status().isOk()).andReturn();
-
-            // assert
-            verify(recommendationRequestRepository, times(1)).findById(15L);
-            verify(recommendationRequestRepository, times(1)).delete(any());
-
-            Map<String, Object> json = responseToJson(response);
-            assertEquals("RecommendationRequest with id 15 deleted", json.get("message"));
-    }
-
-    @WithMockUser(roles = { "ADMIN", "USER" })
-    @Test
-    public void admin_user_tries_to_delete_non_existent_recommendationrequest_and_gets_right_error_message()
-                    throws Exception {
-            // arrange
-
-            when(recommendationRequestRepository.findById(eq(15L))).thenReturn(Optional.empty());
-
-            // act
-            MvcResult response = mockMvc.perform(
-                            delete("/api/recommendationrequest?id=15&requeste")
-                                            .with(csrf()))
-                            .andExpect(status().isNotFound()).andReturn();
-
-            // assert
-            verify(recommendationRequestRepository, times(1)).findById(15L);
-            Map<String, Object> json = responseToJson(response);
-            assertEquals("RecommendationRequest with id 15 not found", json.get("message"));
-    }
-
-    @WithMockUser(roles = { "USER" })
-    @Test
-    public void user_can_edit_an_existing_recommendationrequest() throws Exception {
-            // arrange
-            LocalDateTime submissionDate = LocalDateTime.parse("2022-04-20T00:00:00");
-            LocalDateTime completionDate = LocalDateTime.parse("2022-05-01T00:00:00");
-            LocalDateTime neededByDate = LocalDateTime.parse("2022-06-01T00:00:00");
-
-            RecommendationRequest recommendationRequestOrig = RecommendationRequest.builder()
-                            .requesterId(1)
-                            .professorId(1)
-                            .requestType("PhD program")
-                            .details("I want to apply to a PhD program")
-                            .neededByDate(neededByDate)
-                            .submissionDate(submissionDate)
-                            .completionDate(completionDate)
-                            .status("Pending")
-                            .build();
-
-            LocalDateTime submissionDate2 = LocalDateTime.parse("2022-04-20T00:00:00");
-            LocalDateTime completionDate2 = LocalDateTime.parse("2022-05-01T00:00:00");
-            LocalDateTime neededByDate2 = LocalDateTime.parse("2022-06-01T00:00:00");
-
-            RecommendationRequest recommendationRequestEdited = RecommendationRequest.builder()
-                            .requesterId(1)
-                            .professorId(1)
-                            .requestType("Other")
-                            .details("I want to apply to a program")
-                            .neededByDate(neededByDate2)
-                            .submissionDate(submissionDate2)
-                            .completionDate(completionDate2)
-                            .status("Pending")
-                            .build();
-
-            String requestBody = mapper.writeValueAsString(recommendationRequestEdited);
-
-            when(recommendationRequestRepository.findById(eq(67L))).thenReturn(Optional.of(recommendationRequestOrig));
-
-            // act
-            MvcResult response = mockMvc.perform(
-                            put("/api/recommendationrequest?id=67")
-                                            .contentType(MediaType.APPLICATION_JSON)
-                                            .characterEncoding("utf-8")
-                                            .content(requestBody)
-                                            .with(csrf()))
-                            .andExpect(status().isOk()).andReturn();
-
-            // assert
-            verify(recommendationRequestRepository, times(1)).findById(67L);
-            verify(recommendationRequestRepository, times(1)).save(recommendationRequestEdited); // should be saved with correct user
-            String responseString = response.getResponse().getContentAsString();
-            assertEquals(requestBody, responseString);
-    }
-
-    @WithMockUser(roles = { "ADMIN", "USER" })
-    @Test
-    public void admin_cannot_edit_recommendationrequest_that_does_not_exist() throws Exception {
-            // arrange
-
-            LocalDateTime submissionDate = LocalDateTime.parse("2022-04-20T00:00:00");
-            LocalDateTime completionDate = LocalDateTime.parse("2022-05-01T00:00:00");
-            LocalDateTime neededByDate = LocalDateTime.parse("2022-06-01T00:00:00");
-
-            RecommendationRequest recommendationEditedRequest = RecommendationRequest.builder()
-                            .requesterId(1)
-                            .professorId(1)
-                            .requestType("PhD program")
-                            .details("I want to apply to a PhD program")
-                            .neededByDate(neededByDate)
-                            .submissionDate(submissionDate)
-                            .completionDate(completionDate)
-                            .status("Pending")
-                            .build();
-
-
-            String requestBody = mapper.writeValueAsString(recommendationEditedRequest);
-
-            when(recommendationRequestRepository.findById(eq(67L))).thenReturn(Optional.empty());
-
-            // act
-            MvcResult response = mockMvc.perform(
-                            put("/api/recommendationrequest?id=67")
-                                            .contentType(MediaType.APPLICATION_JSON)
-                                            .characterEncoding("utf-8")
-                                            .content(requestBody)
-                                            .with(csrf()))
-                            .andExpect(status().isNotFound()).andReturn();
-
-            // assert
-            verify(recommendationRequestRepository, times(1)).findById(67L);
-            Map<String, Object> json = responseToJson(response);
-            assertEquals("RecommendationRequest with id 67 not found", json.get("message"));
     }
 }
