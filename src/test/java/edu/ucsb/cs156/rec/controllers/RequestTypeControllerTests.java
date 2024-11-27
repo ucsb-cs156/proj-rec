@@ -568,7 +568,7 @@ public class RequestTypeControllerTests extends ControllerTestCase {
         }
         @Test
     public void logged_out_users_cannot_get_all_request_types() throws Exception {
-            mockMvc.perform(get("/api/requesttype/all"))
+            mockMvc.perform(get("/api/requesttypes/all"))
                             .andExpect(status().is(403)); // logged out users can't get all
     }
 
@@ -578,7 +578,7 @@ public class RequestTypeControllerTests extends ControllerTestCase {
             RequestType r = RequestType.builder().id(1L).requestType("Type A").build();
             Iterable<RequestType> rs = Arrays.asList(r);
             when(requestTypeRepository.findAll()).thenReturn(rs);
-            MvcResult response = mockMvc.perform(get("/api/requesttype/all"))
+            MvcResult response = mockMvc.perform(get("/api/requesttypes/all"))
                             .andExpect(status().isOk()).andReturn();
             String expectedJson = mapper.writeValueAsString(rs);
             String responseString = response.getResponse().getContentAsString();
