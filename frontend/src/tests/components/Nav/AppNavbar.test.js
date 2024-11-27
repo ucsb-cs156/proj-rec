@@ -140,7 +140,6 @@ describe("AppNavbar tests", () => {
     expect(screen.queryByTestId(/AppNavbarLocalhost/i)).toBeNull();
   });
 
-
   test("when oauthlogin undefined, default value is used", async () => {
     const currentUser = currentUserFixtures.notLoggedIn;
     const systemInfo = systemInfoFixtures.oauthLoginUndefined;
