@@ -140,6 +140,27 @@ describe("AppNavbar tests", () => {
     expect(screen.queryByTestId(/AppNavbarLocalhost/i)).toBeNull();
   });
 
+  test("Restaurant and UCSBDates links do NOT show when not logged in", async () => {
+    const currentUser = null;
+    const systemInfo = systemInfoFixtures.showingBoth;
+    const doLogin = jest.fn();
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <AppNavbar
+            currentUser={currentUser}
+            systemInfo={systemInfo}
+            doLogin={doLogin}
+          />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    expect(screen.queryByText("Restaurants")).not.toBeInTheDocument();
+    expect(screen.queryByText("UCSBDates")).not.toBeInTheDocument();
+  });
+
   test("when oauthlogin undefined, default value is used", async () => {
     const currentUser = currentUserFixtures.notLoggedIn;
     const systemInfo = systemInfoFixtures.oauthLoginUndefined;
