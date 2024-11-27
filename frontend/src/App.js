@@ -5,6 +5,10 @@ import AdminUsersPage from "main/pages/AdminUsersPage";
 import AdminRequestsPage from "main/pages/AdminRequestsPage";
 import PendingRequestsPage from "main/pages/PendingRequestsPage";
 
+import RequestTypeIndexPage from "main/pages/RequestType/RequestTypeIndexPage";
+import RequestTypeCreatePage from "main/pages/RequestType/RequestTypeCreatePage";
+import RequestTypeEditPage from "main/pages/RequestType/RequestTypeEditPage";
+
 import { hasRole, useCurrentUser } from "main/utils/currentUser";
 
 import "bootstrap/dist/css/bootstrap.css";
@@ -20,6 +24,29 @@ function App() {
         <Route exact path="/profile" element={<ProfilePage />} />
         {hasRole(currentUser, "ROLE_ADMIN") && (
           <Route exact path="/admin/users" element={<AdminUsersPage />} />
+        )}
+        {hasRole(currentUser, "ROLE_USER") && (
+          <>
+            <Route
+              exact
+              path="/requesttype"
+              element={<RequestTypeIndexPage />}
+            />
+          </>
+        )}
+        {hasRole(currentUser, "ROLE_ADMIN") && (
+          <>
+            <Route
+              exact
+              path="/requesttype/edit/:id"
+              element={<RequestTypeEditPage />}
+            />
+            <Route
+              exact
+              path="/requesttype/create"
+              element={<RequestTypeCreatePage />}
+            />
+          </>
         )}
         {hasRole(currentUser, "ROLE_ADMIN") && (
           <Route exact path="/admin/requests" element={<AdminRequestsPage />} />
