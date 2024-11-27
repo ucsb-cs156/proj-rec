@@ -8,8 +8,12 @@ on:
       - 'src/**'
       - 'pom.xml'
       - '.github/workflows/56-javadoc-main-branch.yml'
+
 env:
   GH_TOKEN: ${{ github.token }}
+  # See: https://github.com/actions/setup-java#supported-distributions
+  JAVA_DISTRIBUTION: ${{ vars.JAVA_DISTRIBUTION || 'temurin' }} 
+
 
 permissions:
   contents: write
@@ -26,8 +30,10 @@ jobs:
     - name: Set up Java (version from .java-version file)
       uses: actions/setup-java@v4
       with:
-         distribution: temurin # See: https://github.com/actions/setup-java#supported-distributions
+         distribution: ${{ env.JAVA_DISTRIBUTION }} 
          java-version-file: ./.java-version
+         cache: 'maven'
+         cache-dependency-path: 'pom.xml' 
   
     - name: Build javadoc
       run: mvn -DskipTests javadoc:javadoc
