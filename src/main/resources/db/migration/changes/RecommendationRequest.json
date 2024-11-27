@@ -1,0 +1,86 @@
+{
+  "databaseChangeLog": [
+    {
+      "changeSet": {
+        "id": "RecommendationRequest-1",
+        "author": "michaelljiang",
+        "preConditions": [
+          {
+            "onFail": "MARK_RAN"
+          },
+          {
+            "not": [
+              {
+                "tableExists": {
+                  "tableName": "RECOMMENDATIONREQUEST"
+                }
+              }
+            ]
+          }
+        ],
+        "changes": [
+          {
+            "createTable": {
+              "columns": [
+                {
+                  "column": {
+                    "autoIncrement": true,
+                    "constraints": {
+                      "primaryKey": true,
+                      "primaryKeyName": "RECOMMENDATIONREQUEST_PK"
+                    },
+                    "name": "ID",
+                    "type": "BIGINT"
+                  }
+                },
+                {
+                  "column": {
+                    "name": "SUBMISSION_DATE",
+                    "type": "DATE"
+                  }
+                },
+                {
+                  "column": {
+                    "name": "COMPLETION_DATE",
+                    "type": "DATE"
+                  }
+                },
+                {
+                  "column": {
+                    "name": "USER_ID",
+                    "type": "BIGINT"
+                  }
+                },
+                {
+                  "column": {
+                    "name": "REQUESTER_ID",
+                    "type": "BIGINT"
+                  }
+                },
+                {
+                  "column": {
+                    "name": "REQTYPE_ID",
+                    "type": "BIGINT"
+                  }
+                },
+                {
+                  "column": {
+                    "name": "DETAILS",
+                    "type": "VARCHAR(255)"
+                  }
+                },
+                {
+                  "column": {
+                    "name": "STATUS",
+                    "type": "VARCHAR(255)"
+                  }
+                }
+              ],
+              "tableName": "RECOMMENDATIONREQUEST"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
