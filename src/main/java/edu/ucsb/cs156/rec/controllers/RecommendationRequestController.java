@@ -115,7 +115,7 @@ public class RecommendationRequestController extends ApiController {
      * This method returns a list of recommendation requests with specified status for a professor.
      * @return a list of recommendation requests with specified status for a professor.
      */
-    @Operation(summary = "Get all completed recommendation requests for a professor")
+    @Operation(summary = "Get all recommendation requests with specified status for a professor")
     @GetMapping("/professor/filtered")
     @PreAuthorize("hasRole('ROLE_PROFESSOR')")
     public Iterable<RecommendationRequest> getRecommendationRequestByStatusForProfessor(
