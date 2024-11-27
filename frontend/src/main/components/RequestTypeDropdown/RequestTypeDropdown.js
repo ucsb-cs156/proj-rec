@@ -39,7 +39,7 @@ const SingleRequestDropdown = ({
         {requests.map(function (object) {
           const key = `${controlId}-option-${object.id}`;
           return (
-            <option key={key} data-testid={key}>
+            <option key={key} data-testid={key} value={object.requestType}>
               {object.requestType}
             </option>
           );

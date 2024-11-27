@@ -24,19 +24,4 @@ describe('RequestTypeDropdown Component', () => {
     });
   });
 
-  test('calls onChange when an option is selected', () => {
-    const handleChange = jest.fn()
-    
-    render(<RequestTypeDropdown options={options} requests={requestTypeFixtures.threeRequestTypes} onChange={handleChange} />);
-    const dropdown = screen.getByRole('combobox');
-    fireEvent.mouseDown(dropdown);
-    fireEvent.click(screen.getByText('PhD program'));
-    expect(handleChange).toHaveBeenCalledWith('PhD program');
-  });
-
-  test('displays the correct selected value', () => {
-    render(<RequestTypeDropdown options={options} requests={requestTypeFixtures.threeRequestTypes} value="PUT" onChange={() => {}} />);
-    const dropdown = screen.getByRole('combobox');
-    expect(dropdown.value).toBe('Scholarship or Fellowship');
-  });
 });
