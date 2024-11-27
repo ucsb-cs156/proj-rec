@@ -38,8 +38,6 @@ import static org.mockito.Mockito.when;
 @WebMvcTest(controllers = RecommendationRequestController.class)
 @Import(TestConfig.class)
 public class RecommendationRequestTests extends ControllerTestCase {
-        // @Autowired
-        // private MockMvc mockMvc;
 
         @MockBean
         RecommendationRequestRepository recommendationRequestRepository;
