@@ -32,7 +32,7 @@ public interface RecommendationRequestRepository extends CrudRepository<Recommen
      * @param status the status of recommendation request
      * @return a list of recommendation requests matching the criteria
      */
-    Iterable<RecommendationRequest> findAllByProfessorIdAndStatus(Long professor_id, String status);
+  Iterable<RecommendationRequest> findAllByProfessorIdAndStatus(Long professor_id, String status);
 
 
 }
