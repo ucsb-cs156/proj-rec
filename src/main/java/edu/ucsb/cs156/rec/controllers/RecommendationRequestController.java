@@ -4,6 +4,7 @@ import edu.ucsb.cs156.rec.entities.RecommendationRequest;
 import edu.ucsb.cs156.rec.entities.User;
 import edu.ucsb.cs156.rec.errors.EntityNotFoundException;
 import edu.ucsb.cs156.rec.repositories.RecommendationRequestRepository;
+import edu.ucsb.cs156.rec.repositories.UserRepository;
 import edu.ucsb.cs156.rec.services.CurrentUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -32,6 +34,8 @@ public class RecommendationRequestController extends ApiController {
     RecommendationRequestRepository recommendationRequestRepository;
     @Autowired
     CurrentUserService currentUserService;
+    @Autowired
+    UserRepository userRepository;
 
     /**
      * List all recommendation requests
@@ -94,12 +98,19 @@ public class RecommendationRequestController extends ApiController {
         User currentUser = currentUserService.getUser();
         Long requesterId = currentUser.getId();
 
+        User professor = userRepository.findById(professorId)
+            .orElseThrow(() -> new IllegalArgumentException("Professor does not exist."));
+
+        if (!professor.getAdmin()) {
+            throw new IllegalArgumentException("Requested professor is not an admin.");
+        }
+
         recommendationRequest.setRequesterId(requesterId);
         recommendationRequest.setProfessorId(professorId);
         recommendationRequest.setRequestType(requestType);
         recommendationRequest.setDetails(details);
 
-        // completionDate is unassigned until completed, so we set that ass null
+        // completionDate is unassigned until completed, so we set that as null
         LocalDateTime submissionDate = LocalDateTime.now();
         submissionDate = submissionDate.minusNanos(submissionDate.getNano());
 

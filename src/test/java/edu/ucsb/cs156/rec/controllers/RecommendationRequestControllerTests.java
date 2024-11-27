@@ -3,8 +3,10 @@ package edu.ucsb.cs156.rec.controllers;
 import edu.ucsb.cs156.rec.repositories.UserRepository;
 import edu.ucsb.cs156.rec.services.CurrentUserService;
 import edu.ucsb.cs156.rec.testconfig.TestConfig;
+import jakarta.servlet.ServletException;
 import edu.ucsb.cs156.rec.ControllerTestCase;
 import edu.ucsb.cs156.rec.entities.RecommendationRequest;
+import edu.ucsb.cs156.rec.entities.User;
 import edu.ucsb.cs156.rec.repositories.RecommendationRequestRepository;
 
 import java.util.ArrayList;
@@ -27,6 +29,8 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -288,6 +292,10 @@ public class RecommendationRequestControllerTests extends ControllerTestCase {
                             .status("Pending")
                             .build();
 
+            User professor = User.builder().admin(true).build();
+
+            when(userRepository.findById(1L)).thenReturn(Optional.of(professor));
+
             when(recommendationRequestRepository.save(eq(recommendationRequest1))).thenReturn(recommendationRequest1);
 
             // act
@@ -301,5 +309,78 @@ public class RecommendationRequestControllerTests extends ControllerTestCase {
             String expectedJson = mapper.writeValueAsString(recommendationRequest1);
             String responseString = response.getResponse().getContentAsString();
             assertEquals(expectedJson, responseString);
+    }
+
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void a_user_cannot_post_a_new_recommendationrequest_professor_does_not_exist() throws Exception {
+            // arrange
+            LocalDateTime currentDate = LocalDateTime.now();
+            final LocalDateTime submissionDate = currentDate.minusNanos(currentDate.getNano());
+
+            LocalDateTime neededByDate = LocalDateTime.parse("2022-06-01T00:00:00");
+
+            RecommendationRequest recommendationRequest1 = RecommendationRequest.builder()
+                            .requesterId(1L)
+                            .professorId(1L)
+                            .requestType("PhD program")
+                            .details("I want to apply to a PhD program")
+                            .neededByDate(neededByDate)
+                            .submissionDate(submissionDate)
+                            .completionDate(null)
+                            .status("Pending")
+                            .build();
+
+
+            when(userRepository.findById(1L)).thenReturn(Optional.empty());
+            when(recommendationRequestRepository.save(eq(recommendationRequest1))).thenReturn(recommendationRequest1);
+
+            // act
+            ServletException exception = assertThrows(ServletException.class, () -> {
+                mockMvc.perform(
+                                post("/api/recommendationrequest/post?requesterId=1&professorId=1&requestType=PhD program&details=I want to apply to a PhD program&neededByDate=2022-06-01T00:00:00&submissionDate="+submissionDate.toString()+"&completionDate=null&status=Pending")
+                                                .with(csrf()))
+                        .andExpect(status().is4xxClientError()).andReturn();
+            });
+        
+            // assert
+            assertEquals("Request processing failed: java.lang.IllegalArgumentException: Professor does not exist.", exception.getMessage());
+    }
+    
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void a_user_cannot_post_a_new_recommendationrequest_professor_is_not_admin() throws Exception {
+            // arrange
+            LocalDateTime currentDate = LocalDateTime.now();
+            final LocalDateTime submissionDate = currentDate.minusNanos(currentDate.getNano());
+
+            LocalDateTime neededByDate = LocalDateTime.parse("2022-06-01T00:00:00");
+
+            RecommendationRequest recommendationRequest1 = RecommendationRequest.builder()
+                            .requesterId(1L)
+                            .professorId(1L)
+                            .requestType("PhD program")
+                            .details("I want to apply to a PhD program")
+                            .neededByDate(neededByDate)
+                            .submissionDate(submissionDate)
+                            .completionDate(null)
+                            .status("Pending")
+                            .build();
+
+            User professor = User.builder().admin(false).build();
+
+            when(userRepository.findById(1L)).thenReturn(Optional.of(professor));
+            when(recommendationRequestRepository.save(eq(recommendationRequest1))).thenReturn(recommendationRequest1);
+
+            // act
+            ServletException exception = assertThrows(ServletException.class, () -> {
+                mockMvc.perform(
+                                post("/api/recommendationrequest/post?requesterId=1&professorId=1&requestType=PhD program&details=I want to apply to a PhD program&neededByDate=2022-06-01T00:00:00&submissionDate="+submissionDate.toString()+"&completionDate=null&status=Pending")
+                                                .with(csrf()))
+                        .andExpect(status().is4xxClientError()).andReturn();
+            });
+        
+            // assert
+            assertEquals("Request processing failed: java.lang.IllegalArgumentException: Requested professor is not an admin.", exception.getMessage());
     }
 }
