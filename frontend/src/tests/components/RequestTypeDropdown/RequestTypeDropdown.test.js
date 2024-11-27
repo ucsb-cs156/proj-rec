@@ -80,8 +80,6 @@ describe('SingleRequestDropdown Component', () => {
     expect(labelElement).toBeInTheDocument();
   });
 
-  
-
   test('renders options with correct data-testid attribute', () => {
     render(
       <SingleRequestDropdown

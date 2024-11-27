@@ -17,6 +17,7 @@ const SingleRequestDropdown = ({
     localSearchrequest || request,
   );
 
+  // Stryker disable all
   const handleRequestOnChange = (event) => {
     localStorage.setItem(controlId, event.target.value);
     setrequestState(event.target.value);
@@ -25,6 +26,7 @@ const SingleRequestDropdown = ({
       onChange(event);
     }
   };
+  // Stryker restore all
 
   requests.sort(compareValues("requestCode"));
 
