@@ -17,7 +17,7 @@ describe("CompletedRequestsPage tests", () => {
     axiosMock.resetHistory();
   });
 
-  test("Renders completed requests for professor", async () => {
+  test("Renders completed and denied requests for professor", async () => {
     axiosMock
       .onGet("/api/currentUser")
       .reply(200, apiCurrentUserFixtures.userOnly);
@@ -26,7 +26,7 @@ describe("CompletedRequestsPage tests", () => {
       .reply(200, systemInfoFixtures.showingNeither);
     axiosMock
       .onGet("/api/recommendationrequest/professor/all")
-      .reply(200, recommendationRequestFixtures.threeRecommendations);
+      .reply(200, recommendationRequestFixtures.mixedRequests);
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -44,6 +44,26 @@ describe("CompletedRequestsPage tests", () => {
     expect(
       screen.getByTestId("RecommendationRequestTable")
     ).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId(`RecommendationRequestTable-cell-row-0-col-status`)
+      ).toBeInTheDocument();
+    });
+
+    const statusCells = screen.getAllByTestId(
+      /RecommendationRequestTable-cell-row-.*-col-status/
+    );
+    expect(
+      statusCells.some((cell) => cell.textContent === "COMPLETED")
+    ).toBeTruthy();
+    expect(
+      statusCells.some((cell) => cell.textContent === "DENIED")
+    ).toBeTruthy();
+
+    expect(
+      statusCells.every((cell) => cell.textContent !== "PENDING")
+    ).toBeTruthy();
   });
 
   test("Renders empty table when no completed requests", async () => {
