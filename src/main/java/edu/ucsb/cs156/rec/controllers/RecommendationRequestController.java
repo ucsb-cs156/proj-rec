@@ -1,9 +1,10 @@
 package edu.ucsb.cs156.rec.controllers;
 
 import edu.ucsb.cs156.rec.entities.RecommendationRequest;
+import edu.ucsb.cs156.rec.entities.User;
 import edu.ucsb.cs156.rec.errors.EntityNotFoundException;
 import edu.ucsb.cs156.rec.repositories.RecommendationRequestRepository;
-
+import edu.ucsb.cs156.rec.services.CurrentUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -14,16 +15,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import jakarta.validation.Valid;
 
 import java.time.LocalDateTime;
 
@@ -34,6 +30,8 @@ import java.time.LocalDateTime;
 public class RecommendationRequestController extends ApiController {
     @Autowired
     RecommendationRequestRepository recommendationRequestRepository;
+    @Autowired
+    CurrentUserService currentUserService;
 
     /**
      * List all recommendation requests
@@ -54,12 +52,13 @@ public class RecommendationRequestController extends ApiController {
      * @return an iterable of RecommendationRequest
      */
     @Operation(summary= "List all recommendation requests")
-    @PreAuthorize("hasRole('ROLE_USER') && #requesterId == authentication.principal.id")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/all")
-    public Iterable<RecommendationRequest> getAllByRequesterId(
-            @Parameter(name="requesterId") @RequestParam Long requesterId
-	) {
+    public Iterable<RecommendationRequest> getAllCurrentUser() {
+        User currentUser = currentUserService.getUser();
+        Long requesterId = currentUser.getId();
         Iterable<RecommendationRequest> requests = recommendationRequestRepository.findAllByRequesterId(requesterId);
+
         return requests;
     }
 
@@ -80,10 +79,7 @@ public class RecommendationRequestController extends ApiController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/post")
 
-    // No. You should get the currentUser.getId() and then set the requesterId inside the controller method.
-    // (there should NOT be a database field for requesterEmail or requesterName, only requestId).
     public RecommendationRequest postRecommendationRequest(
-            @Parameter(name="requesterId") @RequestParam Long requesterId,
             @Parameter(name="professorId") @RequestParam Long professorId,
             @Parameter(name="requestType") @RequestParam String requestType,
             @Parameter(name="details") @RequestParam String details,
@@ -95,19 +91,22 @@ public class RecommendationRequestController extends ApiController {
         // See: https://www.baeldung.com/spring-date-parameters
 
         RecommendationRequest recommendationRequest = new RecommendationRequest();
+        User currentUser = currentUserService.getUser();
+        Long requesterId = currentUser.getId();
+
         recommendationRequest.setRequesterId(requesterId);
         recommendationRequest.setProfessorId(professorId);
         recommendationRequest.setRequestType(requestType);
         recommendationRequest.setDetails(details);
 
         // completionDate is unassigned until completed, so we set that ass null
-        LocalDateTime completionDate = null;
         LocalDateTime submissionDate = LocalDateTime.now();
+        submissionDate = submissionDate.minusNanos(submissionDate.getNano());
+
         String status = "Pending";
 
         recommendationRequest.setNeededByDate(neededByDate);
         recommendationRequest.setSubmissionDate(submissionDate);
-        recommendationRequest.setCompletionDate(completionDate);
         recommendationRequest.setStatus(status);
 
         RecommendationRequest savedRecommendationRequest = recommendationRequestRepository.save(recommendationRequest);
@@ -124,11 +123,14 @@ public class RecommendationRequestController extends ApiController {
      * @return a RecommendationRequest
      */
     @Operation(summary= "Get a single request")
-    @PreAuthorize("(hasRole('ROLE_USER') && #requesterId == authentication.principal.id) || hasRole('ROLE_ADMIN)")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("")
     public RecommendationRequest getById(
-            @Parameter(name="id") @RequestParam Long id,
-			@Parameter(name="requesterId") @RequestParam Long requesterId) {
+            @Parameter(name="id") @RequestParam Long id
+        ) {
+        User currentUser = currentUserService.getUser();
+        Long requesterId = currentUser.getId();
+
         RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(RecommendationRequest.class, id));
 
