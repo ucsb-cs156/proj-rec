@@ -14,14 +14,16 @@ export default function CompletedRequestsPage() {
     // Stryker disable next-line all : don't test internal caching of React Query
     ["/api/recommendationrequest/professor/all"],
     {
+      // Stryker disable next-line all : GET is the default, so mutating this to "" doesn't introduce a bug
       method: "GET",
       url: "/api/recommendationrequest/professor/all",
     },
-    []
+    // Stryker disable next-line all : it's hard to test GET requests that are still in progress
+    [],
   );
 
-  const completedRequests = requests?.filter(
-    (request) => request.status === "COMPLETED" || request.status === "DENIED"
+  const completedRequests = requests.filter(
+    (request) => request.status === "COMPLETED" || request.status === "DENIED",
   );
 
   return (

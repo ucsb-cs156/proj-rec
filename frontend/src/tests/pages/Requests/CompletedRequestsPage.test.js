@@ -33,7 +33,7 @@ describe("CompletedRequestsPage tests", () => {
         <MemoryRouter>
           <CompletedRequestsPage />
         </MemoryRouter>
-      </QueryClientProvider>
+      </QueryClientProvider>,
     );
 
     await waitFor(() => {
@@ -42,27 +42,27 @@ describe("CompletedRequestsPage tests", () => {
 
     expect(axiosMock.history.get.length).toBe(3);
     expect(
-      screen.getByTestId("RecommendationRequestTable")
+      screen.getByTestId("RecommendationRequestTable"),
     ).toBeInTheDocument();
 
     await waitFor(() => {
       expect(
-        screen.getByTestId(`RecommendationRequestTable-cell-row-0-col-status`)
+        screen.getByTestId(`RecommendationRequestTable-cell-row-0-col-status`),
       ).toBeInTheDocument();
     });
 
     const statusCells = screen.getAllByTestId(
-      /RecommendationRequestTable-cell-row-.*-col-status/
+      /RecommendationRequestTable-cell-row-.*-col-status/,
     );
     expect(
-      statusCells.some((cell) => cell.textContent === "COMPLETED")
+      statusCells.some((cell) => cell.textContent === "COMPLETED"),
     ).toBeTruthy();
     expect(
-      statusCells.some((cell) => cell.textContent === "DENIED")
+      statusCells.some((cell) => cell.textContent === "DENIED"),
     ).toBeTruthy();
 
     expect(
-      statusCells.every((cell) => cell.textContent !== "PENDING")
+      statusCells.every((cell) => cell.textContent !== "PENDING"),
     ).toBeTruthy();
   });
 
@@ -80,7 +80,7 @@ describe("CompletedRequestsPage tests", () => {
         <MemoryRouter>
           <CompletedRequestsPage />
         </MemoryRouter>
-      </QueryClientProvider>
+      </QueryClientProvider>,
     );
 
     await waitFor(() => {
@@ -89,7 +89,7 @@ describe("CompletedRequestsPage tests", () => {
 
     expect(axiosMock.history.get.length).toBe(3);
     expect(
-      screen.getByTestId("RecommendationRequestTable")
+      screen.getByTestId("RecommendationRequestTable"),
     ).toBeInTheDocument();
   });
 });
