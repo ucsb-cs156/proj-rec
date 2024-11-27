@@ -26,12 +26,12 @@ public interface RecommendationRequestRepository extends CrudRepository<Recommen
   Iterable<RecommendationRequest> findAllByProfessorId(Long professor_id);
 
   /**
-     * Find all recommendation requests by professor ID and status.
-     *
-     * @param professor_id professor_id within RecommendationRequest that maps to id in User table
-     * @param status the status of recommendation request
-     * @return a list of recommendation requests matching the criteria
-     */
+   * Find all recommendation requests by professor ID and status.
+   *
+   * @param professor_id professor_id within RecommendationRequest that maps to id in User table
+   * @param status the status of recommendation request
+   * @return a list of recommendation requests matching the criteria
+   */
   Iterable<RecommendationRequest> findAllByProfessorIdAndStatus(Long professor_id, String status);
 
 

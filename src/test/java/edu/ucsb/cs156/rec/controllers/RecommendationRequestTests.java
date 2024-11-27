@@ -352,28 +352,28 @@ public class RecommendationRequestTests extends ControllerTestCase {
         @Test
         @WithMockUser(roles = "PROFESSOR")
         public void test_professor_can_get_recommendation_request_by_type() throws Exception {
-        // Arrange
-        User mockProfessor = User.builder().id(1L).email("professor@ucsb.edu").build();
-        RecommendationRequest mockRequest1 = RecommendationRequest.builder()
-                .id(101L).professor(mockProfessor).status("completed").details("Details 1").build();
-        RecommendationRequest mockRequest2 = RecommendationRequest.builder()
-                .id(102L).professor(mockProfessor).status("completed").details("Details 2").build();
+                // Arrange
+                User mockProfessor = User.builder().id(1L).email("professor@ucsb.edu").build();
+                RecommendationRequest mockRequest1 = RecommendationRequest.builder()
+                        .id(101L).professor(mockProfessor).status("completed").details("Details 1").build();
+                RecommendationRequest mockRequest2 = RecommendationRequest.builder()
+                        .id(102L).professor(mockProfessor).status("completed").details("Details 2").build();
 
-        List<RecommendationRequest> mockRequests = List.of(mockRequest1, mockRequest2);
+                List<RecommendationRequest> mockRequests = List.of(mockRequest1, mockRequest2);
 
-        when(userRepository.findByEmail("professor@ucsb.edu")).thenReturn(Optional.of(mockProfessor));
-        when(recommendationRequestRepository.findAllByProfessorIdAndStatus(1L, "completed")).thenReturn(mockRequests);
+                when(userRepository.findByEmail("professor@ucsb.edu")).thenReturn(Optional.of(mockProfessor));
+                when(recommendationRequestRepository.findAllByProfessorIdAndStatus(1L, "completed")).thenReturn(mockRequests);
 
-        // Act & Assert
-        mockMvc.perform(get("/api/recommendationrequest/professor/filtered")
-                .param("status", "completed"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].id").value(101))
-                .andExpect(jsonPath("$[1].id").value(102));
+                // Act & Assert
+                mockMvc.perform(get("/api/recommendationrequest/professor/filtered")
+                        .param("status", "completed"))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.length()").value(2))
+                        .andExpect(jsonPath("$[0].id").value(101))
+                        .andExpect(jsonPath("$[1].id").value(102));
 
-        verify(recommendationRequestRepository, times(1)).findAllByProfessorIdAndStatus(1L, "completed");
-}
+                verify(recommendationRequestRepository, times(1)).findAllByProfessorIdAndStatus(1L, "completed");
+        }
 
         @Test
         @WithMockUser(roles = { "PROFESSOR" })
