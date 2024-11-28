@@ -4,7 +4,6 @@ import edu.ucsb.cs156.rec.repositories.UserRepository;
 import edu.ucsb.cs156.rec.testconfig.TestConfig;
 import edu.ucsb.cs156.rec.ControllerTestCase;
 import edu.ucsb.cs156.rec.entities.RequestType;
-import edu.ucsb.cs156.rec.entities.UCSBDate;
 import edu.ucsb.cs156.rec.repositories.RequestTypeRepository;
 
 import java.time.LocalDateTime;

@@ -33,48 +33,6 @@ function App() {
         )}
         {hasRole(currentUser, "ROLE_USER") && (
           <>
-            <Route exact path="/ucsbdates" element={<UCSBDatesIndexPage />} />
-          </>
-        )}
-        {hasRole(currentUser, "ROLE_ADMIN") && (
-          <>
-            <Route
-              exact
-              path="/ucsbdates/edit/:id"
-              element={<UCSBDatesEditPage />}
-            />
-            <Route
-              exact
-              path="/ucsbdates/create"
-              element={<UCSBDatesCreatePage />}
-            />
-          </>
-        )}
-        {hasRole(currentUser, "ROLE_USER") && (
-          <>
-            <Route
-              exact
-              path="/restaurants"
-              element={<RestaurantIndexPage />}
-            />
-          </>
-        )}
-        {hasRole(currentUser, "ROLE_ADMIN") && (
-          <>
-            <Route
-              exact
-              path="/restaurants/edit/:id"
-              element={<RestaurantEditPage />}
-            />
-            <Route
-              exact
-              path="/restaurants/create"
-              element={<RestaurantCreatePage />}
-            />
-          </>
-        )}
-        {hasRole(currentUser, "ROLE_USER") && (
-          <>
             <Route
               exact
               path="/requesttypes"
