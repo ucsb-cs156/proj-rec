@@ -5,6 +5,7 @@ import AdminUsersPage from "main/pages/AdminUsersPage";
 import AdminRequestsPage from "main/pages/AdminRequestsPage";
 import ProfessorCompletedRequestsPage from "main/pages/Professor/ProfessorCompletedRequestsPage";
 import ProfessorStatisticsPage from "main/pages/Professor/ProfessorStatisticsPage";
+import ProfessorPendingRequestsPage from "main/pages/Professor/ProfessorPendingRequestsPage";
 
 import RequestTypeIndexPage from "main/pages/RequestType/RequestTypeIndexPage";
 import RequestTypeCreatePage from "main/pages/RequestType/RequestTypeCreatePage";
@@ -51,6 +52,13 @@ function App() {
         )}
         {hasRole(currentUser, "ROLE_ADMIN") && (
           <Route exact path="/admin/requests" element={<AdminRequestsPage />} />
+        )}
+        {hasRole(currentUser, "ROLE_PROFESSOR") && (
+          <Route
+            exact
+            path="/requests/pending"
+            element={<ProfessorPendingRequestsPage />}
+          />
         )}
         {hasRole(currentUser, "ROLE_PROFESSOR") && (
           <Route
