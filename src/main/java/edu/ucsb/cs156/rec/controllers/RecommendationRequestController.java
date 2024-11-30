@@ -220,4 +220,19 @@ public class RecommendationRequestController extends ApiController {
         RecommendationRequest savedRecommendationRequest = recommendationRequestRepository.save(recommendationRequest);
         return savedRecommendationRequest;
     }
+
+    /**
+     * This method returns a list of recommendation requests with specified status for a professor.
+     * @return a list of recommendation requests with specified status for a professor.
+     */
+    @Operation(summary = "Get all recommendation requests with specified status for a professor")
+    @GetMapping("/professor/filtered")
+    @PreAuthorize("hasRole('ROLE_PROFESSOR')")
+    public Iterable<RecommendationRequest> getRecommendationRequestByStatusForProfessor(
+        @RequestParam String status) {
+        User currentUser = getCurrentUser().getUser();
+
+        return recommendationRequestRepository.findAllByProfessorIdAndStatus(
+            currentUser.getId(), status);
+    }
 }
