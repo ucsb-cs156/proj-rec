@@ -1,9 +1,11 @@
 package edu.ucsb.cs156.rec.controllers;
 
 import edu.ucsb.cs156.rec.entities.RecommendationRequest;
+import edu.ucsb.cs156.rec.entities.RequestType;
 import edu.ucsb.cs156.rec.entities.User;
 import edu.ucsb.cs156.rec.errors.EntityNotFoundException;
 import edu.ucsb.cs156.rec.repositories.RecommendationRequestRepository;
+import edu.ucsb.cs156.rec.repositories.RequestTypeRepository;
 import edu.ucsb.cs156.rec.repositories.UserRepository;
 import edu.ucsb.cs156.rec.services.CurrentUserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,7 +14,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -36,6 +37,8 @@ public class RecommendationRequestController extends ApiController {
     CurrentUserService currentUserService;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    RequestTypeRepository requestTypeRepository;
 
     /**
      * List all recommendation requests
@@ -99,11 +102,14 @@ public class RecommendationRequestController extends ApiController {
         Long requesterId = currentUser.getId();
 
         User professor = userRepository.findById(professorId)
-            .orElseThrow(() -> new IllegalArgumentException("Professor does not exist."));
+            .orElseThrow(() -> new EntityNotFoundException(User.class, professorId));
 
         if (!professor.getAdmin()) {
             throw new IllegalArgumentException("Requested professor is not an admin.");
         }
+
+        requestTypeRepository.findByRequestType(requestType)
+                .orElseThrow(() -> new EntityNotFoundException(RequestType.class, requestType));
 
         recommendationRequest.setRequesterId(requesterId);
         recommendationRequest.setProfessorId(professorId);
