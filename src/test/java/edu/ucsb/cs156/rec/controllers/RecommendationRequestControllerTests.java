@@ -354,7 +354,7 @@ public class RecommendationRequestControllerTests extends ControllerTestCase {
                 .andExpect(status().is4xxClientError()).andReturn();
 
             // assert
-            assertEquals("edu.ucsb.cs156.rec.errors.EntityNotFoundException: User with id 1 not found", response.getResolvedException());
+            assertEquals("User with id 1 not found", response.getResolvedException().getMessage());
         
     }
     
@@ -435,6 +435,6 @@ public class RecommendationRequestControllerTests extends ControllerTestCase {
                 .andExpect(status().is4xxClientError()).andReturn();
 
             // assert
-            assertEquals("edu.ucsb.cs156.rec.errors.EntityNotFoundException: RequestType with id PhD program not found", response.getResolvedException());
+            assertEquals("RequestType with id PhD program not found", response.getResolvedException().getMessage());
     }
 }
