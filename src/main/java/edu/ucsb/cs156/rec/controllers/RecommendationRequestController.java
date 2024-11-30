@@ -1,10 +1,12 @@
 package edu.ucsb.cs156.rec.controllers;
 
 import edu.ucsb.cs156.rec.entities.RecommendationRequest;
+import edu.ucsb.cs156.rec.entities.RequestType;
 import edu.ucsb.cs156.rec.entities.User;
 import edu.ucsb.cs156.rec.errors.EntityNotFoundException;
 import edu.ucsb.cs156.rec.models.CurrentUser;
 import edu.ucsb.cs156.rec.repositories.RecommendationRequestRepository;
+import edu.ucsb.cs156.rec.repositories.RequestTypeRepository;
 import edu.ucsb.cs156.rec.repositories.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -37,6 +39,9 @@ public class RecommendationRequestController extends ApiController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    RequestTypeRepository requestTypeRepository;
 
     /**
      * Any admin can delete a RecommendationRequest
@@ -201,11 +206,14 @@ public class RecommendationRequestController extends ApiController {
         //get current date right now and set status to pending
         CurrentUser currentUser = getCurrentUser();
         RecommendationRequest recommendationRequest = new RecommendationRequest();
+        if (!recommendationType.equals("Other")) {
+            requestTypeRepository.findByRequestType(recommendationType).orElseThrow(() -> new EntityNotFoundException(RequestType.class, recommendationType));
+        }
+        recommendationRequest.setRecommendationType(recommendationType);
+        recommendationRequest.setDetails(details);
         User professor = userRepository.findById(professorId).orElseThrow(() -> new EntityNotFoundException(User.class, professorId));
         recommendationRequest.setProfessor(professor);
         recommendationRequest.setRequester(currentUser.getUser());
-        recommendationRequest.setRecommendationType(recommendationType);
-        recommendationRequest.setDetails(details);
         recommendationRequest.setStatus("PENDING");
         recommendationRequest.setDueDate(dueDate);
 
