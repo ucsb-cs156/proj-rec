@@ -46,6 +46,7 @@ describe("UserTable tests", () => {
       "Submission Date",
       "Last Modified Date",
       "Completion Date",
+      "Due Date",
     ];
     const expectedFields = [
       "id",
@@ -58,6 +59,7 @@ describe("UserTable tests", () => {
       "submissionDate",
       "lastModifiedDate",
       "completionDate",
+      "dueDate",
     ];
     const testId = "RecommendationRequestTable";
 
@@ -119,6 +121,7 @@ describe("UserTable tests", () => {
       "Submission Date",
       "Last Modified Date",
       "Completion Date",
+      "Due Date",
     ];
     const expectedFields = [
       "id",
@@ -131,6 +134,7 @@ describe("UserTable tests", () => {
       "submissionDate",
       "lastModifiedDate",
       "completionDate",
+      "dueDate",
     ];
     const testId = "RecommendationRequestTable";
 

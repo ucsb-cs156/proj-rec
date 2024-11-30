@@ -71,6 +71,10 @@ export default function RecommendationRequestTable({ requests, currentUser }) {
       Header: "Completion Date",
       accessor: "completionDate",
     },
+    {
+      Header: "Due Date",
+      accessor: "dueDate",
+    },
   ];
 
   //since all admins have the role of a user, we can just check if the current user has the role ROLE_USER
