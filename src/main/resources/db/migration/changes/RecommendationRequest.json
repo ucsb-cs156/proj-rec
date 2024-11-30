@@ -3,7 +3,7 @@
     {
       "changeSet": {
         "id": "RecommendationRequest-1",
-        "author": "MattP",
+        "author": "michaelljiang",
         "preConditions": [
           {
             "onFail": "MARK_RAN"
@@ -49,12 +49,6 @@
                   "column": {
                     "name": "USER_ID",
                     "type": "BIGINT"
-                  }
-                },
-                {
-                  "column": {
-                    "name": "PROFESSOR_EMAIL",
-                    "type": "VARCHAR(255)"
                   }
                 },
                 {

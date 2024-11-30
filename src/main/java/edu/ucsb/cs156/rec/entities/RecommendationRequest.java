@@ -37,8 +37,6 @@ public class RecommendationRequest {
   @JoinColumn(name = "user_id", nullable = false)
   private User professor;
 
-  private String professorEmail;
-
   @ManyToOne(fetch = FetchType.EAGER, optional = false)
   @JoinColumn(name = "requester_id", nullable = false)
   private User requester;

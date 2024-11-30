@@ -104,7 +104,6 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
             RecommendationRequest recReq = RecommendationRequest.builder()
                             .professor(mockUser)
                             .requester(mockRequester)
-                            .professorEmail("email.com")
                             .recommendationType(requestType)
                             .details("")
                             .submissionDate(ld)
@@ -158,7 +157,6 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
             RecommendationRequest recReq1 = RecommendationRequest.builder()
                         .professor(mockUser)
                         .requester(mockRequester)
-                        .professorEmail("email.com")
                         .recommendationType(requestType)
                         .details("")
                         .submissionDate(ld1)
@@ -171,7 +169,6 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
             RecommendationRequest recReq2 = RecommendationRequest.builder()
                         .professor(mockUser)
                         .requester(mockRequester)
-                        .professorEmail("email.com")
                         .recommendationType(requestType)
                         .details("")
                         .submissionDate(ld2)
@@ -196,7 +193,7 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
             assertEquals(expectedJson, responseString);
     }
 
-    @WithMockUser(roles = { "ADMIN", "STUDENT" })
+    @WithMockUser(roles = { "STUDENT" })
     @Test
     public void a_student_user_can_post_a_new_recommendation_request() throws Exception {
         // arrange
@@ -208,7 +205,6 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
         RecommendationRequest recReq1 = RecommendationRequest.builder()
                 .professor(mockUser)
                 .requester(currentUserService.getCurrentUser().getUser())
-                .professorEmail("email.com")
                 .recommendationType(requestType)
                 .details("")
                 .submissionDate(ld)
@@ -232,7 +228,7 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
         String responseString = response.getResponse().getContentAsString();
         assertEquals(expectedJson, responseString);
     }
-    @WithMockUser(roles = { "ADMIN", "STUDENT" })
+    @WithMockUser(roles = { "STUDENT" })
     @Test
     public void a_student_user_cant_post_a_new_recommendation_request_with_bad_request_type() throws Exception {
         // arrange
@@ -244,7 +240,6 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
         RecommendationRequest recReq1 = RecommendationRequest.builder()
                 .professor(mockUser)
                 .requester(currentUserService.getCurrentUser().getUser())
-                .professorEmail("email.com")
                 .recommendationType(requestType)
                 .details("")
                 .submissionDate(ld)
@@ -269,7 +264,7 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
         assertTrue(responseString.contains("EntityNotFoundException"));
     }
 
-    @WithMockUser(roles = { "ADMIN", "STUDENT" })
+    @WithMockUser(roles = { "STUDENT" })
     @Test
     public void a_student_user_cant_post_a_new_recommendation_request_with_non_existent_professor_user() throws Exception {
         // arrange
@@ -281,7 +276,6 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
         RecommendationRequest recReq1 = RecommendationRequest.builder()
                 .professor(mockUser)
                 .requester(currentUserService.getCurrentUser().getUser())
-                .professorEmail("email.com")
                 .recommendationType(requestType)
                 .details("")
                 .submissionDate(ld)
@@ -306,7 +300,7 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
         assertTrue(responseString.contains("EntityNotFoundException"));
     }
 
-    @WithMockUser(roles = { "ADMIN", "STUDENT" })
+    @WithMockUser(roles = { "STUDENT" })
     @Test
     public void a_student_user_cant_post_a_new_recommendation_request_with_user_whos_not_a_professor() throws Exception {
         // arrange
@@ -318,7 +312,6 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
         RecommendationRequest recReq1 = RecommendationRequest.builder()
                 .professor(mockUser1)
                 .requester(currentUserService.getCurrentUser().getUser())
-                .professorEmail("email.com")
                 .recommendationType(requestType)
                 .details("")
                 .submissionDate(ld)
@@ -359,7 +352,6 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
             RecommendationRequest recReqOrig = RecommendationRequest.builder()
                         .professor(mockUser)
                         .requester(mockRequester)
-                        .professorEmail("email.com")
                         .recommendationType(requestType)
                         .details("")
                         .submissionDate(ld1)
@@ -370,7 +362,6 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
             RecommendationRequest recReqEdited = RecommendationRequest.builder()
                         .professor(mockUser)
                         .requester(mockRequester)
-                        .professorEmail("edit")
                         .recommendationType(requestType2)
                         .details("edit")
                         .submissionDate(ld1)
@@ -410,7 +401,6 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
             RecommendationRequest recReqEdited = RecommendationRequest.builder()
                         .professor(mockUser)
                         .requester(mockRequester)
-                        .professorEmail("email.com")
                         .recommendationType(requestType)
                         .details("")
                         .submissionDate(ld1)
@@ -437,19 +427,18 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
             assertEquals("RecommendationRequest with id 67 not found", json.get("message"));
     }
 
-    @WithMockUser(roles = { "ADMIN", "USER" })
+    @WithMockUser(roles = { "USER" })
     @Test
-    public void admin_can_delete_a_recommendation_request() throws Exception {
+    public void user_can_delete_a_recommendation_request() throws Exception {
             // arrange
 
             LocalDate ld1 = LocalDate.parse("2022-01-03");
             User mockUser = User.builder().fullName("test").professor(true).build();
-            User mockRequester = User.builder().fullName("student").student(true).build();
+            // User mockRequester = User.builder().fullName("student").student(true).build();
             RequestType requestType = RequestType.builder().id(1L).requestType("type").build();
             RecommendationRequest recommendationRequest = RecommendationRequest.builder()
                         .professor(mockUser)                        
-                        .requester(mockRequester)
-                        .professorEmail("email.com")
+                        .requester(currentUserService.getCurrentUser().getUser())
                         .recommendationType(requestType)
                         .details("")
                         .submissionDate(ld1)
@@ -472,10 +461,40 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
             Map<String, Object> json = responseToJson(response);
             assertEquals("RecommendationRequest with id 1 deleted", json.get("message"));
     }
-
-    @WithMockUser(roles = { "ADMIN", "USER" })
+    @WithMockUser(roles = { "USER" })
     @Test
-    public void admin_tries_to_delete_non_existant_recommendation_request_and_gets_right_error_message()
+    public void user_cant_delete_a_recommendation_request_they_didnt_author() throws Exception {
+            // arrange
+
+            LocalDate ld1 = LocalDate.parse("2022-01-03");
+            User mockUser = User.builder().fullName("test").professor(true).build();
+            User mockRequester = User.builder().fullName("student").student(true).build();
+            RequestType requestType = RequestType.builder().id(1L).requestType("type").build();
+            RecommendationRequest recommendationRequest = RecommendationRequest.builder()
+                        .professor(mockUser)                        
+                        .requester(mockRequester)
+                        .recommendationType(requestType)
+                        .details("")
+                        .submissionDate(ld1)
+                        .completionDate(null)
+                        .status("pending")
+                        .build();
+
+            when(recommendationRequestRepository.findById(eq(1L))).thenReturn(Optional.of(recommendationRequest));
+
+            // act
+            MvcResult response = mockMvc.perform(
+                            delete("/api/recommendationrequest?id=1")
+                                            .with(csrf()))
+                            .andExpect(status().isForbidden()).andReturn();
+
+            // assert
+            verify(recommendationRequestRepository, times(1)).findById(eq(1L));
+    }
+
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void user_tries_to_delete_non_existant_recommendation_request_and_gets_right_error_message()
                     throws Exception {
             // arrange
 
@@ -504,7 +523,6 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
             RecommendationRequest recReq1 = RecommendationRequest.builder()
                         .professor(mockUser)
                         .requester(mockRequester)
-                        .professorEmail("email.com")
                         .recommendationType(requestType)
                         .details("")
                         .submissionDate(ld1)
@@ -518,7 +536,6 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
             RecommendationRequest recReq2 = RecommendationRequest.builder()
                         .professor(mockUser)
                         .requester(mockRequester2)
-                        .professorEmail("email.com")
                         .recommendationType(requestType)
                         .details("")
                         .submissionDate(ld2)
@@ -530,7 +547,6 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
             RecommendationRequest recReq3 = RecommendationRequest.builder()
                         .professor(mockUser2)
                         .requester(mockRequester2)
-                        .professorEmail("email.com")
                         .recommendationType(requestType)
                         .details("")
                         .submissionDate(ld2)
@@ -585,7 +601,6 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
             RecommendationRequest recReq1 = RecommendationRequest.builder()
                         .professor(mockUser)
                         .requester(mockRequester)
-                        .professorEmail("email.com")
                         .recommendationType(requestType)
                         .details("")
                         .submissionDate(ld1)
@@ -598,7 +613,6 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
             RecommendationRequest recReq2 = RecommendationRequest.builder()
                         .professor(mockUser)
                         .requester(mockRequester)
-                        .professorEmail("email.com")
                         .recommendationType(requestType)
                         .details("")
                         .submissionDate(ld2)
@@ -611,7 +625,6 @@ public class RecommendationRequestControllerTests extends ControllerTestCase{
             RecommendationRequest recReq3 = RecommendationRequest.builder()
                         .professor(mockUser2)
                         .requester(mockRequester2)
-                        .professorEmail("email.com")
                         .recommendationType(requestType)
                         .details("")
                         .submissionDate(ld2)
