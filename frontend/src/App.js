@@ -3,10 +3,6 @@ import HomePage from "main/pages/HomePage";
 import ProfilePage from "main/pages/ProfilePage";
 import AdminUsersPage from "main/pages/AdminUsersPage";
 
-import RestaurantIndexPage from "main/pages/Restaurants/RestaurantIndexPage";
-import RestaurantCreatePage from "main/pages/Restaurants/RestaurantCreatePage";
-import RestaurantEditPage from "main/pages/Restaurants/RestaurantEditPage";
-
 import RequestTypeCreatePage from "main/pages/RequestTypes/RequestTypeCreatePage";
 
 import PlaceholderIndexPage from "main/pages/Placeholder/PlaceholderIndexPage";
@@ -17,7 +13,6 @@ import { hasRole, useCurrentUser } from "main/utils/currentUser";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "react-toastify/dist/ReactToastify.css";
-import PlaceholderRequestTypeIndexPage from "main/pages/RequestTypes/PlaceholderRequestTypeIndexPage";
 
 function App() {
   const { data: currentUser } = useCurrentUser();
@@ -30,37 +25,9 @@ function App() {
         {hasRole(currentUser, "ROLE_ADMIN") && (
           <Route exact path="/admin/users" element={<AdminUsersPage />} />
         )}
-        {hasRole(currentUser, "ROLE_USER") && (
-          <>
-            <Route
-              exact
-              path="/restaurants"
-              element={<RestaurantIndexPage />}
-            />
-          </>
-        )}
-        {hasRole(currentUser, "ROLE_ADMIN") && (
-          <>
-            <Route
-              exact
-              path="/restaurants/edit/:id"
-              element={<RestaurantEditPage />}
-            />
-            <Route
-              exact
-              path="/restaurants/create"
-              element={<RestaurantCreatePage />}
-            />
-          </>
-        )}
         {(hasRole(currentUser, "ROLE_ADMIN") ||
           hasRole(currentUser, "ROLE_INSTRUCTOR")) && (
           <>
-            <Route
-              exact
-              path="/settings/requesttypes"
-              element={<PlaceholderRequestTypeIndexPage />}
-            />
             <Route
               exact
               path="/settings/requesttypes/create"
