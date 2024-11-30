@@ -408,6 +408,8 @@ public class RecommendationRequestTests extends ControllerTestCase {
                 assertEquals("EntityNotFoundException", json.get("type"));
                 assertEquals("RequestType with id CS Department BS/MS program not found", json.get("message"));
 
+        }
+        
         @Test
         @WithMockUser(roles = "PROFESSOR")
         public void test_professor_can_get_recommendation_request_by_type() throws Exception {
