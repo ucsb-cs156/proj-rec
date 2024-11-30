@@ -104,6 +104,54 @@ const apiCurrentUserFixtures = {
       admin: false,
     },
   },
+  professorUser: {
+    user: {
+      id: 3,
+      email: "professor@ucsb.edu",
+      googleSub: "109850895733089793576",
+      pictureUrl:
+        "https://lh3.googleusercontent.com/-bQynVrzVIrU/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucmkGuVsELD1ZeV5iDUAUfe6_K-p8w/s96-c/photo.jpg",
+      fullName: "Professor Gaucho",
+      givenName: "Profesor",
+      familyName: "Gaucho",
+      emailVerified: true,
+      locale: null,
+      hostedDomain: null,
+      admin: false,
+      student: false,
+      professor: true,
+    },
+    roles: [
+      {
+        authority: "SCOPE_openid",
+      },
+      {
+        authority: "ROLE_USER",
+      },
+      {
+        authority: "SCOPE_https://www.googleapis.com/auth/userinfo.profile",
+      },
+      {
+        authority: "ROLE_PROFESSOR",
+      },
+      {
+        authority: "SCOPE_https://www.googleapis.com/auth/userinfo.email",
+      },
+      {
+        authority: "OAUTH2_USER",
+        attributes: {
+          sub: "109850895733089793576",
+          name: "Professor Gaucho",
+          given_name: "Professor",
+          family_name: "Gaucho",
+          picture:
+            "https://lh3.googleusercontent.com/-bQynVrzVIrU/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucmkGuVsELD1ZeV5iDUAUfe6_K-p8w/s96-c/photo.jpg",
+          email: "professor@ucsb.edu",
+          email_verified: true,
+        },
+      },
+    ],
+  },
 };
 
 const currentUserFixtures = {
@@ -136,6 +184,19 @@ const currentUserFixtures = {
   notLoggedIn: {
     loggedIn: false,
     root: {},
+  },
+  professorUser: {
+    loggedIn: true,
+    root: {
+      ...apiCurrentUserFixtures.professorUser,
+      rolesList: [
+        "SCOPE_openid",
+        "ROLE_USER",
+        "ROLE_PROFESSOR",
+        "SCOPE_https://www.googleapis.com/auth/userinfo.profile",
+        "SCOPE_https://www.googleapis.com/auth/userinfo.email",
+      ],
+    },
   },
 };
 

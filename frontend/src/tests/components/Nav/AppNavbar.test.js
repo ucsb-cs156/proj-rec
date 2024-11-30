@@ -159,9 +159,8 @@ describe("AppNavbar tests", () => {
     );
   });
 
-  // Will need to update this test for professor users
-  test("renders the three prof pages correctly for admin users", async () => {
-    const currentUser = currentUserFixtures.adminUser;
+  test("renders the three prof pages correctly for professor users", async () => {
+    const currentUser = currentUserFixtures.professorUser;
     const systemInfo = systemInfoFixtures.showingBoth;
     const doLogin = jest.fn();
 
