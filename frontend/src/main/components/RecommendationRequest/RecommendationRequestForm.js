@@ -102,7 +102,7 @@ function RecommendationRequestForm({
         </Col>
       </Row>
       <Row>
-      <Col>
+        <Col>
           <Form.Group className="mb-3">
             <Form.Label htmlFor="details">Requester Name</Form.Label>
             <Form.Control
@@ -132,12 +132,8 @@ function RecommendationRequestForm({
               })}
             >
               <option value="">--Select an Option --</option>
-              <option value="Placeholder1">
-                  Placeholder 1
-              </option>
-              <option value="Placeholder2">
-                Placeholder 2
-              </option>
+              <option value="Placeholder1">Placeholder 1</option>
+              <option value="Placeholder2">Placeholder 2</option>
               <option value="Other">Other</option>
             </Form.Select>
             <Form.Control.Feedback type="invalid">

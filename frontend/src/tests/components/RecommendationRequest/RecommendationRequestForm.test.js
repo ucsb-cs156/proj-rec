@@ -24,7 +24,11 @@ describe("RecommendationRequestForm tests", () => {
   test("renders correctly when passing in a RecommendationRequest", async () => {
     render(
       <Router>
-        <RecommendationRequestForm initialContents={recommendationRequestFixtures.oneRecommendationRequest} />
+        <RecommendationRequestForm
+          initialContents={
+            recommendationRequestFixtures.oneRecommendationRequest
+          }
+        />
       </Router>,
     );
     await screen.findByTestId("RecommendationRequestForm-id");
@@ -38,8 +42,12 @@ describe("RecommendationRequestForm tests", () => {
         <RecommendationRequestForm />
       </Router>,
     );
-    const recommendationTypesField = screen.getByTestId("RecommendationRequestForm-recommendationTypes");
-    const detailsField = screen.getByTestId("RecommendationRequestForm-details");
+    const recommendationTypesField = screen.getByTestId(
+      "RecommendationRequestForm-recommendationTypes",
+    );
+    const detailsField = screen.getByTestId(
+      "RecommendationRequestForm-details",
+    );
     const submitButton = screen.getByTestId("RecommendationRequestForm-submit");
 
     fireEvent.change(recommendationTypesField, { target: { value: "" } });
@@ -76,18 +84,34 @@ describe("RecommendationRequestForm tests", () => {
       </Router>,
     );
 
-    const professorNameField = screen.getByTestId("RecommendationRequestForm-professorName");
-    const professorEmailField = screen.getByTestId("RecommendationRequestForm-professorEmail");
-    const requesterNameField = screen.getByTestId("RecommendationRequestForm-requesterName");
-    const detailsField = screen.getByTestId("RecommendationRequestForm-details");
-    const recommendationTypesField = screen.getByTestId("RecommendationRequestForm-recommendationTypes");
+    const professorNameField = screen.getByTestId(
+      "RecommendationRequestForm-professorName",
+    );
+    const professorEmailField = screen.getByTestId(
+      "RecommendationRequestForm-professorEmail",
+    );
+    const requesterNameField = screen.getByTestId(
+      "RecommendationRequestForm-requesterName",
+    );
+    const detailsField = screen.getByTestId(
+      "RecommendationRequestForm-details",
+    );
+    const recommendationTypesField = screen.getByTestId(
+      "RecommendationRequestForm-recommendationTypes",
+    );
     const submitButton = screen.getByTestId("RecommendationRequestForm-submit");
 
     fireEvent.change(professorNameField, { target: { value: "Dr. Smith" } });
-    fireEvent.change(professorEmailField, { target: { value: "drsmith@university.edu" } });
+    fireEvent.change(professorEmailField, {
+      target: { value: "drsmith@university.edu" },
+    });
     fireEvent.change(requesterNameField, { target: { value: "Student A" } });
-    fireEvent.change(detailsField, { target: { value: "Letter for graduate school" } });
-    fireEvent.change(recommendationTypesField, { target: { value: "Placeholder1" } });
+    fireEvent.change(detailsField, {
+      target: { value: "Letter for graduate school" },
+    });
+    fireEvent.change(recommendationTypesField, {
+      target: { value: "Placeholder1" },
+    });
     fireEvent.click(submitButton);
 
     await waitFor(() => expect(mockSubmitAction).toHaveBeenCalled());
