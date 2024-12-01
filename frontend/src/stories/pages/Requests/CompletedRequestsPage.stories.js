@@ -16,7 +16,7 @@ export const Empty = Template.bind({});
 Empty.parameters = {
   msw: [
     http.get("/api/currentUser", () => {
-      return HttpResponse.json(apiCurrentUserFixtures.userOnly);
+      return HttpResponse.json(apiCurrentUserFixtures.professorUser);
     }),
     http.get("/api/systemInfo", () => {
       return HttpResponse.json(systemInfoFixtures.showingNeither);
@@ -31,7 +31,7 @@ export const CompletedAndDeniedRequests = Template.bind({});
 CompletedAndDeniedRequests.parameters = {
   msw: [
     http.get("/api/currentUser", () => {
-      return HttpResponse.json(apiCurrentUserFixtures.userOnly);
+      return HttpResponse.json(apiCurrentUserFixtures.professorUser);
     }),
     http.get("/api/systemInfo", () => {
       return HttpResponse.json(systemInfoFixtures.showingNeither);
@@ -46,7 +46,7 @@ export const OnlyCompletedRequests = Template.bind({});
 OnlyCompletedRequests.parameters = {
   msw: [
     http.get("/api/currentUser", () => {
-      return HttpResponse.json(apiCurrentUserFixtures.userOnly);
+      return HttpResponse.json(apiCurrentUserFixtures.professorUser);
     }),
     http.get("/api/systemInfo", () => {
       return HttpResponse.json(systemInfoFixtures.showingNeither);
@@ -63,7 +63,7 @@ export const OnlyDeniedRequests = Template.bind({});
 OnlyDeniedRequests.parameters = {
   msw: [
     http.get("/api/currentUser", () => {
-      return HttpResponse.json(apiCurrentUserFixtures.userOnly);
+      return HttpResponse.json(apiCurrentUserFixtures.professorUser);
     }),
     http.get("/api/systemInfo", () => {
       return HttpResponse.json(systemInfoFixtures.showingNeither);
