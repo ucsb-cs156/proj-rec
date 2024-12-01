@@ -105,7 +105,7 @@ function RecommendationRequestForm({
               data-testid="RecommendationRequestForm-details"
               id="details"
               type="text"
-              isInvalid={Boolean(errors.requesterName)}
+              isInvalid={Boolean(errors.details)}
               {...register("details", {
                 required: "details is required.",
               })}
