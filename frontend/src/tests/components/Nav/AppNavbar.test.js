@@ -140,7 +140,7 @@ describe("AppNavbar tests", () => {
     expect(screen.queryByTestId(/AppNavbarLocalhost/i)).toBeNull();
   });
 
-  test("renders the placeholder link correctly", async () => {
+  test("renders the request types link correctly", async () => {
     const currentUser = currentUserFixtures.userOnly;
     const systemInfo = systemInfoFixtures.showingBoth;
 
@@ -158,13 +158,13 @@ describe("AppNavbar tests", () => {
       </QueryClientProvider>,
     );
 
-    await screen.findByText("Placeholder");
-    const link = screen.getByText("Placeholder");
+    await screen.findByText("Request Type");
+    const link = screen.getByText("Request Type");
     expect(link).toBeInTheDocument();
-    expect(link.getAttribute("href")).toBe("/placeholder");
+    expect(link.getAttribute("href")).toBe("/requesttypes");
   });
 
-  test("Placeholder link does NOT show when not logged in", async () => {
+  test("Request Type links do NOT show when not logged in", async () => {
     const currentUser = null;
     const systemInfo = systemInfoFixtures.showingBoth;
     const doLogin = jest.fn();
@@ -181,7 +181,7 @@ describe("AppNavbar tests", () => {
       </QueryClientProvider>,
     );
 
-    expect(screen.queryByText("Placeholder")).not.toBeInTheDocument();
+    expect(screen.queryByText("Request Type")).not.toBeInTheDocument();
   });
 
   test("when oauthlogin undefined, default value is used", async () => {
