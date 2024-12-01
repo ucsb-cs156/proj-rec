@@ -152,6 +152,54 @@ const apiCurrentUserFixtures = {
       },
     ],
   },
+  studentUser: {
+    user: {
+      id: 4,
+      email: "student@ucsb.edu",
+      googleSub: "109850895733089793577",
+      pictureUrl:
+        "https://lh3.googleusercontent.com/-bQynVrzVIrU/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucmkGuVsELD1ZeV5iDUAUfe6_K-p8w/s96-c/photo.jpg",
+      fullName: "Student Gaucho",
+      givenName: "Student",
+      familyName: "Gaucho",
+      emailVerified: true,
+      locale: null,
+      hostedDomain: null,
+      admin: false,
+      student: true,
+      professor: false,
+    },
+    roles: [
+      {
+        authority: "SCOPE_openid",
+      },
+      {
+        authority: "ROLE_USER",
+      },
+      {
+        authority: "ROLE_STUDENT",
+      },
+      {
+        authority: "SCOPE_https://www.googleapis.com/auth/userinfo.profile",
+      },
+      {
+        authority: "SCOPE_https://www.googleapis.com/auth/userinfo.email",
+      },
+      {
+        authority: "OAUTH2_USER",
+        attributes: {
+          sub: "109850895733089793577",
+          name: "Student Gaucho",
+          given_name: "Student",
+          family_name: "Gaucho",
+          picture:
+            "https://lh3.googleusercontent.com/-bQynVrzVIrU/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucmkGuVsELD1ZeV5iDUAUfe6_K-p8w/s96-c/photo.jpg",
+          email: "student@ucsb.edu",
+          email_verified: true,
+        },
+      },
+    ],
+  },
 };
 
 const currentUserFixtures = {
@@ -193,6 +241,19 @@ const currentUserFixtures = {
         "SCOPE_openid",
         "ROLE_USER",
         "ROLE_PROFESSOR",
+        "SCOPE_https://www.googleapis.com/auth/userinfo.profile",
+        "SCOPE_https://www.googleapis.com/auth/userinfo.email",
+      ],
+    },
+  },
+  studentUser: {
+    loggedIn: true,
+    root: {
+      ...apiCurrentUserFixtures.studentUser,
+      rolesList: [
+        "SCOPE_openid",
+        "ROLE_USER",
+        "ROLE_STUDENT",
         "SCOPE_https://www.googleapis.com/auth/userinfo.profile",
         "SCOPE_https://www.googleapis.com/auth/userinfo.email",
       ],

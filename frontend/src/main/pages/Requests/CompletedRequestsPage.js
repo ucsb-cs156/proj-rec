@@ -1,10 +1,14 @@
 import BasicLayout from "main/layouts/BasicLayout/BasicLayout";
 import { useBackend } from "main/utils/useBackend";
 import RecommendationRequestTable from "main/components/RecommendationRequest/RecommendationRequestTable";
-import { useCurrentUser } from "main/utils/currentUser";
+import { hasRole, useCurrentUser } from "main/utils/currentUser";
 
 export default function CompletedRequestsPage() {
   const { data: currentUser } = useCurrentUser();
+
+  const apiEndpoint = hasRole(currentUser, "ROLE_PROFESSOR")
+    ? "/api/recommendationrequest/professor/all"
+    : "/api/recommendationrequest/requester/all";
 
   const {
     data: requests,
@@ -12,11 +16,11 @@ export default function CompletedRequestsPage() {
     status: _status,
   } = useBackend(
     // Stryker disable next-line all : don't test internal caching of React Query
-    ["/api/recommendationrequest/professor/all"],
+    [apiEndpoint],
     {
       // Stryker disable next-line all : GET is the default, so mutating this to "" doesn't introduce a bug
       method: "GET",
-      url: "/api/recommendationrequest/professor/all",
+      url: apiEndpoint,
     },
     // Stryker disable next-line all : it's hard to test GET requests that are still in progress
     [],
