@@ -58,7 +58,7 @@ public class RecommendationRequestController extends ApiController {
      * 
      * @return an iterable of RecommendationRequest
      */
-    @Operation(summary= "List all recommendation requests")
+    @Operation(summary= "List all recommendation requests created by a user with requesterId")
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/all")
     public Iterable<RecommendationRequest> getAllCurrentUser() {
@@ -70,17 +70,13 @@ public class RecommendationRequestController extends ApiController {
     }
 
     /**
-     * Create a new request
+     * Create a new recommendation request
      * 
-     * @param requesterId   
-     * @param professorEmail     
-     * @param requestType      
-     * @param details          
-     * @param neededByDate 
-     * @param submissionDate
-     * @param completionDate
-     * @param status
-     * @return                  
+     * @param professorId the id of the professor
+     * @param requestType the request type
+     * @param details the details of the recommendation request
+     * @param neededByDate the date the request should be fulfilled by
+     * @return a RecommendationRequest
      */
     @Operation(summary= "Create a new request")
     @PreAuthorize("hasRole('ROLE_USER')")
