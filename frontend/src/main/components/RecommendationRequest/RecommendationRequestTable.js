@@ -20,8 +20,8 @@ export default function RecommendationRequestTable({ requests, currentUser }) {
 
   // when delete success, invalidate the correct query key (depending on user role)
   const apiEndpoint = hasRole(currentUser, "ROLE_PROFESSOR")
-  ? "/api/recommendationrequest/professor/all"
-  : "/api/recommendationrequest/requester/all";
+    ? "/api/recommendationrequest/professor/all"
+    : "/api/recommendationrequest/requester/all";
 
   const deleteMutation = useBackendMutation(
     cellToAxiosParamsDelete,
