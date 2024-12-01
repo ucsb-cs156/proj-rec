@@ -36,7 +36,7 @@ function RecommendationRequestForm({
     };
     const getRequestTypes = async () => {
       try {
-        const response = await fetch("/api/requesttype/all");
+        const response = await fetch("/api/requesttypes/all");
         const data = await response.json();
         setRecommendationTypes(data);
       } catch (error) {

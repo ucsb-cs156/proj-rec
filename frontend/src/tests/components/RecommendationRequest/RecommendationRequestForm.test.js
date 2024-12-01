@@ -28,7 +28,7 @@ describe("RecommendationRequestForm tests", () => {
       .onGet("/api/admin/users/professors")
       .reply(200, usersFixtures.userOnly);
     axiosMock
-      .onGet("/api/requesttype/all")
+      .onGet("/api/requesttypes/all")
       .reply(200, recommendationTypeFixtures.fourTypes);
     global.fetch = jest.fn();
   });
@@ -98,7 +98,7 @@ describe("RecommendationRequestForm tests", () => {
 
     // Assert: Check that fetch was called with the correct URLs
     expect(global.fetch).toHaveBeenCalledWith("/api/admin/users/professors");
-    expect(global.fetch).toHaveBeenCalledWith("/api/requesttype/all");
+    expect(global.fetch).toHaveBeenCalledWith("/api/requesttypes/all");
     await waitFor(() => {
       usersFixtures.twoProfessors.forEach((professor) => {
         expect(screen.getByText(professor.fullName)).toBeInTheDocument();
