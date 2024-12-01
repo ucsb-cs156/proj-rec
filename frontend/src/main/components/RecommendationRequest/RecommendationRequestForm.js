@@ -100,7 +100,7 @@ function RecommendationRequestForm({
       <Row>
         <Col>
           <Form.Group className="mb-3">
-            <Form.Label htmlFor="details">Requester Name</Form.Label>
+            <Form.Label htmlFor="details">Details</Form.Label>
             <Form.Control
               data-testid="RecommendationRequestForm-details"
               id="details"
