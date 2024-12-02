@@ -13,8 +13,8 @@ import org.springframework.stereotype.Repository;
 public interface RecommendationRequestRepository extends CrudRepository<RecommendationRequest, Long> {
     /**
    * This method returns all the RecommendationRequests with a given requesterId.
-   * @param id id of the requester
-   * @return Iterable of RecommendationRequests
+   * @param requesterId id of the requester
+   * @return an iterable of RecommendationRequests
    */
   Iterable<RecommendationRequest> findAllByRequesterId(long requesterId);
 }
