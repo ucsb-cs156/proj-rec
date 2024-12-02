@@ -85,6 +85,98 @@ const recommendationRequestFixtures = {
       },
     },
   ],
+
+  oneCompleted: [
+    {
+      id: 4,
+      requesterEmail: "student4@ucsb.edu",
+      professorEmail: "professor1@ucsb.edu",
+      explanation: "Please write me a recommendation",
+      dateRequested: "2024-02-01T00:00:00",
+      dateNeeded: "2024-03-01T00:00:00",
+      status: "COMPLETED",
+      done: true,
+    },
+  ],
+
+  oneDenied: [
+    {
+      id: 5,
+      requesterEmail: "student5@ucsb.edu",
+      professorEmail: "professor1@ucsb.edu",
+      explanation: "Please write me a recommendation",
+      dateRequested: "2024-02-01T00:00:00",
+      dateNeeded: "2024-03-01T00:00:00",
+      status: "DENIED",
+      done: true,
+    },
+  ],
+
+  mixedRequests: [
+    {
+      id: 6,
+      requesterEmail: "student6@ucsb.edu",
+      professorEmail: "professor1@ucsb.edu",
+      requester: {
+        fullName: "Student Six",
+        email: "student6@ucsb.edu",
+      },
+      professor: {
+        fullName: "Professor One",
+        email: "professor1@ucsb.edu",
+      },
+      details: "Completed request",
+      recommendationType: "Graduate School",
+      status: "COMPLETED",
+      submissionDate: "2024-02-01T00:00:00",
+      dueDate: "2024-03-01T00:00:00",
+      lastModifiedDate: "2024-02-15T00:00:00",
+      completionDate: "2024-02-15T00:00:00",
+      done: true,
+    },
+    {
+      id: 7,
+      requesterEmail: "student7@ucsb.edu",
+      professorEmail: "professor1@ucsb.edu",
+      requester: {
+        fullName: "Student Seven",
+        email: "student7@ucsb.edu",
+      },
+      professor: {
+        fullName: "Professor One",
+        email: "professor1@ucsb.edu",
+      },
+      details: "Denied request",
+      recommendationType: "Graduate School",
+      status: "DENIED",
+      submissionDate: "2024-02-01T00:00:00",
+      dueDate: "2024-03-01T00:00:00",
+      lastModifiedDate: "2024-02-15T00:00:00",
+      completionDate: "2024-02-15T00:00:00",
+      done: true,
+    },
+    {
+      id: 8,
+      requesterEmail: "student8@ucsb.edu",
+      professorEmail: "professor1@ucsb.edu",
+      requester: {
+        fullName: "Student Eight",
+        email: "student8@ucsb.edu",
+      },
+      professor: {
+        fullName: "Professor One",
+        email: "professor1@ucsb.edu",
+      },
+      details: "Pending request",
+      recommendationType: "Graduate School",
+      status: "PENDING",
+      submissionDate: "2024-02-01T00:00:00",
+      dueDate: "2024-03-01T00:00:00",
+      lastModifiedDate: "2024-02-15T00:00:00",
+      completionDate: null,
+      done: false,
+    },
+  ],
 };
 
 export { recommendationRequestFixtures };

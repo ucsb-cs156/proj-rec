@@ -159,9 +159,38 @@ describe("AppNavbar tests", () => {
     );
   });
 
-  // Will need to update this test for professor users
-  test("renders the three prof pages correctly for admin users", async () => {
-    const currentUser = currentUserFixtures.adminUser;
+  test("renders the three prof pages correctly for professor users", async () => {
+    const currentUser = currentUserFixtures.professorUser;
+    const systemInfo = systemInfoFixtures.showingBoth;
+    const doLogin = jest.fn();
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <AppNavbar
+            currentUser={currentUser}
+            systemInfo={systemInfo}
+            doLogin={doLogin}
+          />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    await screen.findByText("Pending Requests");
+    const pendingLink = screen.getByText("Pending Requests");
+    expect(pendingLink).toBeInTheDocument();
+
+    await screen.findByText("Completed Requests");
+    const completedLink = screen.getByText("Completed Requests");
+    expect(completedLink).toBeInTheDocument();
+
+    await screen.findByText("Statistics");
+    const statisticsLink = screen.getByText("Statistics");
+    expect(statisticsLink).toBeInTheDocument();
+  });
+
+  test("renders the three prof pages correctly for student users", async () => {
+    const currentUser = currentUserFixtures.studentUser;
     const systemInfo = systemInfoFixtures.showingBoth;
     const doLogin = jest.fn();
 

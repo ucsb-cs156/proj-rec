@@ -23,7 +23,8 @@ function App() {
         {hasRole(currentUser, "ROLE_ADMIN") && (
           <Route exact path="/admin/users" element={<AdminUsersPage />} />
         )}
-        {hasRole(currentUser, "ROLE_ADMIN") && (
+        {(hasRole(currentUser, "ROLE_PROFESSOR") ||
+          hasRole(currentUser, "ROLE_STUDENT")) && (
           <>
             <Route
               exact
