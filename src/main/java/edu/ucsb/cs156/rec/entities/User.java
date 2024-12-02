@@ -35,9 +35,9 @@ public class User {
   private String locale;
   private String hostedDomain;
   @Builder.Default
-  private boolean admin=false;
+  private Boolean admin=false;
   @Builder.Default
-  private boolean student=false;
+  private Boolean student=false;
   @Builder.Default
-  private boolean professor=false;
+  private Boolean professor=false;
 }
