@@ -38,7 +38,8 @@
                       "nullable": false
                     },
                     "name": "ADMIN",
-                    "type": "BOOLEAN"
+                    "type": "BOOLEAN",
+                    "defaultValue": "false"
                   }
                 },
                 {
@@ -101,13 +102,15 @@
                 {
                   "column": {
                     "name": "PROFESSOR",
-                    "type": "BOOLEAN"
+                    "type": "BOOLEAN",
+                    "defaultValue": "false"
                   }
                 },
                 {
                   "column": {
                     "name": "STUDENT",
-                    "type": "BOOLEAN"
+                    "type": "BOOLEAN",
+                    "defaultValue": "false"
                   }
                 }]
               ,
