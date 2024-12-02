@@ -17,12 +17,6 @@ function RecommendationRequestForm({
 
   const navigate = useNavigate();
 
-  // For explanation, see: https://stackoverflow.com/questions/3143070/javascript-regex-iso-datetime
-  // Note that even this complex regex may still need some tweaks
-
-  // Stryker disable Regex
-
-  // Stryker disable next-line all
 
   return (
     <Form onSubmit={handleSubmit(submitAction)}>
@@ -47,23 +41,6 @@ function RecommendationRequestForm({
       <Row>
         <Col>
           <Form.Group className="mb-3">
-            <Form.Label htmlFor="professorName">Professor Name</Form.Label>
-            <Form.Control
-              data-testid="RecommendationRequestForm-professorName"
-              id="professorName"
-              type="text"
-              isInvalid={Boolean(errors.professorName)}
-              {...register("professorName", {
-                required: "professorName is required.",
-              })}
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.professorName?.message}
-            </Form.Control.Feedback>
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group className="mb-3">
             <Form.Label htmlFor="professorEmail">Professor Email</Form.Label>
             <Form.Control
               data-testid="RecommendationRequestForm-professorEmail"
@@ -81,50 +58,14 @@ function RecommendationRequestForm({
         </Col>
         <Col>
           <Form.Group className="mb-3">
-            <Form.Label htmlFor="requesterName">Requester Name</Form.Label>
-            <Form.Control
-              data-testid="RecommendationRequestForm-requesterName"
-              id="requesterName"
-              type="text"
-              isInvalid={Boolean(errors.requesterName)}
-              {...register("requesterName", {
-                required: "requesterName is required.",
-              })}
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.requesterName?.message}
-            </Form.Control.Feedback>
-          </Form.Group>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Form.Group className="mb-3">
-            <Form.Label htmlFor="details">Details</Form.Label>
-            <Form.Control
-              data-testid="RecommendationRequestForm-details"
-              id="details"
-              type="text"
-              isInvalid={Boolean(errors.details)}
-              {...register("details", {
-                required: "details is required.",
-              })}
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.details?.message}
-            </Form.Control.Feedback>
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group className="mb-3">
-            <Form.Label htmlFor="recommendationTypes">Request Type</Form.Label>
+            <Form.Label htmlFor="recommendationType">Request Type</Form.Label>
             <Form.Select
-              data-testid="RecommendationRequestForm-recommendationTypes"
-              id="recommendationTypes"
+              data-testid="RecommendationRequestForm-recommendationType"
+              id="recommendationType"
               type="string"
-              isInvalid={Boolean(errors.recommendationTypes)}
-              {...register("recommendationTypes", {
-                required: "Request Type is required.",
+              isInvalid={Boolean(errors.recommendationType)}
+              {...register("recommendationType", {
+                required: "Recommendation Type is required.",
               })}
             >
               <option value="">--Select an Option --</option>
@@ -133,9 +74,27 @@ function RecommendationRequestForm({
               <option value="Other">Other</option>
             </Form.Select>
             <Form.Control.Feedback type="invalid">
-              {errors.recommendationTypes?.message}
+              {errors.recommendationType?.message}
             </Form.Control.Feedback>
           </Form.Group>
+        </Col>
+    
+      </Row>
+      <Row>
+        <Col>
+        <Form.Group className="mb-3">
+          <Form.Label htmlFor="details">Details</Form.Label>
+          <Form.Control
+            data-testid="RecommendationRequestForm-details"
+            id="details"
+            type="text"
+            isInvalid={Boolean(errors.details)}
+            {...register("details")}
+          />
+          <Form.Control.Feedback type="invalid">
+            {errors.details?.message}
+          </Form.Control.Feedback>
+        </Form.Group>
         </Col>
       </Row>
 

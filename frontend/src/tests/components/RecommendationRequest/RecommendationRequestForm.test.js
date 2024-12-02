@@ -17,7 +17,7 @@ describe("RecommendationRequestForm tests", () => {
         <RecommendationRequestForm />
       </Router>,
     );
-    await screen.findByText(/Professor Name/);
+    await screen.findByText(/Professor Email/);
     await screen.findByText(/Create/);
   });
 
@@ -43,7 +43,7 @@ describe("RecommendationRequestForm tests", () => {
       </Router>,
     );
     const recommendationTypesField = screen.getByTestId(
-      "RecommendationRequestForm-recommendationTypes",
+      "RecommendationRequestForm-recommendationType",
     );
     const detailsField = screen.getByTestId(
       "RecommendationRequestForm-details",
@@ -54,8 +54,9 @@ describe("RecommendationRequestForm tests", () => {
     fireEvent.change(detailsField, { target: { value: "" } });
     fireEvent.click(submitButton);
 
-    await screen.findByText(/Request Type is required./);
-    expect(screen.getByText(/details is required./)).toBeInTheDocument();
+    await screen.findByText(/Recommendation Type is required./);
+        expect(screen.getByText(/professorEmail is required./)).toBeInTheDocument();
+
   });
 
   test("Correct error messages on missing input", async () => {
@@ -68,11 +69,10 @@ describe("RecommendationRequestForm tests", () => {
 
     fireEvent.click(submitButton);
 
-    await screen.findByText(/professorName is required./);
-    expect(screen.getByText(/professorEmail is required./)).toBeInTheDocument();
-    expect(screen.getByText(/requesterName is required./)).toBeInTheDocument();
-    expect(screen.getByText(/Request Type is required./)).toBeInTheDocument();
-    expect(screen.getByText(/details is required./)).toBeInTheDocument();
+    // await (screen.getByText(/professorEmail is required./)).toBeInTheDocument();
+    await screen.findByText(/Recommendation Type is required./);
+
+    expect(screen.getByText(/Recommendation Type is required./)).toBeInTheDocument();
   });
 
   test("No error messages on good input", async () => {
@@ -84,32 +84,26 @@ describe("RecommendationRequestForm tests", () => {
       </Router>,
     );
 
-    const professorNameField = screen.getByTestId(
-      "RecommendationRequestForm-professorName",
-    );
+   
     const professorEmailField = screen.getByTestId(
       "RecommendationRequestForm-professorEmail",
     );
-    const requesterNameField = screen.getByTestId(
-      "RecommendationRequestForm-requesterName",
-    );
+   
     const detailsField = screen.getByTestId(
       "RecommendationRequestForm-details",
     );
-    const recommendationTypesField = screen.getByTestId(
-      "RecommendationRequestForm-recommendationTypes",
+    const recommendationTypeField = screen.getByTestId(
+      "RecommendationRequestForm-recommendationType",
     );
     const submitButton = screen.getByTestId("RecommendationRequestForm-submit");
 
-    fireEvent.change(professorNameField, { target: { value: "Dr. Smith" } });
     fireEvent.change(professorEmailField, {
       target: { value: "drsmith@university.edu" },
     });
-    fireEvent.change(requesterNameField, { target: { value: "Student A" } });
     fireEvent.change(detailsField, {
       target: { value: "Letter for graduate school" },
     });
-    fireEvent.change(recommendationTypesField, {
+    fireEvent.change(recommendationTypeField, {
       target: { value: "Placeholder1" },
     });
     fireEvent.click(submitButton);
