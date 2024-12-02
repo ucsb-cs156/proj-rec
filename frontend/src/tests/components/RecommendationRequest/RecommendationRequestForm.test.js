@@ -55,8 +55,7 @@ describe("RecommendationRequestForm tests", () => {
     fireEvent.click(submitButton);
 
     await screen.findByText(/Recommendation Type is required./);
-        expect(screen.getByText(/professorEmail is required./)).toBeInTheDocument();
-
+    expect(screen.getByText(/professorEmail is required./)).toBeInTheDocument();
   });
 
   test("Correct error messages on missing input", async () => {
@@ -72,7 +71,9 @@ describe("RecommendationRequestForm tests", () => {
     // await (screen.getByText(/professorEmail is required./)).toBeInTheDocument();
     await screen.findByText(/Recommendation Type is required./);
 
-    expect(screen.getByText(/Recommendation Type is required./)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Recommendation Type is required./),
+    ).toBeInTheDocument();
   });
 
   test("No error messages on good input", async () => {
@@ -84,11 +85,10 @@ describe("RecommendationRequestForm tests", () => {
       </Router>,
     );
 
-   
     const professorEmailField = screen.getByTestId(
       "RecommendationRequestForm-professorEmail",
     );
-   
+
     const detailsField = screen.getByTestId(
       "RecommendationRequestForm-details",
     );

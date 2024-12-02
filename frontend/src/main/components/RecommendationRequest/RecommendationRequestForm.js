@@ -17,7 +17,6 @@ function RecommendationRequestForm({
 
   const navigate = useNavigate();
 
-
   return (
     <Form onSubmit={handleSubmit(submitAction)}>
       <Row>
@@ -78,23 +77,22 @@ function RecommendationRequestForm({
             </Form.Control.Feedback>
           </Form.Group>
         </Col>
-    
       </Row>
       <Row>
         <Col>
-        <Form.Group className="mb-3">
-          <Form.Label htmlFor="details">Details</Form.Label>
-          <Form.Control
-            data-testid="RecommendationRequestForm-details"
-            id="details"
-            type="text"
-            isInvalid={Boolean(errors.details)}
-            {...register("details")}
-          />
-          <Form.Control.Feedback type="invalid">
-            {errors.details?.message}
-          </Form.Control.Feedback>
-        </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label htmlFor="details">Details</Form.Label>
+            <Form.Control
+              data-testid="RecommendationRequestForm-details"
+              id="details"
+              type="text"
+              isInvalid={Boolean(errors.details)}
+              {...register("details")}
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.details?.message}
+            </Form.Control.Feedback>
+          </Form.Group>
         </Col>
       </Row>
 
