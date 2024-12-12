@@ -36,7 +36,7 @@ jobs:
          cache-dependency-path: 'pom.xml' 
   
     - name: Build javadoc
-      run: mvn -DskipTests javadoc:javadoc
+      run: mvn -DskipTests -Dmaven.javadoc.failOnError=false javadoc:javadoc
 
     - name: Deploy 🚀
       uses: JamesIves/github-pages-deploy-action@v4

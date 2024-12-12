@@ -77,13 +77,13 @@ public class SwaggerWebIT {
 
 
         assertThat(
-                page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("UCSBDiningCommons").setExact(true)))
+                page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("RequestTypes").setExact(true)))
                 .isVisible();
 
-        assertThat(page.getByText("Get a single commons"))
+        assertThat(page.getByText("Get a single request type"))
                 .isVisible();
 
-        assertThat(page.getByText("Update a single commons"))
+        assertThat(page.getByText("Update a single request type"))
                 .isVisible();
     }
 
