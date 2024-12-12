@@ -1,0 +1,1 @@
+/opt/hostedtoolcache/Java_Oracle_jdk/21/x64/bin/javadoc @options @packages
