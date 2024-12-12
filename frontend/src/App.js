@@ -2,18 +2,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "main/pages/HomePage";
 import ProfilePage from "main/pages/ProfilePage";
 import AdminUsersPage from "main/pages/AdminUsersPage";
+import AdminRequestsPage from "main/pages/AdminRequestsPage";
+import ProfessorCompletedRequestsPage from "main/pages/Professor/ProfessorCompletedRequestsPage";
+import ProfessorStatisticsPage from "main/pages/Professor/ProfessorStatisticsPage";
+import ProfessorPendingRequestsPage from "main/pages/Professor/ProfessorPendingRequestsPage";
 
-import UCSBDatesIndexPage from "main/pages/UCSBDates/UCSBDatesIndexPage";
-import UCSBDatesCreatePage from "main/pages/UCSBDates/UCSBDatesCreatePage";
-import UCSBDatesEditPage from "main/pages/UCSBDates/UCSBDatesEditPage";
-
-import RestaurantIndexPage from "main/pages/Restaurants/RestaurantIndexPage";
-import RestaurantCreatePage from "main/pages/Restaurants/RestaurantCreatePage";
-import RestaurantEditPage from "main/pages/Restaurants/RestaurantEditPage";
-
-import PlaceholderIndexPage from "main/pages/Placeholder/PlaceholderIndexPage";
-import PlaceholderCreatePage from "main/pages/Placeholder/PlaceholderCreatePage";
-import PlaceholderEditPage from "main/pages/Placeholder/PlaceholderEditPage";
+import RequestTypeIndexPage from "main/pages/RequestType/RequestTypeIndexPage";
+import RequestTypeCreatePage from "main/pages/RequestType/RequestTypeCreatePage";
+import RequestTypeEditPage from "main/pages/RequestType/RequestTypeEditPage";
 
 import { hasRole, useCurrentUser } from "main/utils/currentUser";
 
@@ -33,29 +29,10 @@ function App() {
         )}
         {hasRole(currentUser, "ROLE_USER") && (
           <>
-            <Route exact path="/ucsbdates" element={<UCSBDatesIndexPage />} />
-          </>
-        )}
-        {hasRole(currentUser, "ROLE_ADMIN") && (
-          <>
             <Route
               exact
-              path="/ucsbdates/edit/:id"
-              element={<UCSBDatesEditPage />}
-            />
-            <Route
-              exact
-              path="/ucsbdates/create"
-              element={<UCSBDatesCreatePage />}
-            />
-          </>
-        )}
-        {hasRole(currentUser, "ROLE_USER") && (
-          <>
-            <Route
-              exact
-              path="/restaurants"
-              element={<RestaurantIndexPage />}
+              path="/requesttype"
+              element={<RequestTypeIndexPage />}
             />
           </>
         )}
@@ -63,38 +40,39 @@ function App() {
           <>
             <Route
               exact
-              path="/restaurants/edit/:id"
-              element={<RestaurantEditPage />}
+              path="/requesttype/edit/:id"
+              element={<RequestTypeEditPage />}
             />
             <Route
               exact
-              path="/restaurants/create"
-              element={<RestaurantCreatePage />}
-            />
-          </>
-        )}
-        {hasRole(currentUser, "ROLE_USER") && (
-          <>
-            <Route
-              exact
-              path="/placeholder"
-              element={<PlaceholderIndexPage />}
+              path="/requesttype/create"
+              element={<RequestTypeCreatePage />}
             />
           </>
         )}
         {hasRole(currentUser, "ROLE_ADMIN") && (
-          <>
-            <Route
-              exact
-              path="/placeholder/edit/:id"
-              element={<PlaceholderEditPage />}
-            />
-            <Route
-              exact
-              path="/placeholder/create"
-              element={<PlaceholderCreatePage />}
-            />
-          </>
+          <Route exact path="/admin/requests" element={<AdminRequestsPage />} />
+        )}
+        {hasRole(currentUser, "ROLE_PROFESSOR") && (
+          <Route
+            exact
+            path="/requests/pending"
+            element={<ProfessorPendingRequestsPage />}
+          />
+        )}
+        {hasRole(currentUser, "ROLE_PROFESSOR") && (
+          <Route
+            exact
+            path="/requests/completed"
+            element={<ProfessorCompletedRequestsPage />}
+          />
+        )}
+        {hasRole(currentUser, "ROLE_PROFESSOR") && (
+          <Route
+            exact
+            path="/requests/statistics"
+            element={<ProfessorStatisticsPage />}
+          />
         )}
       </Routes>
     </BrowserRouter>

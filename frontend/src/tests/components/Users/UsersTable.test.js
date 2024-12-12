@@ -1,21 +1,51 @@
 import { render, screen } from "@testing-library/react";
+import { QueryClient, QueryClientProvider } from "react-query";
 import usersFixtures from "fixtures/usersFixtures";
 import UsersTable from "main/components/Users/UsersTable";
 
 describe("UserTable tests", () => {
+  const queryClient = new QueryClient();
   test("renders without crashing for empty table", () => {
-    render(<UsersTable users={[]} />);
+    render(
+      <QueryClientProvider client={queryClient}>
+        <UsersTable users={[]} />
+      </QueryClientProvider>,
+    );
   });
 
   test("renders without crashing for three users", () => {
-    render(<UsersTable users={usersFixtures.threeUsers} />);
+    render(
+      <QueryClientProvider client={queryClient}>
+        <UsersTable users={usersFixtures.threeUsers} />
+      </QueryClientProvider>,
+    );
   });
 
   test("Has the expected colum headers and content", () => {
-    render(<UsersTable users={usersFixtures.threeUsers} />);
+    render(
+      <QueryClientProvider client={queryClient}>
+        <UsersTable users={usersFixtures.threeUsers} />
+      </QueryClientProvider>,
+    );
 
-    const expectedHeaders = ["id", "First Name", "Last Name", "Email", "Admin"];
-    const expectedFields = ["id", "givenName", "familyName", "email", "admin"];
+    const expectedHeaders = [
+      "id",
+      "First Name",
+      "Last Name",
+      "Email",
+      "Admin",
+      "Professor",
+      "Student",
+    ];
+    const expectedFields = [
+      "id",
+      "givenName",
+      "familyName",
+      "email",
+      "admin",
+      "professor",
+      "student",
+    ];
     const testId = "UsersTable";
 
     expectedHeaders.forEach((headerText) => {
@@ -34,11 +64,23 @@ describe("UserTable tests", () => {
     expect(
       screen.getByTestId(`${testId}-cell-row-0-col-admin`),
     ).toHaveTextContent("true");
+    expect(
+      screen.getByTestId(`${testId}-cell-row-0-col-professor`),
+    ).toHaveTextContent("false");
+    expect(
+      screen.getByTestId(`${testId}-cell-row-0-col-student`),
+    ).toHaveTextContent("false");
     expect(screen.getByTestId(`${testId}-cell-row-1-col-id`)).toHaveTextContent(
       "2",
     );
     expect(
       screen.getByTestId(`${testId}-cell-row-1-col-admin`),
+    ).toHaveTextContent("false");
+    expect(
+      screen.getByTestId(`${testId}-cell-row-1-col-professor`),
+    ).toHaveTextContent("true");
+    expect(
+      screen.getByTestId(`${testId}-cell-row-1-col-student`),
     ).toHaveTextContent("false");
   });
 });

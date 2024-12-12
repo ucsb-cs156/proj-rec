@@ -13,6 +13,7 @@ const apiCurrentUserFixtures = {
       locale: "en",
       hostedDomain: "ucsb.edu",
       admin: true,
+      professor: true,
     },
     roles: [
       {
@@ -44,6 +45,9 @@ const apiCurrentUserFixtures = {
       },
       {
         authority: "ROLE_ADMIN",
+      },
+      {
+        authority: "ROLE_PROFESSOR",
       },
     ],
   },
@@ -118,6 +122,7 @@ const currentUserFixtures = {
         "SCOPE_https://www.googleapis.com/auth/userinfo.email",
         "ROLE_USER",
         "ROLE_ADMIN",
+        "ROLE_PROFESSOR",
       ],
     },
   },
