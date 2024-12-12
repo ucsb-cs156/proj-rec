@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RecommendationRequestController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">proj-rec</a> &gt; <a href="index.source.html" class="el_package">edu.ucsb.cs156.rec.controllers</a> &gt; <span class="el_source">RecommendationRequestController.java</span></div><h1>RecommendationRequestController.java</h1><pre class="source lang-java linenums">package edu.ucsb.cs156.rec.controllers;
+
+import edu.ucsb.cs156.rec.entities.RecommendationRequest;
+import edu.ucsb.cs156.rec.errors.EntityNotFoundException;
+import edu.ucsb.cs156.rec.repositories.RecommendationRequestRepository;
+import edu.ucsb.cs156.rec.repositories.UserRepository;
+import edu.ucsb.cs156.rec.entities.User;
+import edu.ucsb.cs156.rec.entities.RequestType;
+import edu.ucsb.cs156.rec.repositories.RequestTypeRepository;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import org.checkerframework.checker.units.qual.g;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.source.IterableConfigurationPropertySource;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.http.HttpStatus;
+
+import jakarta.validation.Valid;
+
+import java.time.LocalDate;
+import java.util.List;
+
+/**
+ * This is a REST controller for RecommendationRequest
+ */
+
+@Tag(name = &quot;RecommendationRequest&quot;)
+@RequestMapping(&quot;/api/recommendationrequest&quot;)
+@RestController
+<span class="fc" id="L48">@Slf4j</span>
+<span class="fc" id="L49">public class RecommendationRequestController extends ApiController{</span>
+    
+    @Autowired
+    RecommendationRequestRepository recommendationRequestRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    RequestTypeRepository requestTypeRepository;
+
+    /**
+     * List all recommendation requests
+     * 
+     * @return an iterable of RecommendationRequest
+     */
+    @Operation(summary= &quot;List all recommendation requests&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+    @GetMapping(&quot;/all&quot;)
+    public Iterable&lt;RecommendationRequest&gt; allRecommendationRequests() {
+<span class="fc" id="L69">        Iterable&lt;RecommendationRequest&gt; requests = recommendationRequestRepository.findAll();</span>
+<span class="fc" id="L70">        return requests;</span>
+    }
+
+    /**
+     * Get a single recommendation request by id
+     * 
+     * @param id the id of the recommendation request
+     * @throws EntityNotFoundException if the recommendation request is not found
+     * @return a recommendation request
+     */
+    @Operation(summary= &quot;Get a single recommendation request&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+    @GetMapping(&quot;&quot;)
+    public RecommendationRequest getById(
+            @Parameter(name=&quot;id&quot;) @RequestParam Long id) {
+<span class="fc" id="L85">        RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)</span>
+<span class="fc" id="L86">                .orElseThrow(() -&gt; new EntityNotFoundException(RecommendationRequest.class, id));</span>
+
+<span class="fc" id="L88">        return recommendationRequest;</span>
+    }
+
+    /**
+     * Create a new recommendation request
+     * @param professorEmail the email of the professor
+     * @param recommendationType the type of recommendations
+     * @param details the other details of the request
+     * @throws EntityNotFoundException if the professor is not found or is hte user does not have the professor role
+     * @return the created RecommendationRequest
+    */
+    
+    @Operation(summary= &quot;Create a new recommendation request&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_STUDENT')&quot;)
+    @PostMapping(&quot;/post&quot;)
+    public RecommendationRequest postRecommendationRequest(
+        @Parameter(name=&quot;professorEmail&quot;) @RequestParam String professorEmail,
+        @Parameter(name=&quot;recommendationType&quot;) @RequestParam String recommendationType,
+        @Parameter(name=&quot;details&quot;) @RequestParam String details)
+        throws JsonProcessingException {
+
+<span class="fc" id="L109">            User prof = userRepository.findByEmail(professorEmail)</span>
+<span class="fc" id="L110">                .orElseThrow(() -&gt; new EntityNotFoundException(User.class, professorEmail));</span>
+            
+<span class="fc bfc" id="L112" title="All 2 branches covered.">            if (!prof.getProfessor()) {</span>
+<span class="fc" id="L113">                throw new EntityNotFoundException(User.class, professorEmail);</span>
+            }
+
+<span class="fc" id="L116">            RequestType type = requestTypeRepository.findByRequestType(recommendationType)</span>
+<span class="fc" id="L117">                .orElseThrow(() -&gt; new EntityNotFoundException(RequestType.class, recommendationType));</span>
+
+<span class="fc" id="L119">            LocalDate currDate = LocalDate.now();</span>
+
+<span class="fc" id="L121">            RecommendationRequest recommendationRequest = new RecommendationRequest();</span>
+<span class="fc" id="L122">            recommendationRequest.setProfessor(prof);</span>
+<span class="fc" id="L123">            recommendationRequest.setRequester(getCurrentUser().getUser());</span>
+<span class="fc" id="L124">            recommendationRequest.setRecommendationType(type);</span>
+<span class="fc" id="L125">            recommendationRequest.setDetails(details);</span>
+<span class="fc" id="L126">            recommendationRequest.setSubmissionDate(currDate);</span>
+<span class="fc" id="L127">            recommendationRequest.setStatus(&quot;pending&quot;);</span>
+
+<span class="fc" id="L129">            RecommendationRequest savedRecommendationRequest = recommendationRequestRepository.save(recommendationRequest);</span>
+
+<span class="fc" id="L131">            return savedRecommendationRequest;</span>
+    }
+
+    /**
+     * Delete a recommendation request
+     * 
+     * @param id the id of the recommendation request to delete
+     * @throws EntityNotFoundException if the recommendation request is not found
+     * @return a message indicating the recommedation request was deleted
+     */
+    @Operation(summary= &quot;Delete a recommendation request&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_USER')&quot;)
+    @DeleteMapping(&quot;&quot;)
+    public Object deleteRecommendationRequest(
+            @Parameter(name=&quot;id&quot;) @RequestParam Long id) {
+<span class="fc" id="L146">        RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)</span>
+<span class="fc" id="L147">                .orElseThrow(() -&gt; new EntityNotFoundException(RecommendationRequest.class, id));</span>
+
+<span class="fc bfc" id="L149" title="All 2 branches covered.">        if( recommendationRequest.getRequester().getId() != getCurrentUser().getUser().getId()) {</span>
+<span class="fc" id="L150">            throw new AccessDeniedException(null);</span>
+        }
+
+<span class="fc" id="L153">        recommendationRequestRepository.delete(recommendationRequest);</span>
+<span class="fc" id="L154">        return genericMessage(&quot;RecommendationRequest with id %s deleted&quot;.formatted(id));</span>
+    }
+
+    /**
+     * Update a single recommendation request
+     * 
+     * @param id       id of the recommendation request to update
+     * @param incoming the new recommendation request
+     * @throws EntityNotFoundException if the recommendation request is not found
+     * @return the updated recommendation request object
+     */
+    @Operation(summary= &quot;Update a single recommendation request&quot;)
+    @PreAuthorize(&quot;hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')&quot;)
+    @PutMapping(&quot;&quot;)
+    public RecommendationRequest updateRecommendationRequest(
+            @Parameter(name=&quot;id&quot;) @RequestParam Long id,
+            @RequestBody @Valid RecommendationRequest incoming) {
+
+<span class="fc" id="L172">        RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)</span>
+<span class="fc" id="L173">                .orElseThrow(() -&gt; new EntityNotFoundException(RecommendationRequest.class, id));</span>
+
+<span class="fc" id="L175">        LocalDate currDate = LocalDate.now();</span>
+
+<span class="fc" id="L177">        recommendationRequest.setRecommendationType(incoming.getRecommendationType());</span>
+<span class="fc" id="L178">        recommendationRequest.setDetails(incoming.getDetails());</span>
+<span class="fc" id="L179">        recommendationRequest.setCompletionDate(currDate);</span>
+<span class="fc" id="L180">        recommendationRequest.setStatus(incoming.getStatus());</span>
+
+<span class="fc" id="L182">        recommendationRequestRepository.save(recommendationRequest);</span>
+
+<span class="fc" id="L184">        return recommendationRequest;</span>
+    }
+
+    /**
+     * Get all recommendation requests by Professor id
+     * 
+     * @param userId the user Id of the professor
+     * @throws EntityNotFoundException if the professor is not found
+     * @return a list of all rec reqs directed towards the professor with the given userId
+     */
+    @Operation(summary= &quot;Get all recommendation requests by Professor's user id&quot;)
+    @PreAuthorize(&quot;hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')&quot;) 
+    @GetMapping(&quot;/professor/{userId}&quot;)
+    public List&lt;RecommendationRequest&gt; getAllRecommendationRequestsByProfessor(
+        @PathVariable(value=&quot;userId&quot;) long userId) {
+
+<span class="fc bfc" id="L200" title="All 2 branches covered.">        if( !userRepository.existsById(userId)) {</span>
+<span class="fc" id="L201">            throw new EntityNotFoundException(User.class, userId);</span>
+        }
+<span class="fc" id="L203">        List&lt;RecommendationRequest&gt; recommendationRequests = recommendationRequestRepository.findAllByProfessorId(userId);</span>
+<span class="fc" id="L204">        return recommendationRequests;</span>
+    }
+
+    /** 
+     * Get all recommendation requests by Requester id
+     * @param userId the user Id of the requester
+     * @throws EntityNotFoundException if the requester is not found
+     * @return a list of all rec reqs made by the requester with the given userId
+     */
+    @Operation(summary = &quot;Get all recommendation requests by Requester's user id&quot;)
+    @PreAuthorize(&quot;hasAnyRole('ROLE_ADMIN', 'ROLE_STUDENT')&quot;)
+    @GetMapping(&quot;/requester/{userId}&quot;)
+    public List&lt;RecommendationRequest&gt; getAllRecommendationRequestsByRequester(
+        @PathVariable(value=&quot;userId&quot;) long userId){
+
+<span class="fc bfc" id="L219" title="All 2 branches covered.">        if( !userRepository.existsById(userId)) {</span>
+<span class="fc" id="L220">            throw new EntityNotFoundException(User.class, userId);</span>
+        }
+<span class="fc" id="L222">        List&lt;RecommendationRequest&gt; recommendationRequests = recommendationRequestRepository.findAllByRequesterId(userId);</span>
+<span class="fc" id="L223">        return recommendationRequests;</span>
+
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

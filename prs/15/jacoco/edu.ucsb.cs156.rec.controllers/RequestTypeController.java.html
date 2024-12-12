@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RequestTypeController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">proj-rec</a> &gt; <a href="index.source.html" class="el_package">edu.ucsb.cs156.rec.controllers</a> &gt; <span class="el_source">RequestTypeController.java</span></div><h1>RequestTypeController.java</h1><pre class="source lang-java linenums">package edu.ucsb.cs156.rec.controllers;
+
+import edu.ucsb.cs156.rec.entities.RequestType;
+import edu.ucsb.cs156.rec.errors.EntityNotFoundException;
+import edu.ucsb.cs156.rec.repositories.RequestTypeRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import jakarta.validation.Valid;
+
+/**
+ * This is a REST controller for Request Types.
+ */
+
+@Tag(name = &quot;Request Types&quot;)
+@RequestMapping(&quot;/api/request-types&quot;)
+@RestController
+<span class="fc" id="L27">@Slf4j</span>
+<span class="fc" id="L28">public class RequestTypeController extends ApiController {</span>
+
+    @Autowired
+    RequestTypeRepository requestTypeRepository;
+
+    /**
+     * This method returns a list of all request types.
+     * @return a list of all request types
+     */
+    @Operation(summary = &quot;List all request types&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_USER')&quot;)
+    @GetMapping(&quot;/all&quot;)
+    public Iterable&lt;RequestType&gt; allRequestTypes() {
+<span class="fc" id="L41">        return requestTypeRepository.findAll();</span>
+    }
+
+    /**
+     * This method returns a single request type.
+     * @param id id of the request type to get
+     * @return a single request type
+     */
+    @Operation(summary = &quot;Get a single request type&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_USER')&quot;)
+    @GetMapping(&quot;&quot;)
+    public RequestType getById(
+            @Parameter(name = &quot;id&quot;) @RequestParam Long id) {
+<span class="fc" id="L54">        return requestTypeRepository.findById(id)</span>
+<span class="fc" id="L55">                .orElseThrow(() -&gt; new EntityNotFoundException(RequestType.class, id));</span>
+    }
+
+    /**
+     * This method creates a new request type. Accessible only to users with the role &quot;ROLE_ADMIN&quot;.
+     * @param description description of the request type
+     * @return the saved request type (with its id field set by the database)
+     */
+    @Operation(summary = &quot;Create a new request type&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+    @PostMapping(&quot;/post&quot;)
+    public ResponseEntity&lt;Object&gt; postRequestType(
+            @Parameter(name = &quot;description&quot;) @RequestParam String description) {
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        if (requestTypeRepository.findByRequestType(description).isPresent()) {</span>
+<span class="fc" id="L69">            return ResponseEntity.badRequest().body(Map.of(</span>
+                &quot;type&quot;, &quot;IllegalArgumentException&quot;,
+                &quot;message&quot;, &quot;Request Type with this description already exists&quot;
+            ));
+        }
+
+<span class="fc" id="L75">        RequestType requestType = RequestType.builder()</span>
+<span class="fc" id="L76">                .requestType(description)</span>
+<span class="fc" id="L77">                .build();</span>
+
+<span class="fc" id="L79">        RequestType savedRequestType = requestTypeRepository.save(requestType);</span>
+<span class="fc" id="L80">        return ResponseEntity.ok(savedRequestType);</span>
+    }
+
+
+    /**
+     * Deletes a request type. Accessible only to users with the role &quot;ROLE_ADMIN&quot;.
+     * @param id id of the request type to delete
+     * @return a message indicating that the request type was deleted
+     */
+    @Operation(summary = &quot;Delete a Request Type&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+    @DeleteMapping(&quot;&quot;)
+    public Object deleteRequestType(
+            @Parameter(name = &quot;id&quot;) @RequestParam Long id) {
+<span class="fc" id="L94">        RequestType requestType = requestTypeRepository.findById(id)</span>
+<span class="fc" id="L95">                .orElseThrow(() -&gt; new EntityNotFoundException(RequestType.class, id));</span>
+
+<span class="fc" id="L97">        requestTypeRepository.delete(requestType);</span>
+<span class="fc" id="L98">        return genericMessage(&quot;Request Type with id %s deleted&quot;.formatted(id));</span>
+    }
+
+    /**
+     * Update a single request type. Accessible only to users with the role &quot;ROLE_ADMIN&quot;.
+     * @param id id of the request type to update
+     * @param description the new description for the request type
+     * @return the updated request type object
+     */
+    @Operation(summary = &quot;Update a single request type&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+    @PutMapping(&quot;&quot;)
+    public ResponseEntity&lt;Object&gt; updateRequestType(
+            @Parameter(name = &quot;id&quot;) @RequestParam Long id,
+            @Parameter(name = &quot;description&quot;) @RequestParam String description) {
+
+<span class="fc" id="L114">        RequestType requestType = requestTypeRepository.findById(id)</span>
+<span class="fc" id="L115">                .orElseThrow(() -&gt; new EntityNotFoundException(RequestType.class, id));</span>
+
+<span class="fc bfc" id="L117" title="All 2 branches covered.">        if (requestTypeRepository.findByRequestType(description).isPresent() &amp;&amp; </span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">            !requestType.getRequestType().equals(description)) {</span>
+<span class="fc" id="L119">            return ResponseEntity.badRequest().body(Map.of(</span>
+                &quot;type&quot;, &quot;IllegalArgumentException&quot;,
+                &quot;message&quot;, &quot;Request Type with this description already exists&quot;
+            ));
+        }
+
+<span class="fc" id="L125">        requestType.setRequestType(description);</span>
+
+<span class="fc" id="L127">        RequestType updatedRequestType = requestTypeRepository.save(requestType);</span>
+<span class="fc" id="L128">        return ResponseEntity.ok(updatedRequestType);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
