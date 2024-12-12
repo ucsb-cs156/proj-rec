@@ -15,7 +15,6 @@ import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
-import com.microsoft.playwright.options.AriaRole;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
@@ -61,8 +60,7 @@ public class SwaggerWebIT {
     }
 
     /**
-     * This test checks that the Swagger page has a few of then endpoints for the
-     * UCSBDiningCommons API.
+     * This test checks that the Swagger page exists.
      * It is probably not necessary to test all controllers or endpoints; we are
      * mainly checking that
      * swagger is appropriate configured and operational. Presumably, if one
@@ -73,17 +71,8 @@ public class SwaggerWebIT {
      * a comprehensive test of the Swagger page.
      */
     @Test
-    public void swagger_page_has_endpoints_for_UCSBDiningCommons() throws Exception {
-
-
-        assertThat(
-                page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("UCSBDiningCommons").setExact(true)))
-                .isVisible();
-
-        assertThat(page.getByText("Get a single commons"))
-                .isVisible();
-
-        assertThat(page.getByText("Update a single commons"))
+    public void swagger_page_exists() throws Exception {
+        assertThat(page.getByText("System Information"))
                 .isVisible();
     }
 

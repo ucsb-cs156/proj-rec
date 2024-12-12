@@ -22,6 +22,9 @@ describe("AppNavbar tests", () => {
     );
 
     await screen.findByText("Welcome, pconrad.cis@gmail.com");
+    expect(
+      screen.queryByTestId("appnavbar-settings-dropdown"),
+    ).not.toBeInTheDocument();
   });
 
   test("renders correctly for admin user", async () => {
@@ -39,6 +42,28 @@ describe("AppNavbar tests", () => {
     await screen.findByText("Welcome, phtcon@ucsb.edu");
     const adminMenu = screen.getByTestId("appnavbar-admin-dropdown");
     expect(adminMenu).toBeInTheDocument();
+    const settingsMenu = screen.getByTestId("appnavbar-settings-dropdown");
+    expect(settingsMenu).toBeInTheDocument();
+  });
+
+  test("renders correctly for instructor user", async () => {
+    const currentUser = currentUserFixtures.instructorUser;
+    const doLogin = jest.fn();
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <AppNavbar currentUser={currentUser} doLogin={doLogin} />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    await screen.findByText("Welcome, pconrad.cis@gmail.com");
+    expect(
+      screen.queryByTestId("appnavbar-admin-dropdown"),
+    ).not.toBeInTheDocument();
+    const settingsMenu = screen.getByTestId("appnavbar-settings-dropdown");
+    expect(settingsMenu).toBeInTheDocument();
   });
 
   test("renders H2Console and Swagger links correctly", async () => {
@@ -140,7 +165,7 @@ describe("AppNavbar tests", () => {
     expect(screen.queryByTestId(/AppNavbarLocalhost/i)).toBeNull();
   });
 
-  test("renders the ucsbdates link correctly", async () => {
+  test("renders the Placeholder link correctly", async () => {
     const currentUser = currentUserFixtures.userOnly;
     const systemInfo = systemInfoFixtures.showingBoth;
 
@@ -158,37 +183,13 @@ describe("AppNavbar tests", () => {
       </QueryClientProvider>,
     );
 
-    await screen.findByText("UCSB Dates");
-    const link = screen.getByText("UCSB Dates");
+    await screen.findByText("Placeholder");
+    const link = screen.getByText("Placeholder");
     expect(link).toBeInTheDocument();
-    expect(link.getAttribute("href")).toBe("/ucsbdates");
+    expect(link.getAttribute("href")).toBe("/placeholder");
   });
 
-  test("renders the restaurants link correctly", async () => {
-    const currentUser = currentUserFixtures.userOnly;
-    const systemInfo = systemInfoFixtures.showingBoth;
-
-    const doLogin = jest.fn();
-
-    render(
-      <QueryClientProvider client={queryClient}>
-        <MemoryRouter>
-          <AppNavbar
-            currentUser={currentUser}
-            systemInfo={systemInfo}
-            doLogin={doLogin}
-          />
-        </MemoryRouter>
-      </QueryClientProvider>,
-    );
-
-    await screen.findByText("Restaurants");
-    const link = screen.getByText("Restaurants");
-    expect(link).toBeInTheDocument();
-    expect(link.getAttribute("href")).toBe("/restaurants");
-  });
-
-  test("Restaurant and UCSBDates links do NOT show when not logged in", async () => {
+  test("Placeholder links do NOT show when not logged in", async () => {
     const currentUser = null;
     const systemInfo = systemInfoFixtures.showingBoth;
     const doLogin = jest.fn();
@@ -205,8 +206,7 @@ describe("AppNavbar tests", () => {
       </QueryClientProvider>,
     );
 
-    expect(screen.queryByText("Restaurants")).not.toBeInTheDocument();
-    expect(screen.queryByText("UCSBDates")).not.toBeInTheDocument();
+    expect(screen.queryByText("Placeholder")).not.toBeInTheDocument();
   });
 
   test("when oauthlogin undefined, default value is used", async () => {
