@@ -38,7 +38,8 @@
                       "nullable": false
                     },
                     "name": "ADMIN",
-                    "type": "BOOLEAN"
+                    "type": "BOOLEAN",
+                    "defaultValue": "false"
                   }
                 },
                 {
@@ -97,12 +98,25 @@
                     "name": "PICTURE_URL",
                     "type": "VARCHAR(255)"
                   }
+                },
+                {
+                  "column": {
+                    "name": "PROFESSOR",
+                    "type": "BOOLEAN",
+                    "defaultValue": "false"
+                  }
+                },
+                {
+                  "column": {
+                    "name": "STUDENT",
+                    "type": "BOOLEAN",
+                    "defaultValue": "false"
+                  }
                 }]
               ,
               "tableName": "USERS"
             }
           }]
-  
       }
     }
   ]}

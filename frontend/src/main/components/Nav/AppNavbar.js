@@ -58,20 +58,19 @@ export default function AppNavbar({
                   <NavDropdown.Item href="/admin/users">Users</NavDropdown.Item>
                 </NavDropdown>
               )}
-              {currentUser && currentUser.loggedIn ? (
+              {(hasRole(currentUser, "ROLE_PROFESSOR") ||
+                hasRole(currentUser, "ROLE_STUDENT")) && (
                 <>
-                  <Nav.Link as={Link} to="/restaurants">
-                    Restaurants
+                  <Nav.Link as={Link} to="/requests/pending">
+                    Pending Requests
                   </Nav.Link>
-                  <Nav.Link as={Link} to="/ucsbdates">
-                    UCSB Dates
+                  <Nav.Link as={Link} to="/requests/completed">
+                    Completed Requests
                   </Nav.Link>
-                  <Nav.Link as={Link} to="/placeholder">
-                    Placeholder
+                  <Nav.Link as={Link} to="/requests/statistics">
+                    Statistics
                   </Nav.Link>
                 </>
-              ) : (
-                <></>
               )}
             </Nav>
 

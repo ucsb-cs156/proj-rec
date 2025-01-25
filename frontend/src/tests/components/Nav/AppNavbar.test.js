@@ -140,75 +140,6 @@ describe("AppNavbar tests", () => {
     expect(screen.queryByTestId(/AppNavbarLocalhost/i)).toBeNull();
   });
 
-  test("renders the ucsbdates link correctly", async () => {
-    const currentUser = currentUserFixtures.userOnly;
-    const systemInfo = systemInfoFixtures.showingBoth;
-
-    const doLogin = jest.fn();
-
-    render(
-      <QueryClientProvider client={queryClient}>
-        <MemoryRouter>
-          <AppNavbar
-            currentUser={currentUser}
-            systemInfo={systemInfo}
-            doLogin={doLogin}
-          />
-        </MemoryRouter>
-      </QueryClientProvider>,
-    );
-
-    await screen.findByText("UCSB Dates");
-    const link = screen.getByText("UCSB Dates");
-    expect(link).toBeInTheDocument();
-    expect(link.getAttribute("href")).toBe("/ucsbdates");
-  });
-
-  test("renders the restaurants link correctly", async () => {
-    const currentUser = currentUserFixtures.userOnly;
-    const systemInfo = systemInfoFixtures.showingBoth;
-
-    const doLogin = jest.fn();
-
-    render(
-      <QueryClientProvider client={queryClient}>
-        <MemoryRouter>
-          <AppNavbar
-            currentUser={currentUser}
-            systemInfo={systemInfo}
-            doLogin={doLogin}
-          />
-        </MemoryRouter>
-      </QueryClientProvider>,
-    );
-
-    await screen.findByText("Restaurants");
-    const link = screen.getByText("Restaurants");
-    expect(link).toBeInTheDocument();
-    expect(link.getAttribute("href")).toBe("/restaurants");
-  });
-
-  test("Restaurant and UCSBDates links do NOT show when not logged in", async () => {
-    const currentUser = null;
-    const systemInfo = systemInfoFixtures.showingBoth;
-    const doLogin = jest.fn();
-
-    render(
-      <QueryClientProvider client={queryClient}>
-        <MemoryRouter>
-          <AppNavbar
-            currentUser={currentUser}
-            systemInfo={systemInfo}
-            doLogin={doLogin}
-          />
-        </MemoryRouter>
-      </QueryClientProvider>,
-    );
-
-    expect(screen.queryByText("Restaurants")).not.toBeInTheDocument();
-    expect(screen.queryByText("UCSBDates")).not.toBeInTheDocument();
-  });
-
   test("when oauthlogin undefined, default value is used", async () => {
     const currentUser = currentUserFixtures.notLoggedIn;
     const systemInfo = systemInfoFixtures.oauthLoginUndefined;
@@ -226,5 +157,109 @@ describe("AppNavbar tests", () => {
       "href",
       "/oauth2/authorization/google",
     );
+  });
+
+  test("renders the three prof pages correctly for professor users", async () => {
+    const currentUser = currentUserFixtures.professorUser;
+    const systemInfo = systemInfoFixtures.showingBoth;
+    const doLogin = jest.fn();
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <AppNavbar
+            currentUser={currentUser}
+            systemInfo={systemInfo}
+            doLogin={doLogin}
+          />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    await screen.findByText("Pending Requests");
+    const pendingLink = screen.getByText("Pending Requests");
+    expect(pendingLink).toBeInTheDocument();
+
+    await screen.findByText("Completed Requests");
+    const completedLink = screen.getByText("Completed Requests");
+    expect(completedLink).toBeInTheDocument();
+
+    await screen.findByText("Statistics");
+    const statisticsLink = screen.getByText("Statistics");
+    expect(statisticsLink).toBeInTheDocument();
+  });
+
+  test("renders the three prof pages correctly for student users", async () => {
+    const currentUser = currentUserFixtures.studentUser;
+    const systemInfo = systemInfoFixtures.showingBoth;
+    const doLogin = jest.fn();
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <AppNavbar
+            currentUser={currentUser}
+            systemInfo={systemInfo}
+            doLogin={doLogin}
+          />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    await screen.findByText("Pending Requests");
+    const pendingLink = screen.getByText("Pending Requests");
+    expect(pendingLink).toBeInTheDocument();
+
+    await screen.findByText("Completed Requests");
+    const completedLink = screen.getByText("Completed Requests");
+    expect(completedLink).toBeInTheDocument();
+
+    await screen.findByText("Statistics");
+    const statisticsLink = screen.getByText("Statistics");
+    expect(statisticsLink).toBeInTheDocument();
+  });
+
+  test("the three prof pages do not show for normal users", async () => {
+    const currentUser = currentUserFixtures.userOnly;
+    const systemInfo = systemInfoFixtures.showingBoth;
+    const doLogin = jest.fn();
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <AppNavbar
+            currentUser={currentUser}
+            systemInfo={systemInfo}
+            doLogin={doLogin}
+          />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    expect(screen.queryByText("Pending Requests")).not.toBeInTheDocument();
+    expect(screen.queryByText("Completed Requests")).not.toBeInTheDocument();
+    expect(screen.queryByText("Statistics")).not.toBeInTheDocument();
+  });
+
+  test("the three prof pages do not show when not logged in", async () => {
+    const currentUser = null;
+    const systemInfo = systemInfoFixtures.showingBoth;
+    const doLogin = jest.fn();
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <AppNavbar
+            currentUser={currentUser}
+            systemInfo={systemInfo}
+            doLogin={doLogin}
+          />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    expect(screen.queryByText("Pending Requests")).not.toBeInTheDocument();
+    expect(screen.queryByText("Completed Requests")).not.toBeInTheDocument();
+    expect(screen.queryByText("Statistics")).not.toBeInTheDocument();
   });
 });
