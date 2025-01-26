@@ -223,26 +223,28 @@ describe("utils/currentUser tests", () => {
       expect(hasRole(currentUser, "ROLE_ADMIN")).toBeFalsy();
     });
 
-    test("hasRole falls back correctly with various data missing", async () => {
-      expect(hasRole(null, "ROLE_USER")).toBeFalsy();
-      expect(hasRole({}, "ROLE_USER")).toBeFalsy();
-      expect(hasRole({ currentUser: null }, "ROLE_USER")).toBeFalsy();
-      expect(hasRole({ currentUser: { data: null } }, "ROLE_USER")).toBeFalsy();
-      expect(
-        hasRole({ currentUser: { data: { root: null } } }, "ROLE_USER"),
-      ).toBeFalsy();
-      expect(
-        hasRole(
-          { currentUser: { data: { root: { rolesList: null } } } },
-          "ROLE_USER",
-        ),
-      ).toBeFalsy();
-      expect(
-        hasRole(
-          { currentUser: { data: { root: { rolesList: [] } } } },
-          "ROLE_USER",
-        ),
-      ).toBeFalsy();
-    });
+  test("hasRole falls back correctly with various data missing", async () => {
+    expect(hasRole(null, "ROLE_USER")).toBeFalsy();
+    expect(hasRole({}, "ROLE_USER")).toBeFalsy();
+    expect(hasRole({ data: null } , "ROLE_USER")).toBeFalsy();
+    expect(
+      hasRole({ data: { root: null } }, "ROLE_USER"),
+    ).toBeFalsy();
+    expect(
+      hasRole(
+        { data: { root: { rolesList: null } } },
+        "ROLE_USER",
+      ),
+    ).toBeFalsy();
+    expect(
+      hasRole(
+        { data: { root: { rolesList: [] } } },
+        "ROLE_USER",
+      ),
+    ).toBeFalsy();
+  });
+    expect(
+        hasRole({root: {rolesList: null}})
+    ).toBeFalsy();
   });
 });
