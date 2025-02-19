@@ -3,7 +3,7 @@
 Recommendation Request Manager
 
 Sprint Planning Doc for S25:
-* [<https://docs.google.com/document/d/1XsaIPgepB4uA3owsH8eszXbW2mHFTuW5_bT49K8PcuU/edit?tab=t.0>](https://docs.google.com/document/d/1xM0llmGIZo3nh_wXUIBB0hMxVBKWV_vRMKd61w8nT-A/edit?usp=sharing)
+* https://docs.google.com/document/d/1xM0llmGIZo3nh_wXUIBB0hMxVBKWV_vRMKd61w8nT-A/edit?usp=sharing
 
 # Versions
 * Java: 21
