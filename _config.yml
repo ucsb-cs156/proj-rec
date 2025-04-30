@@ -23,4 +23,4 @@ repo_name: "TBD"
 repo: ucsb-cs156/proj-rec
 owner: ucsb-cs156
 repo_name: proj-rec
-pull_requests: [{"author":{"id":"MDQ6VXNlcjExMTkwMTc=","is_bot":false,"login":"pconrad","name":"Phill Conrad"},"headRefName":"pc-update-setup-java-to-v4","number":12,"title":"Pc update setup java to v4","url":"https://github.com/ucsb-cs156/proj-rec/pull/12"}]
+pull_requests: [{"author":{"id":"MDQ6VXNlcjI2MzQ3ODk3","is_bot":false,"login":"Division7","name":"Daniel Jensen"},"headRefName":"dj-autoConfigurePostgres","number":41,"title":"Adding the Postgres Autoconfiguration Script","url":"https://github.com/ucsb-cs156/proj-rec/pull/41"},{"author":{"id":"MDQ6VXNlcjExMTkwMTc=","is_bot":false,"login":"pconrad","name":"Phill Conrad"},"headRefName":"pc-update-setup-java-to-v4","number":12,"title":"Pc update setup java to v4","url":"https://github.com/ucsb-cs156/proj-rec/pull/12"}]
