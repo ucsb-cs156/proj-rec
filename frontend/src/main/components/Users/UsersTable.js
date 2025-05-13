@@ -3,7 +3,10 @@ import { useBackendMutation } from "main/utils/useBackend";
 
 export default function UsersTable({ users }) {
   // Stryker disable all : hard to test for query caching
+
   // Stryker enable all
+
+  // Stryker disable next-line all : TODO try to make a good test for this
 
   //toggleAdmin
   function cellToAxiosParamsToggleAdmin(cell) {
