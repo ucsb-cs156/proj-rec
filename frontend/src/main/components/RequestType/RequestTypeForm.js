@@ -19,9 +19,7 @@ function RequestTypeForm({
   // Stryker restore all
 
   const [professors, setProfessors] = useState(professorVals);
-  const [requestTypes, setRequestTypes] = useState(
-    requestTypeVals,
-  );
+  const [requestTypes, setRequestTypes] = useState(requestTypeVals);
 
   //queries endpoint to get list of professors
   useEffect(() => {
@@ -115,9 +113,7 @@ function RequestTypeForm({
       <Row>
         <Col>
           <Form.Group className="mb-3">
-            <Form.Label htmlFor="requestType">
-              Request Type
-            </Form.Label>
+            <Form.Label htmlFor="requestType">Request Type</Form.Label>
             <Form.Select
               data-testid="RequestTypeForm-requestType"
               id="requestType"
@@ -128,8 +124,7 @@ function RequestTypeForm({
               })}
               defaultValue=""
             >
-              {Array.isArray(requestTypes) &&
-              requestTypes.length > 0 ? (
+              {Array.isArray(requestTypes) && requestTypes.length > 0 ? (
                 <>
                   <option disabled value="">
                     Select a request type

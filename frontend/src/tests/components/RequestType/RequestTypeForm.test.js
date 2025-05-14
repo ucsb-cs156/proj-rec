@@ -60,9 +60,7 @@ describe("RequestTypeForm tests", () => {
     render(
       <QueryClientProvider client={queryClient}>
         <Router>
-          <RequestTypeForm
-            initialContents={requestTypeFixtures.oneType}
-          />
+          <RequestTypeForm initialContents={requestTypeFixtures.oneType} />
         </Router>
       </QueryClientProvider>,
     );
@@ -150,9 +148,7 @@ describe("RequestTypeForm tests", () => {
     );
     expect(screen.getByText("No professors available")).toBeInTheDocument();
     expect(
-      screen.getByText(
-        "No request types available, use Other in details",
-      ),
+      screen.getByText("No request types available, use Other in details"),
     ).toBeInTheDocument();
     expect(screen.getByText("Other")).toBeInTheDocument();
 
