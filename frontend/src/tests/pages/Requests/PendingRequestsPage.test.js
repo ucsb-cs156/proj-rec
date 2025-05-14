@@ -44,7 +44,7 @@ describe("PendingRequestsPage tests", () => {
     expect(
       screen.getByTestId("RecommendationRequestTable"),
     ).toBeInTheDocument();
-    
+
     await waitFor(() => {
       expect(
         screen.getByTestId(`RecommendationRequestTable-cell-row-0-col-status`),
