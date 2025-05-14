@@ -191,6 +191,7 @@ public class RecommendationRequestController extends ApiController {
      * @param recommendationType recommendation types of request
      * @param details details of request
      * @param dueDate submission date of request
+     * @param completionDate completion date of request
      * @return the save recommendationrequests (with it's id field set by the database)
      */
 
@@ -201,7 +202,8 @@ public class RecommendationRequestController extends ApiController {
             @Parameter(name = "professorId") @RequestParam Long professorId,
             @Parameter(name = "recommendationType") @RequestParam String recommendationType,
             @Parameter(name = "details") @RequestParam String details,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dueDate)
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dueDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime completionDate)
             {
         //get current date right now and set status to pending
         CurrentUser currentUser = getCurrentUser();
@@ -216,7 +218,7 @@ public class RecommendationRequestController extends ApiController {
         recommendationRequest.setRequester(currentUser.getUser());
         recommendationRequest.setStatus("PENDING");
         recommendationRequest.setDueDate(dueDate);
-
+        recommendationRequest.setCompletionDate(completionDate);
         RecommendationRequest savedRecommendationRequest = recommendationRequestRepository.save(recommendationRequest);
         return savedRecommendationRequest;
     }
