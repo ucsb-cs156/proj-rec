@@ -44,7 +44,7 @@ describe("PendingRequestsPage tests", () => {
     expect(
       screen.getByTestId("RecommendationRequestTable"),
     ).toBeInTheDocument();
-
+    
     await waitFor(() => {
       expect(
         screen.getByTestId(`RecommendationRequestTable-cell-row-0-col-status`),
@@ -74,6 +74,86 @@ describe("PendingRequestsPage tests", () => {
       .onGet("/api/systemInfo")
       .reply(200, systemInfoFixtures.showingNeither);
     axiosMock.onGet("/api/recommendationrequest/professor/all").reply(200, []);
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <PendingRequestsPage />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("heading", { level: 1, name: "Pending Requests" }),
+      ).toBeInTheDocument();
+    });
+
+    expect(axiosMock.history.get.length).toBe(3);
+    expect(
+      screen.getByTestId("RecommendationRequestTable"),
+    ).toBeInTheDocument();
+  });
+
+  test("Renders pending requests for student", async () => {
+    axiosMock
+      .onGet("/api/currentUser")
+      .reply(200, apiCurrentUserFixtures.studentUser);
+    axiosMock
+      .onGet("/api/systemInfo")
+      .reply(200, systemInfoFixtures.showingNeither);
+    axiosMock
+      .onGet("/api/recommendationrequest/requester/all")
+      .reply(200, recommendationRequestFixtures.mixedRequests);
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <PendingRequestsPage />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("heading", { level: 1, name: "Pending Requests" }),
+      ).toBeInTheDocument();
+    });
+
+    expect(axiosMock.history.get.length).toBe(3);
+    expect(
+      screen.getByTestId("RecommendationRequestTable"),
+    ).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId(`RecommendationRequestTable-cell-row-0-col-status`),
+      ).toBeInTheDocument();
+    });
+
+    const statusCells = screen.getAllByTestId(
+      /RecommendationRequestTable-cell-row-.*-col-status/,
+    );
+    expect(
+      statusCells.every((cell) => cell.textContent !== "COMPLETED"),
+    ).toBeTruthy();
+    expect(
+      statusCells.every((cell) => cell.textContent !== "DENIED"),
+    ).toBeTruthy();
+
+    expect(
+      statusCells.some((cell) => cell.textContent === "PENDING"),
+    ).toBeTruthy();
+  });
+
+  test("Renders empty table when no pending requests for student", async () => {
+    axiosMock
+      .onGet("/api/currentUser")
+      .reply(200, apiCurrentUserFixtures.studentUser);
+    axiosMock
+      .onGet("/api/systemInfo")
+      .reply(200, systemInfoFixtures.showingNeither);
+    axiosMock.onGet("/api/recommendationrequest/requester/all").reply(200, []);
 
     render(
       <QueryClientProvider client={queryClient}>
