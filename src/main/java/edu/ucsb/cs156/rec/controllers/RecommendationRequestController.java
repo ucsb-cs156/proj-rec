@@ -146,7 +146,7 @@ public class RecommendationRequestController extends ApiController {
     @GetMapping("/requester/all")
     public Iterable<RecommendationRequest> allRequesterRecommendationRequests(
     ) {
-        // toyed with having this only be ROLE_STUDENT but I think even professors should be able to submit requests so they can see which ones they have submitted too
+        // Professors should be able to submit requests so they can see which ones they have submitted to
         User currentUser = getCurrentUser().getUser();
         Iterable<RecommendationRequest> recommendationRequests = recommendationRequestRepository.findAllByRequesterId(currentUser.getId());
         return recommendationRequests;
