@@ -4,7 +4,6 @@ import UsersTable from "main/components/Users/UsersTable";
 import { QueryClient, QueryClientProvider } from "react-query";
 import axios from "axios";
 import AxiosMockAdapter from "axios-mock-adapter";
-import mockConsole from "jest-mock-console";
 
 const mockToast = jest.fn();
 jest.mock("react-toastify", () => {
@@ -109,12 +108,13 @@ describe("UserTable tests", () => {
       })
       .reply(200);
 
+
     render(
       <QueryClientProvider client={queryClient}>
-        <UsersTable
-          users={usersFixtures.threeUsers}
+        <UsersTable users={usersFixtures.threeUsers} 
           currentUser={currentUser}
         />
+        
       </QueryClientProvider>,
     );
 
@@ -129,9 +129,7 @@ describe("UserTable tests", () => {
       expect(axiosMock.history.post.length).toBe(1);
     });
 
-    expect(axiosMock.history.post[0].url).toBe(
-      "/api/admin/users/toggleProfessor",
-    );
+    expect(axiosMock.history.post[0].url).toBe("/api/admin/users/toggleProfessor");
 
     expect(axiosMock.history.post[0].params).toEqual({ id: 1 });
   });
@@ -147,10 +145,10 @@ describe("UserTable tests", () => {
 
     render(
       <QueryClientProvider client={queryClient}>
-        <UsersTable
-          users={usersFixtures.threeUsers}
+        <UsersTable users={usersFixtures.threeUsers} 
           currentUser={currentUser}
         />
+        
       </QueryClientProvider>,
     );
 
@@ -181,8 +179,7 @@ describe("UserTable tests", () => {
 
     render(
       <QueryClientProvider client={queryClient}>
-        <UsersTable
-          users={usersFixtures.threeUsers}
+        <UsersTable users={usersFixtures.threeUsers} 
           currentUser={currentUser}
         />
       </QueryClientProvider>,
@@ -199,9 +196,7 @@ describe("UserTable tests", () => {
       expect(axiosMock.history.post.length).toBe(3);
     });
 
-    expect(axiosMock.history.post[2].url).toBe(
-      "/api/admin/users/toggleStudent",
-    );
+    expect(axiosMock.history.post[2].url).toBe("/api/admin/users/toggleStudent");
 
     expect(axiosMock.history.post[2].params).toEqual({ id: 1 });
   });
