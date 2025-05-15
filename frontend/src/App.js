@@ -7,8 +7,8 @@ import StudentProfilePage from "main/pages/StudentProfilePage";
 import PendingRequestsPage from "main/pages/Requests/PendingRequestsPage";
 import CompletedRequestsPage from "main/pages/Requests/CompletedRequestsPage";
 import StatisticsPage from "main/pages/Requests/StatisticsPage";
-import CreateRecommendationRequestPage from "main/pages/Requests/CreateRecommendationRequestPage";
-import EditRecommendationRequestPage from "main/pages/Requests/EditRecommendationRequestPage";
+import RecommendationRequestCreatePage from "main/pages/Requests/RecommendationRequestCreatePage";
+import RecommendationRequestEditPage from "main/pages/Requests/RecommendationRequestEditPage";
 
 import { hasRole, useCurrentUser } from "main/utils/currentUser";
 
@@ -25,7 +25,13 @@ function App() {
         <Route
           exact
           path="/profile"
-          element={hasRole(currentUser, "ROLE_STUDENT") ? <StudentProfilePage /> : <ProfilePage />}
+          element={
+            hasRole(currentUser, "ROLE_STUDENT") ? (
+              <StudentProfilePage />
+            ) : (
+              <ProfilePage />
+            )
+          }
         />
         {hasRole(currentUser, "ROLE_ADMIN") && (
           <Route exact path="/admin/users" element={<AdminUsersPage />} />
@@ -50,13 +56,13 @@ function App() {
             />
             <Route
               exact
-              path="/recommendation-requests/create"
-              element={<CreateRecommendationRequestPage />}
+              path="/requests/create"
+              element={<RecommendationRequestCreatePage />}
             />
             <Route
               exact
-              path="/recommendation-requests/edit/:id"
-              element={<EditRecommendationRequestPage />}
+              path="/requests/edit/:id"
+              element={<RecommendationRequestEditPage />}
             />
           </>
         )}

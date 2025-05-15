@@ -58,7 +58,7 @@ function RecommendationRequestForm({
   const onSubmit = (data) => {
     // If dueDate is present and only a date (YYYY-MM-DD), append T00:00:00
     if (data.dueDate && /^\d{4}-\d{2}-\d{2}$/.test(data.dueDate)) {
-      data.dueDate = data.dueDate + 'T00:00:00';
+      data.dueDate = data.dueDate + "T00:00:00";
     }
     submitAction(data);
   };
