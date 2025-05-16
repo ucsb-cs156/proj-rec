@@ -29,7 +29,11 @@ function App() {
         {hasRole(currentUser, "ROLE_ADMIN") && (
           <>
             <Route exact path="/admin/users" element={<AdminUsersPage />} />
-            <Route exact path="/admin/requests" element={<AdminRequestsPage />} />
+            <Route
+              exact
+              path="/admin/requests"
+              element={<AdminRequestsPage />}
+            />
           </>
         )}
         {(hasRole(currentUser, "ROLE_ADMIN") ||
@@ -65,24 +69,24 @@ function App() {
         )}
         {(hasRole(currentUser, "ROLE_PROFESSOR") ||
           hasRole(currentUser, "ROLE_STUDENT")) && (
-            <>
-              <Route
-                exact
-                path="/requests/pending"
-                element={<PendingRequestsPage />}
-              />
-              <Route
-                exact
-                path="/requests/completed"
-                element={<CompletedRequestsPage />}
-              />
-              <Route
-                exact
-                path="/requests/statistics"
-                element={<StatisticsPage />}
-              />
-            </>
-          )}
+          <>
+            <Route
+              exact
+              path="/requests/pending"
+              element={<PendingRequestsPage />}
+            />
+            <Route
+              exact
+              path="/requests/completed"
+              element={<CompletedRequestsPage />}
+            />
+            <Route
+              exact
+              path="/requests/statistics"
+              element={<StatisticsPage />}
+            />
+          </>
+        )}
       </Routes>
     </BrowserRouter>
   );
