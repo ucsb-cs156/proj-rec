@@ -39,3 +39,17 @@ FourTypesAdminUser.parameters = {
     }),
   ],
 };
+
+export const FourTypesProfessorUser = Template.bind({});
+FourTypesProfessorUser.args = {
+  requestTypes: requestTypeFixtures.fourTypes,
+  currentUser: currentUserFixtures.adminUser,
+};
+
+FourTypesProfessorUser.parameters = {
+  msw: [
+    http.delete("/api/requestTypes", () => {
+      return HttpResponse.json({}, { status: 200 });
+    }),
+  ],
+};
