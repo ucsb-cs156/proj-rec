@@ -192,7 +192,6 @@ public class RecommendationRequestController extends ApiController {
      * @param recommendationType recommendation types of request
      * @param details details of request
      * @param dueDate submission date of request
-     * @param completionDate completion date of request by professor (if completed)
      * @return the save recommendationrequests (with it's id field set by the database)
      */
 
