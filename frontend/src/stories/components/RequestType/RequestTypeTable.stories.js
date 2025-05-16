@@ -26,15 +26,9 @@ ThreeItemsOrdinaryUser.args = {
   currentUser: currentUserFixtures.userOnly,
 };
 
-export const FourItemsProfessorUser = Template.bind({});
-FourItemsProfessorUser.args = {
-  requestTypes: requestFixtures.fourTypes,
-  currentUser: currentUserFixtures.professorUser,
-};
-
-export const FourItemsAdminUser = Template.bind({});
-FourItemsAdminUser.args = {
-  requestTypes: requestFixtures.fourTypes,
+export const ThreeItemsAdminUser = Template.bind({});
+ThreeItemsAdminUser.args = {
+  requests: requestFixtures.fourTypes,
   currentUser: currentUserFixtures.adminUser,
 };
 
