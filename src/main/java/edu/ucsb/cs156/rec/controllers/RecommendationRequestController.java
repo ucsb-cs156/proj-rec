@@ -218,7 +218,6 @@ public class RecommendationRequestController extends ApiController {
         recommendationRequest.setRequester(currentUser.getUser());
         recommendationRequest.setStatus("PENDING");
         recommendationRequest.setDueDate(dueDate);
-        recommendationRequest.setCompletionDate(null);
         RecommendationRequest savedRecommendationRequest = recommendationRequestRepository.save(recommendationRequest);
         return savedRecommendationRequest;
     }

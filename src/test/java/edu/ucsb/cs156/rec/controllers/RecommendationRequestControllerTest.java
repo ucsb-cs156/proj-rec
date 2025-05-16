@@ -73,7 +73,6 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
                 .recommendationType("PhDprogram")
                 .details("details")
                 .status("PENDING")
-                .completionDate(LocalDateTime.parse("2022-01-03T00:00:00"))
                 .dueDate(LocalDateTime.parse("2022-01-03T00:00:00"))
                 .submissionDate(LocalDateTime.parse("2022-01-03T00:00:00"))
                 .lastModifiedDate(LocalDateTime.parse("2022-01-03T00:00:00"))
@@ -485,7 +484,7 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
                 .recommendationType("PhDprogram")
                 .details("details")
                 .status("COMPLETED")
-                .completionDate(null)
+                .completionDate(LocalDateTime.parse("2022-01-03T00:00:00")) // temp date
                 .dueDate(LocalDateTime.parse("2022-01-03T00:00:00"))
                 .submissionDate(LocalDateTime.parse("2022-01-03T00:00:00"))
                 .lastModifiedDate(LocalDateTime.parse("2022-01-03T00:00:00"))
