@@ -28,7 +28,7 @@ describe("UserTable tests", () => {
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
           <RequestTypeTable
-            requestTypes={requestFixtures.fourTypes}
+            requests={requestFixtures.fourTypes}
             currentUser={currentUser}
           />
         </MemoryRouter>
@@ -55,18 +55,31 @@ describe("UserTable tests", () => {
     expect(screen.getByTestId(`${testId}-cell-row-1-col-id`)).toHaveTextContent(
       "2",
     );
+
+    const editButton = screen.queryByTestId(
+      `${testId}-cell-row-0-col-Edit-button`,
+    );
+    expect(editButton).toBeInTheDocument();
+
+    expect(editButton).toHaveClass("btn btn-primary");
+
+    const deleteButton = screen.queryByTestId(
+      `${testId}-cell-row-0-col-Delete-button`,
+    );
+    expect(deleteButton).toBeInTheDocument();
   });
 
-  test("Has the expected column headers and content for professorUser", () => {
-    const currentUser = currentUserFixtures.professorUser;
+  test("Has the expected column headers and content for adminUser", () => {
+    const currentUser = currentUserFixtures.adminUser;
 
-    expect(hasRole(currentUser, "ROLE_PROFESSOR")).toBe(true);
+    expect(hasRole(currentUser, "ROLE_ADMIN")).toBe(true);
+    expect(hasRole(currentUser, "ROLE_USER")).toBe(true);
 
     render(
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
           <RequestTypeTable
-            requestTypes={requestFixtures.fourTypes}
+            requests={requestFixtures.fourTypes}
             currentUser={currentUser}
           />
         </MemoryRouter>
@@ -103,20 +116,20 @@ describe("UserTable tests", () => {
     const editButton = screen.queryByTestId(
       `${testId}-cell-row-0-col-Edit-button`,
     );
-    expect(editButton).toBeInTheDocument();
-    expect(editButton).toHaveClass("btn-primary");
+    expect(editButton).not.toBeInTheDocument();
   });
 
-  test("Edit button navigates to the edit page for professorUser", async () => {
-    const currentUser = currentUserFixtures.professorUser;
+  test("Edit button navigates to the edit page for user", async () => {
+    const currentUser = currentUserFixtures.userOnly;
 
-    expect(hasRole(currentUser, "ROLE_PROFESSOR")).toBe(true);
+    expect(hasRole(currentUser, "ROLE_USER")).toBe(true);
+    expect(hasRole(currentUser, "ROLE_ADMIN")).toBe(false);
 
     render(
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
           <RequestTypeTable
-            requestTypes={requestFixtures.fourTypes}
+            requests={requestFixtures.fourTypes}
             currentUser={currentUser}
           />
         </MemoryRouter>
@@ -133,12 +146,11 @@ describe("UserTable tests", () => {
       `RequestTypeTable-cell-row-0-col-Edit-button`,
     );
     expect(editButton).toBeInTheDocument();
-    expect(editButton).toHaveClass("btn-primary");
 
     fireEvent.click(editButton);
 
     await waitFor(() =>
-      expect(mockedNavigate).toHaveBeenCalledWith("/requesttypes/edit/1"),
+      expect(mockedNavigate).toHaveBeenCalledWith("/requests/edit/1"),
     );
   });
 
@@ -152,7 +164,7 @@ describe("UserTable tests", () => {
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
           <RequestTypeTable
-            requestTypes={requestFixtures.fourTypes}
+            requests={requestFixtures.fourTypes}
             currentUser={currentUser}
           />
         </MemoryRouter>
@@ -173,9 +185,9 @@ describe("UserTable tests", () => {
   });
 
   //for user
-  test("Delete button calls delete callback (for professorUser)", async () => {
+  test("Delete button calls delete callback (for user)", async () => {
     // arrange
-    const currentUser = currentUserFixtures.professorUser;
+    const currentUser = currentUserFixtures.userOnly;
 
     const axiosMock = new AxiosMockAdapter(axios);
     axiosMock
@@ -187,7 +199,51 @@ describe("UserTable tests", () => {
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
           <RequestTypeTable
-            requestTypes={requestFixtures.fourTypes}
+            requests={requestFixtures.fourTypes}
+            currentUser={currentUser}
+          />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    // assert - check that the expected content is rendered
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId(`RequestTypeTable-cell-row-0-col-id`),
+      ).toHaveTextContent("1");
+    });
+
+    const deleteButton = screen.getByTestId(
+      `RequestTypeTable-cell-row-0-col-Delete-button`,
+    );
+    expect(deleteButton).toBeInTheDocument();
+
+    // act - click the delete button
+    fireEvent.click(deleteButton);
+
+    // assert - check that the delete endpoint was called
+
+    await waitFor(() => expect(axiosMock.history.delete.length).toBe(1));
+    expect(axiosMock.history.delete[0].params).toEqual({ id: 1 });
+  });
+
+  //for admin
+  test("Delete button calls delete callback (admin)", async () => {
+    // arrange
+    const currentUser = currentUserFixtures.adminUser;
+
+    const axiosMock = new AxiosMockAdapter(axios);
+    axiosMock
+      .onDelete("/api/requesttypes")
+      .reply(200, { message: "Request Type deleted" });
+
+    // act - render the component
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <RequestTypeTable
+            requests={requestFixtures.fourTypes}
             currentUser={currentUser}
           />
         </MemoryRouter>

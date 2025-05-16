@@ -9,11 +9,11 @@ import {
 import { useNavigate } from "react-router-dom";
 import { hasRole } from "main/utils/currentUser";
 
-export default function RequestTypeTable({ requestTypes, currentUser }) {
+export default function RequestTypeTable({ requests, currentUser }) {
   const navigate = useNavigate();
 
   const editCallback = (cell) => {
-    navigate(`/requesttypes/edit/${cell.row.values.id}`);
+    navigate(`/requests/edit/${cell.row.values.id}`);
   };
 
   // Stryker disable all : hard to test for query caching
@@ -46,24 +46,23 @@ export default function RequestTypeTable({ requestTypes, currentUser }) {
     },
   ];
 
-  // only professors can delete / edit
-  if (hasRole(currentUser, "ROLE_PROFESSOR")) {
+  //since all admins have the role of a user, we can just check if the current user has the role ROLE_USER
+  if (hasRole(currentUser, "ROLE_USER")) {
     columns.push(
       ButtonColumn("Delete", "danger", deleteCallback, "RequestTypeTable"),
     );
   }
 
-  if (hasRole(currentUser, "ROLE_PROFESSOR")) {
+  if (
+    hasRole(currentUser, "ROLE_USER") &&
+    !hasRole(currentUser, "ROLE_ADMIN")
+  ) {
     columns.push(
       ButtonColumn("Edit", "primary", editCallback, "RequestTypeTable"),
     );
   }
 
   return (
-    <OurTable
-      data={requestTypes}
-      columns={columns}
-      testid={"RequestTypeTable"}
-    />
+    <OurTable data={requests} columns={columns} testid={"RequestTypeTable"} />
   );
 }
