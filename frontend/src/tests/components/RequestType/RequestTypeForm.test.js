@@ -29,10 +29,9 @@ describe("RequestTypeForm tests", () => {
     );
     await screen.findByText(/Request Type/);
     expect(screen.getByText(/Id/)).toBeInTheDocument();
-    // expect(screen.getByTestId(/RequestTypeForm-id/)).toHaveValue("1");
   });
 
-  test("Correct Error messsages on bad input", async () => {
+  test("correct Error messsages on bad input", async () => {
     render(
       <Router>
         <RequestTypeForm />
