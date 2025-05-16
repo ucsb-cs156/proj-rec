@@ -2,7 +2,6 @@ import OurTable, { ButtonColumn } from "main/components/OurTable";
 import { useBackendMutation } from "main/utils/useBackend";
 
 export default function UsersTable({ users }) {
-
   //toggleAdmin
   function cellToAxiosParamsToggleAdmin(cell) {
     return {
