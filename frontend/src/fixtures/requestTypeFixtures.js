@@ -1,4 +1,4 @@
-const recommendationTypeFixtures = {
+const requestTypeFixtures = {
   oneType: {
     id: 123,
     requestType: "University Transfer",
@@ -23,4 +23,4 @@ const recommendationTypeFixtures = {
   ],
 };
 
-export default recommendationTypeFixtures;
+export default requestTypeFixtures;
