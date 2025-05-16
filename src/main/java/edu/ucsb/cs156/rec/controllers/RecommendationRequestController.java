@@ -79,7 +79,6 @@ public class RecommendationRequestController extends ApiController {
     /**
      * The user who posted a RecommendationRequest can delete their RecommendationRequest
      * 
-     * @param id the id of the RecommendationRequest to delete
      * @return a message indicating that the RecommendationRequest was deleted
      */
     @Operation(summary = "User can delete their RecommendationRequest")
