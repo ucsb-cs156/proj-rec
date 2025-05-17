@@ -7,6 +7,10 @@ import PendingRequestsPage from "main/pages/Requests/PendingRequestsPage";
 import CompletedRequestsPage from "main/pages/Requests/CompletedRequestsPage";
 import StatisticsPage from "main/pages/Requests/StatisticsPage";
 
+import RequestTypesCreatePage from "main/pages/RequestTypes/RequestTypesCreatePage";
+import RequestTypesEditPage from "main/pages/RequestTypes/RequestTypesEditPage";
+import RequestTypesIndexPage from "main/pages/RequestTypes/RequestTypesIndexPage";
+
 import { hasRole, useCurrentUser } from "main/utils/currentUser";
 
 import "bootstrap/dist/css/bootstrap.css";
@@ -22,6 +26,31 @@ function App() {
         <Route exact path="/profile" element={<ProfilePage />} />
         {hasRole(currentUser, "ROLE_ADMIN") && (
           <Route exact path="/admin/users" element={<AdminUsersPage />} />
+        )}
+        {(hasRole(currentUser, "ROLE_ADMIN") ||
+          hasRole(currentUser, "ROLE_PROFESSOR")) && (
+          <>
+            <Route
+              exact
+              path="/requesttypes"
+              element={<RequestTypesIndexPage />}
+            />
+          </>
+        )}
+        {(hasRole(currentUser, "ROLE_ADMIN") ||
+          hasRole(currentUser, "ROLE_PROFESSOR")) && (
+          <>
+            <Route
+              exact
+              path="/requesttypes/edit"
+              element={<RequestTypesEditPage />}
+            />
+            <Route
+              exact
+              path="/requesttypes/create"
+              element={<RequestTypesCreatePage />}
+            />
+          </>
         )}
         {(hasRole(currentUser, "ROLE_PROFESSOR") ||
           hasRole(currentUser, "ROLE_STUDENT")) && (
