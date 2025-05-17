@@ -232,7 +232,7 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
 
     }
 
-    //Admin can delete a recommendation request
+    //Admin can get all recommendation requests
     @WithMockUser(roles = { "ADMIN", "USER" })
     @Test
     public void admin_can_get_all_recommendation_requests() throws Exception {
