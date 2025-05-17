@@ -302,7 +302,6 @@ describe("RecommendationRequestForm tests", () => {
 
       // Even with validation error, if we force submit (which jest allows),
       // check that submitAction is NOT called if validation prevents it
-      // OR if it IS called, it's with dueDate as undefined or empty.
       // Based on react-hook-form behavior, submitAction should not be called if validation fails.
       expect(submitAction).not.toHaveBeenCalled();
     });

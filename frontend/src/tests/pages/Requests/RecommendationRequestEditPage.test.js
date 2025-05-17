@@ -75,7 +75,7 @@ describe("RecommendationRequestEditPage tests", () => {
           }
           // Fallback for unexpected fetch calls
           console.error(
-            `Unhandled fetch call in 'backend doesn\'t return data' suite: ${url}`,
+            `Unhandled fetch call in 'backend doesn't return data' suite: ${url}`,
           );
           return Promise.reject(new Error(`Unhandled fetch call to ${url}`));
         });
@@ -195,13 +195,25 @@ describe("RecommendationRequestEditPage tests", () => {
 
       await waitFor(() => {
         expect(screen.getByLabelText("Professor")).toBeInTheDocument();
+      });
+
+      await waitFor(() => {
         expect(screen.getByLabelText("Due Date")).toHaveValue("2025-01-15");
+      });
+
+      await waitFor(() => {
         expect(screen.getByLabelText("Details")).toHaveValue(
           "Initial details for editing",
         );
+      });
+
+      await waitFor(() => {
         expect(
           screen.getByDisplayValue(usersFixtures.twoProfessors[0].fullName),
         ).toBeInTheDocument();
+      });
+
+      await waitFor(() => {
         const recommendationTypeSelect = screen.getByLabelText(
           "Recommendation Type",
         );
@@ -286,9 +298,15 @@ describe("RecommendationRequestEditPage tests", () => {
       await waitFor(() => {
         const heading = screen.getByText("Edit Recommendation Request");
         expect(heading).toBeInTheDocument();
+      });
 
+      await waitFor(() => {
         const idField = screen.getByTestId("RecommendationRequestForm-id");
         expect(idField).toBeInTheDocument();
+      });
+
+      await waitFor(() => {
+        const idField = screen.getByTestId("RecommendationRequestForm-id");
         expect(idField).toHaveValue("17");
       });
     });
