@@ -99,8 +99,8 @@ export default function RecommendationRequestTable({ requests, currentUser }) {
   }
 
   if (
-    hasRole(currentUser, "ROLE_USER") 
-    && !hasRole(currentUser, "ROLE_ADMIN")
+    hasRole(currentUser, "ROLE_USER") &&
+    !hasRole(currentUser, "ROLE_ADMIN")
   ) {
     columns.push(
       ButtonColumn(

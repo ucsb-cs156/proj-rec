@@ -71,9 +71,7 @@ export default function RecommendationRequestEditPage({ storybook = false }) {
             initialContents={{
               ...recommendationRequest,
               professor_id: recommendationRequest.professor?.id,
-              dueDate: recommendationRequest.dueDate
-                ? recommendationRequest.dueDate.substring(0, 10)
-                : "",
+              dueDate: recommendationRequest.dueDate.substring(0, 10),
             }}
           />
         )}

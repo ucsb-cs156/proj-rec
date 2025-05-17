@@ -195,9 +195,7 @@ describe("RecommendationRequestForm tests", () => {
     expect(
       screen.getByText(/Please select a recommendation type/),
     ).toBeInTheDocument();
-    expect(
-      screen.getByText(/Please select a due date/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Please select a due date/)).toBeInTheDocument();
   });
 
   describe("onSubmit tests", () => {
@@ -230,51 +228,83 @@ describe("RecommendationRequestForm tests", () => {
 
       // Wait for options to be populated from mock fetch
       await screen.findByText(usersFixtures.twoProfessors[0].fullName); // e.g., "Craig Zzyxx"
-      await screen.findByText(recommendationTypeFixtures.fourTypes[0].requestType); // e.g., "CS Department BS/MS program"
+      await screen.findByText(
+        recommendationTypeFixtures.fourTypes[0].requestType,
+      ); // e.g., "CS Department BS/MS program"
 
-      fireEvent.change(screen.getByTestId("RecommendationRequestForm-professor_id"), { target: { value: usersFixtures.twoProfessors[1].id.toString() } }); // Phill Conrad (id 1)
-      fireEvent.change(screen.getByTestId("RecommendationRequestForm-recommendationType"), { target: { value: recommendationTypeFixtures.fourTypes[0].requestType } }); // CS Department BS/MS program
-      fireEvent.change(screen.getByTestId("RecommendationRequestForm-details"), { target: { value: "Test details" } });
-      fireEvent.change(screen.getByTestId("RecommendationRequestForm-dueDate"), { target: { value: "2024-12-31" } });
+      fireEvent.change(
+        screen.getByTestId("RecommendationRequestForm-professor_id"),
+        { target: { value: usersFixtures.twoProfessors[1].id.toString() } },
+      ); // Phill Conrad (id 1)
+      fireEvent.change(
+        screen.getByTestId("RecommendationRequestForm-recommendationType"),
+        {
+          target: {
+            value: recommendationTypeFixtures.fourTypes[0].requestType,
+          },
+        },
+      ); // CS Department BS/MS program
+      fireEvent.change(
+        screen.getByTestId("RecommendationRequestForm-details"),
+        { target: { value: "Test details" } },
+      );
+      fireEvent.change(
+        screen.getByTestId("RecommendationRequestForm-dueDate"),
+        { target: { value: "2024-12-31" } },
+      );
 
       fireEvent.click(screen.getByTestId("RecommendationRequestForm-submit"));
 
       await waitFor(() => expect(submitAction).toHaveBeenCalledTimes(1));
-      expect(submitAction).toHaveBeenCalledWith(expect.objectContaining({
-        professor_id: usersFixtures.twoProfessors[1].id.toString(),
-        recommendationType: recommendationTypeFixtures.fourTypes[0].requestType,
-        details: "Test details",
-        dueDate: "2024-12-31T00:00:00",
-      }));
+      expect(submitAction).toHaveBeenCalledWith(
+        expect.objectContaining({
+          professor_id: usersFixtures.twoProfessors[1].id.toString(),
+          recommendationType:
+            recommendationTypeFixtures.fourTypes[0].requestType,
+          details: "Test details",
+          dueDate: "2024-12-31T00:00:00",
+        }),
+      );
     });
 
     test("calls submitAction with data when dueDate is not present", async () => {
-        const submitAction = jest.fn();
-        render(
-          <QueryClientProvider client={queryClient}>
-            <Router>
-              <RecommendationRequestForm submitAction={submitAction} />
-            </Router>
-          </QueryClientProvider>,
-        );
-  
-        // Simulate filling other required fields
-        fireEvent.change(screen.getByTestId("RecommendationRequestForm-professor_id"), { target: { value: "1" } });
-        fireEvent.change(screen.getByTestId("RecommendationRequestForm-recommendationType"), { target: { value: "Graduate School" } });
-        fireEvent.change(screen.getByTestId("RecommendationRequestForm-details"), { target: { value: "Test details" } });
-        // Deliberately not filling dueDate to test the {required: "..."} validation message
-        // Also, the onSubmit logic should still pass the data to submitAction
+      const submitAction = jest.fn();
+      render(
+        <QueryClientProvider client={queryClient}>
+          <Router>
+            <RecommendationRequestForm submitAction={submitAction} />
+          </Router>
+        </QueryClientProvider>,
+      );
 
-        fireEvent.click(screen.getByTestId("RecommendationRequestForm-submit"));
-  
-        // Check for validation error first
-        expect(await screen.findByText(/Please select a due date/)).toBeInTheDocument();
-        
-        // Even with validation error, if we force submit (which jest allows), 
-        // check that submitAction is NOT called if validation prevents it
-        // OR if it IS called, it's with dueDate as undefined or empty.
-        // Based on react-hook-form behavior, submitAction should not be called if validation fails.
-        expect(submitAction).not.toHaveBeenCalled();
-      });
+      // Simulate filling other required fields
+      fireEvent.change(
+        screen.getByTestId("RecommendationRequestForm-professor_id"),
+        { target: { value: "1" } },
+      );
+      fireEvent.change(
+        screen.getByTestId("RecommendationRequestForm-recommendationType"),
+        { target: { value: "Graduate School" } },
+      );
+      fireEvent.change(
+        screen.getByTestId("RecommendationRequestForm-details"),
+        { target: { value: "Test details" } },
+      );
+      // Deliberately not filling dueDate to test the {required: "..."} validation message
+      // Also, the onSubmit logic should still pass the data to submitAction
+
+      fireEvent.click(screen.getByTestId("RecommendationRequestForm-submit"));
+
+      // Check for validation error first
+      expect(
+        await screen.findByText(/Please select a due date/),
+      ).toBeInTheDocument();
+
+      // Even with validation error, if we force submit (which jest allows),
+      // check that submitAction is NOT called if validation prevents it
+      // OR if it IS called, it's with dueDate as undefined or empty.
+      // Based on react-hook-form behavior, submitAction should not be called if validation fails.
+      expect(submitAction).not.toHaveBeenCalled();
+    });
   });
 });

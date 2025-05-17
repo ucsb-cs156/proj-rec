@@ -6,68 +6,70 @@ import RecommendationRequestTable from "main/components/RecommendationRequest/Re
 import { useBackend } from "main/utils/useBackend";
 
 const StudentProfilePage = () => {
-const { data: currentUser } = useCurrentUser();
-const navigate = useNavigate();
+  const { data: currentUser } = useCurrentUser();
+  const navigate = useNavigate();
 
-// Fetch only the current user's recommendation requests
-const { data: requests } = useBackend(
+  // Fetch only the current user's recommendation requests
+  const { data: requests } = useBackend(
     ["/api/recommendationrequest/requester/all"],
     { method: "GET", url: "/api/recommendationrequest/requester/all" },
-    []
-);
+    [],
+  );
 
-if (!currentUser.loggedIn) {
+  if (!currentUser.loggedIn) {
     return <p>Not logged in.</p>;
-}
+  }
 
-const { email, pictureUrl, fullName } = currentUser.root.user;
+  const { email, pictureUrl, fullName } = currentUser.root.user;
 
-const handleEdit = (request) => {
+  const handleEdit = (request) => {
     navigate(`/requests/edit/${request.id}`);
-};
+  };
 
-const handleDelete = async (request) => {
-    await fetch(`/api/recommendationrequest?id=${request.id}`, { method: "DELETE" });
+  const handleDelete = async (request) => {
+    await fetch(`/api/recommendationrequest?id=${request.id}`, {
+      method: "DELETE",
+    });
     window.location.reload(); // Simple way to refresh, can be improved with state
-};
+  };
 
-return (
+  return (
     <BasicLayout>
-    <Row className="align-items-center profile-header mb-5 text-center text-md-left">
+      <Row className="align-items-center profile-header mb-5 text-center text-md-left">
         <Col md={2}>
-        <img
+          <img
             src={pictureUrl}
             alt="Profile"
             className="rounded-circle img-fluid profile-picture mb-3 mb-md-0"
-        />
+          />
         </Col>
         <Col md>
-        <h2>{fullName}</h2>
-        <p className="lead text-muted">{email}</p>
+          <h2>{fullName}</h2>
+          <p className="lead text-muted">{email}</p>
         </Col>
-    </Row>
-    <Row className="mb-3">
+      </Row>
+      <Row className="mb-3">
         <Col>
-        <Button
+          <Button
             variant="primary"
             onClick={() => navigate("/requests/create")}
-        >
+          >
             Create New Request
-        </Button>
+          </Button>
         </Col>
-    </Row>
-    <Row>
+      </Row>
+      <Row>
         <Col>
-        <RecommendationRequestTable
+          <RecommendationRequestTable
             requests={requests}
             currentUser={currentUser}
             onEdit={handleEdit}
             onDelete={handleDelete}
-        />
+          />
         </Col>
-    </Row>
+      </Row>
     </BasicLayout>
-);
+  );
 };
 
 export default StudentProfilePage;
