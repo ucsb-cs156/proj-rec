@@ -6,9 +6,6 @@ export default function RequestTypesCreatePage() {
     <BasicLayout>
       <div className="pt-2">
         <h1>Request Types Create page not yet implemented</h1>
-        <p>
-          <a href="/requesttypes">Go Back</a>
-        </p>
       </div>
     </BasicLayout>
   );

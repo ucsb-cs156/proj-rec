@@ -7,10 +7,10 @@ export default function RequestTypesIndexPage() {
       <div className="pt-2">
         <h1>Request Types Index page not yet implemented</h1>
         <p>
-          <a href="/requesttypes/create">Create</a>
+          <a href="/settings/requesttypes/create">Create</a>
         </p>
         <p>
-          <a href="/requesttypes/edit">Edit</a>
+          <a href="/settings/requesttypes/edit">Edit</a>
         </p>
       </div>
     </BasicLayout>

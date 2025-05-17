@@ -40,6 +40,5 @@ describe("RequestTypesCreatePage tests", () => {
     // assert
 
     await screen.findByText("Request Types Create page not yet implemented");
-    expect(screen.getByText("Go Back")).toBeInTheDocument();
   });
 });

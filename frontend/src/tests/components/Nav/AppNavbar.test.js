@@ -39,6 +39,8 @@ describe("AppNavbar tests", () => {
     await screen.findByText("Welcome, phtcon@ucsb.edu");
     const adminMenu = screen.getByTestId("appnavbar-admin-dropdown");
     expect(adminMenu).toBeInTheDocument();
+
+    expect(screen.queryByText("Settings")).toBeInTheDocument(); 
   });
 
   test("renders H2Console and Swagger links correctly", async () => {
@@ -175,6 +177,10 @@ describe("AppNavbar tests", () => {
         </MemoryRouter>
       </QueryClientProvider>,
     );
+    
+    await screen.findByText("Settings");
+    const settingsLink = screen.getByText("Settings");
+    expect(settingsLink).toBeInTheDocument();
 
     await screen.findByText("Pending Requests");
     const pendingLink = screen.getByText("Pending Requests");
@@ -239,6 +245,7 @@ describe("AppNavbar tests", () => {
     expect(screen.queryByText("Pending Requests")).not.toBeInTheDocument();
     expect(screen.queryByText("Completed Requests")).not.toBeInTheDocument();
     expect(screen.queryByText("Statistics")).not.toBeInTheDocument();
+    expect(screen.queryByText("Settings")).not.toBeInTheDocument();
   });
 
   test("the three prof pages do not show when not logged in", async () => {
@@ -261,5 +268,6 @@ describe("AppNavbar tests", () => {
     expect(screen.queryByText("Pending Requests")).not.toBeInTheDocument();
     expect(screen.queryByText("Completed Requests")).not.toBeInTheDocument();
     expect(screen.queryByText("Statistics")).not.toBeInTheDocument();
+    expect(screen.queryByText("Settings")).not.toBeInTheDocument();
   });
 });

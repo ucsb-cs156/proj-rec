@@ -6,10 +6,8 @@ export default function RequestTypesEditPage() {
     <BasicLayout>
       <div className="pt-2">
         <h1>Request Types Edit page not yet implemented</h1>
-        <p>
-          <a href="/requesttypes">Go Back</a>
-        </p>
       </div>
     </BasicLayout>
   );
 }
+

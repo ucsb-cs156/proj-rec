@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "main/pages/HomePage";
 import ProfilePage from "main/pages/ProfilePage";
 import AdminUsersPage from "main/pages/AdminUsersPage";
+import SettingsPage from "main/pages/Settings";
 
 import PendingRequestsPage from "main/pages/Requests/PendingRequestsPage";
 import CompletedRequestsPage from "main/pages/Requests/CompletedRequestsPage";
@@ -32,7 +33,17 @@ function App() {
           <>
             <Route
               exact
-              path="/requesttypes"
+              path="/settings"
+              element={<SettingsPage />}
+            />
+          </>
+        )}
+        {(hasRole(currentUser, "ROLE_ADMIN") ||
+          hasRole(currentUser, "ROLE_PROFESSOR")) && (
+          <>
+            <Route
+              exact
+              path="/settings/requesttypes"
               element={<RequestTypesIndexPage />}
             />
           </>
@@ -42,12 +53,12 @@ function App() {
           <>
             <Route
               exact
-              path="/requesttypes/edit"
+              path="/settings/requesttypes/edit"
               element={<RequestTypesEditPage />}
             />
             <Route
               exact
-              path="/requesttypes/create"
+              path="/settings/requesttypes/create"
               element={<RequestTypesCreatePage />}
             />
           </>

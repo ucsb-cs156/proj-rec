@@ -39,6 +39,5 @@ describe("RequestTypesEditPage tests", () => {
 
     // assert
     await screen.findByText("Request Types Edit page not yet implemented");
-    expect(screen.getByText("Go Back")).toBeInTheDocument();
   });
 });

@@ -61,8 +61,8 @@ export default function AppNavbar({
               {(hasRole(currentUser, "ROLE_ADMIN") ||
                 hasRole(currentUser, "ROLE_PROFESSOR")) && (
                 <>
-                  <Nav.Link as={Link} to="/requesttypes">
-                    Request Types
+                  <Nav.Link as={Link} to="/settings">
+                    Settings
                   </Nav.Link>
                 </>
               )}
