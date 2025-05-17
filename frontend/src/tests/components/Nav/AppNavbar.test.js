@@ -40,7 +40,7 @@ describe("AppNavbar tests", () => {
     const adminMenu = screen.getByTestId("appnavbar-admin-dropdown");
     expect(adminMenu).toBeInTheDocument();
 
-    expect(screen.queryByText("Settings")).toBeInTheDocument(); 
+    expect(screen.getByText("Settings")).toBeInTheDocument();
   });
 
   test("renders H2Console and Swagger links correctly", async () => {
@@ -177,7 +177,7 @@ describe("AppNavbar tests", () => {
         </MemoryRouter>
       </QueryClientProvider>,
     );
-    
+
     await screen.findByText("Settings");
     const settingsLink = screen.getByText("Settings");
     expect(settingsLink).toBeInTheDocument();

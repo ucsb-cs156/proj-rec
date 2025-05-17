@@ -31,11 +31,7 @@ function App() {
         {(hasRole(currentUser, "ROLE_ADMIN") ||
           hasRole(currentUser, "ROLE_PROFESSOR")) && (
           <>
-            <Route
-              exact
-              path="/settings"
-              element={<SettingsPage />}
-            />
+            <Route exact path="/settings" element={<SettingsPage />} />
           </>
         )}
         {(hasRole(currentUser, "ROLE_ADMIN") ||
