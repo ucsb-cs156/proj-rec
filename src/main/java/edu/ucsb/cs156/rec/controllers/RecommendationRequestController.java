@@ -68,7 +68,7 @@ public class RecommendationRequestController extends ApiController {
      * 
      * @return a message indicating that the RecommendationRequest was deleted
      */
-    @Operation(summary = "An admin can delete a RecommendationRequest")
+    @Operation(summary = "An admin can get all RecommendationRequests")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/admin/all")
     public Object getRecommendationRequestsAsAdmin() {
