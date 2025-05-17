@@ -146,7 +146,6 @@ public class RecommendationRequestController extends ApiController {
     @GetMapping("/requester/all")
     public Iterable<RecommendationRequest> allRequesterRecommendationRequests(
     ) {
-        // Professors should be able to submit requests so they can see which ones they have submitted to
         User currentUser = getCurrentUser().getUser();
         Iterable<RecommendationRequest> recommendationRequests = recommendationRequestRepository.findAllByRequesterId(currentUser.getId());
         return recommendationRequests;
