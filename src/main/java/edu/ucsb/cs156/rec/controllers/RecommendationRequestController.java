@@ -246,4 +246,5 @@ public class RecommendationRequestController extends ApiController {
     public Iterable<RecommendationRequest> getAllRecoomendationRequest(){
         return recommendationRequestRepository.findAll();
     }
+    
 }
