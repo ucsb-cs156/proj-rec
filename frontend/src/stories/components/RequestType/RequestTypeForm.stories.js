@@ -1,7 +1,6 @@
 import React from "react";
 import RequestTypeForm from "main/components/RequestType/RequestTypeForm";
 import requestTypeFixtures from "fixtures/requestTypeFixtures";
-import usersFixtures from "fixtures/usersFixtures";
 
 export default {
   title: "components/RequestType/RequestTypeForm",
@@ -21,7 +20,6 @@ Create.args = {
     window.alert("Submit was clicked with data: " + JSON.stringify(data));
   },
   requestTypeVals: requestTypeFixtures.fourTypes,
-  professorVals: usersFixtures.twoProfessors,
 };
 
 export const Update = Template.bind({});
@@ -34,5 +32,4 @@ Update.args = {
     window.alert("Submit was clicked with data: " + JSON.stringify(data));
   },
   requestTypeVals: requestTypeFixtures.fourTypes,
-  professorVals: usersFixtures.twoProfessors,
 };

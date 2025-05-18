@@ -8,7 +8,6 @@ function RequestTypeForm({
   submitAction,
   buttonLabel = "Create",
   requestTypeVals = [],
-  professorVals = [],
 }) {
   // Stryker disable all
   const {
@@ -18,20 +17,10 @@ function RequestTypeForm({
   } = useForm({ defaultValues: initialContents || {} });
   // Stryker restore all
 
-  const [professors, setProfessors] = useState(professorVals);
   const [requestTypes, setRequestTypes] = useState(requestTypeVals);
 
-  //queries endpoint to get list of professors
+  //queries endpoint to get list of requestTypes
   useEffect(() => {
-    const getProfessors = async () => {
-      try {
-        const response = await fetch("/api/admin/users/professors");
-        const data = await response.json();
-        setProfessors(data);
-      } catch (error) {
-        console.error("Error fetching professors");
-      }
-    };
     const getRequestTypes = async () => {
       try {
         const response = await fetch("/api/requesttypes/all");
@@ -42,7 +31,6 @@ function RequestTypeForm({
       }
     };
 
-    getProfessors();
     getRequestTypes();
   });
 
@@ -67,43 +55,6 @@ function RequestTypeForm({
             </Form.Group>
           </Col>
         )}
-        <Col>
-          <Form.Group className="mb-3">
-            <Form.Label htmlFor="professor_id">Professor</Form.Label>
-            <Form.Select
-              data-testid="RequestTypeForm-professor_id"
-              id="professor_id"
-              type="string"
-              isInvalid={Boolean(errors.professor_id)}
-              {...register("professor_id", {
-                required: "Please select a professor",
-              })}
-              defaultValue=""
-            >
-              {Array.isArray(professors) && professors.length > 0 ? (
-                <>
-                  <option disabled value="">
-                    Select a professor
-                  </option>
-                  {professors.map((professor) => (
-                    <option key={professor.id} value={professor.id}>
-                      {professor.fullName}
-                    </option>
-                  ))}
-                </>
-              ) : (
-                <option disabled value="">
-                  No professors available
-                </option>
-              )}
-            </Form.Select>
-            {errors.professor_id && (
-              <Form.Control.Feedback type="invalid">
-                {errors.professor_id.message}
-              </Form.Control.Feedback>
-            )}
-          </Form.Group>
-        </Col>
       </Row>
 
       <Row>
@@ -146,18 +97,6 @@ function RequestTypeForm({
                 {errors.requestType.message}
               </Form.Control.Feedback>
             )}
-          </Form.Group>
-        </Col>
-        <Col>
-          <Form.Group className="mb-3">
-            <Form.Label htmlFor="details">Details</Form.Label>
-            <Form.Control
-              data-testid="RequestTypeForm-details"
-              id="details"
-              type="text"
-              isInvalid={Boolean(errors.details)}
-              {...register("details")}
-            />
           </Form.Group>
         </Col>
       </Row>
