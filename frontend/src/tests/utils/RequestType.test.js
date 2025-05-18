@@ -42,7 +42,7 @@ describe("requestTypeUtils", () => {
 
       // assert
       expect(result).toEqual({
-        url: "/api/requestTypes",
+        url: "/api/requesttypes",
         method: "DELETE",
         params: { id: 17 },
       });

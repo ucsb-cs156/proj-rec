@@ -5,7 +5,7 @@ export default function SettingsPage() {
   return (
     <BasicLayout>
       <div className="pt-2">
-        <h1>Settings page not yet implemented</h1>
+        <h1>Settings</h1>
         <p>
           <a href="/settings/requesttypes">Request Types</a>
         </p>

@@ -34,7 +34,7 @@ FourTypesAdminUser.args = {
 
 FourTypesAdminUser.parameters = {
   msw: [
-    http.delete("/api/requestTypes", () => {
+    http.delete("/api/requesttypes", () => {
       return HttpResponse.json({}, { status: 200 });
     }),
   ],
@@ -48,7 +48,7 @@ FourTypesProfessorUser.args = {
 
 FourTypesProfessorUser.parameters = {
   msw: [
-    http.delete("/api/requestTypes", () => {
+    http.delete("/api/requesttypes", () => {
       return HttpResponse.json({}, { status: 200 });
     }),
   ],

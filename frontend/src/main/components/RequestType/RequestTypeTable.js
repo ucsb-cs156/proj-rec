@@ -21,11 +21,11 @@ export default function RequestTypeTable({ requestTypes, currentUser }) {
   const deleteMutation = useBackendMutation(
     cellToAxiosParamsDelete,
     { onSuccess: onDeleteSuccess },
-    ["/api/requestTypes/all"],
+    ["/api/requesttypes/all"],
   );
   // Stryker restore all
 
-  // Stryker disable next-line all : TODO try to make a good test for this
+  // Stryker disable next-line all
   const deleteCallback = async (cell) => {
     deleteMutation.mutate(cell);
   };

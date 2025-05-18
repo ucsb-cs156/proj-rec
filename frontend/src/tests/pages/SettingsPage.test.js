@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import SettingsPage from "main/pages/Settings";
+import SettingsPage from "main/pages/SettingsPage";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter } from "react-router-dom";
 
@@ -38,12 +38,10 @@ describe("SettingsPage tests", () => {
       </QueryClientProvider>,
     );
 
-    await screen.findByText("Settings page not yet implemented");
+    await screen.findByText("Settings");
 
     // assert
-    expect(
-      screen.getByText("Settings page not yet implemented"),
-    ).toBeInTheDocument();
+    expect(screen.getByText("Settings")).toBeInTheDocument();
     expect(screen.getByText("Request Types")).toBeInTheDocument();
   });
 });
