@@ -9,7 +9,7 @@ export default function StudentProfileCreatePage({ storybook = false }) {
     url: "/api/recommendationrequest/post",
     method: "POST",
     params: {
-      professorId: recommendationrequest.professorId,
+      professorId: recommendationrequest.professor_id,
       recommendationType: recommendationrequest.recommendationType,
       details: recommendationrequest.details,
       dueDate: recommendationrequest.dueDate,
@@ -34,7 +34,7 @@ export default function StudentProfileCreatePage({ storybook = false }) {
   };
 
   if (isSuccess && !storybook) {
-    return <Navigate to="/studentrequests" />;
+    return <Navigate to="/requests" />;
   }
 
   return (

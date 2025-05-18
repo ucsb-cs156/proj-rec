@@ -13,7 +13,7 @@ export default function RecommendationRequestTable({ requests, currentUser }) {
   const navigate = useNavigate();
 
   const editCallback = (cell) => {
-    navigate(`/studentrequests/edit/${cell.row.values.id}`);
+    navigate(`/requests/edit/${cell.row.values.id}`);
   };
 
   // Stryker disable all : hard to test for query caching

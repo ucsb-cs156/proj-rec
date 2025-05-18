@@ -46,17 +46,17 @@ function App() {
             />
             <Route
               exact
-              path="/studentrequests"
+              path="/requests"
               element={<StudentProfileIndexPage />}
             />
             <Route
               exact
-              path="/studentrequests/create"
+              path="/requests/create"
               element={<StudentProfileCreatePage />}
             />
             <Route
               exact
-              path="/studentrequests/edit/:id"
+              path="/requests/edit/:id"
               element={<StudentProfileEditPage />}
             />
           </>

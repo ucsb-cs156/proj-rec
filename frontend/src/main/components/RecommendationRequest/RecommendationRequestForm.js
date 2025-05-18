@@ -83,13 +83,13 @@ function RecommendationRequestForm({
         )}
         <Col>
           <Form.Group className="mb-3">
-            <Form.Label htmlFor="professorId">Professor</Form.Label>
+            <Form.Label htmlFor="professor_id">Professor</Form.Label>
             <Form.Select
-              data-testid="RecommendationRequestForm-professorId"
-              id="professorId"
+              data-testid="RecommendationRequestForm-professor_id"
+              id="professor_id"
               type="string"
-              isInvalid={Boolean(errors.professorId)}
-              {...register("professorId", {
+              isInvalid={Boolean(errors.professor_id)}
+              {...register("professor_id", {
                 required: "Please select a professor",
               })}
               defaultValue=""
@@ -111,9 +111,9 @@ function RecommendationRequestForm({
                 </option>
               )}
             </Form.Select>
-            {errors.professorId && (
+            {errors.professor_id && (
               <Form.Control.Feedback type="invalid">
-                {errors.professorId.message}
+                {errors.professor_id.message}
               </Form.Control.Feedback>
             )}
           </Form.Group>

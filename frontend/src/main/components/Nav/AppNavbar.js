@@ -74,7 +74,7 @@ export default function AppNavbar({
               )}
               {hasRole(currentUser, "ROLE_STUDENT") && (
                 <>
-                  <Nav.Link as={Link} to="/studentrequests">
+                  <Nav.Link as={Link} to="/requests">
                     My Requests
                   </Nav.Link>
                 </>

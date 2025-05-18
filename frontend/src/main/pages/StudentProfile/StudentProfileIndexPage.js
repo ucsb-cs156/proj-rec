@@ -26,7 +26,7 @@ export default function StudentProfileIndexPage() {
       return (
         <Button
           variant="primary"
-          href="/studentrequests/create"
+          href="/requests/create"
           style={{ float: "right" }}
         >
           Create a new Recommendation Request

@@ -41,7 +41,7 @@ export default function StudentProfileEditPage({ storybook = false }) {
       id: recommendationrequest.id,
     },
     data: {
-      professorId: recommendationrequest.professorId,
+      professorId: recommendationrequest.professor_id,
       recommendationType: recommendationrequest.recommendationType,
       details: recommendationrequest.details,
       dueDate: recommendationrequest.dueDate,
@@ -66,7 +66,7 @@ export default function StudentProfileEditPage({ storybook = false }) {
   };
 
   if (isSuccess && !storybook) {
-    return <Navigate to="/studentrequests" />;
+    return <Navigate to="/requests" />;
   }
 
   return (
@@ -79,7 +79,7 @@ export default function StudentProfileEditPage({ storybook = false }) {
             buttonLabel={"Update"}
             initialContents={{
               ...recommendationrequests,
-              professorId: recommendationrequests.professor?.id,
+              professor_id: recommendationrequests.professor?.id,
               dueDate: convertToMMDDYYYY(recommendationrequests.dueDate),
             }}
           />
