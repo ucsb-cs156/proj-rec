@@ -38,7 +38,7 @@ describe("RequestTypeCreatePage tests", () => {
     axiosMock.reset();
     axiosMock.resetHistory();
     axiosMock
-      .onGet("/api/admin/users")
+      .onGet("/api/admin/users/professors")
       .reply(200, apiCurrentUserFixtures.professorUser);
     axiosMock
       .onGet("/api/systemInfo")
