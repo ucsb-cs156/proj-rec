@@ -1,8 +1,8 @@
-import { fireEvent, render, waitFor, screen } from "@testing-library/react";
+import { fireEvent, render, waitFor, screen, within } from "@testing-library/react";
 import { recommendationRequestFixtures } from "fixtures/recommendationRequestFixtures";
 import RecommendationRequestTable from "main/components/RecommendationRequest/RecommendationRequestTable";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { currentUserFixtures } from "fixtures/currentUserFixtures";
 import axios from "axios";
 import AxiosMockAdapter from "axios-mock-adapter";
@@ -323,4 +323,5 @@ describe("UserTable tests", () => {
     await waitFor(() => expect(axiosMock.history.delete.length).toBe(1));
     expect(axiosMock.history.delete[0].params).toEqual({ id: 2 });
   });
+  
 });

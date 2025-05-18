@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import PendingRequestsPage from "main/pages/Requests/PendingRequestsPage";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter } from "react-router-dom";
@@ -8,6 +8,7 @@ import { systemInfoFixtures } from "fixtures/systemInfoFixtures";
 import axios from "axios";
 import AxiosMockAdapter from "axios-mock-adapter";
 import { recommendationRequestFixtures } from "fixtures/recommendationRequestFixtures";
+import mockConsole from "jest-mock-console";
 
 describe("PendingRequestsPage tests", () => {
   const axiosMock = new AxiosMockAdapter(axios);
@@ -93,6 +94,9 @@ describe("PendingRequestsPage tests", () => {
     expect(
       statusCells.some((cell) => cell.textContent === "PENDING"),
     ).toBeTruthy();
+
+    const status = screen.getByTestId(`status-span-${8}`);
+    expect(status).toBeInTheDocument();
   });
 
   test("Renders empty table when no completed requests", async () => {
@@ -202,4 +206,144 @@ describe("PendingRequestsPage tests", () => {
       screen.getByTestId("RecommendationRequestTable"),
     ).toBeInTheDocument();
   });
+  test("Dropdown menu appears for professor user on pending requests page", async () => {
+    const restoreConsole = mockConsole();
+    let currentRequests = [...recommendationRequestFixtures.mixedRequests];
+  
+    axiosMock
+      .onGet("/api/currentUser")
+      .reply(200, apiCurrentUserFixtures.professorUser);
+    axiosMock
+      .onGet("/api/systemInfo")
+      .reply(200, systemInfoFixtures.showingNeither);
+  
+    // Dynamic response for GET requests to always return the latest state
+    axiosMock
+      .onGet("/api/recommendationrequest/professor/all")
+      .reply(() => [200, currentRequests]);
+  
+    // Update the currentRequests when PUT request is made
+    axiosMock
+      .onPut("/api/recommendationrequest/professor")
+      .reply(() => {
+        currentRequests = currentRequests.map(request =>
+          request.id === 8 ? { ...request, status: "COMPLETED" } : request
+        );
+        return [200, { ...recommendationRequestFixtures.mixedRequests[2], status: "COMPLETED" }];
+      });
+  
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter initialEntries={["/requests/pending"]}>
+          <PendingRequestsPage />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+  
+    expect(axiosMock.history.get.length).toBe(3);
+    expect(
+      screen.getByTestId("RecommendationRequestTable"),
+    ).toBeInTheDocument();
+  
+    await waitFor(() => {
+      const statusCell = screen.getByTestId(
+        `RecommendationRequestTable-cell-row-0-col-status`
+      );
+      expect(statusCell).toBeInTheDocument();
+    });
+  
+    // Check that the dropdown and button exist
+    const statusDropdown = screen.getByTestId(`status-dropdown-${8}`);
+    expect(statusDropdown).toBeInTheDocument();
+    const dropdownToggle = statusDropdown.querySelector(".dropdown-toggle");
+    expect(dropdownToggle).toBeInTheDocument();
+  
+    await act(async () => {
+      fireEvent.click(dropdownToggle);
+    });
+  
+    await waitFor(() => {
+      expect(dropdownToggle).toHaveAttribute("aria-expanded", "true");
+    });
+  
+    expect(screen.getByTestId(`RecommendationRequestTable-cell-row-0-col-status`)).toBeInTheDocument();
+    const completed = await screen.findByText("COMPLETED");
+    await act(async () => {
+      fireEvent.click(completed);
+    });
+  
+    await act(async () => {
+      queryClient.invalidateQueries("/api/recommendationrequest/professor/all");
+    });
+  
+    await waitFor(() => {
+      expect(queryClient.isFetching()).toBe(0);
+    });
+  
+    await waitFor(() => {
+      const rows = screen.queryAllByTestId(/RecommendationRequestTable-cell-row-0-col-status/);
+      expect(rows.length).toBe(0); // The row should disappear after completion
+    });
+
+    expect(console.log).toHaveBeenCalled();
+    const message = console.log.mock.calls[0][0];
+    const expectedObject = {
+      id: 8,
+      requesterEmail: "student8@ucsb.edu",
+      professorEmail: "professor1@ucsb.edu",
+      requester: { fullName: "Student Eight", email: "student8@ucsb.edu" },
+      professor: { fullName: "Professor One", email: "professor1@ucsb.edu" },
+      details: "Pending request",
+      recommendationType: "Graduate School",
+      status: "COMPLETED",
+      submissionDate: "2024-02-01T00:00:00",
+      dueDate: "2024-03-01T00:00:00",
+      lastModifiedDate: "2024-02-15T00:00:00",
+      completionDate: null,
+      done: false,
+    };
+    
+    // Check if the logged message matches the expected object
+    expect(message).toEqual(expectedObject);
+
+    expect(screen.queryByTestId(`status-dropdown-${8}`)).not.toBeInTheDocument();
+  });
+
+  test("Dropdown menu does not appear for student user on pending requests page", async () => {
+    axiosMock
+      .onGet("/api/currentUser")
+      .reply(200, apiCurrentUserFixtures.studentUser);
+    axiosMock
+      .onGet("/api/systemInfo")
+      .reply(200, systemInfoFixtures.showingNeither);
+    axiosMock
+      .onGet("/api/recommendationrequest/requester/all")
+      .reply(200, recommendationRequestFixtures.mixedRequests);
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <PendingRequestsPage />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    expect(axiosMock.history.get.length).toBe(3);
+    expect(
+      screen.getByTestId("RecommendationRequestTable"),
+    ).toBeInTheDocument();
+
+    await waitFor(() => {
+      const statusCell = screen.getByTestId(
+        `RecommendationRequestTable-cell-row-0-col-status`
+      );
+      console.log("Status Cell HTML:", statusCell.innerHTML);
+      expect(statusCell).toBeInTheDocument();
+    });
+
+    const status = screen.getByTestId(`status-span-${8}`);
+    expect(status).toBeInTheDocument();
+    
+  });
+  
 });
