@@ -48,16 +48,19 @@ export default function RequestTypeTable({ requests, currentUser }) {
     },
   ];
 
-  //since all admins have the role of a user, we can just check if the current user has the role ROLE_USER
-  if (hasRole(currentUser, "ROLE_USER")) {
+  // only professors can delete / edit
+  if (
+    hasRole(currentUser, "ROLE_PROFESSOR") ||
+    hasRole(currentUser, "ROLE_ADMIN")
+  ) {
     columns.push(
       ButtonColumn("Delete", "danger", deleteCallback, "RequestTypeTable"),
     );
   }
 
   if (
-    hasRole(currentUser, "ROLE_USER") &&
-    !hasRole(currentUser, "ROLE_ADMIN")
+    hasRole(currentUser, "ROLE_PROFESSOR") ||
+    hasRole(currentUser, "ROLE_ADMIN")
   ) {
     columns.push(
       ButtonColumn("Edit", "primary", editCallback, "RequestTypeTable"),
