@@ -47,13 +47,19 @@ export default function RequestTypeTable({ requestTypes, currentUser }) {
   ];
 
   // only professors can delete / edit
-  if (hasRole(currentUser, "ROLE_PROFESSOR")) {
+  if (
+    hasRole(currentUser, "ROLE_PROFESSOR") ||
+    hasRole(currentUser, "ROLE_ADMIN")
+  ) {
     columns.push(
       ButtonColumn("Delete", "danger", deleteCallback, "RequestTypeTable"),
     );
   }
 
-  if (hasRole(currentUser, "ROLE_PROFESSOR")) {
+  if (
+    hasRole(currentUser, "ROLE_PROFESSOR") ||
+    hasRole(currentUser, "ROLE_ADMIN")
+  ) {
     columns.push(
       ButtonColumn("Edit", "primary", editCallback, "RequestTypeTable"),
     );

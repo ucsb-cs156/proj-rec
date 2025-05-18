@@ -32,6 +32,12 @@ FourItemsProfessorUser.args = {
   currentUser: currentUserFixtures.professorUser,
 };
 
+export const FourItemsAdminUser = Template.bind({});
+FourItemsAdminUser.args = {
+  requestTypes: requestFixtures.fourTypes,
+  currentUser: currentUserFixtures.adminUser,
+};
+
 FourItemsProfessorUser.parameters = {
   msw: [
     http.delete("/api/requesttypes", () => {
