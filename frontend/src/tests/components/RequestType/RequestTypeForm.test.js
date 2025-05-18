@@ -77,6 +77,25 @@ describe("RequestTypeForm tests", () => {
     ).toBeInTheDocument();
   });
 
+  test("does NOT show validation error when requestType is provided", async () => {
+    renderForm();
+
+    const requestTypeInput = await screen.findByTestId(`${testId}-requestType`);
+    const submitButton = screen.getByTestId(`${testId}-submit`);
+
+    fireEvent.change(requestTypeInput, {
+      target: { value: "ValidType" },
+    });
+
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(
+        screen.queryByText("requestType is required."),
+      ).not.toBeInTheDocument();
+    });
+  });
+
   test("navigates back on cancel click", async () => {
     renderForm();
 
