@@ -2,6 +2,7 @@ import { apiCurrentUserFixtures } from "fixtures/currentUserFixtures";
 import { systemInfoFixtures } from "fixtures/systemInfoFixtures";
 import { http, HttpResponse } from "msw";
 
+import { recommendationRequestFixtures } from "fixtures/recommendationRequestFixtures";
 import StudentProfilePage from "main/pages/StudentProfilePage";
 
 export default {
@@ -21,6 +22,11 @@ RegularUser.parameters = {
       http.get("/api/systemInfo", () => {
         return HttpResponse.json(systemInfoFixtures.showingNeither);
       }),
+      http.get("/api/recommendationrequest/requester/all", () => {
+        return HttpResponse.json(
+          recommendationRequestFixtures.threeRecommendations,
+        );
+      }),
     ],
   },
 };
@@ -34,6 +40,11 @@ AdminUser.parameters = {
       }),
       http.get("/api/systemInfo", () => {
         return HttpResponse.json(systemInfoFixtures.showingBoth);
+      }),
+      http.get("/api/recommendationrequest/requester/all", () => {
+        return HttpResponse.json(
+          recommendationRequestFixtures.threeRecommendations,
+        );
       }),
     ],
   },

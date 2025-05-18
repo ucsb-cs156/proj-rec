@@ -5,6 +5,8 @@ import { http, HttpResponse } from "msw";
 
 import RecommendationRequestEditPage from "main/pages/Requests/RecommendationRequestEditPage";
 import { recommendationRequestFixtures } from "fixtures/recommendationRequestFixtures";
+import usersFixtures from "fixtures/usersFixtures";
+import recommendationTypeFixtures from "fixtures/recommendationTypeFixtures";
 
 export default {
   title: "pages/Requests/RecommendationRequestEditPage",
@@ -40,6 +42,16 @@ Default.parameters = {
     http.put("/api/recommendationrequest", (req) => {
       window.alert("PUT: " + req.url + " and body: " + req.body);
       return HttpResponse.json({}, { status: 200 });
+    }),
+    http.get("/api/admin/users/professors", () => {
+      return HttpResponse.json(usersFixtures.twoProfessors, {
+        status: 200,
+      });
+    }),
+    http.get("/api/requesttypes/all", () => {
+      return HttpResponse.json(recommendationTypeFixtures.fourTypes, {
+        status: 200,
+      });
     }),
   ],
 };
