@@ -104,6 +104,7 @@ describe("UserTable tests", () => {
       `${testId}-cell-row-0-col-Edit-button`,
     );
     expect(editButton).toBeInTheDocument();
+    expect(editButton).toHaveClass("btn-primary");
   });
 
   test("Edit button navigates to the edit page for professorUser", async () => {
@@ -132,6 +133,7 @@ describe("UserTable tests", () => {
       `RequestTypeTable-cell-row-0-col-Edit-button`,
     );
     expect(editButton).toBeInTheDocument();
+    expect(editButton).toHaveClass("btn-primary");
 
     fireEvent.click(editButton);
 
