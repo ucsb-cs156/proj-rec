@@ -22,7 +22,7 @@ describe("RequestTypeForm tests", () => {
         <Router>
           <RequestTypeForm submitAction={jest.fn()} {...props} />
         </Router>
-      </QueryClientProvider>
+      </QueryClientProvider>,
     );
 
   test("renders correctly with no initialContents", async () => {
@@ -39,10 +39,10 @@ describe("RequestTypeForm tests", () => {
 
     expect(await screen.findByTestId(`${testId}-id`)).toBeInTheDocument();
     expect(screen.getByTestId(`${testId}-id`)).toHaveValue(
-      String(initialContents.id)
+      String(initialContents.id),
     );
     expect(screen.getByTestId(`${testId}-requestType`)).toHaveValue(
-      initialContents.requestType
+      initialContents.requestType,
     );
   });
 
@@ -61,7 +61,7 @@ describe("RequestTypeForm tests", () => {
     await waitFor(() => {
       expect(mockSubmitAction).toHaveBeenCalledWith(
         { requestType: "NewType" },
-        expect.anything()
+        expect.anything(),
       );
     });
   });
@@ -72,7 +72,9 @@ describe("RequestTypeForm tests", () => {
     const submitButton = await screen.findByTestId(`${testId}-submit`);
     fireEvent.click(submitButton);
 
-    expect(await screen.findByText("requestType is required.")).toBeInTheDocument();
+    expect(
+      await screen.findByText("requestType is required."),
+    ).toBeInTheDocument();
   });
 
   test("navigates back on cancel click", async () => {

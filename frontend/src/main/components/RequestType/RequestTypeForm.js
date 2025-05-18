@@ -16,7 +16,7 @@ function RequestTypeForm({
   // Stryker restore all
 
   const navigate = useNavigate();
-  
+
   return (
     <Form onSubmit={handleSubmit(submitAction)}>
       <Row>
@@ -39,7 +39,7 @@ function RequestTypeForm({
 
       <Row>
         <Col>
-        <Form.Group className="mb-3">
+          <Form.Group className="mb-3">
             <Form.Label htmlFor="requestType">Request Type</Form.Label>
             <Form.Control
               data-testid="RequestTypeForm-requestType"
