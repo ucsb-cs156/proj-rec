@@ -10,7 +10,7 @@ export default function RequestTypeIndexPage() {
   const currentUser = useCurrentUser();
 
   const {
-    data: requestTypes,
+    data: requestType,
     error: _error,
     status: _status,
   } = useBackend(
@@ -22,7 +22,10 @@ export default function RequestTypeIndexPage() {
   );
 
   const createButton = () => {
-    if (hasRole(currentUser, "ROLE_PROFESSOR")) {
+    if (
+      hasRole(currentUser, "ROLE_PROFESSOR") ||
+      hasRole(currentUser, "ROLE_ADMIN")
+    ) {
       return (
         <Button
           variant="primary"
@@ -40,7 +43,10 @@ export default function RequestTypeIndexPage() {
       <div className="pt-2">
         {createButton()}
         <h1>RequestType</h1>
-        <RequestTypeTable RequestTypes={requestTypes} currentUser={currentUser} />
+        <RequestTypeTable
+          requestTypes={requestType}
+          currentUser={currentUser}
+        />
       </div>
     </BasicLayout>
   );
