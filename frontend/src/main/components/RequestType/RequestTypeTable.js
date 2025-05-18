@@ -67,6 +67,5 @@ export default function RequestTypeTable({ requests, currentUser }) {
 
   return (
     <OurTable data={requests} columns={columns} testid={"RequestTypeTable"} />
-    <OurTable data={requests} columns={columns} testid={"RequestTypeTable"} />
   );
 }
