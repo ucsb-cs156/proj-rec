@@ -3,6 +3,7 @@ import HomePage from "main/pages/HomePage";
 import ProfilePage from "main/pages/ProfilePage";
 import AdminUsersPage from "main/pages/AdminUsersPage";
 import SettingsPage from "main/pages/SettingsPage";
+import AdminRequestsPage from "main/pages/AdminRequestsPage";
 
 import PendingRequestsPage from "main/pages/Requests/PendingRequestsPage";
 import CompletedRequestsPage from "main/pages/Requests/CompletedRequestsPage";
@@ -26,7 +27,14 @@ function App() {
         <Route exact path="/" element={<HomePage />} />
         <Route exact path="/profile" element={<ProfilePage />} />
         {hasRole(currentUser, "ROLE_ADMIN") && (
-          <Route exact path="/admin/users" element={<AdminUsersPage />} />
+          <>
+            <Route exact path="/admin/users" element={<AdminUsersPage />} />
+            <Route
+              exact
+              path="/admin/requests"
+              element={<AdminRequestsPage />}
+            />
+          </>
         )}
         {(hasRole(currentUser, "ROLE_ADMIN") ||
           hasRole(currentUser, "ROLE_PROFESSOR")) && (
