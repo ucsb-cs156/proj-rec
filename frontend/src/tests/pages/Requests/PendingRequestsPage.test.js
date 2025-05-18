@@ -1,4 +1,10 @@
-import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import PendingRequestsPage from "main/pages/Requests/PendingRequestsPage";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter } from "react-router-dom";
@@ -31,11 +37,8 @@ describe("PendingRequestsPage tests", () => {
   });
 
   test("Renders expected content", async () => {
-    // arrange
-
     setupUserOnly();
 
-    // act
     render(
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
@@ -44,7 +47,6 @@ describe("PendingRequestsPage tests", () => {
       </QueryClientProvider>,
     );
 
-    // assert
     await screen.findByText("Pending Requests");
   });
 
@@ -207,31 +209,35 @@ describe("PendingRequestsPage tests", () => {
     ).toBeInTheDocument();
   });
   test("Dropdown menu appears for professor user on pending requests page", async () => {
-    const restoreConsole = mockConsole();
+    const _restoreConsole = mockConsole();
     let currentRequests = [...recommendationRequestFixtures.mixedRequests];
-  
+
     axiosMock
       .onGet("/api/currentUser")
       .reply(200, apiCurrentUserFixtures.professorUser);
     axiosMock
       .onGet("/api/systemInfo")
       .reply(200, systemInfoFixtures.showingNeither);
-  
+
     // Dynamic response for GET requests to always return the latest state
     axiosMock
       .onGet("/api/recommendationrequest/professor/all")
       .reply(() => [200, currentRequests]);
-  
+
     // Update the currentRequests when PUT request is made
-    axiosMock
-      .onPut("/api/recommendationrequest/professor")
-      .reply(() => {
-        currentRequests = currentRequests.map(request =>
-          request.id === 8 ? { ...request, status: "COMPLETED" } : request
-        );
-        return [200, { ...recommendationRequestFixtures.mixedRequests[2], status: "COMPLETED" }];
-      });
-  
+    axiosMock.onPut("/api/recommendationrequest/professor").reply(() => {
+      currentRequests = currentRequests.map((request) =>
+        request.id === 8 ? { ...request, status: "COMPLETED" } : request,
+      );
+      return [
+        200,
+        {
+          ...recommendationRequestFixtures.mixedRequests[2],
+          status: "COMPLETED",
+        },
+      ];
+    });
+
     render(
       <QueryClientProvider client={queryClient}>
         <MemoryRouter initialEntries={["/requests/pending"]}>
@@ -239,49 +245,47 @@ describe("PendingRequestsPage tests", () => {
         </MemoryRouter>
       </QueryClientProvider>,
     );
-  
+
     expect(axiosMock.history.get.length).toBe(3);
     expect(
       screen.getByTestId("RecommendationRequestTable"),
     ).toBeInTheDocument();
-  
+
     await waitFor(() => {
       const statusCell = screen.getByTestId(
-        `RecommendationRequestTable-cell-row-0-col-status`
+        `RecommendationRequestTable-cell-row-0-col-status`,
       );
       expect(statusCell).toBeInTheDocument();
     });
-  
+
     // Check that the dropdown and button exist
     const statusDropdown = screen.getByTestId(`status-dropdown-${8}`);
     expect(statusDropdown).toBeInTheDocument();
-    const dropdownToggle = statusDropdown.querySelector(".dropdown-toggle");
+    const dropdownToggle = within(statusDropdown).getByRole("button");
     expect(dropdownToggle).toBeInTheDocument();
-  
-    await act(async () => {
-      fireEvent.click(dropdownToggle);
-    });
-  
+
+    fireEvent.click(dropdownToggle);
+
     await waitFor(() => {
       expect(dropdownToggle).toHaveAttribute("aria-expanded", "true");
     });
-  
-    expect(screen.getByTestId(`RecommendationRequestTable-cell-row-0-col-status`)).toBeInTheDocument();
+
+    expect(
+      screen.getByTestId(`RecommendationRequestTable-cell-row-0-col-status`),
+    ).toBeInTheDocument();
     const completed = await screen.findByText("COMPLETED");
-    await act(async () => {
-      fireEvent.click(completed);
-    });
-  
-    await act(async () => {
-      queryClient.invalidateQueries("/api/recommendationrequest/professor/all");
-    });
-  
+    fireEvent.click(completed);
+
+    queryClient.invalidateQueries("/api/recommendationrequest/professor/all");
+
     await waitFor(() => {
       expect(queryClient.isFetching()).toBe(0);
     });
-  
+
     await waitFor(() => {
-      const rows = screen.queryAllByTestId(/RecommendationRequestTable-cell-row-0-col-status/);
+      const rows = screen.queryAllByTestId(
+        /RecommendationRequestTable-cell-row-0-col-status/,
+      );
       expect(rows.length).toBe(0); // The row should disappear after completion
     });
 
@@ -302,11 +306,13 @@ describe("PendingRequestsPage tests", () => {
       completionDate: null,
       done: false,
     };
-    
+
     // Check if the logged message matches the expected object
     expect(message).toEqual(expectedObject);
 
-    expect(screen.queryByTestId(`status-dropdown-${8}`)).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId(`status-dropdown-${8}`),
+    ).not.toBeInTheDocument();
   });
 
   test("Dropdown menu does not appear for student user on pending requests page", async () => {
@@ -335,7 +341,7 @@ describe("PendingRequestsPage tests", () => {
 
     await waitFor(() => {
       const statusCell = screen.getByTestId(
-        `RecommendationRequestTable-cell-row-0-col-status`
+        `RecommendationRequestTable-cell-row-0-col-status`,
       );
       console.log("Status Cell HTML:", statusCell.innerHTML);
       expect(statusCell).toBeInTheDocument();
@@ -343,7 +349,5 @@ describe("PendingRequestsPage tests", () => {
 
     const status = screen.getByTestId(`status-span-${8}`);
     expect(status).toBeInTheDocument();
-    
   });
-  
 });

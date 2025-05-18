@@ -2,7 +2,7 @@ import {
   onDeleteSuccess,
   cellToAxiosParamsDelete,
   onUpdateStatusSuccess,
-  cellToAxiosParamsUpdateStatus
+  cellToAxiosParamsUpdateStatus,
 } from "main/utils/RecommendationRequestUtils";
 import mockConsole from "jest-mock-console";
 
@@ -69,7 +69,7 @@ describe("RecommendationRequestUtils", () => {
     test("It returns the correct params", () => {
       // arrange
       const cell = { row: { values: { id: 17 } } };
-      const newStatus = "COMPLETED"
+      const newStatus = "COMPLETED";
 
       // act
       const result = cellToAxiosParamsUpdateStatus(cell, newStatus);
@@ -78,8 +78,8 @@ describe("RecommendationRequestUtils", () => {
       expect(result).toEqual({
         url: "/api/recommendationrequest/professor",
         method: "PUT",
-        params: { id: 17}, 
-        data: {status: "COMPLETED"}
+        params: { id: 17 },
+        data: { status: "COMPLETED" },
       });
     });
   });

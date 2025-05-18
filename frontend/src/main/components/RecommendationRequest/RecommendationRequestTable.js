@@ -6,13 +6,12 @@ import {
   cellToAxiosParamsDelete,
   onDeleteSuccess,
   cellToAxiosParamsUpdateStatus,
-  onUpdateStatusSuccess
+  onUpdateStatusSuccess,
 } from "main/utils/RecommendationRequestUtils";
 import { useNavigate, useLocation } from "react-router-dom";
 import { hasRole } from "main/utils/currentUser";
 import { Dropdown, DropdownButton } from "react-bootstrap";
 import { useQueryClient } from "react-query";
-
 
 export default function RecommendationRequestTable({ requests, currentUser }) {
   const navigate = useNavigate();
@@ -35,7 +34,6 @@ export default function RecommendationRequestTable({ requests, currentUser }) {
   );
 
   // Stryker restore all
-  
 
   // Stryker disable next-line all : TODO try to make a good test for this
   const deleteCallback = async (cell) => {
@@ -44,13 +42,13 @@ export default function RecommendationRequestTable({ requests, currentUser }) {
 
   const updateStatusMutation = useBackendMutation(
     (params) => cellToAxiosParamsUpdateStatus(params.cell, params.newStatus),
-    { 
+    {
       onSuccess: (message) => {
         onUpdateStatusSuccess(message);
         // Refreshes the page immediately when status is changed by requiring a new GET call
         queryClient.invalidateQueries(apiEndpoint);
-      }
-    }
+      },
+    },
   );
 
   const StatusCell = ({ cell }) => {
@@ -59,13 +57,16 @@ export default function RecommendationRequestTable({ requests, currentUser }) {
 
     const handleClick = (eventKey) => {
       setStatus(eventKey);
-      updateStatusMutation.mutate({cell, newStatus:eventKey })
+      updateStatusMutation.mutate({ cell, newStatus: eventKey });
     };
 
-    if (currentUrl.pathname.includes("/requests/pending") && hasRole(currentUser, "ROLE_PROFESSOR")) {
+    if (
+      currentUrl.pathname.includes("/requests/pending") &&
+      hasRole(currentUser, "ROLE_PROFESSOR")
+    ) {
       return (
-        <DropdownButton 
-          title={status} 
+        <DropdownButton
+          title={status}
           data-testid={`status-dropdown-${cell.row.values.id}`}
           onSelect={handleClick}
         >
@@ -73,15 +74,15 @@ export default function RecommendationRequestTable({ requests, currentUser }) {
           <Dropdown.Item eventKey="COMPLETED">COMPLETED</Dropdown.Item>
           <Dropdown.Item eventKey="DENIED">DENIED</Dropdown.Item>
         </DropdownButton>
-      )
+      );
     } else {
-      return <span data-testid={`status-span-${cell.row.values.id}`}>{cell.row.values.status}</span>
+      return (
+        <span data-testid={`status-span-${cell.row.values.id}`}>
+          {cell.row.values.status}
+        </span>
+      );
     }
   };
-
-  
-  
-  
 
   const columns = [
     {
