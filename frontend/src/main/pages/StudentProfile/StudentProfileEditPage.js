@@ -48,12 +48,8 @@ export default function StudentProfileEditPage({ storybook = false }) {
     },
   });
 
-
-
   const onSuccess = (recommendationrequest) => {
-    toast(
-      `UCSBOrganization Updated - id: ${recommendationrequest.id}`,
-    );
+    toast(`UCSBOrganization Updated - id: ${recommendationrequest.id}`);
   };
 
   const mutation = useBackendMutation(
@@ -84,7 +80,8 @@ export default function StudentProfileEditPage({ storybook = false }) {
             initialContents={{
               ...recommendationrequests,
               professorId: recommendationrequests.professor?.id,
-              dueDate: convertToMMDDYYYY(recommendationrequests.dueDate),}}
+              dueDate: convertToMMDDYYYY(recommendationrequests.dueDate),
+            }}
           />
         )}
       </div>

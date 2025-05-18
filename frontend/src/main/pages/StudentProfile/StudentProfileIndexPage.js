@@ -21,7 +21,6 @@ export default function StudentProfileIndexPage() {
     [],
   );
 
-
   const createButton = () => {
     if (hasRole(currentUser, "ROLE_STUDENT")) {
       return (

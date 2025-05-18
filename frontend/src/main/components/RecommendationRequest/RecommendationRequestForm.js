@@ -46,7 +46,7 @@ function RecommendationRequestForm({
 
     getProfessors();
     getRequestTypes();
-  },[]);
+  }, []);
 
   const onSubmit = (data) => {
     if (data.dueDate && data.dueDate.includes("/")) {
@@ -180,30 +180,30 @@ function RecommendationRequestForm({
           </Form.Group>
         </Col>
       </Row>
-      
+
       <Row>
         <Col>
-            <Form.Group className="mb-3">
-              <Form.Label htmlFor="duedate">Due Date</Form.Label>
-              <Form.Control
-                id="dueDate"
-                type="text"
-                placeholder="MM/DD/YYYY"
-                data-testid="RecommendationRequestForm-dueDate"
-                isInvalid={Boolean(errors.dueDate)}
-                {...register("dueDate", {
-                  required: "Please enter a due date (MM/DD/YYYY)",
-                  pattern: {
-                    value: /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}$/,
-                  },
-                })}
-              />
-              {errors.dueDate && (
-                <Form.Control.Feedback type="invalid">
-                  {errors.dueDate.message}
-                </Form.Control.Feedback>
-              )}
-            </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label htmlFor="duedate">Due Date</Form.Label>
+            <Form.Control
+              id="dueDate"
+              type="text"
+              placeholder="MM/DD/YYYY"
+              data-testid="RecommendationRequestForm-dueDate"
+              isInvalid={Boolean(errors.dueDate)}
+              {...register("dueDate", {
+                required: "Please enter a due date (MM/DD/YYYY)",
+                pattern: {
+                  value: /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}$/,
+                },
+              })}
+            />
+            {errors.dueDate && (
+              <Form.Control.Feedback type="invalid">
+                {errors.dueDate.message}
+              </Form.Control.Feedback>
+            )}
+          </Form.Group>
         </Col>
       </Row>
 
