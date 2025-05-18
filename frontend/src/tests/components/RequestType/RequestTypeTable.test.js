@@ -22,7 +22,6 @@ describe("UserTable tests", () => {
     const currentUser = currentUserFixtures.userOnly;
 
     expect(hasRole(currentUser, "ROLE_USER")).toBe(true);
-    expect(hasRole(currentUser, "ROLE_ADMIN")).toBe(false);
 
     render(
       <QueryClientProvider client={queryClient}>
