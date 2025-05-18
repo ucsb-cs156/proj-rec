@@ -100,7 +100,7 @@ describe("UserTable tests", () => {
     expect(deleteButton).toBeInTheDocument();
     expect(deleteButton).toHaveClass("btn-danger");
 
-    const editButton = screen.getByTestId(
+    const editButton = screen.queryByTestId(
       `${testId}-cell-row-0-col-Edit-button`,
     );
     expect(editButton).toBeInTheDocument();
@@ -237,8 +237,7 @@ describe("UserTable tests", () => {
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
           <RequestTypeTable
-            requests={requestFixtures.fourTypes}
-            requests={requestFixtures.fourTypes}
+            requestTypes={requestFixtures.fourTypes}
             currentUser={currentUser}
           />
         </MemoryRouter>
@@ -259,9 +258,9 @@ describe("UserTable tests", () => {
   });
 
   //for user
-  test("Delete button calls delete callback (for user)", async () => {
+  test("Delete button calls delete callback (for professorUser)", async () => {
     // arrange
-    const currentUser = currentUserFixtures.userOnly;
+    const currentUser = currentUserFixtures.professorUser;
 
     const axiosMock = new AxiosMockAdapter(axios);
     axiosMock
@@ -273,98 +272,7 @@ describe("UserTable tests", () => {
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
           <RequestTypeTable
-            requests={requestFixtures.fourTypes}
-            currentUser={currentUser}
-          />
-        </MemoryRouter>
-      </QueryClientProvider>,
-    );
-
-    // assert - check that the expected content is rendered
-
-    await waitFor(() => {
-      expect(
-        screen.getByTestId(`RequestTypeTable-cell-row-0-col-id`),
-      ).toHaveTextContent("1");
-    });
-
-    const deleteButton = screen.getByTestId(
-      `RequestTypeTable-cell-row-0-col-Delete-button`,
-    );
-    expect(deleteButton).toBeInTheDocument();
-
-    // act - click the delete button
-    fireEvent.click(deleteButton);
-
-    // assert - check that the delete endpoint was called
-
-    await waitFor(() => expect(axiosMock.history.delete.length).toBe(1));
-    expect(axiosMock.history.delete[0].params).toEqual({ id: 1 });
-  });
-
-  //for admin
-  test("Delete button calls delete callback (admin)", async () => {
-  test("Delete button calls delete callback (for user)", async () => {
-    // arrange
-    const currentUser = currentUserFixtures.userOnly;
-
-    const axiosMock = new AxiosMockAdapter(axios);
-    axiosMock
-      .onDelete("/api/requesttypes")
-      .reply(200, { message: "Request Type deleted" });
-
-    // act - render the component
-    render(
-      <QueryClientProvider client={queryClient}>
-        <MemoryRouter>
-          <RequestTypeTable
-            requests={requestFixtures.fourTypes}
-            currentUser={currentUser}
-          />
-        </MemoryRouter>
-      </QueryClientProvider>,
-    );
-
-    // assert - check that the expected content is rendered
-
-    await waitFor(() => {
-      expect(
-        screen.getByTestId(`RequestTypeTable-cell-row-0-col-id`),
-      ).toHaveTextContent("1");
-    });
-
-    const deleteButton = screen.getByTestId(
-      `RequestTypeTable-cell-row-0-col-Delete-button`,
-    );
-    expect(deleteButton).toBeInTheDocument();
-
-    // act - click the delete button
-    fireEvent.click(deleteButton);
-
-    // assert - check that the delete endpoint was called
-
-    await waitFor(() => expect(axiosMock.history.delete.length).toBe(1));
-    expect(axiosMock.history.delete[0].params).toEqual({ id: 1 });
-  });
-
-  //for admin
-  test("Delete button calls delete callback (admin)", async () => {
-    // arrange
-    const currentUser = currentUserFixtures.adminUser;
-    const currentUser = currentUserFixtures.adminUser;
-
-    const axiosMock = new AxiosMockAdapter(axios);
-    axiosMock
-      .onDelete("/api/requesttypes")
-      .reply(200, { message: "Request Type deleted" });
-
-    // act - render the component
-    render(
-      <QueryClientProvider client={queryClient}>
-        <MemoryRouter>
-          <RequestTypeTable
-            requests={requestFixtures.fourTypes}
-            requests={requestFixtures.fourTypes}
+            requestTypes={requestFixtures.fourTypes}
             currentUser={currentUser}
           />
         </MemoryRouter>
