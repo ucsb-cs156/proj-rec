@@ -1,7 +1,6 @@
 import BasicLayout from "main/layouts/BasicLayout/BasicLayout";
 import RecommendationRequestTable from "main/components/RecommendationRequest/RecommendationRequestTable";
 
-// import { useCurrentUser } from "main/utils/useCurrentUser";
 import { useBackend } from "main/utils/useBackend";
 const AdminRequestsPage = () => {
   const {
