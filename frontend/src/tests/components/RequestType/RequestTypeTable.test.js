@@ -22,6 +22,7 @@ describe("UserTable tests", () => {
     const currentUser = currentUserFixtures.userOnly;
 
     expect(hasRole(currentUser, "ROLE_USER")).toBe(true);
+    expect(hasRole(currentUser, "ROLE_ADMIN")).toBe(false);
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -103,6 +104,7 @@ describe("UserTable tests", () => {
       `${testId}-cell-row-0-col-Edit-button`,
     );
     expect(editButton).toBeInTheDocument();
+    expect(editButton).toHaveClass("btn-primary");
   });
 
   test("Edit button navigates to the edit page for professorUser", async () => {

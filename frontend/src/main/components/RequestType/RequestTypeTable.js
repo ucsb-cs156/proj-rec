@@ -53,14 +53,17 @@ export default function RequestTypeTable({ requestTypes, currentUser }) {
     );
   }
 
-  if (
-    hasRole(currentUser, "ROLE_PROFESSOR")) {
+  if (hasRole(currentUser, "ROLE_PROFESSOR")) {
     columns.push(
       ButtonColumn("Edit", "primary", editCallback, "RequestTypeTable"),
     );
   }
 
   return (
-    <OurTable data={requestTypes} columns={columns} testid={"RequestTypeTable"} />
+    <OurTable
+      data={requestTypes}
+      columns={columns}
+      testid={"RequestTypeTable"}
+    />
   );
 }
