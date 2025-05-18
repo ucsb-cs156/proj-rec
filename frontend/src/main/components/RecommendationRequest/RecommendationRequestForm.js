@@ -49,9 +49,8 @@ function RecommendationRequestForm({
   }, []);
 
   const onSubmit = (data) => {
-    if (data.dueDate && data.dueDate.includes("/")) {
-      const [month, day, year] = data.dueDate.split("/");
-      data.dueDate = `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}T00:00:00`;
+    if (data.dueDate && /^\d{4}-\d{2}-\d{2}$/.test(data.dueDate)) {
+      data.dueDate = data.dueDate + "T00:00:00";
     }
     submitAction(data);
   };
@@ -184,18 +183,14 @@ function RecommendationRequestForm({
       <Row>
         <Col>
           <Form.Group className="mb-3">
-            <Form.Label htmlFor="duedate">Due Date</Form.Label>
+            <Form.Label htmlFor="dueDate">Due Date</Form.Label>
             <Form.Control
               id="dueDate"
-              type="text"
-              placeholder="MM/DD/YYYY"
+              type="date"
               data-testid="RecommendationRequestForm-dueDate"
               isInvalid={Boolean(errors.dueDate)}
               {...register("dueDate", {
-                required: "Please enter a due date (MM/DD/YYYY)",
-                pattern: {
-                  value: /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}$/,
-                },
+                required: "Please select a due date",
               })}
             />
             {errors.dueDate && (

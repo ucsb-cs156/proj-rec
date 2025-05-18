@@ -5,15 +5,6 @@ import { Navigate } from "react-router-dom";
 import { useBackend, useBackendMutation } from "main/utils/useBackend";
 import { toast } from "react-toastify";
 
-function convertToMMDDYYYY(dateStr) {
-  if (!dateStr) return "";
-  const d = new Date(dateStr);
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  const dd = String(d.getDate()).padStart(2, "0");
-  const yyyy = d.getFullYear();
-  return `${mm}/${dd}/${yyyy}`;
-}
-
 export default function StudentProfileEditPage({ storybook = false }) {
   let { id } = useParams();
 
@@ -80,7 +71,9 @@ export default function StudentProfileEditPage({ storybook = false }) {
             initialContents={{
               ...recommendationrequests,
               professor_id: recommendationrequests.professor?.id,
-              dueDate: convertToMMDDYYYY(recommendationrequests.dueDate),
+              dueDate: recommendationrequests.dueDate
+              ? new Date(recommendationrequests.dueDate).toISOString().split("T")[0]
+              : "",
             }}
           />
         )}
