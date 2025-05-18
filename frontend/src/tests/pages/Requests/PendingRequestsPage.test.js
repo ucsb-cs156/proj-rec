@@ -97,7 +97,7 @@ describe("PendingRequestsPage tests", () => {
       statusCells.some((cell) => cell.textContent === "PENDING"),
     ).toBeTruthy();
 
-    const status = screen.getByTestId(`status-span-${8}`);
+    const status = screen.getByTestId(`status-dropdown-${8}`);
     expect(status).toBeInTheDocument();
   });
 
@@ -178,6 +178,9 @@ describe("PendingRequestsPage tests", () => {
     expect(
       statusCells.some((cell) => cell.textContent === "PENDING"),
     ).toBeTruthy();
+
+    const status = screen.getByTestId(`status-span-${8}`);
+    expect(status).toBeInTheDocument();
   });
 
   test("Renders empty table when no pending requests for student", async () => {
@@ -208,6 +211,7 @@ describe("PendingRequestsPage tests", () => {
       screen.getByTestId("RecommendationRequestTable"),
     ).toBeInTheDocument();
   });
+
   test("Dropdown menu appears for professor user on pending requests page", async () => {
     const _restoreConsole = mockConsole();
     let currentRequests = [...recommendationRequestFixtures.mixedRequests];
@@ -218,13 +222,9 @@ describe("PendingRequestsPage tests", () => {
     axiosMock
       .onGet("/api/systemInfo")
       .reply(200, systemInfoFixtures.showingNeither);
-
-    // Dynamic response for GET requests to always return the latest state
     axiosMock
       .onGet("/api/recommendationrequest/professor/all")
       .reply(() => [200, currentRequests]);
-
-    // Update the currentRequests when PUT request is made
     axiosMock.onPut("/api/recommendationrequest/professor").reply(() => {
       currentRequests = currentRequests.map((request) =>
         request.id === 8 ? { ...request, status: "COMPLETED" } : request,
@@ -240,7 +240,7 @@ describe("PendingRequestsPage tests", () => {
 
     render(
       <QueryClientProvider client={queryClient}>
-        <MemoryRouter initialEntries={["/requests/pending"]}>
+        <MemoryRouter>
           <PendingRequestsPage />
         </MemoryRouter>
       </QueryClientProvider>,
@@ -258,7 +258,6 @@ describe("PendingRequestsPage tests", () => {
       expect(statusCell).toBeInTheDocument();
     });
 
-    // Check that the dropdown and button exist
     const statusDropdown = screen.getByTestId(`status-dropdown-${8}`);
     expect(statusDropdown).toBeInTheDocument();
     const dropdownToggle = within(statusDropdown).getByRole("button");
@@ -279,36 +278,16 @@ describe("PendingRequestsPage tests", () => {
     queryClient.invalidateQueries("/api/recommendationrequest/professor/all");
 
     await waitFor(() => {
-      expect(queryClient.isFetching()).toBe(0);
-    });
-
-    await waitFor(() => {
-      const rows = screen.queryAllByTestId(
-        /RecommendationRequestTable-cell-row-0-col-status/,
-      );
-      expect(rows.length).toBe(0); // The row should disappear after completion
+      expect(
+        screen.queryByTestId(
+          "RecommendationRequestTable-cell-row-0-col-status",
+        ),
+      ).not.toBeInTheDocument();
     });
 
     expect(console.log).toHaveBeenCalled();
     const message = console.log.mock.calls[0][0];
-    const expectedObject = {
-      id: 8,
-      requesterEmail: "student8@ucsb.edu",
-      professorEmail: "professor1@ucsb.edu",
-      requester: { fullName: "Student Eight", email: "student8@ucsb.edu" },
-      professor: { fullName: "Professor One", email: "professor1@ucsb.edu" },
-      details: "Pending request",
-      recommendationType: "Graduate School",
-      status: "COMPLETED",
-      submissionDate: "2024-02-01T00:00:00",
-      dueDate: "2024-03-01T00:00:00",
-      lastModifiedDate: "2024-02-15T00:00:00",
-      completionDate: null,
-      done: false,
-    };
-
-    // Check if the logged message matches the expected object
-    expect(message).toEqual(expectedObject);
+    expect(message).toEqual(currentRequests[2]);
 
     expect(
       screen.queryByTestId(`status-dropdown-${8}`),
@@ -343,7 +322,6 @@ describe("PendingRequestsPage tests", () => {
       const statusCell = screen.getByTestId(
         `RecommendationRequestTable-cell-row-0-col-status`,
       );
-      console.log("Status Cell HTML:", statusCell.innerHTML);
       expect(statusCell).toBeInTheDocument();
     });
 

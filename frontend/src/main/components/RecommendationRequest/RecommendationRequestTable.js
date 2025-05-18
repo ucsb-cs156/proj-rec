@@ -8,12 +8,16 @@ import {
   cellToAxiosParamsUpdateStatus,
   onUpdateStatusSuccess,
 } from "main/utils/RecommendationRequestUtils";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { hasRole } from "main/utils/currentUser";
 import { Dropdown, DropdownButton } from "react-bootstrap";
 import { useQueryClient } from "react-query";
 
-export default function RecommendationRequestTable({ requests, currentUser }) {
+export default function RecommendationRequestTable({
+  requests,
+  currentUser,
+  onPendingRequests = false,
+}) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const editCallback = (cell) => {
@@ -53,17 +57,13 @@ export default function RecommendationRequestTable({ requests, currentUser }) {
 
   const StatusCell = ({ cell }) => {
     const [status, setStatus] = React.useState(cell.row.values.status);
-    const currentUrl = useLocation();
 
     const handleClick = (eventKey) => {
       setStatus(eventKey);
       updateStatusMutation.mutate({ cell, newStatus: eventKey });
     };
 
-    if (
-      currentUrl.pathname.includes("/requests/pending") &&
-      hasRole(currentUser, "ROLE_PROFESSOR")
-    ) {
+    if (onPendingRequests && hasRole(currentUser, "ROLE_PROFESSOR")) {
       return (
         <DropdownButton
           title={status}
