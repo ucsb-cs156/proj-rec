@@ -36,7 +36,6 @@ function RequestTypeForm({
 
   const navigate = useNavigate();
 
-
   return (
     <Form onSubmit={handleSubmit(submitAction)}>
       <Row>

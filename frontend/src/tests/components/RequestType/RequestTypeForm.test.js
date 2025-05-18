@@ -73,10 +73,9 @@ describe("RequestTypeForm tests", () => {
   });
 
   test("that the options are filled correctly", async () => {
-    global.fetch
-      .mockResolvedValueOnce({
-        json: () => Promise.resolve(requestTypeFixtures.fourTypes), // for request types
-      });
+    global.fetch.mockResolvedValueOnce({
+      json: () => Promise.resolve(requestTypeFixtures.fourTypes), // for request types
+    });
     render(
       <QueryClientProvider client={queryClient}>
         <Router>
