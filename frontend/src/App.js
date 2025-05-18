@@ -6,6 +6,9 @@ import AdminUsersPage from "main/pages/AdminUsersPage";
 import PendingRequestsPage from "main/pages/Requests/PendingRequestsPage";
 import CompletedRequestsPage from "main/pages/Requests/CompletedRequestsPage";
 import StatisticsPage from "main/pages/Requests/StatisticsPage";
+import StudentProfileIndexPage from "main/pages/StudentProfile/StudentProfileIndexPage";
+import StudentProfileCreatePage from "main/pages/StudentProfile/StudentProfileCreatePage";
+import StudentProfileEditPage from "main/pages/StudentProfile/StudentProfileEditPage";
 
 import { hasRole, useCurrentUser } from "main/utils/currentUser";
 
@@ -40,6 +43,21 @@ function App() {
               exact
               path="/requests/statistics"
               element={<StatisticsPage />}
+            />
+            <Route
+              exact
+              path="/studentrequests"
+              element={<StudentProfileIndexPage />}
+            />
+            <Route
+              exact
+              path="/studentrequests/create"
+              element={<StudentProfileCreatePage />}
+            />
+            <Route
+              exact
+              path="/studentrequests/edit/:id"
+              element={<StudentProfileEditPage />}
             />
           </>
         )}
