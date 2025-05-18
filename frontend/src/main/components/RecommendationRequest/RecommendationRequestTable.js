@@ -16,6 +16,11 @@ export default function RecommendationRequestTable({ requests, currentUser }) {
     navigate(`/requests/edit/${cell.row.values.id}`);
   };
 
+  const formattedDate = (val) => {
+    const date = new Date(val);
+    const formattedDate = `${String(date.getMonth() + 1).padStart(2, "0")}/${String(date.getDate()).padStart(2, "0")}/${date.getFullYear()} ${String(date.getHours()).padStart(2, "0")}:${String(date.getSeconds()).padStart(2, "0")}`;
+    return formattedDate;
+  };
   // Stryker disable all : hard to test for query caching
 
   // when delete success, invalidate the correct query key (depending on user role)
@@ -71,18 +76,31 @@ export default function RecommendationRequestTable({ requests, currentUser }) {
     {
       Header: "Submission Date",
       accessor: "submissionDate",
+      Cell: ({ value }) => {
+        return formattedDate(value);
+      },
     },
     {
       Header: "Last Modified Date",
       accessor: "lastModifiedDate",
+      Cell: ({ value }) => {
+        return formattedDate(value);
+      },
     },
     {
       Header: "Completion Date",
       accessor: "completionDate",
+      Cell: ({ value }) => {
+        if (!value) return ""; // Check if value exists
+        return formattedDate(value);
+      },
     },
     {
       Header: "Due Date",
       accessor: "dueDate",
+      Cell: ({ value }) => {
+        return formattedDate(value);
+      },
     },
   ];
 
