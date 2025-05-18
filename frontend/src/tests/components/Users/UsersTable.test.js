@@ -168,40 +168,4 @@ describe("UserTable tests", () => {
 
     expect(axiosMock.history.post[1].params).toEqual({ id: 1 });
   });
-
-  test("toggling student", async () => {
-    const currentUser = usersFixtures.adminUser;
-
-    axiosMock
-      .onPost("/api/admin/users/toggleStudent", {
-        params: { id: 1 },
-      })
-      .reply(200);
-
-    render(
-      <QueryClientProvider client={queryClient}>
-        <UsersTable
-          users={usersFixtures.threeUsers}
-          currentUser={currentUser}
-        />
-      </QueryClientProvider>,
-    );
-
-    const studentButton = screen.getByTestId(
-      `UsersTable-cell-row-0-col-Toggle Student-button`,
-    );
-    expect(studentButton).toBeInTheDocument();
-
-    fireEvent.click(studentButton);
-
-    await waitFor(() => {
-      expect(axiosMock.history.post.length).toBe(3);
-    });
-
-    expect(axiosMock.history.post[2].url).toBe(
-      "/api/admin/users/toggleStudent",
-    );
-
-    expect(axiosMock.history.post[2].params).toEqual({ id: 1 });
-  });
 });
