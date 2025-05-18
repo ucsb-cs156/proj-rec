@@ -16,19 +16,19 @@ const Template = (args) => {
 export const Empty = Template.bind({});
 
 Empty.args = {
-  requests: [],
+  requestTypes: [],
 };
 
 export const FourItemsOrdinaryUser = Template.bind({});
 
 FourItemsOrdinaryUser.args = {
-  requests: requestFixtures.fourTypes,
+  requestTypes: requestFixtures.fourTypes,
   currentUser: currentUserFixtures.userOnly,
 };
 
 export const FourItemsProfessorUser = Template.bind({});
 FourItemsProfessorUser.args = {
-  requests: requestFixtures.fourTypes,
+  requestTypes: requestFixtures.fourTypes,
   currentUser: currentUserFixtures.professorUser,
 };
 
