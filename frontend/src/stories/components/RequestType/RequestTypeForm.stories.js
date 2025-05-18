@@ -19,7 +19,6 @@ Create.args = {
     console.log("Submit was clicked with data: ", data);
     window.alert("Submit was clicked with data: " + JSON.stringify(data));
   },
-  requestTypeVals: requestTypeFixtures.fourTypes,
 };
 
 export const Update = Template.bind({});
@@ -31,5 +30,4 @@ Update.args = {
     console.log("Submit was clicked with data: ", data);
     window.alert("Submit was clicked with data: " + JSON.stringify(data));
   },
-  requestTypeVals: requestTypeFixtures.fourTypes,
 };

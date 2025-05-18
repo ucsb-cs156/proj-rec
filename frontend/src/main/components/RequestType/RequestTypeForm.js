@@ -1,5 +1,4 @@
 import { Button, Form, Row, Col } from "react-bootstrap";
-import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
@@ -7,7 +6,6 @@ function RequestTypeForm({
   initialContents,
   submitAction,
   buttonLabel = "Create",
-  requestTypeVals = [],
 }) {
   // Stryker disable all
   const {
@@ -17,25 +15,8 @@ function RequestTypeForm({
   } = useForm({ defaultValues: initialContents || {} });
   // Stryker restore all
 
-  const [requestTypes, setRequestTypes] = useState(requestTypeVals);
-
-  //queries endpoint to get list of requestTypes
-  useEffect(() => {
-    const getRequestTypes = async () => {
-      try {
-        const response = await fetch("/api/requesttypes/all");
-        const data = await response.json();
-        setRequestTypes(data);
-      } catch (error) {
-        console.error("Error fetching request types");
-      }
-    };
-
-    getRequestTypes();
-  });
-
   const navigate = useNavigate();
-
+  
   return (
     <Form onSubmit={handleSubmit(submitAction)}>
       <Row>
@@ -58,44 +39,20 @@ function RequestTypeForm({
 
       <Row>
         <Col>
-          <Form.Group className="mb-3">
+        <Form.Group className="mb-3">
             <Form.Label htmlFor="requestType">Request Type</Form.Label>
-            <Form.Select
+            <Form.Control
               data-testid="RequestTypeForm-requestType"
               id="requestType"
-              type="string"
+              type="text"
               isInvalid={Boolean(errors.requestType)}
               {...register("requestType", {
-                required: "Please select a request type",
+                required: true,
               })}
-              defaultValue=""
-            >
-              {Array.isArray(requestTypes) && requestTypes.length > 0 ? (
-                <>
-                  <option disabled value="">
-                    Select a request type
-                  </option>
-                  {requestTypes.map((requestType) => (
-                    <option
-                      key={requestType.id}
-                      value={requestType.requestType}
-                    >
-                      {requestType.requestType}
-                    </option>
-                  ))}
-                </>
-              ) : (
-                <option disabled value="">
-                  No request types available, use Other in details
-                </option>
-              )}
-              <option value="Other">Other</option>
-            </Form.Select>
-            {errors.requestType && (
-              <Form.Control.Feedback type="invalid">
-                {errors.requestType.message}
-              </Form.Control.Feedback>
-            )}
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.requestType && "requestType is required."}
+            </Form.Control.Feedback>
           </Form.Group>
         </Col>
       </Row>
