@@ -16,23 +16,29 @@ const Template = (args) => {
 export const Empty = Template.bind({});
 
 Empty.args = {
-  requests: [],
+  requestTypes: [],
 };
 
-export const ThreeItemsOrdinaryUser = Template.bind({});
+export const FourItemsOrdinaryUser = Template.bind({});
 
-ThreeItemsOrdinaryUser.args = {
-  requests: requestFixtures.fourTypes,
+FourItemsOrdinaryUser.args = {
+  requestTypes: requestFixtures.fourTypes,
   currentUser: currentUserFixtures.userOnly,
 };
 
-export const ThreeItemsAdminUser = Template.bind({});
-ThreeItemsAdminUser.args = {
-  requests: requestFixtures.fourTypes,
+export const FourItemsProfessorUser = Template.bind({});
+FourItemsProfessorUser.args = {
+  requestTypes: requestFixtures.fourTypes,
+  currentUser: currentUserFixtures.professorUser,
+};
+
+export const FourItemsAdminUser = Template.bind({});
+FourItemsAdminUser.args = {
+  requestTypes: requestFixtures.fourTypes,
   currentUser: currentUserFixtures.adminUser,
 };
 
-ThreeItemsAdminUser.parameters = {
+FourItemsProfessorUser.parameters = {
   msw: [
     http.delete("/api/requesttypes", () => {
       return HttpResponse.json({}, { status: 200 });

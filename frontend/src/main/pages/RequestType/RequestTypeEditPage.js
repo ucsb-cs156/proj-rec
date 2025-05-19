@@ -32,7 +32,7 @@ export default function RequestTypeEditPage({ storybook = false }) {
       id: requestTypes.id,
     },
     data: {
-      requestType: requestTypes.requestType
+      requestType: requestTypes.requestType,
     },
   });
 

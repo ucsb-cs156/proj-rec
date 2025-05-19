@@ -30,6 +30,17 @@ describe("RequestTypeIndexPage tests", () => {
     axiosMock.resetHistory();
     axiosMock
       .onGet("/api/currentUser")
+      .reply(200, apiCurrentUserFixtures.userOnly);
+    axiosMock
+      .onGet("/api/systemInfo")
+      .reply(200, systemInfoFixtures.showingNeither);
+  };
+
+  const setupProfessorUser = () => {
+    axiosMock.reset();
+    axiosMock.resetHistory();
+    axiosMock
+      .onGet("/api/currentUser")
       .reply(200, apiCurrentUserFixtures.professorUser);
     axiosMock
       .onGet("/api/systemInfo")
@@ -69,7 +80,27 @@ describe("RequestTypeIndexPage tests", () => {
     expect(button).toHaveAttribute("style", "float: right;");
   });
 
-  test("renders three requesttypes correctly for regular user", async () => {
+  test("Renders with Create Button for professor user", async () => {
+    setupProfessorUser();
+    axiosMock.onGet("/api/requesttypes/all").reply(200, []);
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <RequestTypeIndexPage />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText(/Create RequestType/)).toBeInTheDocument();
+    });
+    const button = screen.getByText(/Create RequestType/);
+    expect(button).toHaveAttribute("href", "/requesttypes/create");
+    expect(button).toHaveAttribute("style", "float: right;");
+  });
+
+  test("renders four request types correctly for regular user", async () => {
     setupUserOnly();
     axiosMock
       .onGet("/api/requesttypes/all")
@@ -98,8 +129,8 @@ describe("RequestTypeIndexPage tests", () => {
     const createRequestTypeButton = screen.queryByText("Create RequestType");
     expect(createRequestTypeButton).not.toBeInTheDocument();
 
-    const requesterEmail = screen.getByText("Inqueries");
-    expect(requesterEmail).toBeInTheDocument();
+    const requestType = screen.getByText("Recommendations");
+    expect(requestType).toBeInTheDocument();
 
     // for non-admin users, details button is visible, but the edit and delete buttons should not be visible
     expect(
@@ -138,6 +169,52 @@ describe("RequestTypeIndexPage tests", () => {
 
   test("what happens when you click delete, admin", async () => {
     setupAdminUser();
+
+    axiosMock
+      .onGet("/api/requesttypes/all")
+      .reply(200, requestFixtures.fourTypes);
+    axiosMock
+      .onDelete("/api/requesttypes")
+      .reply(200, "RequestType with id 1 was deleted");
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <RequestTypeIndexPage />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId(`${testId}-cell-row-0-col-id`),
+      ).toBeInTheDocument();
+    });
+
+    expect(screen.getByTestId(`${testId}-cell-row-0-col-id`)).toHaveTextContent(
+      "1",
+    );
+
+    const deleteButton = screen.getByTestId(
+      `${testId}-cell-row-0-col-Delete-button`,
+    );
+    expect(deleteButton).toBeInTheDocument();
+
+    fireEvent.click(deleteButton);
+
+    await waitFor(() => {
+      expect(mockToast).toBeCalledWith("RequestType with id 1 was deleted");
+    });
+
+    await waitFor(() => {
+      expect(axiosMock.history.delete.length).toBe(1);
+    });
+    expect(axiosMock.history.delete[0].url).toBe("/api/requesttypes");
+    expect(axiosMock.history.delete[0].url).toBe("/api/requesttypes");
+    expect(axiosMock.history.delete[0].params).toEqual({ id: 1 });
+  });
+  test("what happens when you click delete, professor", async () => {
+    setupProfessorUser();
 
     axiosMock
       .onGet("/api/requesttypes/all")

@@ -85,9 +85,7 @@ describe("RequestTypeCreatePage tests", () => {
       ).toBeInTheDocument();
     });
 
-    const requestTypeField = screen.getByTestId(
-      "RequestTypeForm-requestType",
-    );
+    const requestTypeField = screen.getByTestId("RequestTypeForm-requestType");
     const submitButton = screen.getByTestId("RequestTypeForm-submit");
 
     fireEvent.change(requestTypeField, {
