@@ -33,14 +33,8 @@ describe("UserTable tests", () => {
       </QueryClientProvider>,
     );
 
-    const expectedHeaders = [
-      "id",
-      "Request Type",
-    ];
-    const expectedFields = [
-      "id",
-      "requestType",
-    ];
+    const expectedHeaders = ["id", "Request Type"];
+    const expectedFields = ["id", "requestType"];
     const testId = "RequestTypeTable";
 
     expectedHeaders.forEach((headerText) => {
@@ -72,7 +66,6 @@ describe("UserTable tests", () => {
     );
     expect(deleteButton).toBeInTheDocument();
   });
-
 
   test("Edit button navigates to the edit page", async () => {
     const currentUser = currentUserFixtures.professorUser;
@@ -216,15 +209,14 @@ describe("UserTable tests", () => {
             currentUser={currentUser}
           />
         </MemoryRouter>
-      </QueryClientProvider>
+      </QueryClientProvider>,
     );
 
     const editButton = screen.queryByTestId(
-      `RequestTypeTable-cell-row-0-col-Edit-button`
+      `RequestTypeTable-cell-row-0-col-Edit-button`,
     );
 
     // This should now trigger the real logic
     expect(editButton).not.toBeInTheDocument();
-  }); 
-
+  });
 });
