@@ -39,6 +39,8 @@ describe("AppNavbar tests", () => {
     await screen.findByText("Welcome, phtcon@ucsb.edu");
     const adminMenu = screen.getByTestId("appnavbar-admin-dropdown");
     expect(adminMenu).toBeInTheDocument();
+    const settings = screen.getByText("Settings");
+    expect(settings).toBeInTheDocument();
   });
 
   test("renders H2Console and Swagger links correctly", async () => {
