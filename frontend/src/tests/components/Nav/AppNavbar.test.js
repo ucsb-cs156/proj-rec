@@ -42,7 +42,6 @@ describe("AppNavbar tests", () => {
 
     const recManager = screen.getByText("Rec Manager");
     expect(recManager).toBeInTheDocument();
-    
   });
 
   test("renders H2Console and Swagger links correctly", async () => {
