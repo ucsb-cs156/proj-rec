@@ -210,19 +210,16 @@ describe("RequestTypeIndexPage tests", () => {
     );
 
     await waitFor(() => {
-      expect(
-        screen.getByTestId(`${testId}-cell-row-0-col-id`),
-      ).toBeInTheDocument();
+      expect(screen.getByTestId(`${testId}-cell-row-0-col-id`)).toBeInTheDocument();
     });
-
+    
     expect(screen.getByTestId(`${testId}-cell-row-0-col-id`)).toHaveTextContent(
       "1",
     );
-
-    const deleteButton = screen.getByTestId(
+    
+    const deleteButton = await screen.findByTestId(
       `${testId}-cell-row-0-col-Delete-button`,
     );
-    expect(deleteButton).toBeInTheDocument();
 
     fireEvent.click(deleteButton);
 
