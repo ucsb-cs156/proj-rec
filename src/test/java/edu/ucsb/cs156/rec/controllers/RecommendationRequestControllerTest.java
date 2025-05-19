@@ -446,4 +446,38 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
         assertNull(savedRequest.getCompletionDate());
        }
 
+        // professor cannot update status to invalid status
+        @WithMockUser(roles = {"PROFESSOR"})
+        @Test
+        public void prof_cannot_update_status_to_invalid_status() throws Exception {
+            //arrange
+            User student = User.builder().id(99).build(); 
+            User prof = buildProfessor("profA@ucsb.edu", "googleSub", "Prof A", "Prof", "A", 22L);
+            
+            RecommendationRequest rec = buildRecommendationRequest(67L, student, prof, "PhDprogram", "details", "PENDING", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00", null);
+            RecommendationRequest rec_updated = buildRecommendationRequest(67L, student, prof, "PhDprogram", "details", "INVALID", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00", null);
+
+            String requestBody = mapper.writeValueAsString(rec_updated);
+
+            when(recommendationRequestRepository.findById(eq(67L))).thenReturn(Optional.of(rec));
+
+            //act
+            MvcResult response = mockMvc
+                    .perform(put("/api/recommendationrequest/professor?id=67")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding("utf-8")
+                    .content(requestBody)
+                    .with(csrf()))
+                    .andExpect(status().isNotFound())
+                    .andReturn();
+
+            //assert
+            verify(recommendationRequestRepository, times(1)).findById(67L);
+            verify(recommendationRequestRepository, times(0)).save(any(RecommendationRequest.class));
+
+            Map<String, Object> json = responseToJson(response);
+            assertEquals("EntityNotFoundException", json.get("type"));
+            assertEquals("RecommendationRequest with id 67 not found", json.get("message"));
+        }
+
 }

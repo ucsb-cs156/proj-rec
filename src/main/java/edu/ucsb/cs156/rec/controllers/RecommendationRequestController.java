@@ -138,6 +138,9 @@ public class RecommendationRequestController extends ApiController {
         else if (incoming.getStatus().equals("PENDING") || incoming.getStatus().equals("ACCEPTED")) {
             recommendationRequest.setCompletionDate(null);
         }
+        else {
+            throw new EntityNotFoundException(RecommendationRequest.class, id);
+        }
 
         recommendationRequestRepository.save(recommendationRequest);
 
