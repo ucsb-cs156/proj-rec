@@ -172,7 +172,7 @@ describe("RequestTypeIndexPage tests", () => {
     axiosMock.resetHistory();
     axiosMock
       .onGet("/api/currentUser")
-      .reply(200, apiCurrentUserFixtures.userWithoutRoles);
+      .reply(200, apiCurrentUserFixtures.missingRolesToTestErrorHandling);
     axiosMock
       .onGet("/api/systemInfo")
       .reply(200, systemInfoFixtures.showingNeither);
@@ -234,9 +234,9 @@ describe("RequestTypeIndexPage tests", () => {
       expect(axiosMock.history.delete.length).toBe(1);
     });
     expect(axiosMock.history.delete[0].url).toBe("/api/requesttypes");
-    expect(axiosMock.history.delete[0].url).toBe("/api/requesttypes");
     expect(axiosMock.history.delete[0].params).toEqual({ id: 1 });
   });
+
   test("what happens when you click delete, professor", async () => {
     setupProfessorUser();
 
@@ -279,7 +279,6 @@ describe("RequestTypeIndexPage tests", () => {
     await waitFor(() => {
       expect(axiosMock.history.delete.length).toBe(1);
     });
-    expect(axiosMock.history.delete[0].url).toBe("/api/requesttypes");
     expect(axiosMock.history.delete[0].url).toBe("/api/requesttypes");
     expect(axiosMock.history.delete[0].params).toEqual({ id: 1 });
   });
