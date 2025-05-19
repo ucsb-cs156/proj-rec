@@ -337,6 +337,7 @@ public class RecommendationRequestTests extends ControllerTestCase {
 
                 when(recommendationRequestRepository.save(eq(recommendationRequest1))).thenReturn(recommendationRequest1);
                 when(userRepository.findById(7L)).thenReturn(Optional.of(other));
+                when(requestTypeRepository.findByRequestType("Other")).thenReturn(Optional.of(requestType));
                 // act
                 MvcResult response = mockMvc.perform(
                                 post("/api/recommendationrequest/post")
