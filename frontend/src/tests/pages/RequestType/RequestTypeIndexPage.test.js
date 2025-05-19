@@ -191,6 +191,32 @@ describe("RequestTypeIndexPage tests", () => {
     });
   });
 
+  test("does NOT render Create Button if user is missing ROLE_PROFESSOR but has unrelated roles", async () => {
+    axiosMock.reset();
+    axiosMock.resetHistory();
+  
+    const userWithUnrelatedRole = {
+      ...apiCurrentUserFixtures.userOnly,
+      roles: [{ authority: "ROLE_USER" }],
+    };
+  
+    axiosMock.onGet("/api/currentUser").reply(200, userWithUnrelatedRole);
+    axiosMock.onGet("/api/systemInfo").reply(200, systemInfoFixtures.showingNeither);
+    axiosMock.onGet("/api/requesttypes/all").reply(200, []);
+  
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <RequestTypeIndexPage />
+        </MemoryRouter>
+      </QueryClientProvider>
+    );
+  
+    await waitFor(() => {
+      expect(screen.queryByText(/Create RequestType/)).not.toBeInTheDocument();
+    });
+  });  
+
   test("what happens when you click delete, admin", async () => {
     setupAdminUser();
 
