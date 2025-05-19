@@ -262,12 +262,15 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
                 .emailVerified(true)
                 .professor(true)
                 .build();
+        RequestType requestType = RequestType.builder()
+                .requestType("PhDprogram")
+                .build();
 
         RecommendationRequest rec1 = RecommendationRequest.builder()
                 .id(67L)
                 .requester(user2)
                 .professor(prof)
-                .recommendationType("PhDprogram")
+                .recommendationType(requestType)
                 .details("details")
                 .status("PENDING")
                 .completionDate(LocalDateTime.parse("2022-01-03T00:00:00"))
