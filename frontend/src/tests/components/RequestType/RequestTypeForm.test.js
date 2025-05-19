@@ -6,8 +6,6 @@ import RequestTypeForm from "main/components/RequestType/RequestTypeForm";
 import { requestTypeFixtures } from "fixtures/requestTypeFixtures";
 
 import { QueryClient, QueryClientProvider } from "react-query";
-// import axios from "axios";
-// import AxiosMockAdapter from "axios-mock-adapter";
 
 const mockedNavigate = jest.fn();
 
