@@ -446,6 +446,45 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
         assertNull(savedRequest.getCompletionDate());
        }
 
+       // professor can change status of recommendation request from Denied back to Accepted (within pending page), causing completion date to be set to null
+        @WithMockUser(roles = {"PROFESSOR"})
+       @Test
+       public void prof_can_put_recommendation_request_from_denied_to_accepted_status() throws Exception {
+        //arrange
+        User student = User.builder().id(99).build(); 
+        User prof = buildProfessor("profA@ucsb.edu", "googleSub", "Prof A", "Prof", "A", 22L);
+        
+        RecommendationRequest rec = buildRecommendationRequest(67L, student, prof, "PhDprogram", "details", "PENDING", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00", null);
+
+        RecommendationRequest rec_updated = buildRecommendationRequest(67L, student, prof, "PhDprogram", "details", "DENIED", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00");
+
+        String requestBody = mapper.writeValueAsString(rec_updated);
+
+        when(recommendationRequestRepository.findById(eq(67L))).thenReturn(Optional.of(rec));
+        when(recommendationRequestRepository.save(any(RecommendationRequest.class))).thenReturn(rec_updated);
+
+        //act
+        MvcResult response = mockMvc
+                .perform(put("/api/recommendationrequest/professor?id=67")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("utf-8")
+                .content(requestBody)
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        //assert
+        verify(recommendationRequestRepository, times(1)).findById(67L);
+        verify(recommendationRequestRepository, times(1)).save(any(RecommendationRequest.class));
+
+        String responseString = response.getResponse().getContentAsString();
+        RecommendationRequest savedRequest = mapper.readValue(responseString, RecommendationRequest.class);
+
+        assertEquals("DENIED", savedRequest.getStatus());
+        // check that completion date was set to null
+        assertNotNull(savedRequest.getCompletionDate());
+       }
+
         // professor cannot update status to invalid status
         @WithMockUser(roles = {"PROFESSOR"})
         @Test
