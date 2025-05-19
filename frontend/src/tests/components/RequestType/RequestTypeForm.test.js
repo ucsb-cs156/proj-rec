@@ -22,6 +22,36 @@ describe("RequestTypeForm tests", () => {
   const expectedHeaders = ["Request Type"];
   const testId = "RequestTypeForm";
 
+  test("that submitAction is called when Submit is clicked", async () => {
+    const mockSubmit = jest.fn();
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <RequestTypeForm submitAction={mockSubmit} />
+        </Router>
+      </QueryClientProvider>,
+    );
+
+    expect(await screen.findByTestId(`${testId}-submit`)).toBeInTheDocument();
+    const submitButton = screen.getByTestId(`${testId}-submit`);
+    const requestTypeInput = await screen.findByTestId(`${testId}-requestType`);
+
+    fireEvent.change(requestTypeInput, {
+      target: { value: "RequestType" },
+    });
+    fireEvent.click(submitButton);
+
+    await waitFor(() =>
+      expect(mockSubmit).toHaveBeenCalledWith(
+        {
+          requestType: "RequestType",
+        },
+        expect.anything(),
+      ),
+    );
+  });
+
   test("renders correctly when passing in initialContents", async () => {
     render(
       <QueryClientProvider client={queryClient}>

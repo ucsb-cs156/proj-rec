@@ -34,7 +34,7 @@ function RequestTypeForm({
             id="id"
             type="text"
             {...register("id")}
-            // value={initialContents.id}
+            value={initialContents.id}
             disabled
           />
         </Form.Group>
