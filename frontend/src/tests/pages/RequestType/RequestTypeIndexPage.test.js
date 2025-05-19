@@ -167,6 +167,30 @@ describe("RequestTypeIndexPage tests", () => {
     restoreConsole();
   });
 
+  test("does NOT render Create Button for user without ROLE_PROFESSOR or ROLE_ADMIN", async () => {
+    axiosMock.reset();
+    axiosMock.resetHistory();
+    axiosMock
+      .onGet("/api/currentUser")
+      .reply(200, apiCurrentUserFixtures.userWithoutRoles);
+    axiosMock
+      .onGet("/api/systemInfo")
+      .reply(200, systemInfoFixtures.showingNeither);
+    axiosMock.onGet("/api/requesttypes/all").reply(200, []);
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <RequestTypeIndexPage />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByText(/Create RequestType/)).not.toBeInTheDocument();
+    });
+  });
+
   test("what happens when you click delete, admin", async () => {
     setupAdminUser();
 

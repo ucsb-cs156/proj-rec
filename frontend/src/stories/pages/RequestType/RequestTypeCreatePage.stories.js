@@ -16,10 +16,10 @@ export const Default = Template.bind({});
 Default.parameters = {
   msw: [
     http.get("/api/currentUser", () =>
-      HttpResponse.json(apiCurrentUserFixtures.professorUser, { status: 200 })
+      HttpResponse.json(apiCurrentUserFixtures.professorUser, { status: 200 }),
     ),
     http.get("/api/systemInfo", () =>
-      HttpResponse.json(systemInfoFixtures.showingNeither, { status: 200 })
+      HttpResponse.json(systemInfoFixtures.showingNeither, { status: 200 }),
     ),
     http.post("/api/requesttypes/post", ({ request }) => {
       const url = new URL(request.url);
@@ -31,9 +31,8 @@ Default.parameters = {
           id,
           requestType,
         },
-        { status: 200 }
+        { status: 200 },
       );
     }),
   ],
 };
-
