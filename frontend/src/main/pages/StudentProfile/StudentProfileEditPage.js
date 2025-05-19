@@ -40,7 +40,7 @@ export default function StudentProfileEditPage({ storybook = false }) {
   });
 
   const onSuccess = (recommendationrequest) => {
-    toast(`UCSBOrganization Updated - id: ${recommendationrequest.id}`);
+    toast(`Recommendation Request Updated - id: ${recommendationrequest.id}`);
   };
 
   const mutation = useBackendMutation(
@@ -71,9 +71,7 @@ export default function StudentProfileEditPage({ storybook = false }) {
             initialContents={{
               ...recommendationrequests,
               professor_id: recommendationrequests.professor?.id,
-              dueDate: recommendationrequests.dueDate
-              ? new Date(recommendationrequests.dueDate).toISOString().split("T")[0]
-              : "",
+              dueDate: recommendationrequests.dueDate.substring(0,10),
             }}
           />
         )}
