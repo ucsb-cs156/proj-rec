@@ -2,7 +2,6 @@ import OurTable, { ButtonColumn } from "main/components/OurTable";
 import { useBackendMutation } from "main/utils/useBackend";
 
 export default function UsersTable({ users }) {
-
   //toggleAdmin
   // Stryker disable next-line all : TODO try to make a good test for this
   function cellToAxiosParamsToggleAdmin(cell) {
