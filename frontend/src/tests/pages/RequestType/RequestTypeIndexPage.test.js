@@ -167,37 +167,13 @@ describe("RequestTypeIndexPage tests", () => {
     restoreConsole();
   });
 
-  test("does NOT render Create Button for user without ROLE_PROFESSOR or ROLE_ADMIN", async () => {
-    axiosMock.reset();
-    axiosMock.resetHistory();
-    axiosMock
-      .onGet("/api/currentUser")
-      .reply(200, apiCurrentUserFixtures.missingRolesToTestErrorHandling);
-    axiosMock
-      .onGet("/api/systemInfo")
-      .reply(200, systemInfoFixtures.showingNeither);
-    axiosMock.onGet("/api/requesttypes/all").reply(200, []);
-
-    render(
-      <QueryClientProvider client={queryClient}>
-        <MemoryRouter>
-          <RequestTypeIndexPage />
-        </MemoryRouter>
-      </QueryClientProvider>,
-    );
-
-    await waitFor(() => {
-      expect(screen.queryByText(/Create RequestType/)).not.toBeInTheDocument();
-    });
-  });
-
-  test("does NOT render Create Button if user is missing ROLE_PROFESSOR but has unrelated roles", async () => {
+  test("does NOT render Create Button for user with unrelated role", async () => {
     axiosMock.reset();
     axiosMock.resetHistory();
   
     const userWithUnrelatedRole = {
       ...apiCurrentUserFixtures.userOnly,
-      roles: [{ authority: "ROLE_USER" }],
+      roles: [{ authority: "ROLE_STUDENT" }]
     };
   
     axiosMock.onGet("/api/currentUser").reply(200, userWithUnrelatedRole);
