@@ -38,6 +38,7 @@ Default.parameters = {
 
     http.put("/api/recommendationrequest", async ({ request }) => {
       const body = await request.json();
+      console.log("PUT received:", body);
       return HttpResponse.json({}, { status: 200 });
     }),
 
