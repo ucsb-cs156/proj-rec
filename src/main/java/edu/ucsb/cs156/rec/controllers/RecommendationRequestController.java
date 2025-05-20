@@ -132,6 +132,11 @@ public class RecommendationRequestController extends ApiController {
 
         recommendationRequest.setStatus(incoming.getStatus());
 
+        // set the date when professor accepts or denies
+        if (incoming.getStatus().equals("COMPLETED") || incoming.getStatus().equals("DENIED")) {
+            recommendationRequest.setCompletionDate(LocalDateTime.now());
+        }
+
         recommendationRequestRepository.save(recommendationRequest);
 
         return recommendationRequest;
