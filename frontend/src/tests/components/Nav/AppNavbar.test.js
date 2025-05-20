@@ -42,6 +42,10 @@ describe("AppNavbar tests", () => {
 
     const recManager = screen.getByText("Rec Manager");
     expect(recManager).toBeInTheDocument();
+
+    const settings = screen.getByText("Settings");
+    expect(settings).toBeInTheDocument();
+
   });
 
   test("renders H2Console and Swagger links correctly", async () => {
@@ -190,6 +194,10 @@ describe("AppNavbar tests", () => {
     await screen.findByText("Statistics");
     const statisticsLink = screen.getByText("Statistics");
     expect(statisticsLink).toBeInTheDocument();
+
+    await screen.findByText("Settings");
+    const settingsLink = screen.getByText("Settings");
+    expect(settingsLink).toBeInTheDocument();
   });
 
   test("renders the three prof pages correctly for student users", async () => {
@@ -242,7 +250,11 @@ describe("AppNavbar tests", () => {
     expect(screen.queryByText("Pending Requests")).not.toBeInTheDocument();
     expect(screen.queryByText("Completed Requests")).not.toBeInTheDocument();
     expect(screen.queryByText("Statistics")).not.toBeInTheDocument();
+
     expect(screen.getByText("Rec Manager")).toBeInTheDocument();
+
+    expect(screen.queryByText("Settings")).not.toBeInTheDocument();
+
   });
 
   test("the three prof pages do not show when not logged in", async () => {
@@ -265,6 +277,10 @@ describe("AppNavbar tests", () => {
     expect(screen.queryByText("Pending Requests")).not.toBeInTheDocument();
     expect(screen.queryByText("Completed Requests")).not.toBeInTheDocument();
     expect(screen.queryByText("Statistics")).not.toBeInTheDocument();
+
     expect(screen.getByText("Rec Manager")).toBeInTheDocument();
+
+    expect(screen.queryByText("Settings")).not.toBeInTheDocument();
+
   });
 });
