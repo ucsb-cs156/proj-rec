@@ -139,7 +139,7 @@ public class RecommendationRequestController extends ApiController {
             recommendationRequest.setCompletionDate(null);
         }
         else {
-            throw new EntityNotFoundException(RecommendationRequest.class, id);
+            throw new IllegalArgumentException(String.format("Unknown Request Status: %s", incoming.getStatus()));
         }
 
         recommendationRequestRepository.save(recommendationRequest);

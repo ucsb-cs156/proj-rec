@@ -507,7 +507,7 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
                     .characterEncoding("utf-8")
                     .content(requestBody)
                     .with(csrf()))
-                    .andExpect(status().isNotFound())
+                    .andExpect(status().isBadRequest())
                     .andReturn();
 
             //assert
@@ -515,8 +515,8 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
             verify(recommendationRequestRepository, times(0)).save(any(RecommendationRequest.class));
 
             Map<String, Object> json = responseToJson(response);
-            assertEquals("EntityNotFoundException", json.get("type"));
-            assertEquals("RecommendationRequest with id 67 not found", json.get("message"));
+            assertEquals("IllegalArgumentException", json.get("type"));
+            assertEquals("Unknown Request Status: INVALID", json.get("message"));
         }
 
 }
