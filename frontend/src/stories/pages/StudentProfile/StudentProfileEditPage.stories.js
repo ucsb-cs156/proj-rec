@@ -4,7 +4,6 @@ import { systemInfoFixtures } from "fixtures/systemInfoFixtures";
 import { http, HttpResponse } from "msw";
 
 import StudentProfileEditPage from "main/pages/StudentProfile/StudentProfileEditPage";
-import { recommendationRequestFixtures } from "fixtures/recommendationRequestFixtures";
 import { usersFixtures } from "fixtures/usersFixtures";
 import { recommendationTypeFixtures } from "fixtures/recommendationTypeFixtures";
 
@@ -29,17 +28,38 @@ Default.parameters = {
       });
     }),
 
-    http.get("/api/recommendationrequest", () => {
-      return HttpResponse.json(
-        recommendationRequestFixtures.threeRecommendations[0],
-        { status: 200 },
-      );
+    http.get("/api/recommendationrequest", ({ request }) => {
+      const url = new URL(request.url);
+      const id = url.searchParams.get("id");
+      if (id === "17") {
+        return HttpResponse.json(
+          {
+            id: 17,
+            professor: {
+              id: 3,
+              fullName: "Craig Zzyxx",
+            },
+            recommendationType: "Other",
+            details: "Test details",
+            dueDate: "2025-05-19T00:00:00",
+          },
+          { status: 200 },
+        );
+      }
+      return HttpResponse.json({}, { status: 404 });
     }),
 
-    http.put("/api/recommendationrequest", async ({ request }) => {
-      const body = await request.json();
-      console.log("PUT received:", body);
-      return HttpResponse.json({}, { status: 200 });
+    http.put("/api/recommendationrequest", () => {
+      return HttpResponse.json(
+        {
+          id: 17,
+          professor: { id: 2, fullName: "New Professor" },
+          recommendationType: "Other",
+          details: "Updated details",
+          dueDate: "2025-06-01T00:00:00",
+        },
+        { status: 200 },
+      );
     }),
 
     http.get("/api/admin/users/professors", () => {
