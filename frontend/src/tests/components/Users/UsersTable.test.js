@@ -90,56 +90,64 @@ describe("UserTable tests", () => {
   });
 });
 
-describe("UsersTable toggle callbacks", () => {
+describe("UsersTable toggle-button hooks", () => {
   const queryClient = new QueryClient();
-
-  let mutateAdmin;
-  let mutateProfessor;
+  let spyAdmin, spyProf;
 
   beforeEach(() => {
-    mutateAdmin = jest.fn();
-    mutateProfessor = jest.fn();
+    spyAdmin = jest.fn();
+    spyProf = jest.fn();
 
     useBackendMutation
-      .mockImplementationOnce(() => ({ mutate: mutateAdmin }))
-      .mockImplementationOnce(() => ({ mutate: mutateProfessor }));
+      .mockImplementationOnce((cellToAxiosParams) => ({
+        mutate: (cell) => {
+          const axiosCfg = cellToAxiosParams(cell);
+          spyAdmin(axiosCfg);
+        },
+      }))
+      .mockImplementationOnce((cellToAxiosParams) => ({
+        mutate: (cell) => {
+          const axiosCfg = cellToAxiosParams(cell);
+          spyProf(axiosCfg);
+        },
+      }));
   });
 
-  test("clicking Toggle Admin calls the admin mutate with the right cell", async () => {
+  test("clicking Toggle Admin uses the correct URL/method/params", async () => {
     render(
       <QueryClientProvider client={queryClient}>
         <UsersTable users={usersFixtures.threeUsers} />
       </QueryClientProvider>,
     );
 
-    const toggleAdminButtons = screen.getAllByRole("button", { name: "Toggle Admin" });
-    expect(toggleAdminButtons).toHaveLength(3);
+    const buttons = screen.getAllByRole("button", { name: "Toggle Admin" });
+    expect(buttons).toHaveLength(3);
 
-    await userEvent.click(toggleAdminButtons[0]);
+    await userEvent.click(buttons[0]);
 
-    expect(mutateAdmin).toHaveBeenCalledWith(
-      expect.objectContaining({
-        row: expect.objectContaining({ index: 0 }),
-      })
-    );
+    expect(spyAdmin).toHaveBeenCalledWith({
+      url: "/api/admin/users/toggleAdmin",
+      method: "POST",
+      params: { id: usersFixtures.threeUsers[0].id },
+    });
   });
 
-  test("clicking Toggle Professor calls the professor mutate with the right cell", async () => {
+  test("clicking Toggle Professor uses the correct URL/method/params", async () => {
     render(
       <QueryClientProvider client={queryClient}>
         <UsersTable users={usersFixtures.threeUsers} />
       </QueryClientProvider>,
     );
 
-    const toggleProfButtons = screen.getAllByRole("button", { name: "Toggle Professor" });
-    expect(toggleProfButtons).toHaveLength(3);
+    const buttons = screen.getAllByRole("button", { name: "Toggle Professor" });
+    expect(buttons).toHaveLength(3);
 
-    await userEvent.click(toggleProfButtons[2]);
+    await userEvent.click(buttons[2]);
 
-    expect(mutateProfessor).toHaveBeenCalledWith(
-      expect.objectContaining({
-        row: expect.objectContaining({ index: 2 }),
-      })
-    );
+    expect(spyProf).toHaveBeenCalledWith({
+      url: "/api/admin/users/toggleProfessor",
+      method: "POST",
+      params: { id: usersFixtures.threeUsers[2].id },
+    });
   });
 });
