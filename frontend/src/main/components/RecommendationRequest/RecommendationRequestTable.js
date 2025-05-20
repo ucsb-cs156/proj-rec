@@ -72,22 +72,22 @@ export default function RecommendationRequestTable({ requests, currentUser }) {
     {
       Header: "Submission Date",
       accessor: "submissionDate",
-      Cell: ({ value }) => (value ? dateutils.formatdate(value) : ""),
+      Cell: ({ value }) => dateutils.formatdate(value),
     },
     {
       Header: "Last Modified Date",
       accessor: "lastModifiedDate",
-      Cell: ({ value }) => (value ? dateutils.formatdate(value) : ""),
+      Cell: ({ value }) => dateutils.formatdate(value),
     },
     {
       Header: "Completion Date",
       accessor: "completionDate",
-      Cell: ({ value }) => (value ? dateutils.formatdate(value) : ""),
+      Cell: ({ value }) => dateutils.formatdate(value),
     },
     {
       Header: "Due Date",
       accessor: "dueDate",
-      Cell: ({ value }) => (value ? dateutils.formatdate(value) : ""),
+      Cell: ({ value }) => dateutils.formatdate(value),
     },
   ];
 

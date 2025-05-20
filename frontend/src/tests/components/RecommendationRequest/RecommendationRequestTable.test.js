@@ -84,16 +84,16 @@ describe("UserTable tests", () => {
 
     expect(
       screen.getByTestId(`${testId}-cell-row-0-col-submissionDate`),
-    ).toHaveTextContent("01:02:2022 12:00");
+    ).toHaveTextContent("01/02/2022 12:00");
     expect(
       screen.getByTestId(`${testId}-cell-row-0-col-lastModifiedDate`),
-    ).toHaveTextContent("06:02:2022 12:00");
+    ).toHaveTextContent("06/02/2022 12:00");
     expect(
       screen.getByTestId(`${testId}-cell-row-0-col-completionDate`),
-    ).toHaveTextContent("06:02:2022 12:00");
+    ).toHaveTextContent("06/02/2022 12:00");
     expect(
       screen.getByTestId(`${testId}-cell-row-0-col-dueDate`),
-    ).toHaveTextContent("09:02:2022 12:00");
+    ).toHaveTextContent("09/02/2022 12:00");
 
     const editButton = screen.queryByTestId(
       `${testId}-cell-row-0-col-Edit-button`,
