@@ -17,7 +17,7 @@ describe("PendingRequestsPage tests", () => {
     axiosMock.resetHistory();
   });
 
-  test("Renders completed and denied requests for professor", async () => {
+  test("Renders pending requests for professor", async () => {
     axiosMock
       .onGet("/api/currentUser")
       .reply(200, apiCurrentUserFixtures.professorUser);
