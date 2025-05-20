@@ -238,7 +238,7 @@ describe("RecommendationRequestForm tests", () => {
     );
 
     fireEvent.change(screen.getByTestId("RecommendationRequestForm-dueDate"), {
-      target: { value: "2025-05-18" },
+      target: { value: "2025-05-19" },
     });
 
     fireEvent.click(screen.getByTestId("RecommendationRequestForm-submit"));
@@ -246,40 +246,9 @@ describe("RecommendationRequestForm tests", () => {
     await waitFor(() =>
       expect(mockSubmit).toHaveBeenCalledWith(
         expect.objectContaining({
-          dueDate: "2025-05-18T00:00:00",
+          dueDate: "2025-05-19T00:00:00",
         }),
       ),
     );
   });
-
-  // test("submitAction is not called with no dueDate input", async () => {
-  //   const mockSubmit = jest.fn();
-
-  //   render(
-  //     <QueryClientProvider client={queryClient}>
-  //       <Router>
-  //         <RecommendationRequestForm
-  //           initialContents={{
-  //             id: 1,
-  //             professor_id: "1",
-  //             recommendationType: "Other",
-  //             details: "Test details",
-  //             dueDate: "",
-  //           }}
-  //           professorVals={usersFixtures.twoProfessors}
-  //           recommendationTypeVals={recommendationTypeFixtures.fourTypes}
-  //           submitAction={mockSubmit}
-  //         />
-  //       </Router>
-  //     </QueryClientProvider>,
-  //   );
-
-  //   fireEvent.click(screen.getByTestId("RecommendationRequestForm-submit"));
-
-  //   expect(
-  //     await screen.findByText(/Please select a due date/),
-  //   ).toBeInTheDocument();
-
-  //   expect(mockSubmit).not.toHaveBeenCalled();
-  // });
 });
