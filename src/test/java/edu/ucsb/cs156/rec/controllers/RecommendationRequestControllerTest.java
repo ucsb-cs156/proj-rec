@@ -494,7 +494,6 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
 
         when(recommendationRequestRepository.findById(eq(1L))).thenReturn(Optional.of(rec));
 
-        // REFERENCE: chatgpt for figuring out how to do this, need to save the request to get the completion date
         when(recommendationRequestRepository.save(any(RecommendationRequest.class))).thenAnswer(new Answer<RecommendationRequest>() {
             @Override
             public RecommendationRequest answer(InvocationOnMock invocation) throws Throwable {
@@ -527,7 +526,6 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
         assertNotNull(savedRequest.getCompletionDate());
         
         // check that completion date is recent
-        // REFERENCE: chatgpt for figuring out how to do this
         LocalDateTime now = LocalDateTime.now();
         assertTrue(savedRequest.getCompletionDate().isAfter(now.minusSeconds(5)));
         assertTrue(savedRequest.getCompletionDate().isBefore(now.plusSeconds(5)));
