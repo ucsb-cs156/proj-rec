@@ -1,8 +1,6 @@
 package edu.ucsb.cs156.rec.controllers;
-
 import edu.ucsb.cs156.rec.entities.User;
 import edu.ucsb.cs156.rec.repositories.UserRepository;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +8,10 @@ import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -30,13 +32,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import edu.ucsb.cs156.rec.ControllerTestCase;
 import edu.ucsb.cs156.rec.entities.RecommendationRequest;
 import edu.ucsb.cs156.rec.repositories.RecommendationRequestRepository;
 import edu.ucsb.cs156.rec.testconfig.TestConfig;
 import joptsimple.internal.OptionNameMap;
 
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 @WebMvcTest(controllers = RecommendationRequestController.class)
 @Import(TestConfig.class)
 public class RecommendationRequestControllerTest extends ControllerTestCase {
@@ -575,4 +578,179 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
         assertEquals("EntityNotFoundException", json.get("type"));
         assertEquals("RecommendationRequest with id 67 not found", json.get("message"));
     }
+
+    // prof can change status from pending to accepted and dateAcceptedOrDenied is set
+    @WithMockUser(roles = {"PROFESSOR"})
+    @Test
+    public void prof_can_change_status_from_pending_to_accepted_and_dateAcceptedOrDenied_is_set() throws Exception {
+        // arrange
+        User prof = currentUserService.getCurrentUser().getUser();
+        User student = User.builder().id(99).build();
+
+        RecommendationRequest rec = RecommendationRequest.builder()
+            .id(1L)
+            .requester(student)
+            .professor(prof)
+            .recommendationType("PhDprogram")
+            .details("test details")
+            .status("PENDING")
+            .build();
+
+        RecommendationRequest rec_updated = RecommendationRequest.builder()
+            .id(1L)
+            .requester(student)
+            .professor(prof)
+            .recommendationType("PhDprogram")
+            .details("test details")
+            .status("ACCEPTED")
+            .build();
+
+        when(recommendationRequestRepository.findById(eq(1L))).thenReturn(Optional.of(rec));
+
+        when(recommendationRequestRepository.save(any(RecommendationRequest.class))).thenAnswer(new Answer<RecommendationRequest>() {
+            @Override
+            public RecommendationRequest answer(InvocationOnMock invocation) throws Throwable {
+                RecommendationRequest saved = (RecommendationRequest) invocation.getArguments()[0];
+                return saved;
+            }
+        });
+
+        // act
+        MvcResult response = mockMvc.perform(put("/api/recommendationrequest/professor?id=1")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(rec_updated))
+            .with(csrf()))
+            .andExpect(status().isOk())
+            .andReturn();
+
+        // assert
+        verify(recommendationRequestRepository, times(1)).findById(1L);
+        verify(recommendationRequestRepository, times(1)).save(any(RecommendationRequest.class));
+
+        String responseString = response.getResponse().getContentAsString();
+        RecommendationRequest savedRequest = mapper.readValue(responseString, RecommendationRequest.class);
+
+        assertEquals("ACCEPTED", savedRequest.getStatus());
+        assertNotNull(savedRequest.getDateAcceptedOrDenied());
+
+        LocalDateTime now = LocalDateTime.now();
+        assertTrue(savedRequest.getDateAcceptedOrDenied().isAfter(now.minusSeconds(5)));
+        assertTrue(savedRequest.getDateAcceptedOrDenied().isBefore(now.plusSeconds(5)));        
+    }
+
+    // prof can change status from pending to denied and dateAcceptedOrDenied is set
+    @WithMockUser(roles = {"PROFESSOR"})
+    @Test
+    public void prof_can_change_status_from_pending_to_denied_and_dateAcceptedOrDenied_is_set() throws Exception {
+        // arrange
+        User prof = currentUserService.getCurrentUser().getUser();
+        User student = User.builder().id(99).build();
+
+        RecommendationRequest rec = RecommendationRequest.builder()
+            .id(1L)
+            .requester(student)
+            .professor(prof)
+            .recommendationType("PhDprogram")
+            .details("test details")
+            .status("PENDING")
+            .build();
+
+        RecommendationRequest rec_updated = RecommendationRequest.builder()
+            .id(1L)
+            .requester(student)
+            .professor(prof)
+            .recommendationType("PhDprogram")
+            .details("test details")
+            .status("DENIED")
+            .build();
+
+        when(recommendationRequestRepository.findById(eq(1L))).thenReturn(Optional.of(rec));
+
+        when(recommendationRequestRepository.save(any(RecommendationRequest.class))).thenAnswer(new Answer<RecommendationRequest>() {
+            @Override
+            public RecommendationRequest answer(InvocationOnMock invocation) throws Throwable {
+                RecommendationRequest saved = (RecommendationRequest) invocation.getArguments()[0];
+                return saved;
+            }
+        });
+
+        // act
+        MvcResult response = mockMvc.perform(put("/api/recommendationrequest/professor?id=1")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(rec_updated))
+            .with(csrf()))
+            .andExpect(status().isOk())
+            .andReturn();
+
+        // assert
+        verify(recommendationRequestRepository, times(1)).findById(1L);
+        verify(recommendationRequestRepository, times(1)).save(any(RecommendationRequest.class));
+
+        String responseString = response.getResponse().getContentAsString();
+        RecommendationRequest savedRequest = mapper.readValue(responseString, RecommendationRequest.class);
+
+        assertEquals("DENIED", savedRequest.getStatus());
+        assertNotNull(savedRequest.getDateAcceptedOrDenied());
+
+        LocalDateTime now = LocalDateTime.now();
+        assertTrue(savedRequest.getDateAcceptedOrDenied().isAfter(now.minusSeconds(5)));
+        assertTrue(savedRequest.getDateAcceptedOrDenied().isBefore(now.plusSeconds(5)));
+    }
+
+    // if prof doesn't change status, dateAcceptedOrDenied should not be set
+    @WithMockUser(roles = {"PROFESSOR"})
+    @Test
+    public void prof_doesnt_update_status_and_dateAcceptedOrDenied_should_not_update() throws Exception {
+        // arrange
+        User prof = currentUserService.getCurrentUser().getUser();
+        User student = User.builder().id(99).build();
+
+        RecommendationRequest rec = RecommendationRequest.builder()
+            .id(1L)
+            .requester(student)
+            .professor(prof)
+            .recommendationType("PhDprogram")
+            .details("test details")
+            .status("PENDING")
+            .completionDate(null)
+            .build();
+
+        RecommendationRequest rec_updated = RecommendationRequest.builder()
+            .id(1L)
+            .requester(student)
+            .professor(prof)
+            .recommendationType("PhDprogram")
+            .details("test details")
+            .status("PENDING") 
+            .completionDate(null)
+            .build();
+
+        when(recommendationRequestRepository.findById(eq(1L))).thenReturn(Optional.of(rec));
+        when(recommendationRequestRepository.save(any(RecommendationRequest.class))).thenAnswer(new Answer<RecommendationRequest>() {
+            @Override
+            public RecommendationRequest answer(InvocationOnMock invocation) throws Throwable {
+                RecommendationRequest saved = (RecommendationRequest) invocation.getArguments()[0];
+                return saved;
+            }
+        });
+
+        // act
+        MvcResult response = mockMvc.perform(put("/api/recommendationrequest/professor?id=1")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(rec_updated))
+            .with(csrf()))
+            .andExpect(status().isOk())
+            .andReturn();
+
+        // assert
+        verify(recommendationRequestRepository, times(1)).findById(1L);
+        verify(recommendationRequestRepository, times(1)).save(any(RecommendationRequest.class));
+
+        String responseString = response.getResponse().getContentAsString();
+        RecommendationRequest savedRequest = mapper.readValue(responseString, RecommendationRequest.class);
+
+        assertEquals("PENDING", savedRequest.getStatus());
+        assertNull(savedRequest.getDateAcceptedOrDenied());
+    }
+
 }
