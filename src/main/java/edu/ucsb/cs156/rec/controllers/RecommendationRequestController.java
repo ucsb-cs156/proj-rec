@@ -136,7 +136,7 @@ public class RecommendationRequestController extends ApiController {
         if (incoming.getStatus().equals("COMPLETED") || incoming.getStatus().equals("DENIED")) {
             recommendationRequest.setCompletionDate(LocalDateTime.now());
         }
-
+        
         recommendationRequestRepository.save(recommendationRequest);
 
         return recommendationRequest;

@@ -10,6 +10,10 @@ import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -40,7 +44,8 @@ import joptsimple.internal.OptionNameMap;
 import java.util.List;
 import java.util.Map;
 
-
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 @WebMvcTest(controllers = RecommendationRequestController.class)
 @Import(TestConfig.class)
 public class RecommendationRequestControllerTest extends ControllerTestCase {
@@ -454,9 +459,9 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
     @WithMockUser(roles = {"PROFESSOR"})
     @Test
     public void prof_can_put_recommendation_request() throws Exception {
-        //arrange
-        User student = User.builder().id(99).build(); 
-        User prof = User.builder()
+            //arrange
+            User student = User.builder().id(99).build(); 
+            User prof = User.builder()
                 .id(22L)
                 .email("profA@ucsb.edu")
                 .googleSub("googleSub")
@@ -468,51 +473,39 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
                 .build();
 
         RecommendationRequest rec = RecommendationRequest.builder()
-                .id(67L)
-                .requester(student)
-                .professor(prof)
-                .recommendationType("PhDprogram")
-                .details("details")
-                .status("PENDING")
-                .completionDate(LocalDateTime.parse("2022-01-03T00:00:00"))
-                .dueDate(LocalDateTime.parse("2022-01-03T00:00:00"))
-                .submissionDate(LocalDateTime.parse("2022-01-03T00:00:00"))
-                .lastModifiedDate(LocalDateTime.parse("2022-01-03T00:00:00"))
-                .build();
+            .id(1L)
+            .requester(student)
+            .professor(prof)
+            .recommendationType("PhDprogram")
+            .details("test details")
+            .status("PENDING")
+            .build();
 
         RecommendationRequest rec_updated = RecommendationRequest.builder()
-                .id(67L)
-                .requester(student)
-                .professor(prof)
-                .recommendationType("PhDprogram")
-                .details("details")
-                .status("COMPLETED")
-                .completionDate(LocalDateTime.parse("2022-01-03T00:00:00"))
-                .dueDate(LocalDateTime.parse("2022-01-03T00:00:00"))
-                .submissionDate(LocalDateTime.parse("2022-01-03T00:00:00"))
-                .lastModifiedDate(LocalDateTime.parse("2022-01-03T00:00:00"))
-                .build();
-        RecommendationRequest rec_corrected = RecommendationRequest.builder()
-                .id(67L)
-                .requester(student)
-                .professor(prof)
-                .recommendationType("PhDprogram")
-                .details("details")
-                .status("COMPLETED")
-                .completionDate(LocalDateTime.parse("2022-01-03T00:00:00"))
-                .dueDate(LocalDateTime.parse("2022-01-03T00:00:00"))
-                .submissionDate(LocalDateTime.parse("2022-01-03T00:00:00"))
-                .lastModifiedDate(LocalDateTime.parse("2022-01-03T00:00:00"))
-                .build();
+            .id(1L)
+            .requester(student)
+            .professor(prof)
+            .recommendationType("PhDprogram")
+            .details("test details")
+            .status("COMPLETED")
+            .build();
 
         String requestBody = mapper.writeValueAsString(rec_updated);
-        String expectedJson = mapper.writeValueAsString(rec_corrected);
 
-        when(recommendationRequestRepository.findById(eq(67L))).thenReturn(Optional.of(rec)); 
+        when(recommendationRequestRepository.findById(eq(1L))).thenReturn(Optional.of(rec));
+
+        // REFERENCE: chatgpt for figuring out how to do this, need to save the request to get the completion date
+        when(recommendationRequestRepository.save(any(RecommendationRequest.class))).thenAnswer(new Answer<RecommendationRequest>() {
+            @Override
+            public RecommendationRequest answer(InvocationOnMock invocation) throws Throwable {
+                RecommendationRequest saved = (RecommendationRequest) invocation.getArguments()[0];
+                return saved;
+            }
+        });
 
         //act
         MvcResult response = mockMvc
-                .perform(put("/api/recommendationrequest/professor?id=67")
+                .perform(put("/api/recommendationrequest/professor?id=1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("utf-8")
                 .content(requestBody)
@@ -521,12 +514,25 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
                 .andReturn();
 
         //assert
-        verify(recommendationRequestRepository, times(1)).findById(67L);
-        verify(recommendationRequestRepository, times(1)).save(rec_corrected);
+        verify(recommendationRequestRepository, times(1)).findById(1L);
+        verify(recommendationRequestRepository, times(1)).save(any(RecommendationRequest.class));
 
         String responseString = response.getResponse().getContentAsString();
-        assertEquals(expectedJson, responseString);
+        RecommendationRequest savedRequest = mapper.readValue(responseString, RecommendationRequest.class);
+        
+        // check that status was updated
+        assertEquals("COMPLETED", savedRequest.getStatus());
+        
+        // check that completion date was set
+        assertNotNull(savedRequest.getCompletionDate());
+        
+        // check that completion date is recent
+        // REFERENCE: chatgpt for figuring out how to do this
+        LocalDateTime now = LocalDateTime.now();
+        assertTrue(savedRequest.getCompletionDate().isAfter(now.minusSeconds(5)));
+        assertTrue(savedRequest.getCompletionDate().isBefore(now.plusSeconds(5)));
     }
+
 
     //prof can not edit a Recommendation Request that dne
     @WithMockUser(roles = {"PROFESSOR"})
@@ -578,6 +584,121 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
         Map<String, Object> json = responseToJson(response);
         assertEquals("EntityNotFoundException", json.get("type"));
         assertEquals("RecommendationRequest with id 67 not found", json.get("message"));
+    }
+
+        @WithMockUser(roles = {"PROFESSOR"})
+    @Test
+    public void prof_can_deny_request_and_sets_date() throws Exception {
+
+        // arrange
+        User prof = currentUserService.getCurrentUser().getUser();
+        User student = User.builder().id(99).build();
+
+        RecommendationRequest rec = RecommendationRequest.builder()
+            .id(1L)
+            .requester(student)
+            .professor(prof)
+            .recommendationType("PhDprogram")
+            .details("test details")
+            .status("PENDING")
+            .build();
+
+        RecommendationRequest rec_updated = RecommendationRequest.builder()
+            .id(1L)
+            .requester(student)
+            .professor(prof)
+            .recommendationType("PhDprogram")
+            .details("test details")
+            .status("DENIED")
+            .build();
+
+        when(recommendationRequestRepository.findById(eq(1L))).thenReturn(Optional.of(rec));
+
+        when(recommendationRequestRepository.save(any(RecommendationRequest.class))).thenAnswer(new Answer<RecommendationRequest>() {
+            @Override
+            public RecommendationRequest answer(InvocationOnMock invocation) throws Throwable {
+                RecommendationRequest saved = (RecommendationRequest) invocation.getArguments()[0];
+                return saved;
+            }
+        });
+
+        // act
+        MvcResult response = mockMvc.perform(put("/api/recommendationrequest/professor?id=1")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(rec_updated))
+            .with(csrf()))
+            .andExpect(status().isOk())
+            .andReturn();
+
+        // assert
+        verify(recommendationRequestRepository, times(1)).findById(1L);
+        verify(recommendationRequestRepository, times(1)).save(any(RecommendationRequest.class));
+
+        String responseString = response.getResponse().getContentAsString();
+        RecommendationRequest savedRequest = mapper.readValue(responseString, RecommendationRequest.class);
+
+        assertEquals("DENIED", savedRequest.getStatus());
+        assertNotNull(savedRequest.getCompletionDate());
+
+        LocalDateTime now = LocalDateTime.now();
+        assertTrue(savedRequest.getCompletionDate().isAfter(now.minusSeconds(5)));
+        assertTrue(savedRequest.getCompletionDate().isBefore(now.plusSeconds(5)));
+
+    }
+
+    @WithMockUser(roles = {"PROFESSOR"})
+    @Test
+    public void prof_doesnt_update_status_and_completion_date_should_not_update() throws Exception {
+        // arrange
+        User prof = currentUserService.getCurrentUser().getUser();
+        User student = User.builder().id(99).build();
+
+        RecommendationRequest rec = RecommendationRequest.builder()
+            .id(1L)
+            .requester(student)
+            .professor(prof)
+            .recommendationType("PhDprogram")
+            .details("test details")
+            .status("PENDING")
+            .completionDate(null)
+            .build();
+
+        RecommendationRequest rec_updated = RecommendationRequest.builder()
+            .id(1L)
+            .requester(student)
+            .professor(prof)
+            .recommendationType("PhDprogram")
+            .details("test details")
+            .status("PENDING") 
+            .completionDate(null)
+            .build();
+
+        when(recommendationRequestRepository.findById(eq(1L))).thenReturn(Optional.of(rec));
+        when(recommendationRequestRepository.save(any(RecommendationRequest.class))).thenAnswer(new Answer<RecommendationRequest>() {
+            @Override
+            public RecommendationRequest answer(InvocationOnMock invocation) throws Throwable {
+                RecommendationRequest saved = (RecommendationRequest) invocation.getArguments()[0];
+                return saved;
+            }
+        });
+
+        // act
+        MvcResult response = mockMvc.perform(put("/api/recommendationrequest/professor?id=1")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(rec_updated))
+            .with(csrf()))
+            .andExpect(status().isOk())
+            .andReturn();
+
+        // assert
+        verify(recommendationRequestRepository, times(1)).findById(1L);
+        verify(recommendationRequestRepository, times(1)).save(any(RecommendationRequest.class));
+
+        String responseString = response.getResponse().getContentAsString();
+        RecommendationRequest savedRequest = mapper.readValue(responseString, RecommendationRequest.class);
+        
+        assertEquals("PENDING", savedRequest.getStatus());
+        assertNull(savedRequest.getCompletionDate());
     }
     
     //Admin can get all requests
