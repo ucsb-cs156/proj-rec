@@ -12,7 +12,6 @@ describe("PendingRequestsPage tests", () => {
   const axiosMock = new AxiosMockAdapter(axios);
   const queryClient = new QueryClient();
 
-  
   const setupUserOnly = () => {
     axiosMock.reset();
     axiosMock.resetHistory();
@@ -29,7 +28,7 @@ describe("PendingRequestsPage tests", () => {
     axiosMock.resetHistory();
   });
 
-    test("Renders expected content", async () => {
+  test("Renders expected content", async () => {
     // arrange
     setupUserOnly();
     // act
@@ -83,8 +82,8 @@ describe("PendingRequestsPage tests", () => {
     );
 
     expect(
-      statusCells.every((cell) => cell.textContent !== "PENDING"),
-    ).toBeTruthy();
+      statusCells.some((cell) => cell.textContent !== "PENDING"),
+    ).toBeFalsy();
   });
 
   test("Renders empty table when no completed requests", async () => {
@@ -155,11 +154,10 @@ describe("PendingRequestsPage tests", () => {
     const statusCells = screen.getAllByTestId(
       /RecommendationRequestTable-cell-row-.*-col-status/,
     );
-    
 
     expect(
-      statusCells.every((cell) => cell.textContent !== "PENDING"),
-    ).toBeTruthy();
+      statusCells.some((cell) => cell.textContent !== "PENDING"),
+    ).toBeFalsy();
   });
 
   test("Renders empty table when no completed requests for student", async () => {
