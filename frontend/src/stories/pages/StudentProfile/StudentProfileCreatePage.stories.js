@@ -28,7 +28,7 @@ Default.parameters = {
       });
     }),
     http.post("/api/recommendationrequest/post", () => {
-      return HttpResponse.json(recommendationRequestFixtures.oneRecommendation, {
+      return HttpResponse.json(recommendationRequestFixtures.oneOrganization, {
         status: 200,
       });
     }),
