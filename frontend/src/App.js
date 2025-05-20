@@ -27,7 +27,7 @@ function App() {
           exact
           path="/profile"
           element={
-            hasRole(currentUser, "ROLE_STUDENT") ? (
+            hasRole(currentUser, "ROLE_USER") ? (
               <StudentProfilePage />
             ) : (
               <ProfilePage />

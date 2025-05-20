@@ -286,62 +286,6 @@ describe("StudentProfilePage tests", () => {
     expect(navigateMock).toHaveBeenCalledWith("/requests/edit/1");
   });
 
-  test("checks delete functionality", async () => {
-    const requestsData = [
-      {
-        id: 2,
-        requester: { fullName: "Student Name", email: "test@example.com" },
-        professor: { fullName: "Professor Name", email: "prof@example.com" },
-        recommendationType: "Letter of Recommendation",
-        details: "Test details",
-        status: "Pending",
-      },
-    ];
-
-    useBackend.mockImplementation(() => {
-      return {
-        data: requestsData,
-        error: null,
-        status: "success",
-      };
-    });
-
-    // Mock successful delete response
-    global.fetch.mockImplementation(() => Promise.resolve({ ok: true }));
-
-    axiosMock
-      .onGet("/api/currentUser")
-      .reply(200, apiCurrentUserFixtures.userOnly);
-    axiosMock
-      .onGet("/api/systemInfo")
-      .reply(200, systemInfoFixtures.showingNeither);
-
-    render(
-      <QueryClientProvider client={queryClient}>
-        <MemoryRouter>
-          <StudentProfilePage />
-        </MemoryRouter>
-      </QueryClientProvider>,
-    );
-
-    await screen.findByTestId("RecommendationRequestTable");
-
-    // Find and click the delete button
-    const deleteButton = await screen.findByTestId("delete-button-2");
-    fireEvent.click(deleteButton);
-
-    await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledWith(
-        "/api/recommendationrequest?id=2",
-        { method: "DELETE" },
-      );
-    });
-
-    await waitFor(() => {
-      expect(mockReload).toHaveBeenCalled();
-    });
-  });
-
   test("checks create new request button", async () => {
     useBackend.mockImplementation(() => {
       return {

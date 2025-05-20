@@ -26,13 +26,6 @@ const StudentProfilePage = () => {
     navigate(`/requests/edit/${request.id}`);
   };
 
-  const handleDelete = async (request) => {
-    await fetch(`/api/recommendationrequest?id=${request.id}`, {
-      method: "DELETE",
-    });
-    window.location.reload(); // Simple way to refresh, can be improved with state
-  };
-
   return (
     <BasicLayout>
       <Row className="align-items-center profile-header mb-5 text-center text-md-left">
@@ -64,7 +57,6 @@ const StudentProfilePage = () => {
             requests={requests}
             currentUser={currentUser}
             onEdit={handleEdit}
-            onDelete={handleDelete}
           />
         </Col>
       </Row>
