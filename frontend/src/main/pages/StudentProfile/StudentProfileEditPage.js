@@ -70,7 +70,7 @@ export default function StudentProfileEditPage({ storybook = false }) {
             buttonLabel={"Update"}
             initialContents={{
               ...recommendationrequests,
-              professor_id: recommendationrequests.professor?.id,
+              professor_id: recommendationrequests.professor.id,
               dueDate: recommendationrequests.dueDate.substring(0, 10),
             }}
           />

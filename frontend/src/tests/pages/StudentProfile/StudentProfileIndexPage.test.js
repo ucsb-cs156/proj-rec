@@ -22,7 +22,6 @@ jest.mock("react-toastify", () => {
 describe("StudentProfileIndexPage tests", () => {
   const axiosMock = new AxiosMockAdapter(axios);
 
-
   const setupUserOnly = () => {
     axiosMock.reset();
     axiosMock.resetHistory();
