@@ -1,7 +1,32 @@
 import OurTable, { ButtonColumn } from "main/components/OurTable";
 import { useBackendMutation } from "main/utils/useBackend";
+import { useCurrentUser, hasRole } from "main/utils/currentUser";
 
 export default function UsersTable({ users }) {
+  const currentUser = useCurrentUser();
+  const isAdmin = hasRole(currentUser, "ROLE_ADMIN");
+
+  // Stryker disable all : hard to test for query caching
+  function cellToAxiosParamsToggleStudent(cell) {
+    return {
+      url: "/api/admin/users/toggleStudent",
+      method: "POST",
+      params: {
+        id: cell.row.values.id,
+      },
+    };
+  }
+
+  const toggleStudentMutation = useBackendMutation(
+    cellToAxiosParamsToggleStudent,
+    {},
+    ["/api/admin/users"],
+  );
+
+  const toggleStudentCallback = async (cell) => {
+    toggleStudentMutation.mutate(cell);
+  };
+
   //toggleAdmin
   function cellToAxiosParamsToggleAdmin(cell) {
     return {
@@ -92,6 +117,16 @@ export default function UsersTable({ users }) {
       toggleProfessorCallback,
       "UsersTable",
     ),
+    ...(isAdmin
+      ? [
+          ButtonColumn(
+            "Toggle Student",
+            "danger",
+            toggleStudentCallback,
+            "UsersTable",
+          ),
+        ]
+      : []),
   ];
 
   return <OurTable data={users} columns={buttonColumn} testid={"UsersTable"} />;
