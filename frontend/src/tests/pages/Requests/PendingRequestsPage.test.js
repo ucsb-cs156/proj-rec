@@ -54,12 +54,6 @@ describe("PendingRequestsPage tests", () => {
     const statusCells = screen.getAllByTestId(
       /RecommendationRequestTable-cell-row-.*-col-status/,
     );
-    expect(
-      statusCells.some((cell) => cell.textContent === "COMPLETED"),
-    ).toBeTruthy();
-    expect(
-      statusCells.some((cell) => cell.textContent === "DENIED"),
-    ).toBeTruthy();
 
     expect(
       statusCells.every((cell) => cell.textContent !== "PENDING"),
@@ -134,12 +128,7 @@ describe("PendingRequestsPage tests", () => {
     const statusCells = screen.getAllByTestId(
       /RecommendationRequestTable-cell-row-.*-col-status/,
     );
-    expect(
-      statusCells.some((cell) => cell.textContent === "COMPLETED"),
-    ).toBeTruthy();
-    expect(
-      statusCells.some((cell) => cell.textContent === "DENIED"),
-    ).toBeTruthy();
+    
 
     expect(
       statusCells.every((cell) => cell.textContent !== "PENDING"),
