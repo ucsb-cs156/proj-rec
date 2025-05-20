@@ -6,6 +6,7 @@ import { http, HttpResponse } from "msw";
 import StudentProfileEditPage from "main/pages/StudentProfile/StudentProfileEditPage";
 import { usersFixtures } from "fixtures/usersFixtures";
 import { recommendationTypeFixtures } from "fixtures/recommendationTypeFixtures";
+import { recommendationRequestFixtures } from "fixtures/recommendationRequestFixtures";
 
 export default {
   title: "pages/StudentProfile/StudentProfileEditPage",
@@ -28,25 +29,11 @@ Default.parameters = {
       });
     }),
 
-    http.get("/api/recommendationrequest", ({ request }) => {
-      const url = new URL(request.url);
-      const id = url.searchParams.get("id");
-      if (id === "17") {
-        return HttpResponse.json(
-          {
-            id: 17,
-            professor: {
-              id: 3,
-              fullName: "Craig Zzyxx",
-            },
-            recommendationType: "Other",
-            details: "Test details",
-            dueDate: "2025-05-19T00:00:00",
-          },
-          { status: 200 },
-        );
-      }
-      return HttpResponse.json({}, { status: 404 });
+    http.get("/api/recommendationrequest", ({}) => {
+      return HttpResponse.json(
+        recommendationRequestFixtures.threeRecommendations[1],
+        { status: 200 },
+      );
     }),
 
     http.put("/api/recommendationrequest", () => {
