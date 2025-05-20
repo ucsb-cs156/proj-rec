@@ -19,6 +19,7 @@ export default function RecommendationRequestTable({ requests, currentUser }) {
   const location = useLocation();
 
   const isPendingPage = location.pathname.includes("pending");
+  const isCompletedPage = location.pathname.includes("completed");
 
   const editCallback = (cell) => {
     navigate(`/requests/edit/${cell.row.values.id}`);
@@ -177,7 +178,8 @@ export default function RecommendationRequestTable({ requests, currentUser }) {
   if (
     hasRole(currentUser, "ROLE_USER") &&
     !hasRole(currentUser, "ROLE_ADMIN") &&
-    !hasRole(currentUser, "ROLE_PROFESSOR")
+    !isPendingPage &&
+    !isCompletedPage
   ) {
     columns.push(
       ButtonColumn(

@@ -1,5 +1,8 @@
 import { render, waitFor, fireEvent, screen } from "@testing-library/react";
-import OurTable, { ButtonColumn } from "main/components/OurTable";
+import OurTable, {
+  ButtonColumn,
+  ButtonDropdownColumn,
+} from "main/components/OurTable";
 
 describe("OurTable tests", () => {
   const threeRows = [
@@ -29,6 +32,7 @@ describe("OurTable tests", () => {
       accessor: "col2",
     },
     ButtonColumn("Click", "primary", clickMeCallback, "testId"),
+    ButtonDropdownColumn("Update", "info", clickMeCallback, "testId"),
   ];
 
   test("renders an empty table without crashing", () => {
@@ -84,4 +88,57 @@ describe("OurTable tests", () => {
     fireEvent.click(col1Header);
     await screen.findByText("🔽");
   });
+});
+
+describe("ButtonDropdownColumn", () => {
+  const mockAccept = jest.fn();
+  const mockDeny = jest.fn();
+  const mockComplete = jest.fn();
+
+  const _columns = [
+    ButtonDropdownColumn(
+      "Update",
+      "info",
+      {
+        Accept: mockAccept,
+        Deny: mockDeny,
+        Complete: mockComplete,
+      },
+      "testId",
+    ),
+  ];
+
+  // test("renders Accept and Deny for PENDING row and triggers Accept", async () => {
+  //   const data = [{ id: 1, status: "PENDING" }];
+  //   render(<OurTable data={data} columns={columns} />);
+
+  //   const toggle = await screen.findByTestId(
+  //     "testId-cell-row-0-col-Update-dropdown",
+  //   );
+  //   fireEvent.click(toggle);
+
+  //   const acceptItem = await screen.findByText("Accept");
+  //   fireEvent.click(acceptItem);
+
+  //   await waitFor(() => {
+  //     expect(mockAccept).toHaveBeenCalledTimes(1);
+  //   });
+  // });
+
+  // test("renders Complete for IN PROGRESS row and triggers Complete", async () => {
+  //   const data = [{ id: 2, status: "IN PROGRESS" }];
+  //   render(<OurTable data={data} columns={columns} />);
+
+  //   const toggle = await screen.findByTestId(
+  //     "testId-cell-row-0-col-Update-dropdown",
+  //   );
+  //   fireEvent.click(toggle);
+
+  //   const completeItem = await screen.findByText("Complete");
+  //   fireEvent.click(completeItem);
+
+  //   await waitFor(() => {
+  //     expect(mockComplete).toHaveBeenCalledTimes(1);
+  //   });
+  // });
 });
