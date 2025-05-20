@@ -3,7 +3,7 @@ import { useBackend } from "main/utils/useBackend";
 
 import BasicLayout from "main/layouts/BasicLayout/BasicLayout";
 import RecommendationRequestTable from "main/components/RecommendationRequest/RecommendationRequestTable";
-import { useCurrentUser, hasRole } from "main/utils/currentUser";
+import { useCurrentUser} from "main/utils/currentUser";
 import { Button } from "react-bootstrap";
 
 export default function StudentProfileIndexPage() {
