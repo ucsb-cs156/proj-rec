@@ -210,6 +210,6 @@ describe("UserTable tests", () => {
     await deleteButtonCallsDeleteCallback(currentUserFixtures.adminUser);
   });
   test("delete button calls delete callback for professor user", async () => {
-    await deleteButtonCallsDeleteCallback(currentUserFixtures.adminUser);
+    await deleteButtonCallsDeleteCallback(currentUserFixtures.professorUser);
   });
 });
