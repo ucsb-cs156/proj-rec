@@ -658,14 +658,9 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
         String expectedJson = "[" + expectedJson1 + "," + expectedJson2 + "," + expectedJson3 + "]";
 
 
-        // Assert the size
+        // Assert that the contents match
         assertEquals(content, expectedJson);
 
-        // Optionally assert specific fields from each item
-        // assertEquals(101, json.get(0).get("id"));
-        // assertEquals("COMPLETED", json.get(0).get("status"));
-        // assertEquals(102, json.get(1).get("id"));
-        // assertEquals(103, json.get(2).get("id"));
     }
 
     //Non-Admin can't get all requests
