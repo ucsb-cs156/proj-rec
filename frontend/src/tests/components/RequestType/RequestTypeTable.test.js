@@ -18,7 +18,7 @@ jest.mock("react-router-dom", () => ({
 describe("UserTable tests", () => {
   const queryClient = new QueryClient();
 
-  test("Has the expected column headers and content", () => {
+  test("Has the expected column headers and content (ADMIN)", () => {
     const currentUser = currentUserFixtures.adminUser;
     expect(hasRole(currentUser, "ROLE_ADMIN")).toBe(true);
 
@@ -67,7 +67,7 @@ describe("UserTable tests", () => {
     expect(deleteButton).toBeInTheDocument();
   });
 
-  test("Edit button navigates to the edit page", async () => {
+  test("Edit button navigates to the edit page (PROFESSOR)", async () => {
     const currentUser = currentUserFixtures.professorUser;
 
     expect(hasRole(currentUser, "ROLE_PROFESSOR")).toBe(true);
@@ -131,7 +131,7 @@ describe("UserTable tests", () => {
   });
 
   //for user
-  test("Delete button calls delete callback (for user)", async () => {
+  test("Delete button calls delete callback (PROFESSOR)", async () => {
     // arrange
     const currentUser = currentUserFixtures.professorUser;
     expect(hasRole(currentUser, "ROLE_PROFESSOR")).toBe(true);
@@ -175,8 +175,8 @@ describe("UserTable tests", () => {
     expect(axiosMock.history.delete[0].params).toEqual({ id: 1 });
   });
 
-  test("Delete button has correct styling (danger variant)", () => {
-    const currentUser = currentUserFixtures.userOnly;
+  test("Delete button has correct styling", () => {
+    const currentUser = currentUserFixtures.adminUser;
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -197,6 +197,7 @@ describe("UserTable tests", () => {
     // Assert the "danger" styling class is applied
     expect(deleteButton).toHaveClass("btn-danger");
   });
+
   test("Edit button is not shown to users with ROLE_STUDENT", () => {
     const currentUser = currentUserFixtures.studentUser;
     expect(hasRole(currentUser, "ROLE_STUDENT")).toBe(true);

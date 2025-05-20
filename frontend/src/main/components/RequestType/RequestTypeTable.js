@@ -42,15 +42,18 @@ export default function RequestTypeTable({ requesttype, currentUser }) {
   ];
 
   //Only admins and professors should be able to see and use the delete and edit buttons
-  if (hasRole(currentUser, "ROLE_ADMIN")||hasRole(currentUser, "ROLE_PROFESSOR")) {
+  if (
+    hasRole(currentUser, "ROLE_ADMIN") ||
+    hasRole(currentUser, "ROLE_PROFESSOR")
+  ) {
     columns.push(
       ButtonColumn("Delete", "danger", deleteCallback, "RequestTypeTable"),
     );
   }
 
   if (
-    (hasRole(currentUser, "ROLE_ADMIN") ||
-      hasRole(currentUser, "ROLE_PROFESSOR"))
+    hasRole(currentUser, "ROLE_ADMIN") ||
+    hasRole(currentUser, "ROLE_PROFESSOR")
   ) {
     columns.push(
       ButtonColumn("Edit", "primary", editCallback, "RequestTypeTable"),
