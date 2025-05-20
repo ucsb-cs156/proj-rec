@@ -186,7 +186,7 @@ describe("StudentProfileEditPage tests", () => {
           screen.getByDisplayValue(usersFixtures.twoProfessors[0].fullName),
         ).toBeInTheDocument();
       });
-      const professorField = await screen.getByTestId(
+      const professorField = screen.getByTestId(
         "RecommendationRequestForm-professor_id",
       );
       expect(professorField).toHaveValue(
@@ -196,12 +196,12 @@ describe("StudentProfileEditPage tests", () => {
       expect(screen.getByLabelText("Details")).toHaveValue("Test");
       expect(screen.getByLabelText("Due Date")).toHaveValue("2025-06-01");
 
-      const recommendationTypeField = await screen.getByLabelText(
+      const recommendationTypeField = screen.getByLabelText(
         "Recommendation Type",
       );
-      const detailsField = await screen.getByLabelText("Details");
-      const dueDateField = await screen.getByLabelText("Due Date");
-      const submitButton = await screen.getByRole("button", { name: "Update" });
+      const detailsField = screen.getByLabelText("Details");
+      const dueDateField = screen.getByLabelText("Due Date");
+      const submitButton = screen.getByRole("button", { name: "Update" });
 
       fireEvent.change(professorField, {
         target: { value: usersFixtures.twoProfessors[1].id.toString() },
