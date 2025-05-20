@@ -64,12 +64,12 @@ describe("RequestTypesCreatePage tests", () => {
 
   test("on submit, makes request to backend, and redirects to /settings/requesttypes", async () => {
     const queryClient = new QueryClient();
-    const articles = {
+    const requestType = {
       id: 123,
       requestType: "University Transfer",
     };
 
-    axiosMock.onPost("/api/requesttypes/post").reply(202, articles);
+    axiosMock.onPost("/api/requesttypes/post").reply(202, requestType);
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -108,5 +108,59 @@ describe("RequestTypesCreatePage tests", () => {
       "New Request Type Created - id: 123 requestType: University Transfer",
     );
     expect(mockNavigate).toHaveBeenCalledWith({ to: "/settings/requesttypes" });
+  });
+
+  test("on submit with duplicate type, makes request to backend, does not exit page", async () => {
+    const queryClient = new QueryClient();
+    const errorMessage = "Duplicate request type: Duplicate Type";
+
+    axiosMock
+      .onPost("/api/requesttypes/post")
+      .reply(400, { message: "Duplicate request type: Duplicate Type" });
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <RequestTypesCreatePage />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByLabelText("Request Type")).toBeInTheDocument();
+    });
+
+    const requestTypeInput = screen.getByLabelText("Request Type");
+    expect(requestTypeInput).toBeInTheDocument();
+
+    const createButton = screen.getByText("Create");
+    expect(createButton).toBeInTheDocument();
+
+    fireEvent.change(requestTypeInput, {
+      target: {
+        value: "Duplicate Type",
+      },
+    });
+
+    fireEvent.click(createButton);
+
+    await waitFor(() => expect(axiosMock.history.post.length).toBe(1));
+
+    expect(axiosMock.history.post[0].params).toEqual({
+      requestType: "Duplicate Type",
+    });
+
+    // assert - check that the toast was called with the expected message
+    expect(mockToast).toHaveBeenNthCalledWith(
+      1,
+      `Axios Error: Error: Request failed with status code 400`,
+    );
+    expect(mockToast).toHaveBeenNthCalledWith(2, `Error: ${errorMessage}`);
+    expect(mockNavigate).not.toHaveBeenCalledWith({
+      to: "/settings/requesttypes",
+    });
+
+    // Check the duplicate input is still in the form
+    expect(screen.getByLabelText("Request Type")).toHaveValue("Duplicate Type");
   });
 });

@@ -19,9 +19,13 @@ export default function RequestTypesCreatePage({ storybook = false }) {
     );
   };
 
+  const onError = (error) => {
+    toast(`Error: ${error.response.data.message}`);
+  };
+
   const mutation = useBackendMutation(
     objectToAxiosParams,
-    { onSuccess },
+    { onSuccess, onError },
     // Stryker disable next-line all : hard to set up test for caching
     ["/api/requesttypes/all"], // mutation makes this key stale so that pages relying on it reload
   );
