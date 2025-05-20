@@ -17,7 +17,9 @@ export default function StudentProfileCreatePage({ storybook = false }) {
   });
 
   const onSuccess = (recommendationrequest) => {
-    toast(`New ucsborganization Created - id: ${recommendationrequest.id}`);
+    toast(
+      `New Recommendation Request Created - id: ${recommendationrequest.id}`,
+    );
   };
 
   const mutation = useBackendMutation(

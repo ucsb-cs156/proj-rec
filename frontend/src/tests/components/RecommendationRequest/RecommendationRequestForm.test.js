@@ -21,34 +21,33 @@ jest.mock("react-router-dom", () => ({
 describe("RecommendationRequestForm tests", () => {
   const axiosMock = new AxiosMockAdapter(axios);
   beforeEach(() => {
-  jest.clearAllMocks();
-  axiosMock.reset();
-  axiosMock.resetHistory();
+    jest.clearAllMocks();
+    axiosMock.reset();
+    axiosMock.resetHistory();
 
-  axiosMock
-    .onGet("/api/admin/users/professors")
-    .reply(200, usersFixtures.userOnly);
-  axiosMock
-    .onGet("/api/requesttypes/all")
-    .reply(200, recommendationTypeFixtures.fourTypes);
+    axiosMock
+      .onGet("/api/admin/users/professors")
+      .reply(200, usersFixtures.userOnly);
+    axiosMock
+      .onGet("/api/requesttypes/all")
+      .reply(200, recommendationTypeFixtures.fourTypes);
 
-  // ✅ 正确模拟 fetch，用于 useEffect 内异步加载数据
-  global.fetch = jest.fn((url) => {
-    if (url.includes("/api/admin/users/professors")) {
-      return Promise.resolve({
-        json: () => Promise.resolve(usersFixtures.twoProfessors), // ✅ mock 成功返回教授列表
-      });
-    }
+    global.fetch = jest.fn((url) => {
+      if (url.includes("/api/admin/users/professors")) {
+        return Promise.resolve({
+          json: () => Promise.resolve(usersFixtures.twoProfessors),
+        });
+      }
 
-    if (url.includes("/api/requesttypes/all")) {
-      return Promise.resolve({
-        json: () => Promise.resolve(recommendationTypeFixtures.fourTypes), // ✅ mock 成功返回类型列表
-      });
-    }
+      if (url.includes("/api/requesttypes/all")) {
+        return Promise.resolve({
+          json: () => Promise.resolve(recommendationTypeFixtures.fourTypes),
+        });
+      }
 
-    return Promise.reject(new Error("Unhandled fetch: " + url));
+      return Promise.reject(new Error("Unhandled fetch: " + url));
+    });
   });
-});
 
   afterEach(() => {
     jest.resetAllMocks();
@@ -133,7 +132,7 @@ describe("RecommendationRequestForm tests", () => {
   test("that the correct error appears when the gets are called for the options", async () => {
     const consoleErrorMock = jest
       .spyOn(console, "error")
-      .mockImplementation(() => { });
+      .mockImplementation(() => {});
     global.fetch = jest.fn().mockRejectedValueOnce(new Error("Network error"));
     render(
       <QueryClientProvider client={queryClient}>
@@ -213,11 +212,8 @@ describe("RecommendationRequestForm tests", () => {
     expect(
       screen.getByText(/Please select a recommendation type/),
     ).toBeInTheDocument();
-    expect(
-      screen.getByText(/Please select a due date/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Please select a due date/)).toBeInTheDocument();
   });
-
 
   test("submitAction is called with correctly formatted dueDate", async () => {
     const mockSubmit = jest.fn();
@@ -231,14 +227,14 @@ describe("RecommendationRequestForm tests", () => {
               professor_id: "1",
               recommendationType: "Other",
               details: "Test details",
-              dueDate: "2025-05-18"
+              dueDate: "2025-05-18",
             }}
             professorVals={usersFixtures.twoProfessors}
             recommendationTypeVals={recommendationTypeFixtures.fourTypes}
             submitAction={mockSubmit}
           />
         </Router>
-      </QueryClientProvider>
+      </QueryClientProvider>,
     );
 
     fireEvent.change(screen.getByTestId("RecommendationRequestForm-dueDate"), {
@@ -251,8 +247,39 @@ describe("RecommendationRequestForm tests", () => {
       expect(mockSubmit).toHaveBeenCalledWith(
         expect.objectContaining({
           dueDate: "2025-05-18T00:00:00",
-        })
-      )
+        }),
+      ),
     );
+  });
+
+  test("submitAction is not called with no dueDate input", async () => {
+    const mockSubmit = jest.fn();
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <RecommendationRequestForm
+            initialContents={{
+              id: 1,
+              professor_id: "1",
+              recommendationType: "Other",
+              details: "Test details",
+              dueDate: "",
+            }}
+            professorVals={usersFixtures.twoProfessors}
+            recommendationTypeVals={recommendationTypeFixtures.fourTypes}
+            submitAction={mockSubmit}
+          />
+        </Router>
+      </QueryClientProvider>,
+    );
+
+    fireEvent.click(screen.getByTestId("RecommendationRequestForm-submit"));
+
+    expect(
+      await screen.findByText(/Please select a due date/),
+    ).toBeInTheDocument();
+
+    expect(mockSubmit).not.toHaveBeenCalled();
   });
 });

@@ -71,7 +71,7 @@ export default function StudentProfileEditPage({ storybook = false }) {
             initialContents={{
               ...recommendationrequests,
               professor_id: recommendationrequests.professor?.id,
-              dueDate: recommendationrequests.dueDate.substring(0,10),
+              dueDate: recommendationrequests.dueDate.substring(0, 10),
             }}
           />
         )}

@@ -46,10 +46,10 @@ function RecommendationRequestForm({
 
     getProfessors();
     getRequestTypes();
-  }, []);
+  });
 
   const onSubmit = (data) => {
-    if (data.dueDate && /^\d{4}-\d{2}-\d{2}$/.test(data.dueDate)) {
+    if (/^\d{4}-\d{2}-\d{2}$/.test(data.dueDate)) {
       data.dueDate = data.dueDate + "T00:00:00";
     }
     submitAction(data);

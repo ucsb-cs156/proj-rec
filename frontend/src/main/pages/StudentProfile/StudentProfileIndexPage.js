@@ -22,17 +22,15 @@ export default function StudentProfileIndexPage() {
   );
 
   const createButton = () => {
-    if (hasRole(currentUser, "ROLE_STUDENT")) {
-      return (
-        <Button
-          variant="primary"
-          href="/requests/create"
-          style={{ float: "right" }}
-        >
-          Create a new Recommendation Request
-        </Button>
-      );
-    }
+    return (
+      <Button
+        variant="primary"
+        href="/requests/create"
+        style={{ float: "right" }}
+      >
+        Create a new Recommendation Request
+      </Button>
+    );
   };
 
   return (
@@ -40,8 +38,8 @@ export default function StudentProfileIndexPage() {
       <div className="pt-2">
         {createButton()}
         <h1>My Requests</h1>
-        <div style={{ marginLeft: "-180px" }}>
-          <div style={{ marginTop: "40px" }}>
+        <div data-testid="left-div" style={{ marginLeft: "-180px" }}>
+          <div data-testid="top-div" style={{ marginTop: "40px" }}>
             <RecommendationRequestTable
               requests={recommendationrequests}
               currentUser={currentUser}
