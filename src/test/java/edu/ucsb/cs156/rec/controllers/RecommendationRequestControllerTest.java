@@ -475,7 +475,13 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
         //act 
         MvcResult response = mockMvc
                 .perform(get("/api/recommendationrequest/admin/all")
-                         
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(requestBody)
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andReturn();
+
         String content = response.getResponse().getContentAsString();
 
         String expectedJson1 = mapper.writeValueAsString(rec_111);
@@ -619,6 +625,10 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
         //act
         MvcResult response = mockMvc
                 .perform(put("/api/recommendationrequest/professor?id=67")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("utf-8")
+                        .content(requestBody)
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andReturn();
 
