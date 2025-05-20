@@ -18,15 +18,10 @@ export default function RequestTypeTable({ requesttype, currentUser }) {
 
   // Stryker disable all : hard to test for query caching
 
-  // when delete success, invalidate the correct query key (depending on user role)
-  const apiEndpoint = hasRole(currentUser, "ROLE_PROFESSOR")
-    ? "/api/requesttypes/all"
-    : "/api/requesttypes/all";
-
   const deleteMutation = useBackendMutation(
     cellToAxiosParamsDelete,
     { onSuccess: onDeleteSuccess },
-    [apiEndpoint],
+    ["/api/requesttypes/all"],
   );
   // Stryker restore all
 
@@ -46,15 +41,14 @@ export default function RequestTypeTable({ requesttype, currentUser }) {
     },
   ];
 
-  //since all admins have the role of a user, we can just check if the current user has the role ROLE_USER
-  if (hasRole(currentUser, "ROLE_USER")) {
+  //Only admins and professors should be able to see and use the delete and edit buttons
+  if (hasRole(currentUser, "ROLE_ADMIN")||hasRole(currentUser, "ROLE_PROFESSOR")) {
     columns.push(
       ButtonColumn("Delete", "danger", deleteCallback, "RequestTypeTable"),
     );
   }
 
   if (
-    hasRole(currentUser, "ROLE_USER") &&
     (hasRole(currentUser, "ROLE_ADMIN") ||
       hasRole(currentUser, "ROLE_PROFESSOR"))
   ) {
