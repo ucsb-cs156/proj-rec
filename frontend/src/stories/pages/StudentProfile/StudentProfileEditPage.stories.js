@@ -36,7 +36,8 @@ Default.parameters = {
       );
     }),
 
-    http.put("/api/recommendationrequest", async ({}) => {
+    http.put("/api/recommendationrequest", async ({ request }) => {
+      const body = await request.json();
       return HttpResponse.json({}, { status: 200 });
     }),
 
