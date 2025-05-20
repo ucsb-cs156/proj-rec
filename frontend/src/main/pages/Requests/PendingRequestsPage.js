@@ -35,7 +35,7 @@ export default function PendingRequestsPage() {
   return (
     <BasicLayout>
       <div className="pt-2">
-        <h1>Pendibg Requests</h1>
+        <h1>Pending Requests</h1>
         <div data-testid="RecommendationRequestTable">
           <RecommendationRequestTable
             requests={pendingRequests}

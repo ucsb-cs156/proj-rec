@@ -12,9 +12,36 @@ describe("PendingRequestsPage tests", () => {
   const axiosMock = new AxiosMockAdapter(axios);
   const queryClient = new QueryClient();
 
+  
+  const setupUserOnly = () => {
+    axiosMock.reset();
+    axiosMock.resetHistory();
+    axiosMock
+      .onGet("/api/currentUser")
+      .reply(200, apiCurrentUserFixtures.userOnly);
+    axiosMock
+      .onGet("/api/systemInfo")
+      .reply(200, systemInfoFixtures.showingNeither);
+  };
+
   beforeEach(() => {
     axiosMock.reset();
     axiosMock.resetHistory();
+  });
+
+    test("Renders expected content", async () => {
+    // arrange
+    setupUserOnly();
+    // act
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <PendingRequestsPage />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+    // assert
+    await screen.findByText("Pending Requests");
   });
 
   test("Renders pending requests for professor", async () => {
