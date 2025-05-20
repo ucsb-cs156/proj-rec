@@ -45,7 +45,6 @@ describe("AppNavbar tests", () => {
 
     const settings = screen.getByText("Settings");
     expect(settings).toBeInTheDocument();
-
   });
 
   test("renders H2Console and Swagger links correctly", async () => {
@@ -254,7 +253,6 @@ describe("AppNavbar tests", () => {
     expect(screen.getByText("Rec Manager")).toBeInTheDocument();
 
     expect(screen.queryByText("Settings")).not.toBeInTheDocument();
-
   });
 
   test("the three prof pages do not show when not logged in", async () => {
@@ -281,6 +279,5 @@ describe("AppNavbar tests", () => {
     expect(screen.getByText("Rec Manager")).toBeInTheDocument();
 
     expect(screen.queryByText("Settings")).not.toBeInTheDocument();
-
   });
 });
