@@ -43,7 +43,7 @@ FourTypesAdminUser.parameters = {
 export const FourTypesProfessorUser = Template.bind({});
 FourTypesProfessorUser.args = {
   requestTypes: requestTypeFixtures.fourTypes,
-  currentUser: currentUserFixtures.adminUser,
+  currentUser: currentUserFixtures.professorUser,
 };
 
 FourTypesProfessorUser.parameters = {
