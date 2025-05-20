@@ -130,7 +130,14 @@ public class RecommendationRequestController extends ApiController {
                 .findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(RecommendationRequest.class, id));
 
+                
+
         recommendationRequest.setStatus(incoming.getStatus());
+
+        if ("COMPLETED".equalsIgnoreCase(incoming.getStatus())
+        && recommendationRequest.getCompletionDate() == null) {
+        recommendationRequest.setCompletionDate(LocalDateTime.now());
+    }
 
         recommendationRequestRepository.save(recommendationRequest);
 
