@@ -49,7 +49,7 @@ public class RecommendationRequestController extends ApiController {
      */
     @Operation(summary = "An admin can list all Recommendation Requests")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping("/admin/all")
+    @GetMapping("/admin/all")
     public Iterable<RecommendationRequest> getAllRecommendationRequests() {
         return recommendationRequestRepository.findAll();
     }
