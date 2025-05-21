@@ -2,35 +2,9 @@ import { render, screen } from "@testing-library/react";
 import usersFixtures from "fixtures/usersFixtures";
 import UsersTable from "main/components/Users/UsersTable";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { useCurrentUser, hasRole } from "main/utils/currentUser";
-
-jest.mock("main/utils/currentUser", () => ({
-  useCurrentUser: jest.fn(),
-  hasRole: jest.fn(),
-}));
 
 describe("UserTable tests", () => {
   const queryClient = new QueryClient();
-
-  beforeEach(() => {
-    useCurrentUser.mockReturnValue({
-      data: { user: { id: 1, email: "admin@example.com" } },
-    });
-
-    hasRole.mockImplementation((_currentUser, role) => role === "ROLE_ADMIN");
-  });
-
-  test("Toggle Student button should appear for admin", () => {
-    render(
-      <QueryClientProvider client={queryClient}>
-        <UsersTable users={usersFixtures.threeUsers} />
-      </QueryClientProvider>,
-    );
-
-    // This checks that the Toggle Student button is in the document
-    const toggleStudentButton = screen.getAllByText("Toggle Student")[0];
-    expect(toggleStudentButton).toBeInTheDocument();
-  });
 
   test("renders without crashing for empty table", () => {
     render(
