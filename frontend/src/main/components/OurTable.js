@@ -119,7 +119,7 @@ export function ButtonDropdownColumn(label, variant, callback, testid) {
         </Dropdown.Toggle>
 
         <Dropdown.Menu>
-          {cell.row.values.status === "PENDING" && (
+          {cell.row.original.status === "PENDING" && (
             <>
               <Dropdown.Item onClick={() => callback.Accept(cell)}>
                 Accept
@@ -130,7 +130,7 @@ export function ButtonDropdownColumn(label, variant, callback, testid) {
             </>
           )}
 
-          {cell.row.values.status === "IN PROGRESS" && (
+          {cell.row.original.status === "IN PROGRESS" && (
             <Dropdown.Item onClick={() => callback.Complete(cell)}>
               Complete
             </Dropdown.Item>

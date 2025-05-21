@@ -31,8 +31,11 @@ describe("OurTable tests", () => {
       Header: "Column 2",
       accessor: "col2",
     },
+    {
+      Header: "Status",
+      accessor: "status",
+    },
     ButtonColumn("Click", "primary", clickMeCallback, "testId"),
-    ButtonDropdownColumn("Update", "info", clickMeCallback, "testId"),
   ];
 
   test("renders an empty table without crashing", () => {
@@ -90,55 +93,133 @@ describe("OurTable tests", () => {
   });
 });
 
-describe("ButtonDropdownColumn", () => {
+describe("ButtonDropdownColumn tests", () => {
   const mockAccept = jest.fn();
   const mockDeny = jest.fn();
   const mockComplete = jest.fn();
 
-  const _columns = [
+  const columns = [
+    {
+      Header: "Column 1",
+      accessor: "col1", // accessor is the "key" in the data
+    },
+    {
+      Header: "Column 2",
+      accessor: "col2",
+    },
     ButtonDropdownColumn(
       "Update",
       "info",
-      {
-        Accept: mockAccept,
-        Deny: mockDeny,
-        Complete: mockComplete,
-      },
+      { Accept: mockAccept, Deny: mockDeny, Complete: mockComplete },
       "testId",
     ),
   ];
 
-  // test("renders Accept and Deny for PENDING row and triggers Accept", async () => {
-  //   const data = [{ id: 1, status: "PENDING" }];
-  //   render(<OurTable data={data} columns={columns} />);
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
 
-  //   const toggle = await screen.findByTestId(
-  //     "testId-cell-row-0-col-Update-dropdown",
-  //   );
-  //   fireEvent.click(toggle);
+  test("The dropdown appears in the table", async () => {
+    const rows = [{ id: 5, status: "PENDING" }];
+    render(<OurTable columns={columns} data={rows} />);
 
-  //   const acceptItem = await screen.findByText("Accept");
-  //   fireEvent.click(acceptItem);
+    await screen.findByTestId("testId-cell-row-0-col-Update-dropdown");
+    const dropdown = screen.getByTestId(
+      "testId-cell-row-0-col-Update-dropdown",
+    );
+    expect(dropdown).toBeInTheDocument();
+  });
 
-  //   await waitFor(() => {
-  //     expect(mockAccept).toHaveBeenCalledTimes(1);
-  //   });
-  // });
+  test("The dropdown shows Accept and Deny buttons when request is PENDING", async () => {
+    const rows = [{ id: 5, status: "PENDING" }];
+    render(<OurTable columns={columns} data={rows} />);
 
-  // test("renders Complete for IN PROGRESS row and triggers Complete", async () => {
-  //   const data = [{ id: 2, status: "IN PROGRESS" }];
-  //   render(<OurTable data={data} columns={columns} />);
+    await screen.findByTestId("testId-cell-row-0-col-Update-dropdown");
+    const dropdown = screen.getByTestId(
+      "testId-cell-row-0-col-Update-dropdown",
+    );
+    fireEvent.click(dropdown);
 
-  //   const toggle = await screen.findByTestId(
-  //     "testId-cell-row-0-col-Update-dropdown",
-  //   );
-  //   fireEvent.click(toggle);
+    expect(await screen.findByText("Accept")).toBeInTheDocument();
+    expect(await screen.findByText("Deny")).toBeInTheDocument();
+  });
 
-  //   const completeItem = await screen.findByText("Complete");
-  //   fireEvent.click(completeItem);
+  test("Clicking accept/deny invokes correct callbacks", async () => {
+    const rows = [{ id: 5, status: "PENDING" }];
+    render(<OurTable columns={columns} data={rows} />);
 
-  //   await waitFor(() => {
-  //     expect(mockComplete).toHaveBeenCalledTimes(1);
-  //   });
-  // });
+    await screen.findByTestId("testId-cell-row-0-col-Update-dropdown");
+    const dropdown = screen.getByTestId(
+      "testId-cell-row-0-col-Update-dropdown",
+    );
+    fireEvent.click(dropdown);
+
+    await screen.findByText("Accept");
+    const accept = screen.getByText("Accept");
+    await screen.findByText("Deny");
+    const deny = screen.getByText("Deny");
+
+    fireEvent.click(accept);
+    await waitFor(() => expect(mockAccept).toBeCalledTimes(1));
+
+    fireEvent.click(deny);
+    await waitFor(() => expect(mockDeny).toBeCalledTimes(1));
+  });
+
+  test("The dropdown shows Complete button when request is IN PROGRESS", async () => {
+    const rows = [{ id: 5, status: "IN PROGRESS" }];
+    render(<OurTable columns={columns} data={rows} />);
+
+    await screen.findByTestId("testId-cell-row-0-col-Update-dropdown");
+    const dropdown = screen.getByTestId(
+      "testId-cell-row-0-col-Update-dropdown",
+    );
+    fireEvent.click(dropdown);
+
+    expect(await screen.findByText("Complete")).toBeInTheDocument();
+  });
+
+  test("Clicking complete invokes correct callback", async () => {
+    const rows = [{ id: 5, status: "IN PROGRESS" }];
+    render(<OurTable columns={columns} data={rows} />);
+
+    await screen.findByTestId("testId-cell-row-0-col-Update-dropdown");
+    const dropdown = screen.getByTestId(
+      "testId-cell-row-0-col-Update-dropdown",
+    );
+    fireEvent.click(dropdown);
+
+    await screen.findByText("Complete");
+    const complete = screen.getByText("Complete");
+
+    fireEvent.click(complete);
+    await waitFor(() => expect(mockComplete).toBeCalledTimes(1));
+  });
+
+  test("for PENDING status, Comoplete should not render", async () => {
+    const rows = [{ id: 5, status: "PENDING" }];
+    render(<OurTable columns={columns} data={rows} />);
+
+    await screen.findByTestId("testId-cell-row-0-col-Update-dropdown");
+    const dropdown = screen.getByTestId(
+      "testId-cell-row-0-col-Update-dropdown",
+    );
+    fireEvent.click(dropdown);
+
+    expect(screen.queryByText("Complete")).not.toBeInTheDocument();
+  });
+
+  test("for IN PROGRESS status, Accept and Deny should not render", async () => {
+    const rows = [{ id: 5, status: "IN PROGRESS" }];
+    render(<OurTable columns={columns} data={rows} />);
+
+    await screen.findByTestId("testId-cell-row-0-col-Update-dropdown");
+    const dropdown = screen.getByTestId(
+      "testId-cell-row-0-col-Update-dropdown",
+    );
+    fireEvent.click(dropdown);
+
+    expect(screen.queryByText("Accept")).not.toBeInTheDocument();
+    expect(screen.queryByText("Deny")).not.toBeInTheDocument();
+  });
 });
