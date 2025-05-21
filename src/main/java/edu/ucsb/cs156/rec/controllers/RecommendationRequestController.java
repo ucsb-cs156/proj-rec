@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -134,9 +135,8 @@ public class RecommendationRequestController extends ApiController {
 
         recommendationRequest.setStatus(incoming.getStatus());
 
-        if ("COMPLETED".equalsIgnoreCase(incoming.getStatus())
-        && recommendationRequest.getCompletionDate() == null) {
-        recommendationRequest.setCompletionDate(LocalDateTime.now());
+        if ("COMPLETED".equalsIgnoreCase(incoming.getStatus())) {
+        recommendationRequest.setCompletionDate(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
     }
 
         recommendationRequestRepository.save(recommendationRequest);
