@@ -2,7 +2,6 @@ package edu.ucsb.cs156.rec.controllers;
 
 import edu.ucsb.cs156.rec.ControllerTestCase;
 import edu.ucsb.cs156.rec.repositories.UserRepository;
-import edu.ucsb.cs156.rec.repositories.RequestTypeRepository;
 import edu.ucsb.cs156.rec.testconfig.TestConfig;
 
 import org.junit.jupiter.api.BeforeAll;
