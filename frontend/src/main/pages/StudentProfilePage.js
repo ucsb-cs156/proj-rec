@@ -20,7 +20,8 @@ const StudentProfilePage = () => {
     // Stryker disable next-line all : don't test internal caching of React Query
     ["/api/recommendationrequest/requester/all"],
     // Stryker disable next-line all
-    { method: "GET", url: "/api/recommendationrequest/requester/all" }, [],
+    { method: "GET", url: "/api/recommendationrequest/requester/all" },
+    [],
   );
 
   if (!hasRole(currentUser, "ROLE_STUDENT")) {

@@ -9,28 +9,33 @@ import { systemInfoFixtures } from "fixtures/systemInfoFixtures";
 import { recommendationRequestFixtures } from "fixtures/recommendationRequestFixtures";
 import mockConsole from "jest-mock-console";
 
-
-
-
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useNavigate: jest.fn(),
 }));
 
 describe("StudentProfilePage tests", () => {
-    const axiosMock = new AxiosMockAdapter(axios);
-    const queryClient = new QueryClient();
-  
-    beforeEach(() => {
-        axiosMock.reset();
-        axiosMock.resetHistory();
-        
-        axiosMock.onGet("/api/recommendationrequest/requester/all").reply(200, recommendationRequestFixtures.threeRecommendations);
-        axiosMock.onGet("/api/recommendationrequest/professor/all").reply(200, recommendationRequestFixtures.threeRecommendations);
-        
-        axiosMock.onGet("/api/currentUser").reply(200, apiCurrentUserFixtures.userOnly);
-        axiosMock.onGet("/api/systemInfo").reply(200, systemInfoFixtures.showingNeither);
-      });
+  const axiosMock = new AxiosMockAdapter(axios);
+  const queryClient = new QueryClient();
+
+  beforeEach(() => {
+    axiosMock.reset();
+    axiosMock.resetHistory();
+
+    axiosMock
+      .onGet("/api/recommendationrequest/requester/all")
+      .reply(200, recommendationRequestFixtures.threeRecommendations);
+    axiosMock
+      .onGet("/api/recommendationrequest/professor/all")
+      .reply(200, recommendationRequestFixtures.threeRecommendations);
+
+    axiosMock
+      .onGet("/api/currentUser")
+      .reply(200, apiCurrentUserFixtures.userOnly);
+    axiosMock
+      .onGet("/api/systemInfo")
+      .reply(200, systemInfoFixtures.showingNeither);
+  });
   test("renders correctly for student user", async () => {
     axiosMock
       .onGet("/api/currentUser")
@@ -52,32 +57,29 @@ describe("StudentProfilePage tests", () => {
     );
     const mockNavigate = jest.fn();
     useNavigate.mockImplementation(() => mockNavigate);
-    const sampleRequestId =
-      recommendationRequestFixtures.threeRecommendations[0].id;
+
     await waitFor(() => {
       const table = screen.getByTestId("RecommendationRequestTable");
       expect(table).toBeInTheDocument();
-      expect(screen.getAllByText("Edit").length).toBeGreaterThan(0);
-      expect(screen.getAllByText("Delete").length).toBeGreaterThan(0);
     });
+
+    expect(screen.getAllByText("Edit").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Delete").length).toBeGreaterThan(0);
 
     const editButtons = screen.getAllByText("Edit");
     const deleteButtons = screen.getAllByText("Delete");
     fireEvent.click(editButtons[0]);
     fireEvent.click(deleteButtons[0]);
 
-    await waitFor(() => {
-      const createButton = screen.getByTestId("create-request-button");
-      fireEvent.click(createButton);
-      
-    });
+    await screen.findByTestId("create-request-button");
 
+    const createButton = screen.getByTestId("create-request-button");
+    fireEvent.click(createButton);
 
     expect(screen.getByTestId("role-badge-student")).toBeInTheDocument();
   });
 
   test("renders correctly for non-student user", async () => {
-
     axiosMock
       .onGet("/api/currentUser")
       .reply(200, apiCurrentUserFixtures.adminUser);
@@ -121,12 +123,5 @@ describe("StudentProfilePage tests", () => {
       "Error communicating with backend via GET on /api/recommendationrequest/requester/all",
     );
     restoreConsole();
-
-    
   });
-
-
- 
-
-
 });
