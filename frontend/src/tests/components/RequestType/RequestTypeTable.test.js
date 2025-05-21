@@ -1,5 +1,5 @@
 import { fireEvent, render, waitFor, screen } from "@testing-library/react";
-import requestTypeFixtures from "fixtures/requestTypeFixtures";
+import recommendationTypeFixtures from "fixtures/recommendationTypeFixtures";
 import RequestTypeTable from "main/components/RequestType/RequestTypeTable";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter } from "react-router-dom";
@@ -24,7 +24,7 @@ describe("UserTable tests", () => {
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
           <RequestTypeTable
-            requestTypes={requestTypeFixtures.fourTypes}
+            requestTypes={recommendationTypeFixtures.fourTypes}
             currentUser={currentUser}
           />
         </MemoryRouter>
@@ -74,7 +74,7 @@ describe("UserTable tests", () => {
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
           <RequestTypeTable
-            requestTypes={requestTypeFixtures.fourTypes}
+            requestTypes={recommendationTypeFixtures.fourTypes}
             currentUser={currentUser}
           />
         </MemoryRouter>
@@ -130,7 +130,7 @@ describe("UserTable tests", () => {
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
           <RequestTypeTable
-            requestTypes={requestTypeFixtures.fourTypes}
+            requestTypes={recommendationTypeFixtures.fourTypes}
             currentUser={currentUser}
           />
         </MemoryRouter>
@@ -178,7 +178,7 @@ describe("UserTable tests", () => {
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
           <RequestTypeTable
-            requestTypes={requestTypeFixtures.fourTypes}
+            requestTypes={recommendationTypeFixtures.fourTypes}
             currentUser={currentUser}
           />
         </MemoryRouter>
