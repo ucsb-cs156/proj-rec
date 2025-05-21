@@ -3,7 +3,7 @@
       {
         "changeSet": {
           "id": "RecommendationRequest-2",
-          "author": "Ryan Choi",
+          "author": "ryanchoi07",
           "changes": [
             {
               "renameColumn": {

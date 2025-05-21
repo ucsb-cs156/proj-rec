@@ -207,7 +207,7 @@ public class RecommendationRequestController extends ApiController {
         CurrentUser currentUser = getCurrentUser();
         RecommendationRequest recommendationRequest = new RecommendationRequest();
 
-        RequestType requestType = requestTypeRepository.findById(recommendationTypeId).orElseThrow(() -> new EntityNotFoundException(RequestType.class, recommendationTypeId));
+        RequestType requestType = requestTypeRepository.findById(recommendationTypeId).orElseThrow(() -> new IllegalArgumentException(String.format("Unknown Request Type ID: %d", recommendationTypeId)));
         
         recommendationRequest.setRecommendationType(requestType);
         recommendationRequest.setDetails(details);

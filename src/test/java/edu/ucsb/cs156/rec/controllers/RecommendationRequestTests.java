@@ -439,11 +439,11 @@ public class RecommendationRequestTests extends ControllerTestCase {
                                 .param("professorId", "7")
                                 .param("dueDate", "2024-11-25T16:46:28")
                                 .with(csrf()))
-                                .andExpect(status().isNotFound()).andReturn();
+                                .andExpect(status().isBadRequest()).andReturn();
                 // assert
                 Map<String, Object> json = responseToJson(response);
-                assertEquals("EntityNotFoundException", json.get("type"));
-                assertEquals("RequestType with id 1 not found", json.get("message"));
+                assertEquals("IllegalArgumentException", json.get("type"));
+                assertEquals("Unknown Request Type ID: 1", json.get("message"));
 
         }
         
