@@ -59,8 +59,14 @@
                   },
                   {
                     "column": {
-                      "name": "RECOMMENDATION_TYPE",
-                      "type": "VARCHAR(255)"
+                      "name": "RECOMMENDATION_TYPE_ID",
+                      "type": "BIGINT",
+                      "constraints": {
+                        "foreignKeyName": "RECOMMENDATIONREQUEST_RECOMMENDATION_TYPE_ID_FK",
+                        "references": "REQUESTTYPE(ID)",
+                        "onDelete": "RESTRICT",
+                        "onUpdate": "RESTRICT"
+                      }
                     }
                   },
                   {
