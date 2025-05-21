@@ -1,7 +1,10 @@
 import OurTable, { ButtonColumn } from "main/components/OurTable";
 import { useBackendMutation } from "main/utils/useBackend";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
-export default function UsersTable({ users }) {
+export default function UsersTable({ users, currentUser }) {
+  const navigate = useNavigate();
   // Stryker disable all : hard to test for query caching
   // Stryker enable all
 
@@ -26,7 +29,14 @@ export default function UsersTable({ users }) {
 
   // Stryker disable next-line all : TODO try to make a good test for this
   const toggleAdminCallback = async (cell) => {
-    toggleAdminMutation.mutate(cell);
+    if (currentUser && currentUser.loggedIn 
+        && currentUser.root.user.email === cell.row.values.email) {
+        toggleAdminMutation.mutate(cell);
+        toast("admin privileges removed");
+      navigate('/'); // Redirect after showing the toast
+    } else {
+      toggleAdminMutation.mutate(cell);
+    }
   };
 
   function cellToAxiosParamsToggleProfessor(cell) {
