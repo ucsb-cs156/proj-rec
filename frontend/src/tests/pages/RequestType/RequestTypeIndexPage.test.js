@@ -167,47 +167,40 @@ describe("RequestTypeIndexPage tests", () => {
     restoreConsole();
   });
 
-  test("does NOT render Create Button for user with unrelated role", async () => {
-    axiosMock.reset();
-    axiosMock.resetHistory();
+  const relatedRoles = [
+    ["professor", apiCurrentUserFixtures.professorUser],
+    ["admin", apiCurrentUserFixtures.adminUser],
+  ];
 
-    const userWithUnrelatedRole = {
-      ...apiCurrentUserFixtures.userOnly,
-      roles: [{ authority: "ROLE_STUDENT" }],
-    };
+  test.each(relatedRoles)(
+    "renders Create Button for %s user (has ROLE_%s)",
+    async (_name, fakeUser) => {
+      axiosMock.reset();
+      axiosMock.resetHistory();
+      axiosMock.onGet("/api/currentUser").reply(200, fakeUser);
+      axiosMock
+        .onGet("/api/systemInfo")
+        .reply(200, systemInfoFixtures.showingBoth);
 
-    axiosMock.onGet("/api/currentUser").reply(200, userWithUnrelatedRole);
-    axiosMock
-      .onGet("/api/systemInfo")
-      .reply(200, systemInfoFixtures.showingNeither);
-    axiosMock.onGet("/api/requesttypes/all").reply(200, []);
+      axiosMock.onGet("/api/requesttypes/all").reply(200, []);
 
-    render(
-      <QueryClientProvider client={queryClient}>
-        <MemoryRouter>
-          <RequestTypeIndexPage />
-        </MemoryRouter>
-      </QueryClientProvider>,
-    );
+      render(
+        <QueryClientProvider client={queryClient}>
+          <MemoryRouter>
+            <RequestTypeIndexPage />
+          </MemoryRouter>
+        </QueryClientProvider>,
+      );
 
-    await waitFor(() => {
-      expect(screen.queryByText(/Create RequestType/)).not.toBeInTheDocument();
-    });
-  });
+      const btn = await screen.findByText(/Create RequestType/);
+      expect(btn).toBeInTheDocument();
+      expect(btn).toHaveAttribute("href", "/requesttypes/create");
+      expect(btn).toHaveStyle({ float: "right" });
+    },
+  );
 
-  test("does NOT render Create Button for user with missing role", async () => {
-    axiosMock.reset();
-    axiosMock.resetHistory();
-
-    const userWithUnrelatedRole = {
-      ...apiCurrentUserFixtures.missingRolesToTestErrorHandling,
-      roles: [{ authority: "ROLE_STUDENT" }],
-    };
-
-    axiosMock.onGet("/api/currentUser").reply(200, userWithUnrelatedRole);
-    axiosMock
-      .onGet("/api/systemInfo")
-      .reply(200, systemInfoFixtures.showingNeither);
+  test("does NOT render Create Button for plain userOnly (no prof, no admin)", async () => {
+    setupUserOnly();
     axiosMock.onGet("/api/requesttypes/all").reply(200, []);
 
     render(
