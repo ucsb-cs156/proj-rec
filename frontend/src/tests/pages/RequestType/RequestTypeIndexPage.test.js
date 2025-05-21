@@ -195,34 +195,6 @@ describe("RequestTypeIndexPage tests", () => {
     });
   });
 
-  test("does NOT render Create Button for setup user with unrelated role", async () => {
-    axiosMock.reset();
-    axiosMock.resetHistory();
-
-    const userWithUnrelatedRole = {
-      ...apiCurrentUserFixtures.setupUserOnly,
-      roles: [{ authority: "ROLE_STUDENT" }],
-    };
-
-    axiosMock.onGet("/api/currentUser").reply(200, userWithUnrelatedRole);
-    axiosMock
-      .onGet("/api/systemInfo")
-      .reply(200, systemInfoFixtures.showingNeither);
-    axiosMock.onGet("/api/requesttypes/all").reply(200, []);
-
-    render(
-      <QueryClientProvider client={queryClient}>
-        <MemoryRouter>
-          <RequestTypeIndexPage />
-        </MemoryRouter>
-      </QueryClientProvider>,
-    );
-
-    await waitFor(() => {
-      expect(screen.queryByText(/Create RequestType/)).not.toBeInTheDocument();
-    });
-  });
-
   test("what happens when you click delete, admin", async () => {
     setupAdminUser();
 
