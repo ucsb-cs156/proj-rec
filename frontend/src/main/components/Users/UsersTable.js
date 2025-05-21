@@ -29,11 +29,14 @@ export default function UsersTable({ users, currentUser }) {
 
   // Stryker disable next-line all : TODO try to make a good test for this
   const toggleAdminCallback = async (cell) => {
-    if (currentUser && currentUser.loggedIn 
-        && currentUser.root.user.email === cell.row.values.email) {
-        toggleAdminMutation.mutate(cell);
-        toast("admin privileges removed");
-      navigate('/'); // Redirect after showing the toast
+    if (
+      currentUser &&
+      currentUser.loggedIn &&
+      currentUser.root.user.email === cell.row.values.email
+    ) {
+      toggleAdminMutation.mutate(cell);
+      toast("admin privileges removed");
+      navigate("/"); // Redirect after showing the toast
     } else {
       toggleAdminMutation.mutate(cell);
     }
