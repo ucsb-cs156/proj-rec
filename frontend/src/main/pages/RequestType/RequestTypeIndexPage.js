@@ -10,7 +10,7 @@ export default function RequestTypeIndexPage() {
   const currentUser = useCurrentUser();
 
   const {
-    data: requestType,
+    data: requestTypes,
     error: _error,
     status: _status,
   } = useBackend(
@@ -44,7 +44,7 @@ export default function RequestTypeIndexPage() {
         {createButton()}
         <h1>RequestType</h1>
         <RequestTypeTable
-          requestTypes={requestType}
+          requestTypes={requestTypes}
           currentUser={currentUser}
         />
       </div>
