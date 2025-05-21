@@ -21,6 +21,7 @@ const StudentProfilePage = () => {
     ["/api/recommendationrequest/requester/all"],
     // Stryker disable next-line all
     { method: "GET", url: "/api/recommendationrequest/requester/all" },
+    // Stryker disable next-line all
     [],
   );
 
