@@ -1,6 +1,6 @@
 import React from "react";
 import RequestTypeTable from "main/components/RequestType/RequestTypeTable";
-import requestTypeFixtures from "fixtures/requestTypeFixtures";
+import recommendationTypeFixtures from "fixtures/recommendationTypeFixtures";
 import { currentUserFixtures } from "fixtures/currentUserFixtures";
 import { http, HttpResponse } from "msw";
 
@@ -22,13 +22,13 @@ Empty.args = {
 export const FourTypesOrdinaryUser = Template.bind({});
 
 FourTypesOrdinaryUser.args = {
-  requestTypes: requestTypeFixtures.fourTypes,
+  requestTypes: recommendationTypeFixtures.fourTypes,
   currentUser: currentUserFixtures.userOnly,
 };
 
 export const FourTypesAdminUser = Template.bind({});
 FourTypesAdminUser.args = {
-  requestTypes: requestTypeFixtures.fourTypes,
+  requestTypes: recommendationTypeFixtures.fourTypes,
   currentUser: currentUserFixtures.adminUser,
 };
 
@@ -42,7 +42,7 @@ FourTypesAdminUser.parameters = {
 
 export const FourTypesProfessorUser = Template.bind({});
 FourTypesProfessorUser.args = {
-  requestTypes: requestTypeFixtures.fourTypes,
+  requestTypes: recommendationTypeFixtures.fourTypes,
   currentUser: currentUserFixtures.professorUser,
 };
 

@@ -1,6 +1,6 @@
 import { render, waitFor, fireEvent, screen } from "@testing-library/react";
 import RequestTypeForm from "main/components/RequestType/RequestTypeForm";
-import requestTypeFixtures from "fixtures/requestTypeFixtures";
+import recommendationTypeFixtures from "fixtures/recommendationTypeFixtures";
 import { BrowserRouter as Router } from "react-router-dom";
 
 const mockedNavigate = jest.fn();
@@ -24,7 +24,7 @@ describe("RequestTypeForm tests", () => {
   test("renders correctly when passing in a request type", async () => {
     render(
       <Router>
-        <RequestTypeForm initialContents={requestTypeFixtures.oneType} />
+        <RequestTypeForm initialContents={recommendationTypeFixtures.oneType} />
       </Router>,
     );
     await screen.findByText(/Request Type/);
