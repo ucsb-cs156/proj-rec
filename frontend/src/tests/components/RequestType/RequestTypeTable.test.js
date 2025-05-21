@@ -170,7 +170,7 @@ describe("UserTable tests", () => {
   async function deleteButtonCallsDeleteCallback(currentUser) {
     const axiosMock = new AxiosMockAdapter(axios);
     axiosMock
-      .onDelete("/api/requestTypes")
+      .onDelete("/api/requesttypes")
       .reply(200, { message: "Request Type deleted" });
 
     // act - render the component

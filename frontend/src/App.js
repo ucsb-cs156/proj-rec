@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "main/pages/HomePage";
 import ProfilePage from "main/pages/ProfilePage";
 import AdminUsersPage from "main/pages/AdminUsersPage";
-import SettingsPage from "main/pages/Settings";
+import SettingsPage from "main/pages/SettingsPage";
 import AdminRequestsPage from "main/pages/AdminRequestsPage";
 
 import PendingRequestsPage from "main/pages/Requests/PendingRequestsPage";
