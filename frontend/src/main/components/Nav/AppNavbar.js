@@ -32,32 +32,31 @@ export default function AppNavbar({
 
           <Nav className="me-auto">
             {systemInfo?.springH2ConsoleEnabled && (
-              <>
-                <Nav.Link href="/h2-console">H2Console</Nav.Link>
-              </>
+              <Nav.Link href="/h2-console">H2Console</Nav.Link>
             )}
             {systemInfo?.showSwaggerUILink && (
-              <>
-                <Nav.Link href="/swagger-ui/index.html">Swagger</Nav.Link>
-              </>
+              <Nav.Link href="/swagger-ui/index.html">Swagger</Nav.Link>
             )}
           </Nav>
 
-          <>
-            {/* be sure that each NavDropdown has a unique id and data-testid  */}
-          </>
-
+          {/* Admin Dropdown - for Admins and Professors */}
           <Navbar.Collapse className="justify-content-between">
             <Nav className="mr-auto">
-              {hasRole(currentUser, "ROLE_ADMIN") && (
+              {(hasRole(currentUser, "ROLE_ADMIN") || hasRole(currentUser, "ROLE_PROFESSOR")) && (
                 <NavDropdown
                   title="Admin"
                   id="appnavbar-admin-dropdown"
                   data-testid="appnavbar-admin-dropdown"
                 >
-                  <NavDropdown.Item href="/admin/users">Users</NavDropdown.Item>
+                  {hasRole(currentUser, "ROLE_ADMIN") && (
+                    <NavDropdown.Item href="/admin/users">Users</NavDropdown.Item>
+                  )}
+                  <NavDropdown.Item as={Link} to="/settings/requesttypes">
+                    Request Types
+                  </NavDropdown.Item>
                 </NavDropdown>
               )}
+
               {(hasRole(currentUser, "ROLE_PROFESSOR") ||
                 hasRole(currentUser, "ROLE_STUDENT")) && (
                 <>
@@ -74,6 +73,7 @@ export default function AppNavbar({
               )}
             </Nav>
 
+            {/* Login/Logout & Profile */}
             <Nav className="ml-auto">
               {currentUser && currentUser.loggedIn ? (
                 <>
