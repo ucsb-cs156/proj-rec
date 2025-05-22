@@ -14,7 +14,7 @@ const Template = () => <AdminUsersPage />;
 // Mock user data for different scenarios - matching UsersTable structure
 const mockUsers = {
   emptyList: [],
-  
+
   fewUsers: [
     {
       id: 1,
@@ -27,7 +27,7 @@ const mockUsers = {
     },
     {
       id: 2,
-      email: "jane.smith@example.com", 
+      email: "jane.smith@example.com",
       givenName: "Jane",
       familyName: "Smith",
       admin: true,
@@ -93,7 +93,7 @@ const mockUsers = {
     },
     {
       id: 6,
-      email: "student2@example.com", 
+      email: "student2@example.com",
       givenName: "Student",
       familyName: "Two",
       admin: false,
@@ -214,7 +214,7 @@ LoadingState.parameters = {
       }),
       http.get("/api/admin/users", async () => {
         // Simulate a slow API response to show loading state
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise((resolve) => setTimeout(resolve, 2000));
         return HttpResponse.json(mockUsers.fewUsers);
       }),
       // Mock the toggle endpoints
@@ -244,7 +244,7 @@ ErrorState.parameters = {
       http.get("/api/admin/users", () => {
         return HttpResponse.json(
           { message: "Internal server error" },
-          { status: 500 }
+          { status: 500 },
         );
       }),
       // Mock the toggle endpoints
