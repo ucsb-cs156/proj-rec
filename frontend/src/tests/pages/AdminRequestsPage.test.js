@@ -22,18 +22,19 @@ describe("AdminRequestsPage tests", () => {
       .reply(200, recommendationRequestFixtures.threeRecommendations);
 
     axiosMock
-    .onGet("/api/currentUser")
-    .reply(200, apiCurrentUserFixtures.adminUser); 
+      .onGet("/api/currentUser")
+      .reply(200, apiCurrentUserFixtures.adminUser);
 
     axiosMock
-    .onGet("/api/systemInfo")
-    .reply(200, systemInfoFixtures.showingNeither);
+      .onGet("/api/systemInfo")
+      .reply(200, systemInfoFixtures.showingNeither);
   });
-
 
   test("renders without crashing on three users", async () => {
     const queryClient = new QueryClient();
-    axiosMock.onGet("/api/recommendationrequest/admin/all").reply(200, recommendationRequestFixtures.threeRecommendations);
+    axiosMock
+      .onGet("/api/recommendationrequest/admin/all")
+      .reply(200, recommendationRequestFixtures.threeRecommendations);
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -42,7 +43,9 @@ describe("AdminRequestsPage tests", () => {
         </MemoryRouter>
       </QueryClientProvider>,
     );
-    expect(screen.queryByTestId("RequestTable-cell-row-0-col-id")).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId("RequestTable-cell-row-0-col-id"),
+    ).not.toBeInTheDocument();
     expect(
       screen.queryByTestId(`${testId}-cell-row-0-col-id`),
     ).not.toBeInTheDocument();
@@ -50,8 +53,6 @@ describe("AdminRequestsPage tests", () => {
     await screen.findByText("All Requests");
 
     expect(screen.getByText("All Requests")).toBeInTheDocument();
-
-
   });
 
   test("renders empty table when backend unavailable", async () => {
@@ -79,9 +80,9 @@ describe("AdminRequestsPage tests", () => {
     restoreConsole();
 
     expect(
-    screen.queryAllByTestId(new RegExp(`${testId}-cell-row-\\d+-col-id`)).length
+      screen.queryAllByTestId(new RegExp(`${testId}-cell-row-\\d+-col-id`))
+        .length,
     ).toBe(0);
-
 
     expect(
       screen.queryByTestId(`${testId}-cell-row-0-col-id`),
@@ -91,8 +92,6 @@ describe("AdminRequestsPage tests", () => {
   test("renders empty table when there is no backend data", async () => {
     const queryClient = new QueryClient();
     axiosMock.onGet("/api/recommendationrequest/admin/all").reply(200, []);
-
-    const restoreConsole = mockConsole();
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -105,7 +104,6 @@ describe("AdminRequestsPage tests", () => {
     await waitFor(() => {
       expect(axiosMock.history.get.length).toBeGreaterThanOrEqual(1);
     });
-
 
     expect(
       screen.queryByTestId(`${testId}-cell-row-0-col-id`),
