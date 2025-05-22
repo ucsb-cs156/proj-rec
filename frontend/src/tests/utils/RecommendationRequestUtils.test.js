@@ -1,6 +1,7 @@
 import {
   onDeleteSuccess,
   cellToAxiosParamsDelete,
+  formattedDate,
 } from "main/utils/RecommendationRequestUtils";
 import mockConsole from "jest-mock-console";
 
@@ -45,6 +46,18 @@ describe("RecommendationRequestUtils", () => {
         method: "DELETE",
         params: { id: 17 },
       });
+    });
+  });
+  describe("formattedDate", () => {
+    test("It returns the correct date", () => {
+      // arrange
+      const val = "2023-10-01T12:34:56";
+
+      // act
+      const result = formattedDate(val);
+
+      // assert
+      expect(result).toEqual("10/01/2023 12:34");
     });
   });
 });
