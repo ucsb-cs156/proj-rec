@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "main/pages/HomePage";
 import ProfilePage from "main/pages/ProfilePage";
 import AdminUsersPage from "main/pages/AdminUsersPage";
+import AdminRequestsPage from "main/pages/AdminRequestsPage";
 
 import PendingRequestsPage from "main/pages/Requests/PendingRequestsPage";
 import CompletedRequestsPage from "main/pages/Requests/CompletedRequestsPage";
@@ -26,7 +27,7 @@ function App() {
         {hasRole(currentUser, "ROLE_ADMIN") && (
           <>
           <Route exact path="/admin/users" element={<AdminUsersPage />} />
-          <Route exact path="admin/requests" element = {<AdminRequestsPage />} />
+          <Route exact path="/admin/requests" element = {<AdminRequestsPage />} />
           </>
         )}
         {(hasRole(currentUser, "ROLE_PROFESSOR") ||
