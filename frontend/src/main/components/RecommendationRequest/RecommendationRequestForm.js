@@ -1,4 +1,4 @@
-import { Button, Form, Row, Col } from "react-bootstrap";
+import { Button, Form, Row, Col, OverlayTrigger, Tooltip} from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -81,6 +81,11 @@ function RecommendationRequestForm({
         <Col>
           <Form.Group className="mb-3">
             <Form.Label htmlFor="professor_id">Professor</Form.Label>
+            <OverlayTrigger
+              placement="top"
+              overlay={<Tooltip>This is the professor from whom you would like to request a recommendation letter.</Tooltip>}
+              delay='100'
+            >
             <Form.Select
               data-testid="RecommendationRequestForm-professor_id"
               id="professor_id"
@@ -108,6 +113,7 @@ function RecommendationRequestForm({
                 </option>
               )}
             </Form.Select>
+            </OverlayTrigger>
             {errors.professor_id && (
               <Form.Control.Feedback type="invalid">
                 {errors.professor_id.message}
@@ -123,6 +129,11 @@ function RecommendationRequestForm({
             <Form.Label htmlFor="recommendationType">
               Recommendation Type
             </Form.Label>
+            <OverlayTrigger
+              placement="top"
+              overlay={<Tooltip>This is what you request a recommendation letter for.</Tooltip>}
+              delay='100'
+            >
             <Form.Select
               data-testid="RecommendationRequestForm-recommendationType"
               id="recommendationType"
@@ -134,7 +145,7 @@ function RecommendationRequestForm({
               defaultValue=""
             >
               {Array.isArray(recommendationTypes) &&
-              recommendationTypes.length > 0 ? (
+                recommendationTypes.length > 0 ? (
                 <>
                   <option disabled value="">
                     Select a recommendation type
@@ -155,6 +166,7 @@ function RecommendationRequestForm({
               )}
               <option value="Other">Other</option>
             </Form.Select>
+            </OverlayTrigger>
             {errors.recommendationType && (
               <Form.Control.Feedback type="invalid">
                 {errors.recommendationType.message}
@@ -167,6 +179,11 @@ function RecommendationRequestForm({
         <Col>
           <Form.Group className="mb-3">
             <Form.Label htmlFor="details">Details</Form.Label>
+            <OverlayTrigger
+              placement="top"
+              overlay={<Tooltip>These are additional details that is helpful for the professor to write the recommendation letter.</Tooltip>}
+              delay='100'
+            >
             <Form.Control
               data-testid="RecommendationRequestForm-details"
               id="details"
@@ -174,6 +191,7 @@ function RecommendationRequestForm({
               isInvalid={Boolean(errors.details)}
               {...register("details")}
             />
+            </OverlayTrigger>
           </Form.Group>
         </Col>
       </Row>
@@ -182,6 +200,11 @@ function RecommendationRequestForm({
         <Col>
           <Form.Group className="mb-3">
             <Form.Label htmlFor="dueDate">Due Date</Form.Label>
+            <OverlayTrigger
+              placement="top"
+              overlay={<Tooltip>This is when you would like the professor to submit the recommendation letter by.</Tooltip>}
+              delay='100'
+            >
             <Form.Control
               id="dueDate"
               type="date"
@@ -191,6 +214,7 @@ function RecommendationRequestForm({
                 required: "Please select a due date",
               })}
             />
+            </OverlayTrigger>
             {errors.dueDate && (
               <Form.Control.Feedback type="invalid">
                 {errors.dueDate.message}
