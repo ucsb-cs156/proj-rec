@@ -9,13 +9,19 @@ export default function AppNavbar({
   doLogout,
   currentUrl = window.location.href,
 }) {
-  var oauthLogin = systemInfo?.oauthLogin || "/oauth2/authorization/google";
+  const oauthLogin = systemInfo?.oauthLogin || "/oauth2/authorization/google";
+  const isAdmin = hasRole(currentUser, "ROLE_ADMIN");
+  const isProfessor = hasRole(currentUser, "ROLE_PROFESSOR");
+  const isStudent = hasRole(currentUser, "ROLE_STUDENT");
+  const isLoggedIn = currentUser && currentUser.loggedIn;
+
   return (
     <>
       {(currentUrl.startsWith("http://localhost:3000") ||
         currentUrl.startsWith("http://127.0.0.1:3000")) && (
         <AppNavbarLocalhost url={currentUrl} />
       )}
+
       <Navbar
         expand="xl"
         variant="dark"
@@ -24,10 +30,7 @@ export default function AppNavbar({
         data-testid="AppNavbar"
       >
         <Container>
-          <Navbar.Brand as={Link} to="/">
-            Example
-          </Navbar.Brand>
-
+          <Navbar.Brand as={Link} to="/">Example</Navbar.Brand>
           <Navbar.Toggle />
 
           <Nav className="me-auto">
@@ -39,20 +42,16 @@ export default function AppNavbar({
             )}
           </Nav>
 
-          {/* Admin Dropdown - for Admins and Professors */}
           <Navbar.Collapse className="justify-content-between">
             <Nav className="mr-auto">
-              {(hasRole(currentUser, "ROLE_ADMIN") ||
-                hasRole(currentUser, "ROLE_PROFESSOR")) && (
+              {(isAdmin || isProfessor) && (
                 <NavDropdown
                   title="Admin"
                   id="appnavbar-admin-dropdown"
                   data-testid="appnavbar-admin-dropdown"
                 >
-                  {hasRole(currentUser, "ROLE_ADMIN") && (
-                    <NavDropdown.Item href="/admin/users">
-                      Users
-                    </NavDropdown.Item>
+                  {isAdmin && (
+                    <NavDropdown.Item href="/admin/users">Users</NavDropdown.Item>
                   )}
                   <NavDropdown.Item as={Link} to="/settings/requesttypes">
                     Request Types
@@ -60,25 +59,17 @@ export default function AppNavbar({
                 </NavDropdown>
               )}
 
-              {(hasRole(currentUser, "ROLE_PROFESSOR") ||
-                hasRole(currentUser, "ROLE_STUDENT")) && (
+              {(isProfessor || isStudent) && (
                 <>
-                  <Nav.Link as={Link} to="/requests/pending">
-                    Pending Requests
-                  </Nav.Link>
-                  <Nav.Link as={Link} to="/requests/completed">
-                    Completed Requests
-                  </Nav.Link>
-                  <Nav.Link as={Link} to="/requests/statistics">
-                    Statistics
-                  </Nav.Link>
+                  <Nav.Link as={Link} to="/requests/pending">Pending Requests</Nav.Link>
+                  <Nav.Link as={Link} to="/requests/completed">Completed Requests</Nav.Link>
+                  <Nav.Link as={Link} to="/requests/statistics">Statistics</Nav.Link>
                 </>
               )}
             </Nav>
 
-            {/* Login/Logout & Profile */}
             <Nav className="ml-auto">
-              {currentUser && currentUser.loggedIn ? (
+              {isLoggedIn ? (
                 <>
                   <Navbar.Text className="me-3" as={Link} to="/profile">
                     Welcome, {currentUser.root.user.email}
