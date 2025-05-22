@@ -1,4 +1,11 @@
-import { Button, Form, Row, Col, OverlayTrigger, Tooltip} from "react-bootstrap";
+import {
+  Button,
+  Form,
+  Row,
+  Col,
+  OverlayTrigger,
+  Tooltip,
+} from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -83,36 +90,41 @@ function RecommendationRequestForm({
             <Form.Label htmlFor="professor_id">Professor</Form.Label>
             <OverlayTrigger
               placement="top"
-              overlay={<Tooltip>This is the professor from whom you would like to request a recommendation letter.</Tooltip>}
-              delay='100'
+              overlay={
+                <Tooltip>
+                  This is the professor from whom you would like to request a
+                  recommendation letter.
+                </Tooltip>
+              }
+              delay="100"
             >
-            <Form.Select
-              data-testid="RecommendationRequestForm-professor_id"
-              id="professor_id"
-              type="string"
-              isInvalid={Boolean(errors.professor_id)}
-              {...register("professor_id", {
-                required: "Please select a professor",
-              })}
-              defaultValue=""
-            >
-              {Array.isArray(professors) && professors.length > 0 ? (
-                <>
-                  <option disabled value="">
-                    Select a professor
-                  </option>
-                  {professors.map((professor) => (
-                    <option key={professor.id} value={professor.id}>
-                      {professor.fullName}
+              <Form.Select
+                data-testid="RecommendationRequestForm-professor_id"
+                id="professor_id"
+                type="string"
+                isInvalid={Boolean(errors.professor_id)}
+                {...register("professor_id", {
+                  required: "Please select a professor",
+                })}
+                defaultValue=""
+              >
+                {Array.isArray(professors) && professors.length > 0 ? (
+                  <>
+                    <option disabled value="">
+                      Select a professor
                     </option>
-                  ))}
-                </>
-              ) : (
-                <option disabled value="">
-                  No professors available
-                </option>
-              )}
-            </Form.Select>
+                    {professors.map((professor) => (
+                      <option key={professor.id} value={professor.id}>
+                        {professor.fullName}
+                      </option>
+                    ))}
+                  </>
+                ) : (
+                  <option disabled value="">
+                    No professors available
+                  </option>
+                )}
+              </Form.Select>
             </OverlayTrigger>
             {errors.professor_id && (
               <Form.Control.Feedback type="invalid">
@@ -131,41 +143,45 @@ function RecommendationRequestForm({
             </Form.Label>
             <OverlayTrigger
               placement="top"
-              overlay={<Tooltip>This is what you request a recommendation letter for.</Tooltip>}
-              delay='100'
+              overlay={
+                <Tooltip>
+                  This is what you request a recommendation letter for.
+                </Tooltip>
+              }
+              delay="100"
             >
-            <Form.Select
-              data-testid="RecommendationRequestForm-recommendationType"
-              id="recommendationType"
-              type="string"
-              isInvalid={Boolean(errors.recommendationType)}
-              {...register("recommendationType", {
-                required: "Please select a recommendation type",
-              })}
-              defaultValue=""
-            >
-              {Array.isArray(recommendationTypes) &&
+              <Form.Select
+                data-testid="RecommendationRequestForm-recommendationType"
+                id="recommendationType"
+                type="string"
+                isInvalid={Boolean(errors.recommendationType)}
+                {...register("recommendationType", {
+                  required: "Please select a recommendation type",
+                })}
+                defaultValue=""
+              >
+                {Array.isArray(recommendationTypes) &&
                 recommendationTypes.length > 0 ? (
-                <>
-                  <option disabled value="">
-                    Select a recommendation type
-                  </option>
-                  {recommendationTypes.map((recommendationType) => (
-                    <option
-                      key={recommendationType.id}
-                      value={recommendationType.requestType}
-                    >
-                      {recommendationType.requestType}
+                  <>
+                    <option disabled value="">
+                      Select a recommendation type
                     </option>
-                  ))}
-                </>
-              ) : (
-                <option disabled value="">
-                  No recommendation types available, use Other in details
-                </option>
-              )}
-              <option value="Other">Other</option>
-            </Form.Select>
+                    {recommendationTypes.map((recommendationType) => (
+                      <option
+                        key={recommendationType.id}
+                        value={recommendationType.requestType}
+                      >
+                        {recommendationType.requestType}
+                      </option>
+                    ))}
+                  </>
+                ) : (
+                  <option disabled value="">
+                    No recommendation types available, use Other in details
+                  </option>
+                )}
+                <option value="Other">Other</option>
+              </Form.Select>
             </OverlayTrigger>
             {errors.recommendationType && (
               <Form.Control.Feedback type="invalid">
@@ -181,16 +197,21 @@ function RecommendationRequestForm({
             <Form.Label htmlFor="details">Details</Form.Label>
             <OverlayTrigger
               placement="top"
-              overlay={<Tooltip>These are additional details that is helpful for the professor to write the recommendation letter.</Tooltip>}
-              delay='100'
+              overlay={
+                <Tooltip>
+                  These are additional details that is helpful for the professor
+                  to write the recommendation letter.
+                </Tooltip>
+              }
+              delay="100"
             >
-            <Form.Control
-              data-testid="RecommendationRequestForm-details"
-              id="details"
-              type="text"
-              isInvalid={Boolean(errors.details)}
-              {...register("details")}
-            />
+              <Form.Control
+                data-testid="RecommendationRequestForm-details"
+                id="details"
+                type="text"
+                isInvalid={Boolean(errors.details)}
+                {...register("details")}
+              />
             </OverlayTrigger>
           </Form.Group>
         </Col>
@@ -202,18 +223,23 @@ function RecommendationRequestForm({
             <Form.Label htmlFor="dueDate">Due Date</Form.Label>
             <OverlayTrigger
               placement="top"
-              overlay={<Tooltip>This is when you would like the professor to submit the recommendation letter by.</Tooltip>}
-              delay='100'
+              overlay={
+                <Tooltip>
+                  This is when you would like the professor to submit the
+                  recommendation letter by.
+                </Tooltip>
+              }
+              delay="100"
             >
-            <Form.Control
-              id="dueDate"
-              type="date"
-              data-testid="RecommendationRequestForm-dueDate"
-              isInvalid={Boolean(errors.dueDate)}
-              {...register("dueDate", {
-                required: "Please select a due date",
-              })}
-            />
+              <Form.Control
+                id="dueDate"
+                type="date"
+                data-testid="RecommendationRequestForm-dueDate"
+                isInvalid={Boolean(errors.dueDate)}
+                {...register("dueDate", {
+                  required: "Please select a due date",
+                })}
+              />
             </OverlayTrigger>
             {errors.dueDate && (
               <Form.Control.Feedback type="invalid">
