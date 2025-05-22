@@ -19,7 +19,7 @@ export default function RecommendationRequestTable({ requests, currentUser }) {
   // Stryker disable all : hard to test for query caching
 
   // when delete success, invalidate the correct query key (depending on user role)
-  const apiEndpoint = hasRole(currentUser, "ROLE_PROFESSOR")
+  const apiEndpoint = hasRole(currentUser, "ROLE_PROFESSOR" || "ROLE_ADMIN")
     ? "/api/recommendationrequest/professor/all"
     : "/api/recommendationrequest/requester/all";
 

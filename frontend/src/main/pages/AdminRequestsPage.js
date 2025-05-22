@@ -7,7 +7,6 @@ import { useCurrentUser } from "main/utils/currentUser";
 const AdminRequestsPage = () => {
 
     const { data: currentUser } = useCurrentUser();
-    console.log("Hello, world!");
     const {
         data: all,
         error: _error,
@@ -18,9 +17,7 @@ const AdminRequestsPage = () => {
         { method: "GET", url: "/api/recommendationrequest/admin/all" },
         [],
       );
-      console.log("Fetched data (raw):", all);
-      console.log("Status:", _status);
-      console.log("Error:", _error);
+
       return (
         <BasicLayout>
           <h2>All Requests</h2>
