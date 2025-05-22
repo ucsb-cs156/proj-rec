@@ -70,47 +70,4 @@ describe("AdminRequestsPage tests", () => {
       screen.queryByTestId(`${testId}-cell-row-0-col-id`),
     ).not.toBeInTheDocument();
   });
-
-  test("renders admin-specific table when user has ROLE_ADMIN", async () => {
-    const queryClient = new QueryClient();
-    axiosMock
-      .onGet("/api/currentUser")
-      .reply(200, { ...apiCurrentUserFixtures.adminUser, role: "ROLE_ADMIN" });
-    axiosMock
-      .onGet("/api/recommendationrequest/admin/all")
-      .reply(200, recommendationRequestFixtures.threeRecommendations);
-
-    render(
-      <QueryClientProvider client={queryClient}>
-        <MemoryRouter>
-          <AdminRequestsPage />
-        </MemoryRouter>
-      </QueryClientProvider>,
-    );
-
-    expect(await screen.findByText("Requests")).toBeInTheDocument();
-    expect(
-      await screen.findByTestId(`${testId}-cell-row-0-col-id`),
-    ).toBeInTheDocument();
-  });
-
-  test("renders fallback when user has no role", async () => {
-    const queryClient = new QueryClient();
-    axiosMock
-      .onGet("/api/currentUser")
-      .reply(200, { ...apiCurrentUserFixtures.adminUser, role: "" });
-    axiosMock
-      .onGet("/api/recommendationrequest/admin/all")
-      .reply(200, recommendationRequestFixtures.threeRecommendations);
-
-    render(
-      <QueryClientProvider client={queryClient}>
-        <MemoryRouter>
-          <AdminRequestsPage />
-        </MemoryRouter>
-      </QueryClientProvider>,
-    );
-
-    expect(await screen.findByText("Requests")).toBeInTheDocument();
-  });
 });

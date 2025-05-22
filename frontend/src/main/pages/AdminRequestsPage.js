@@ -17,7 +17,7 @@ const AdminRequestsPage = () => {
   return (
     <BasicLayout>
       <h2>Requests</h2>
-      <RequestsTable requests={requests} currentUser={{ role: "ROLE_ADMIN" }} />
+      <RequestsTable requests={requests} />
     </BasicLayout>
   );
 };
