@@ -42,14 +42,17 @@ export default function AppNavbar({
           {/* Admin Dropdown - for Admins and Professors */}
           <Navbar.Collapse className="justify-content-between">
             <Nav className="mr-auto">
-              {(hasRole(currentUser, "ROLE_ADMIN") || hasRole(currentUser, "ROLE_PROFESSOR")) && (
+              {(hasRole(currentUser, "ROLE_ADMIN") ||
+                hasRole(currentUser, "ROLE_PROFESSOR")) && (
                 <NavDropdown
                   title="Admin"
                   id="appnavbar-admin-dropdown"
                   data-testid="appnavbar-admin-dropdown"
                 >
                   {hasRole(currentUser, "ROLE_ADMIN") && (
-                    <NavDropdown.Item href="/admin/users">Users</NavDropdown.Item>
+                    <NavDropdown.Item href="/admin/users">
+                      Users
+                    </NavDropdown.Item>
                   )}
                   <NavDropdown.Item as={Link} to="/settings/requesttypes">
                     Request Types
