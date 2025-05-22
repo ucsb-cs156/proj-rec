@@ -1,6 +1,6 @@
 import React from "react";
 import RequestTypeForm from "main/components/RequestType/RequestTypeForm";
-import requestTypeFixtures from "fixtures/requestTypeFixtures";
+import recommendationTypeFixtures from "fixtures/recommendationTypeFixtures";
 
 export default {
   title: "components/RequestType/RequestTypeForm",
@@ -24,7 +24,7 @@ Create.args = {
 export const Update = Template.bind({});
 
 Update.args = {
-  initialContents: requestTypeFixtures.oneType,
+  initialContents: recommendationTypeFixtures.oneType,
   buttonLabel: "Update",
   submitAction: (data) => {
     console.log("Submit was clicked with data: ", data);
