@@ -28,7 +28,9 @@ describe("AdminRequestsPage tests", () => {
 
   test("renders without crashing on three requests", async () => {
     const queryClient = new QueryClient();
-    axiosMock.onGet("/api/admin/requests").reply(200, recommendationRequestFixtures.threeRecommendations);
+    axiosMock
+      .onGet("/api/admin/requests")
+      .reply(200, recommendationRequestFixtures.threeRecommendations);
 
     render(
       <QueryClientProvider client={queryClient}>

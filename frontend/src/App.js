@@ -24,7 +24,11 @@ function App() {
         {hasRole(currentUser, "ROLE_ADMIN") && (
           <>
             <Route exact path="/admin/users" element={<AdminUsersPage />} />
-            <Route exact path="/admin/requests" element={<AdminRequestsPage />} />
+            <Route
+              exact
+              path="/admin/requests"
+              element={<AdminRequestsPage />}
+            />
           </>
         )}
         {(hasRole(currentUser, "ROLE_PROFESSOR") ||
