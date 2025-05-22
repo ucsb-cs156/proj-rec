@@ -30,7 +30,9 @@ export default function AppNavbar({
         data-testid="AppNavbar"
       >
         <Container>
-          <Navbar.Brand as={Link} to="/">Example</Navbar.Brand>
+          <Navbar.Brand as={Link} to="/">
+            Example
+          </Navbar.Brand>
           <Navbar.Toggle />
 
           <Nav className="me-auto">
@@ -51,7 +53,9 @@ export default function AppNavbar({
                   data-testid="appnavbar-admin-dropdown"
                 >
                   {isAdmin && (
-                    <NavDropdown.Item href="/admin/users">Users</NavDropdown.Item>
+                    <NavDropdown.Item href="/admin/users">
+                      Users
+                    </NavDropdown.Item>
                   )}
                   <NavDropdown.Item as={Link} to="/settings/requesttypes">
                     Request Types
@@ -61,9 +65,15 @@ export default function AppNavbar({
 
               {(isProfessor || isStudent) && (
                 <>
-                  <Nav.Link as={Link} to="/requests/pending">Pending Requests</Nav.Link>
-                  <Nav.Link as={Link} to="/requests/completed">Completed Requests</Nav.Link>
-                  <Nav.Link as={Link} to="/requests/statistics">Statistics</Nav.Link>
+                  <Nav.Link as={Link} to="/requests/pending">
+                    Pending Requests
+                  </Nav.Link>
+                  <Nav.Link as={Link} to="/requests/completed">
+                    Completed Requests
+                  </Nav.Link>
+                  <Nav.Link as={Link} to="/requests/statistics">
+                    Statistics
+                  </Nav.Link>
                 </>
               )}
             </Nav>
