@@ -320,7 +320,7 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
 
         //act
         MvcResult response = mockMvc
-                .perform(put("/api/recommendationrequest/professor?id=1")
+                .perform(put("/api/recommendationrequest/professor?id=67")
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("utf-8")
                 .content(requestBody)
