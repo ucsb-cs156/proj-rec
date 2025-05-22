@@ -2,7 +2,7 @@
     "databaseChangeLog": [
       {
         "changeSet": {
-          "id": "RecommendationRequest-2",
+          "id": "RecommendationRequest-002",
           "author": "ryanchoi07",
           "changes": [
             {
