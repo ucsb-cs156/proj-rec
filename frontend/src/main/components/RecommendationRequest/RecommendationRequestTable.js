@@ -18,10 +18,10 @@ import { hasRole } from "main/utils/currentUser";
 export default function RecommendationRequestTable({ requests, currentUser }) {
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   const isPendingPage = location.pathname.includes("pending");
   const isCompletedPage = location.pathname.includes("completed");
-  
+
   const editCallback = (cell) => {
     navigate(`/requests/edit/${cell.row.values.id}`);
   };
