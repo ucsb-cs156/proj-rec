@@ -3,3 +3,4 @@
         {"include": {"file": "db/migration/changes/RecommendationRequest.json"}},
         {"include": {"file": "db/migration/changes/RequestType.json"}}
 ]}
+
