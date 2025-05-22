@@ -23,7 +23,6 @@ const mockUsers = {
       familyName: "Doe",
       admin: false,
       professor: false,
-      student: true,
     },
     {
       id: 2,
@@ -32,7 +31,6 @@ const mockUsers = {
       familyName: "Smith",
       admin: true,
       professor: false,
-      student: false,
     },
     {
       id: 3,
@@ -41,7 +39,6 @@ const mockUsers = {
       familyName: "Johnson",
       admin: false,
       professor: true,
-      student: false,
     },
   ],
 
@@ -53,7 +50,6 @@ const mockUsers = {
       familyName: "Doe",
       admin: false,
       professor: false,
-      student: true,
     },
     {
       id: 2,
@@ -62,7 +58,6 @@ const mockUsers = {
       familyName: "Smith",
       admin: true,
       professor: false,
-      student: false,
     },
     {
       id: 3,
@@ -71,7 +66,6 @@ const mockUsers = {
       familyName: "Johnson",
       admin: false,
       professor: true,
-      student: false,
     },
     {
       id: 4,
@@ -80,7 +74,6 @@ const mockUsers = {
       familyName: "User",
       admin: true,
       professor: true,
-      student: false,
     },
     {
       id: 5,
@@ -89,7 +82,6 @@ const mockUsers = {
       familyName: "One",
       admin: false,
       professor: false,
-      student: true,
     },
     {
       id: 6,
@@ -98,7 +90,6 @@ const mockUsers = {
       familyName: "Two",
       admin: false,
       professor: false,
-      student: true,
     },
     {
       id: 7,
@@ -107,7 +98,6 @@ const mockUsers = {
       familyName: "Williams",
       admin: false,
       professor: true,
-      student: false,
     },
     {
       id: 8,
@@ -116,7 +106,6 @@ const mockUsers = {
       familyName: "Admin",
       admin: true,
       professor: false,
-      student: false,
     },
   ],
 };
@@ -140,9 +129,6 @@ EmptyUsers.parameters = {
       }),
       http.post("/api/admin/users/toggleProfessor", () => {
         return HttpResponse.json({ message: "Professor toggled successfully" });
-      }),
-      http.post("/api/admin/users/toggleStudent", () => {
-        return HttpResponse.json({ message: "Student toggled successfully" });
       }),
     ],
   },
@@ -168,9 +154,6 @@ FewUsers.parameters = {
       http.post("/api/admin/users/toggleProfessor", () => {
         return HttpResponse.json({ message: "Professor toggled successfully" });
       }),
-      http.post("/api/admin/users/toggleStudent", () => {
-        return HttpResponse.json({ message: "Student toggled successfully" });
-      }),
     ],
   },
 };
@@ -194,9 +177,6 @@ ManyUsers.parameters = {
       }),
       http.post("/api/admin/users/toggleProfessor", () => {
         return HttpResponse.json({ message: "Professor toggled successfully" });
-      }),
-      http.post("/api/admin/users/toggleStudent", () => {
-        return HttpResponse.json({ message: "Student toggled successfully" });
       }),
     ],
   },
@@ -224,9 +204,6 @@ LoadingState.parameters = {
       http.post("/api/admin/users/toggleProfessor", () => {
         return HttpResponse.json({ message: "Professor toggled successfully" });
       }),
-      http.post("/api/admin/users/toggleStudent", () => {
-        return HttpResponse.json({ message: "Student toggled successfully" });
-      }),
     ],
   },
 };
@@ -253,9 +230,6 @@ ErrorState.parameters = {
       }),
       http.post("/api/admin/users/toggleProfessor", () => {
         return HttpResponse.json({ message: "Professor toggled successfully" });
-      }),
-      http.post("/api/admin/users/toggleStudent", () => {
-        return HttpResponse.json({ message: "Student toggled successfully" });
       }),
     ],
   },
