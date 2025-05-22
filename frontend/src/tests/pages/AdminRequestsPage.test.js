@@ -29,7 +29,7 @@ describe("AdminRequestsPage tests", () => {
   test("renders without crashing on three requests", async () => {
     const queryClient = new QueryClient();
     axiosMock
-      .onGet("/api/admin/requests")
+      .onGet("/api/recomendationrequest/admin/all")
       .reply(200, recommendationRequestFixtures.threeRecommendations);
 
     render(
@@ -44,7 +44,7 @@ describe("AdminRequestsPage tests", () => {
 
   test("renders empty table when backend unavailable", async () => {
     const queryClient = new QueryClient();
-    axiosMock.onGet("/api/admin/requests").timeout();
+    axiosMock.onGet("/api/recomendationrequest/admin/all").timeout();
 
     const restoreConsole = mockConsole();
 
@@ -62,7 +62,7 @@ describe("AdminRequestsPage tests", () => {
 
     const errorMessage = console.error.mock.calls[0][0];
     expect(errorMessage).toMatch(
-      "Error communicating with backend via GET on /api/admin/requests",
+      "Error communicating with backend via GET on /api/recomendationrequest/admin/all",
     );
     restoreConsole();
 
