@@ -49,22 +49,6 @@ describe("RecommendationRequestUtils", () => {
       });
     });
   });
-  describe("cellToAxiosParamsDeleteAdmin", () => {
-    test("It returns the correct params", () => {
-      // arrange
-      const cell = { row: { values: { id: 17 } } };
-
-      // act
-      const result = cellToAxiosParamsDelete(cell, true);
-
-      // assert
-      expect(result).toEqual({
-        url: "/api/recommendationrequest/admin",
-        method: "DELETE",
-        params: { id: 17 },
-      });
-    });
-  });
   describe("onUpdateStatusSuccess", () => {
     test("It puts the message on console.log and in a toast", () => {
       // arrange

@@ -32,7 +32,7 @@ export default function RecommendationRequestTable({
     : "/api/recommendationrequest/requester/all";
 
   const deleteMutation = useBackendMutation(
-    (cell) => cellToAxiosParamsDelete(cell, hasRole(currentUser, "ROLE_ADMIN")),
+    cellToAxiosParamsDelete,
     { onSuccess: onDeleteSuccess },
     [apiEndpoint],
   );

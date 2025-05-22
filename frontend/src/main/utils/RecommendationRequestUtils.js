@@ -5,12 +5,9 @@ export function onDeleteSuccess(message) {
   toast(message);
 }
 
-export function cellToAxiosParamsDelete(cell, isAdmin) {
-  const urlCalled = isAdmin
-    ? "/api/recommendationrequest/admin"
-    : "/api/recommendationrequest";
+export function cellToAxiosParamsDelete(cell) {
   return {
-    url: urlCalled,
+    url: "/api/recommendationrequest",
     method: "DELETE",
     params: {
       id: cell.row.values.id,
