@@ -90,7 +90,7 @@
         "rollback": [
           {
             "sql": {
-              "sql": "DELETE FROM REQUESTTYPE WHERE REQUEST_TYPE IN ('Letter of Recommendation', 'Graduate School Recommendation', 'Scholarship Recommendation', 'Job Recommendation', 'Research Program Recommendation', 'Fellowship Recommendation', 'Internship Recommendation')"
+              "sql": "DELETE FROM REQUESTTYPE WHERE REQUEST_TYPE IN ('CS Department BS/MS program', 'Scholarship or Fellowship', 'MS program (other than CS Dept BS/MS', 'PhD program', 'Other')"
             }
           }
         ],
