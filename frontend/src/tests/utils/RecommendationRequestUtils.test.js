@@ -51,17 +51,19 @@ describe("RecommendationRequestUtils", () => {
       });
     });
   });
-  
-  describe("formattedDate", () => {
-    test("It returns the correct date", () => {
-      // arrange
-      const val = "2023-10-01T12:34:56";
+});
 
-      // act
-      const result = formattedDate(val);
+describe("formattedDate", () => {
+  test("It returns the correct date", () => {
+    // arrange
+    const val = "2023-10-01T12:34:56";
 
-      // assert
-      expect(result).toEqual("10/01/2023 12:34");
+    // act
+    const result = formattedDate(val);
+
+    // assert
+    expect(result).toEqual("10/01/2023 12:34");
+  });
 
   describe("onUpdateStatusSuccess", () => {
     test("It puts the message on console.log and in a toast", () => {
