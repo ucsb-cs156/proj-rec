@@ -51,16 +51,6 @@ function App() {
           <>
             <Route
               exact
-              path="/requesttypes/create"
-              element={<RequestTypeCreatePage />}
-            />
-            <Route
-              exact
-              path="/requesttypes/edit"
-              element={<RequestTypeEditPage />}
-            />
-            <Route
-              exact
               path="/requests/pending"
               element={<PendingRequestsPage />}
             />
@@ -83,6 +73,16 @@ function App() {
               exact
               path="/requests/edit/:id"
               element={<RecommendationRequestEditPage />}
+            />
+            <Route
+              exact
+              path="/requesttypes/create"
+              element={<RequestTypeCreatePage />}
+            />
+            <Route
+              exact
+              path="/requesttypes/edit"
+              element={<RequestTypeEditPage />}
             />
           </>
         )}
