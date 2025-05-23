@@ -1,18 +1,27 @@
 import React from "react";
-import OurTable, { ButtonColumn } from "main/components/OurTable";
+import OurTable, {
+  ButtonColumn,
+  ButtonDropdownColumn,
+} from "main/components/OurTable";
 
 import { useBackendMutation } from "main/utils/useBackend";
 import {
   cellToAxiosParamsDelete,
   onDeleteSuccess,
+  cellToAxiosParamsUpdateStatus,
+  onUpdateStatusSuccess,
 } from "main/utils/RecommendationRequestUtils";
-import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+
+import { useNavigate, useLocation } from "react-router-dom";
 import { hasRole } from "main/utils/currentUser";
 
 export default function RecommendationRequestTable({ requests, currentUser }) {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const isPendingPage = location.pathname.includes("pending");
+  const isCompletedPage = location.pathname.includes("completed");
+
   const editCallback = (cell) => {
     navigate(`/requests/edit/${cell.row.values.id}`);
   };
@@ -25,8 +34,6 @@ export default function RecommendationRequestTable({ requests, currentUser }) {
   // Stryker disable all : hard to test for query caching
 
   // when delete success, invalidate the correct query key (depending on user role)
-  const isPendingPage = location.pathname.includes("pending");
-  const isCompletedPage = location.pathname.includes("completed");
 
   const apiEndpoint =
     isPendingPage || isCompletedPage
@@ -41,9 +48,44 @@ export default function RecommendationRequestTable({ requests, currentUser }) {
 
   // Stryker restore all
 
+  const updateStatusMutation = useBackendMutation(
+    ({ cell, newStatus }) => cellToAxiosParamsUpdateStatus(cell, newStatus),
+    { onSuccess: onUpdateStatusSuccess },
+    [apiEndpoint],
+  );
+  // Stryker restore all
+
   // Stryker disable next-line all : TODO try to make a good test for this
   const deleteCallback = async (cell) => {
     deleteMutation.mutate(cell);
+  };
+
+  const acceptCallback = async (cell) => {
+    updateStatusMutation.mutate(
+      { cell, newStatus: "IN PROGRESS" },
+      {
+        onSuccess: () =>
+          onUpdateStatusSuccess("Request marked as IN PROGRESS."),
+      },
+    );
+  };
+
+  const denyCallback = async (cell) => {
+    updateStatusMutation.mutate(
+      { cell, newStatus: "DENIED" },
+      {
+        onSuccess: () => onUpdateStatusSuccess("Request marked as DENIED."),
+      },
+    );
+  };
+
+  const completeCallback = async (cell) => {
+    updateStatusMutation.mutate(
+      { cell, newStatus: "COMPLETED" },
+      {
+        onSuccess: () => onUpdateStatusSuccess("Request marked as COMPLETED."),
+      },
+    );
   };
 
   const columns = [
@@ -110,6 +152,21 @@ export default function RecommendationRequestTable({ requests, currentUser }) {
     },
   ];
 
+  if (hasRole(currentUser, "ROLE_PROFESSOR") && isPendingPage) {
+    columns.push(
+      ButtonDropdownColumn(
+        "Update",
+        "info",
+        {
+          Accept: acceptCallback,
+          Deny: denyCallback,
+          Complete: completeCallback,
+        },
+        "RecommendationRequestTable",
+      ),
+    );
+  }
+
   //since all admins have the role of a user, we can just check if the current user has the role ROLE_USER
   if (hasRole(currentUser, "ROLE_USER")) {
     columns.push(
@@ -124,7 +181,9 @@ export default function RecommendationRequestTable({ requests, currentUser }) {
 
   if (
     hasRole(currentUser, "ROLE_USER") &&
-    !hasRole(currentUser, "ROLE_ADMIN")
+    !hasRole(currentUser, "ROLE_ADMIN") &&
+    !isPendingPage &&
+    !isCompletedPage
   ) {
     columns.push(
       ButtonColumn(
