@@ -142,6 +142,9 @@ public class RequestTypeController extends ApiController {
             if (incoming.getRequestType().isEmpty()){
                 throw new IllegalArgumentException("Request type cannot be empty");
             }
+            if(existing.getId() == id){
+                continue;
+            }
             if (existing.getRequestType().equals(incoming.getRequestType())) {
                 throw new IllegalArgumentException("Duplicate request type: " + incoming);
             }
