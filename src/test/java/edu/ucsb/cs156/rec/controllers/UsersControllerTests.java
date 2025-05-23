@@ -233,6 +233,22 @@ public class UsersControllerTests extends ControllerTestCase {
     assertEquals("Cannot remove admin from currently logged in user; ask another admin to do that.", json.get("message"));
   }
 
+  @WithMockUser(roles = { "ADMIN", "USER" })
+  @Test
+  public void admin_can_add_admin_status_to_themselves() throws Exception{
+     // Mock the current user to have ID 1 (which is the mock current user ID) and admin status false
+     User currentUser = User.builder().email("user@example.org").id(1L).admin(false).build();
+     when(userRepository.findById(eq(1L))).thenReturn(Optional.of(currentUser));
+     
+     MvcResult response = mockMvc.perform(post("/api/admin/users/toggleAdmin?id=1").with(csrf()))
+             .andExpect(status().isOk()).andReturn();
+    
+    verify(userRepository, times(1)).findById(1L);
+    verify(userRepository, times(1)).save(any(User.class)); // Should save because no exception is thrown
+    Map<String, Object> json = responseToJson(response);
+    assertEquals("User with id 1 has toggled admin status to true", json.get("message"));
+  }
+
   @WithMockUser(roles = { "USER" })
   @Test
   public void non_admin_can_get_all_professors() throws Exception{
