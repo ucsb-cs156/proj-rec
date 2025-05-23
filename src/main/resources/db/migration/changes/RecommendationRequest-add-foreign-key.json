@@ -24,7 +24,7 @@
             "onUpdate": "RESTRICT",
             "constraintName": "RECOMMENDATIONREQUEST_RECOMMENDATION_TYPE_FK",
             "referencedTableName": "REQUESTTYPE",
-            "referencedColumnNames": "ID"
+            "referencedColumnNames": "ID","REQUEST_TYPE"
           }
         }
       ]
