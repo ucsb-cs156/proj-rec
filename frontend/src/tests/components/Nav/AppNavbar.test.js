@@ -264,9 +264,6 @@ describe("AppNavbar tests", () => {
     expect(screen.queryByText("Statistics")).not.toBeInTheDocument();
   });
 
-  // ------------------------------------------------------------------
-  // NEW TESTS TO KILL REMAINING MUTANTS
-  // ------------------------------------------------------------------
 
   test("Admin dropdown does NOT render for normal user", () => {
     const normalUser = currentUserFixtures.userOnly;
