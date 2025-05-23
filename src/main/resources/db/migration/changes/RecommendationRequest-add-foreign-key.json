@@ -17,14 +17,19 @@
       ],
       "changes": [
         {
+          "addUniqueConstraint": {
+            "constraintName": "REQUESTTYPE_UNIQUE_TYPE",
+            "tableName": "REQUESTTYPE",
+            "columnNames": "REQUEST_TYPE"
+          },
           "addForeignKeyConstraint": {
+            "constraintName": "RECOMMENDATIONREQUEST_RECOMMENDATION_TYPE_FK",
             "baseTableName": "RECOMMENDATIONREQUEST",
             "baseColumnNames": "RECOMMENDATION_TYPE",
             "onDelete": "RESTRICT",
             "onUpdate": "RESTRICT",
-            "constraintName": "RECOMMENDATIONREQUEST_RECOMMENDATION_TYPE_FK",
             "referencedTableName": "REQUESTTYPE",
-            "referencedColumnNames": "ID","REQUEST_TYPE"
+            "referencedColumnNames": "REQUEST_TYPE"
           }
         }
       ]
