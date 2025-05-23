@@ -76,7 +76,7 @@ describe("RequestTypeIndexPage tests", () => {
       expect(screen.getByText(/Create RequestType/)).toBeInTheDocument();
     });
     const button = screen.getByText(/Create RequestType/);
-    expect(button).toHaveAttribute("href", "/requesttypes/create");
+    expect(button).toHaveAttribute("href", "/requesttypes/post");
     expect(button).toHaveAttribute("style", "float: right;");
   });
 
@@ -96,7 +96,7 @@ describe("RequestTypeIndexPage tests", () => {
       expect(screen.getByText(/Create RequestType/)).toBeInTheDocument();
     });
     const button = screen.getByText(/Create RequestType/);
-    expect(button).toHaveAttribute("href", "/requesttypes/create");
+    expect(button).toHaveAttribute("href", "/requesttypes/post");
     expect(button).toHaveAttribute("style", "float: right;");
   });
 
@@ -194,7 +194,7 @@ describe("RequestTypeIndexPage tests", () => {
 
       const btn = await screen.findByText(/Create RequestType/);
       expect(btn).toBeInTheDocument();
-      expect(btn).toHaveAttribute("href", "/requesttypes/create");
+      expect(btn).toHaveAttribute("href", "/requesttypes/post");
       expect(btn).toHaveStyle({ float: "right" });
     },
   );

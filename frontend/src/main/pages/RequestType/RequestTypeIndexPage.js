@@ -29,7 +29,7 @@ export default function RequestTypeIndexPage() {
       return (
         <Button
           variant="primary"
-          href="/requesttypes/create"
+          href="/requesttypes/post"
           style={{ float: "right" }}
         >
           Create RequestType
