@@ -129,7 +129,7 @@ describe("RequestTypeIndexPage tests", () => {
     const createRequestTypeButton = screen.queryByText("Create RequestType");
     expect(createRequestTypeButton).not.toBeInTheDocument();
 
-    const requestType = screen.getByText("Recommendations");
+    const requestType = screen.getByText("CS Department BS/MS program");
     expect(requestType).toBeInTheDocument();
 
     // for non-admin users, details button is visible, but the edit and delete buttons should not be visible

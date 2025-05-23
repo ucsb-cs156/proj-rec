@@ -4,6 +4,7 @@ import ProfilePage from "main/pages/ProfilePage";
 import AdminUsersPage from "main/pages/AdminUsersPage";
 import AdminRequestsPage from "main/pages/AdminRequestsPage";
 
+import RequestTypeIndexPageStories from "stories/pages/RequestType/RequestTypeIndexPage.stories";
 import PendingRequestsPage from "main/pages/Requests/PendingRequestsPage";
 import CompletedRequestsPage from "main/pages/Requests/CompletedRequestsPage";
 import StatisticsPage from "main/pages/Requests/StatisticsPage";
@@ -12,6 +13,7 @@ import { hasRole, useCurrentUser } from "main/utils/currentUser";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "react-toastify/dist/ReactToastify.css";
+import RequestTypeIndexPage from "main/pages/RequestType/RequestTypeIndexPage";
 
 function App() {
   const { data: currentUser } = useCurrentUser();
@@ -34,6 +36,11 @@ function App() {
         {(hasRole(currentUser, "ROLE_PROFESSOR") ||
           hasRole(currentUser, "ROLE_STUDENT")) && (
           <>
+            <Route
+              exact
+              path="/requesttypes/all"
+              element={<RequestTypeIndexPage />}
+            />
             <Route
               exact
               path="/requests/pending"
