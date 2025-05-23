@@ -6,13 +6,18 @@ export function onDeleteSuccess(message) {
   toast(message);
 }
 
-export function cellToAxiosParamsDeleteAdmin(cell) {
+/**
+ * Build axios params for DELETE.
+ * @param {object} cell     – table-cell object
+ * @param {boolean} isAdmin – if true, hits the admin endpoint
+ */
+export function cellToAxiosParamsDelete(cell, isAdmin = false) {
   return {
-    url: "/api/recommendationrequest/admin",
+    url: isAdmin
+      ? "/api/recommendationrequest/admin"
+      : "/api/recommendationrequest",
     method: "DELETE",
-    params: {
-      id: cell.row.values.id,
-    },
+    params: { id: cell.row.values.id },
   };
 }
 
