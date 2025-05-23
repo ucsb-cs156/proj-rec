@@ -105,6 +105,6 @@ describe("RequestTypeCreatePage tests", () => {
     expect(mockToast).toBeCalledWith(
       "New requestType Created - id: 17 request type: Inqueries",
     );
-    expect(mockNavigate).toBeCalledWith({ to: "/requesttypes" });
+    expect(mockNavigate).toBeCalledWith({ to: "/requesttypes/all" });
   });
 });

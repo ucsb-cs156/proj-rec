@@ -49,7 +49,7 @@ describe("RequestTypeEditPage tests", () => {
       axiosMock
         .onGet("/api/systemInfo")
         .reply(200, systemInfoFixtures.showingNeither);
-      axiosMock.onGet("/api/requesttypes", { params: { id: 17 } }).timeout();
+      axiosMock.onGet("/api/requesttypes/all", { params: { id: 17 } }).timeout();
     });
 
     const queryClient = new QueryClient();
@@ -159,7 +159,7 @@ describe("RequestTypeEditPage tests", () => {
       expect(mockToast).toBeCalledWith(
         "RequestType Updated - id: 17 request type: Regrades",
       );
-      expect(mockNavigate).toBeCalledWith({ to: "/requesttypes" });
+      expect(mockNavigate).toBeCalledWith({ to: "/requesttypes/all" });
 
       expect(axiosMock.history.put.length).toBe(1); // times called
       expect(axiosMock.history.put[0].params).toEqual({ id: 17 });
