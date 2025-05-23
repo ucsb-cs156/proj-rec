@@ -161,7 +161,7 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
 
         User prof = buildProfessor("profA@ucsb.edu", "googleSub", "Prof A", "Prof", "A", 22L);
         RequestType phDRequestType = buildRequestType(1L, "phDProgram");
-        RecommendationRequest rec1 = buildRecommendationRequest(67L, user2, prof, "PhDprogram", "details", "PENDING", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00");
+        RecommendationRequest rec1 = buildRecommendationRequest(67L, user2, prof, phDRequestType, "details", "PENDING", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00");
 
 
         when(recommendationRequestRepository.findById(eq(67L))).thenReturn(Optional.of(rec1));
@@ -412,9 +412,10 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
         //arrange
         User student = User.builder().id(99).build(); 
         User prof = buildProfessor("profA@ucsb.edu", "googleSub", "Prof A", "Prof", "A", 22L);
+        RequestType phDRequestType = buildRequestType(1L, "phDProgram");
         
-        RecommendationRequest rec = buildRecommendationRequest(67L, student, prof, "PhDprogram", "details", "COMPLETED", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00");
-        RecommendationRequest rec_updated = buildRecommendationRequest(67L, student, prof, "PhDprogram", "details", "PENDING", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00", null);
+        RecommendationRequest rec = buildRecommendationRequest(67L, student, prof, phDRequestType, "details", "COMPLETED", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00");
+        RecommendationRequest rec_updated = buildRecommendationRequest(67L, student, prof, phDRequestType, "details", "PENDING", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00", null);
 
         String requestBody = mapper.writeValueAsString(rec_updated);
 
@@ -616,11 +617,13 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
         //arrange
         User student = User.builder().id(99).build(); 
         User prof = buildProfessor("profA@ucsb.edu", "googleSub", "Prof A", "Prof", "A", 22L);
+        RequestType phDRequestType = buildRequestType(1L, "phDProgram");
         
-        RecommendationRequest rec = buildRecommendationRequest(67L, student, prof, "PhDprogram", "details", "COMPLETED", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00");
+        RecommendationRequest rec = buildRecommendationRequest(67L, student, prof, phDRequestType, "details", "COMPLETED", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00");
 
-        RecommendationRequest rec_updated = buildRecommendationRequest(67L, student, prof, "PhDprogram", "details", "ACCEPTED", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00", null);
+        RecommendationRequest rec_updated = buildRecommendationRequest(67L, student, prof, phDRequestType, "details", "ACCEPTED", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00", null);
 
+        
         String requestBody = mapper.writeValueAsString(rec_updated);
 
         when(recommendationRequestRepository.findById(eq(67L))).thenReturn(Optional.of(rec));
@@ -655,10 +658,12 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
         //arrange
         User student = User.builder().id(99).build(); 
         User prof = buildProfessor("profA@ucsb.edu", "googleSub", "Prof A", "Prof", "A", 22L);
+        RequestType phDRequestType = buildRequestType(1L, "phDProgram");
         
-        RecommendationRequest rec = buildRecommendationRequest(67L, student, prof, "PhDprogram", "details", "PENDING", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00", null);
+        
+        RecommendationRequest rec = buildRecommendationRequest(67L, student, prof, phDRequestType, "details", "PENDING", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00", null);
 
-        RecommendationRequest rec_updated = buildRecommendationRequest(67L, student, prof, "PhDprogram", "details", "DENIED", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00");
+        RecommendationRequest rec_updated = buildRecommendationRequest(67L, student, prof, phDRequestType, "details", "DENIED", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00");
 
         String requestBody = mapper.writeValueAsString(rec_updated);
 
@@ -695,8 +700,10 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
             User student = User.builder().id(99).build(); 
             User prof = buildProfessor("profA@ucsb.edu", "googleSub", "Prof A", "Prof", "A", 22L);
             
-            RecommendationRequest rec = buildRecommendationRequest(67L, student, prof, "PhDprogram", "details", "PENDING", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00", null);
-            RecommendationRequest rec_updated = buildRecommendationRequest(67L, student, prof, "PhDprogram", "details", "INVALID", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00", null);
+            RequestType phDRequestType = buildRequestType(1L, "phDProgram");
+            
+            RecommendationRequest rec = buildRecommendationRequest(67L, student, prof, phDRequestType, "details", "PENDING", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00", null);
+            RecommendationRequest rec_updated = buildRecommendationRequest(67L, student, prof, phDRequestType, "details", "INVALID", "2022-01-03T00:00:00", "2022-01-03T00:00:00", "2022-01-03T00:00:00", null);
 
             String requestBody = mapper.writeValueAsString(rec_updated);
 
