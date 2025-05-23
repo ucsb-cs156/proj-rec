@@ -217,6 +217,22 @@ public class UsersControllerTests extends ControllerTestCase {
     assertEquals("User with id 15 not found", json.get("message"));
   }
 
+  @WithMockUser(roles = { "ADMIN", "USER" })
+  @Test
+  public void admin_cannot_remove_own_admin_status() throws Exception{
+     // Mock the current user to have ID 1 (which is the mock current user ID) and admin status true
+     User currentUser = User.builder().email("user@example.org").id(1L).admin(true).build();
+     when(userRepository.findById(eq(1L))).thenReturn(Optional.of(currentUser));
+     
+     MvcResult response = mockMvc.perform(post("/api/admin/users/toggleAdmin?id=1").with(csrf()))
+             .andExpect(status().isBadRequest()).andReturn();
+    
+    verify(userRepository, times(1)).findById(1L);
+    verify(userRepository, times(0)).save(any(User.class)); // Should not save because exception is thrown
+    Map<String, Object> json = responseToJson(response);
+    assertEquals("Cannot remove admin from currently logged in user; ask another admin to do that.", json.get("message"));
+  }
+
   @WithMockUser(roles = { "USER" })
   @Test
   public void non_admin_can_get_all_professors() throws Exception{
