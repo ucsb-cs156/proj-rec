@@ -113,7 +113,6 @@ public class RoleInterceptorTests extends ControllerTestCase{
                 .email("nogaucho@ucsb.edu")
                 .id(15L)
                 .admin(false)
-                .student(false)
                 .professor(false)
                 .build();
         when(userRepository.findByEmail("nogaucho@ucsb.edu")).thenReturn(Optional.of(user));
@@ -155,7 +154,6 @@ public class RoleInterceptorTests extends ControllerTestCase{
                 .email("joegaucho@ucsb.edu")
                 .id(15L)
                 .admin(false)
-                .student(false)
                 .professor(true)
                 .build();
 
@@ -195,7 +193,6 @@ public class RoleInterceptorTests extends ControllerTestCase{
                 .email("joegaucho@ucsb.edu")
                 .id(15L)
                 .admin(true)
-                .student(true)
                 .professor(true)
                 .build();
 
@@ -235,7 +232,6 @@ public class RoleInterceptorTests extends ControllerTestCase{
                 .email("joegaucho@ucsb.edu")
                 .id(15L)
                 .admin(true)
-                .student(false)
                 .professor(false)
                 .build();
 
