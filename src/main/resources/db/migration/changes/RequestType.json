@@ -63,37 +63,27 @@
         "changes": [
           {
             "sql": {
-              "sql": "INSERT INTO REQUESTTYPE (REQUEST_TYPE) SELECT 'Letter of Recommendation' WHERE NOT EXISTS (SELECT 1 FROM REQUESTTYPE WHERE REQUEST_TYPE = 'Letter of Recommendation')"
+              "sql": "INSERT INTO REQUESTTYPE (REQUEST_TYPE) SELECT 'CS Department BS/MS program' WHERE NOT EXISTS (SELECT 1 FROM REQUESTTYPE WHERE REQUEST_TYPE = 'CS Department BS/MS program')"
             }
           },
           {
             "sql": {
-              "sql": "INSERT INTO REQUESTTYPE (REQUEST_TYPE) SELECT 'Graduate School Recommendation' WHERE NOT EXISTS (SELECT 1 FROM REQUESTTYPE WHERE REQUEST_TYPE = 'Graduate School Recommendation')"
+              "sql": "INSERT INTO REQUESTTYPE (REQUEST_TYPE) SELECT 'Scholarship or Fellowship' WHERE NOT EXISTS (SELECT 1 FROM REQUESTTYPE WHERE REQUEST_TYPE = 'Scholarship or Fellowship')"
             }
           },
           {
             "sql": {
-              "sql": "INSERT INTO REQUESTTYPE (REQUEST_TYPE) SELECT 'Scholarship Recommendation' WHERE NOT EXISTS (SELECT 1 FROM REQUESTTYPE WHERE REQUEST_TYPE = 'Scholarship Recommendation')"
+              "sql": "INSERT INTO REQUESTTYPE (REQUEST_TYPE) SELECT 'MS program (other than CS Dept BS/MS)' WHERE NOT EXISTS (SELECT 1 FROM REQUESTTYPE WHERE REQUEST_TYPE = 'MS program (other than CS Dept BS/MS)')"
             }
           },
           {
             "sql": {
-              "sql": "INSERT INTO REQUESTTYPE (REQUEST_TYPE) SELECT 'Job Recommendation' WHERE NOT EXISTS (SELECT 1 FROM REQUESTTYPE WHERE REQUEST_TYPE = 'Job Recommendation')"
+              "sql": "INSERT INTO REQUESTTYPE (REQUEST_TYPE) SELECT 'PhD program' WHERE NOT EXISTS (SELECT 1 FROM REQUESTTYPE WHERE REQUEST_TYPE = 'PhD program')"
             }
           },
           {
             "sql": {
-              "sql": "INSERT INTO REQUESTTYPE (REQUEST_TYPE) SELECT 'Research Program Recommendation' WHERE NOT EXISTS (SELECT 1 FROM REQUESTTYPE WHERE REQUEST_TYPE = 'Research Program Recommendation')"
-            }
-          },
-          {
-            "sql": {
-              "sql": "INSERT INTO REQUESTTYPE (REQUEST_TYPE) SELECT 'Fellowship Recommendation' WHERE NOT EXISTS (SELECT 1 FROM REQUESTTYPE WHERE REQUEST_TYPE = 'Fellowship Recommendation')"
-            }
-          },
-          {
-            "sql": {
-              "sql": "INSERT INTO REQUESTTYPE (REQUEST_TYPE) SELECT 'Internship Recommendation' WHERE NOT EXISTS (SELECT 1 FROM REQUESTTYPE WHERE REQUEST_TYPE = 'Internship Recommendation')"
+              "sql": "INSERT INTO REQUESTTYPE (REQUEST_TYPE) SELECT 'Other' WHERE NOT EXISTS (SELECT 1 FROM REQUESTTYPE WHERE REQUEST_TYPE = 'Other')"
             }
           }
         ],
