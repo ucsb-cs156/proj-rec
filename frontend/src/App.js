@@ -5,6 +5,7 @@ import AdminUsersPage from "main/pages/AdminUsersPage";
 import StudentProfilePage from "main/pages/StudentProfilePage";
 import AdminRequestsPage from "main/pages/AdminRequestsPage";
 
+import RequestTypeIndexPage from "main/pages/RequestType/RequestTypeIndexPage";
 import RequestTypeCreatePage from "main/pages/RequestType/RequestTypeCreatePage";
 import RequestTypeEditPage from "main/pages/RequestType/RequestTypeEditPage";
 import PendingRequestsPage from "main/pages/Requests/PendingRequestsPage";
@@ -73,6 +74,11 @@ function App() {
               exact
               path="/requests/edit/:id"
               element={<RecommendationRequestEditPage />}
+            />
+            <Route
+              exact
+              path="/requesttypes/all"
+              element={<RequestTypeIndexPage />}
             />
             <Route
               exact

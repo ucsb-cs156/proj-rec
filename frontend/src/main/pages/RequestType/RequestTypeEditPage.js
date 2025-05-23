@@ -56,7 +56,7 @@ export default function RequestTypeEditPage({ storybook = false }) {
   };
 
   if (isSuccess && !storybook) {
-    return <Navigate to="/requesttypes" />;
+    return <Navigate to="/requesttypes/all" />;
   }
 
   return (

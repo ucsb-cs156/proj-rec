@@ -21,8 +21,8 @@ Default.parameters = {
     http.get("/api/systemInfo", () =>
       HttpResponse.json(systemInfoFixtures.showingNeither, { status: 200 }),
     ),
-    http.post("/api/requesttypes/post", ({ request }) => {
-      const url = new URL(request.url);
+    http.post("/api/requesttypes/post", ({ requestType }) => {
+      const url = new URL(requestType.url);
       const id = url.searchParams.get("id");
       const requestType = url.searchParams.get("requestType");
 
