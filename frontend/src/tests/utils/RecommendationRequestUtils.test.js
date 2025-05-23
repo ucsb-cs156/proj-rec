@@ -49,7 +49,7 @@ describe("RecommendationRequestUtils", () => {
       });
     });
   });
-    describe("cellToAxiosParamsDeleteAdmin", () => {
+  describe("cellToAxiosParamsDeleteAdmin", () => {
     test("It returns the correct params", () => {
       // arrange
       const cell = { row: { values: { id: 17 } } };

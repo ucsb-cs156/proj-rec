@@ -1,3 +1,4 @@
+// frontend/src/utils/RecommendationRequestUtils.js
 import { toast } from "react-toastify";
 
 export function onDeleteSuccess(message) {
@@ -5,9 +6,9 @@ export function onDeleteSuccess(message) {
   toast(message);
 }
 
-export function cellToAxiosParamsDelete(cell) {
+export function cellToAxiosParamsDeleteAdmin(cell) {
   return {
-    url: "/api/recommendationrequest",
+    url: "/api/recommendationrequest/admin",
     method: "DELETE",
     params: {
       id: cell.row.values.id,
