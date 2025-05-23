@@ -20,10 +20,11 @@
           "addForeignKeyConstraint": {
             "baseTableName": "RECOMMENDATIONREQUEST",
             "baseColumnNames": "RECOMMENDATION_TYPE",
+            "onDelete": "RESTRICT",
+            "onUpdate": "RESTRICT",
             "constraintName": "RECOMMENDATIONREQUEST_RECOMMENDATION_TYPE_FK",
             "referencedTableName": "REQUESTTYPE",
-            "referencedColumnNames": "REQUEST_TYPE",
-            "validate": true
+            "referencedColumnNames": "ID"
           }
         }
       ]
