@@ -1,4 +1,3 @@
-// frontend/src/utils/RecommendationRequestUtils.js
 import { toast } from "react-toastify";
 
 export function onDeleteSuccess(message) {
@@ -6,18 +5,16 @@ export function onDeleteSuccess(message) {
   toast(message);
 }
 
-/**
- * Build axios params for DELETE.
- * @param {object} cell     – table-cell object
- * @param {boolean} isAdmin – if true, hits the admin endpoint
- */
-export function cellToAxiosParamsDelete(cell, isAdmin = false) {
+export function cellToAxiosParamsDelete(cell, isAdmin) {
+  const urlCalled = isAdmin
+    ? "/api/recommendationrequest/admin"
+    : "/api/recommendationrequest";
   return {
-    url: isAdmin
-      ? "/api/recommendationrequest/admin"
-      : "/api/recommendationrequest",
+    url: urlCalled,
     method: "DELETE",
-    params: { id: cell.row.values.id },
+    params: {
+      id: cell.row.values.id,
+    },
   };
 }
 
