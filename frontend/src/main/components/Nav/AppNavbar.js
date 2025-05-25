@@ -64,6 +64,11 @@ export default function AppNavbar({
               {(hasRole(currentUser, "ROLE_PROFESSOR") ||
                 hasRole(currentUser, "ROLE_STUDENT")) && (
                 <>
+                  {hasRole(currentUser, "ROLE_STUDENT") && (
+                    <Nav.Link as={Link} to="/studentprofile">
+                      Student Profile
+                    </Nav.Link>
+                  )}
                   <Nav.Link as={Link} to="/requests/pending">
                     Pending Requests
                   </Nav.Link>

@@ -8,6 +8,7 @@ import {
 } from "main/utils/RecommendationRequestUtils";
 import { useNavigate } from "react-router-dom";
 import { hasRole } from "main/utils/currentUser";
+import * as dateutils from "main/utils/dateutils";
 
 export default function RecommendationRequestTable({ requests, currentUser }) {
   const navigate = useNavigate();
@@ -72,18 +73,22 @@ export default function RecommendationRequestTable({ requests, currentUser }) {
     {
       Header: "Submission Date",
       accessor: "submissionDate",
+      Cell: ({ value }) => dateutils.formatdate(value),
     },
     {
       Header: "Last Modified Date",
       accessor: "lastModifiedDate",
+      Cell: ({ value }) => dateutils.formatdate(value),
     },
     {
       Header: "Completion Date",
       accessor: "completionDate",
+      Cell: ({ value }) => dateutils.formatdate(value),
     },
     {
       Header: "Due Date",
       accessor: "dueDate",
+      Cell: ({ value }) => dateutils.formatdate(value),
     },
   ];
 

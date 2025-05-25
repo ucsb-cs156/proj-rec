@@ -52,6 +52,7 @@ public class HomePageWebIT {
             .isVisible();
         assertThat(page.getByText("Our webapp allows a simple process for students to submit requests for letters of recommendation to professors, and allows professors to manage their requests."))
             .isVisible();
+
     }
 
 }

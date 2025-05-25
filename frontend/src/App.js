@@ -7,6 +7,7 @@ import AdminRequestsPage from "main/pages/AdminRequestsPage";
 import PendingRequestsPage from "main/pages/Requests/PendingRequestsPage";
 import CompletedRequestsPage from "main/pages/Requests/CompletedRequestsPage";
 import StatisticsPage from "main/pages/Requests/StatisticsPage";
+import StudentProfilePage from "main/pages/StudentProfilePage";
 
 import { hasRole, useCurrentUser } from "main/utils/currentUser";
 
@@ -15,6 +16,8 @@ import "react-toastify/dist/ReactToastify.css";
 import RequestTypeIndexPage from "main/pages/RequestType/RequestTypeIndexPage";
 import RequestTypeCreatePage from "main/pages/RequestType/RequestTypeCreatePage";
 import RequestTypeEditPage from "main/pages/RequestType/RequestTypeEditPage";
+import RecommendationRequestCreatePage from "main/pages/RecommendationRequest/RecommendationRequestCreatePage";
+import RecommendationRequestTable from "main/components/RecommendationRequest/RecommendationRequestTable";
 
 function App() {
   const { data: currentUser } = useCurrentUser();
@@ -31,6 +34,30 @@ function App() {
               exact
               path="/admin/requests"
               element={<AdminRequestsPage />}
+            />
+          </>
+        )}
+        {hasRole(currentUser, "ROLE_STUDENT") && (
+          <>
+            <Route
+              exact
+              path="/studentprofile"
+              element={<StudentProfilePage />}
+            />
+            <Route
+              exact
+              path="/recommendationrequest/post"
+              element={<RecommendationRequestCreatePage />}
+            />
+            <Route
+              exact
+              path="/recommendationrequest/requester/all"
+              element={<RecommendationRequestTable />}
+            />
+            <Route
+              exact
+              path="/requests/edit/:id"
+              element={<RequestTypeEditPage />}
             />
           </>
         )}
