@@ -132,6 +132,16 @@ public class RecommendationRequestController extends ApiController {
 
         recommendationRequest.setStatus(incoming.getStatus());
 
+        if (incoming.getStatus().equals("COMPLETED") || incoming.getStatus().equals("DENIED")) {
+            recommendationRequest.setCompletionDate(LocalDateTime.now());
+        }
+        else if (incoming.getStatus().equals("PENDING") || incoming.getStatus().equals("ACCEPTED")) {
+            recommendationRequest.setCompletionDate(null);
+        }
+        else {
+            throw new IllegalArgumentException(String.format("Unknown Request Status: %s", incoming.getStatus()));
+        }
+
         recommendationRequestRepository.save(recommendationRequest);
 
         return recommendationRequest;
@@ -216,7 +226,6 @@ public class RecommendationRequestController extends ApiController {
         recommendationRequest.setRequester(currentUser.getUser());
         recommendationRequest.setStatus("PENDING");
         recommendationRequest.setDueDate(dueDate);
-
         RecommendationRequest savedRecommendationRequest = recommendationRequestRepository.save(recommendationRequest);
         return savedRecommendationRequest;
     }
@@ -235,4 +244,16 @@ public class RecommendationRequestController extends ApiController {
         return recommendationRequestRepository.findAllByProfessorIdAndStatus(
             currentUser.getId(), status);
     }
+
+    /**
+     * This methods return a list of all the recommendation requests for the admin.
+     * @return a list of all the recommendation requests.
+     */
+    @Operation(summary = "Get all recommendation requests for the admin")
+    @GetMapping("/admin/all")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public Iterable<RecommendationRequest> getAllRecoomendationRequest(){
+        return recommendationRequestRepository.findAll();
+    }
+    
 }
