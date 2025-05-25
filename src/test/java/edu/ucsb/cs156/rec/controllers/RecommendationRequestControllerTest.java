@@ -13,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -42,6 +41,9 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import java.util.List;
 import java.util.Map;
+
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 @WebMvcTest(controllers = RecommendationRequestController.class)
 @Import(TestConfig.class)
@@ -332,16 +334,18 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
         String responseString = response.getResponse().getContentAsString();
         RecommendationRequest savedRequest = mapper.readValue(responseString, RecommendationRequest.class);
         
+        // check that status was updated
         assertEquals("COMPLETED", savedRequest.getStatus());
         
+        // check that completion date was set
         assertNotNull(savedRequest.getCompletionDate());
         
         // check that completion date is recent
-        // REFERENCE: chatgpt for figuring out how to do this
         LocalDateTime now = LocalDateTime.now();
         assertTrue(savedRequest.getCompletionDate().isAfter(now.minusSeconds(5)));
         assertTrue(savedRequest.getCompletionDate().isBefore(now.plusSeconds(5)));
     }
+
 
     //prof can not edit a Recommendation Request that dne
     @WithMockUser(roles = {"PROFESSOR"})
@@ -496,6 +500,7 @@ public void prof_can_change_status_from_pending_to_accepted_and_dateAcceptedOrDe
     @WithMockUser(roles = {"PROFESSOR"})
     @Test
     public void prof_doesnt_update_status_and_dateAcceptedOrDenied_should_not_update() throws Exception {
+
         // arrange
         User prof = currentUserService.getCurrentUser().getUser();
         User student = User.builder().id(99).build();
@@ -581,9 +586,9 @@ public void prof_can_change_status_from_pending_to_accepted_and_dateAcceptedOrDe
         RecommendationRequest savedRequest = mapper.readValue(responseString, RecommendationRequest.class);
         // check that completion date was set to null
         assertNull(savedRequest.getCompletionDate());
+
        }
-       
-    
+
     //Admin can get all requests
     @WithMockUser(roles = {"ADMIN"})
     @Test
