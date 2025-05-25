@@ -417,11 +417,13 @@ public void prof_can_change_status_from_pending_to_accepted_and_dateAcceptedOrDe
         User prof = currentUserService.getCurrentUser().getUser();
         User student = User.builder().id(99).build();
 
+        RequestType phDRequestType = buildRequestType(1L, "phDProgram");
+
         RecommendationRequest rec = RecommendationRequest.builder()
             .id(1L)
             .requester(student)
             .professor(prof)
-            .recommendationType("PhDprogram")
+            .recommendationType(phDRequestType)
             .details("test details")
             .status("PENDING")
             .build();
@@ -430,7 +432,7 @@ public void prof_can_change_status_from_pending_to_accepted_and_dateAcceptedOrDe
             .id(1L)
             .requester(student)
             .professor(prof)
-            .recommendationType("PhDprogram")
+            .recommendationType(phDRequestType)
             .details("test details")
             .status("ACCEPTED")
             .build();
@@ -475,12 +477,13 @@ public void prof_can_change_status_from_pending_to_accepted_and_dateAcceptedOrDe
         // arrange
         User prof = currentUserService.getCurrentUser().getUser();
         User student = User.builder().id(99).build();
+        RequestType phDRequestType = buildRequestType(1L, "phDProgram");
 
         RecommendationRequest rec = RecommendationRequest.builder()
             .id(1L)
             .requester(student)
             .professor(prof)
-            .recommendationType("PhDprogram")
+            .recommendationType(phDRequestType)
             .details("test details")
             .status("PENDING")
             .build();
@@ -489,7 +492,7 @@ public void prof_can_change_status_from_pending_to_accepted_and_dateAcceptedOrDe
             .id(1L)
             .requester(student)
             .professor(prof)
-            .recommendationType("PhDprogram")
+            .recommendationType(phDRequestType)
             .details("test details")
             .status("DENIED")
             .build();
@@ -535,12 +538,13 @@ public void prof_can_change_status_from_pending_to_accepted_and_dateAcceptedOrDe
         // arrange
         User prof = currentUserService.getCurrentUser().getUser();
         User student = User.builder().id(99).build();
+        RequestType phDRequestType = buildRequestType(1L, "phDProgram");
 
         RecommendationRequest rec = RecommendationRequest.builder()
             .id(1L)
             .requester(student)
             .professor(prof)
-            .recommendationType("PhDprogram")
+            .recommendationType(phDRequestType)
             .details("test details")
             .status("PENDING")
             .completionDate(null)
@@ -550,7 +554,7 @@ public void prof_can_change_status_from_pending_to_accepted_and_dateAcceptedOrDe
             .id(1L)
             .requester(student)
             .professor(prof)
-            .recommendationType("PhDprogram")
+            .recommendationType(phDRequestType)
             .details("test details")
             .status("PENDING") 
             .completionDate(null)
