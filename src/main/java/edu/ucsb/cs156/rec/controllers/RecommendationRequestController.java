@@ -132,6 +132,12 @@ public class RecommendationRequestController extends ApiController {
 
         recommendationRequest.setStatus(incoming.getStatus());
 
+        // set the date when professor accepts or denies request
+        if (incoming.getStatus().equals("ACCEPTED") || incoming.getStatus().equals("DENIED")) {
+            recommendationRequest.setDateAcceptedOrDenied(LocalDateTime.now());
+        }
+
+        // set the date when professor completes the request
         if (incoming.getStatus().equals("COMPLETED") || incoming.getStatus().equals("DENIED")) {
             recommendationRequest.setCompletionDate(LocalDateTime.now());
         }
@@ -252,7 +258,7 @@ public class RecommendationRequestController extends ApiController {
     @Operation(summary = "Get all recommendation requests for the admin")
     @GetMapping("/admin/all")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public Iterable<RecommendationRequest> getAllRecoomendationRequest(){
+    public Iterable<RecommendationRequest> getAllRecommendationRequest(){
         return recommendationRequestRepository.findAll();
     }
     
