@@ -54,4 +54,6 @@ public class RecommendationRequest {
   private LocalDateTime submissionDate;
   @LastModifiedDate
   private LocalDateTime lastModifiedDate;
+
+  private LocalDateTime dateAcceptedOrDenied;
 }
