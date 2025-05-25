@@ -132,6 +132,22 @@ public class RecommendationRequestController extends ApiController {
 
         recommendationRequest.setStatus(incoming.getStatus());
 
+        // set the date when professor accepts or denies request
+        if (incoming.getStatus().equals("ACCEPTED") || incoming.getStatus().equals("DENIED")) {
+            recommendationRequest.setDateAcceptedOrDenied(LocalDateTime.now());
+        }
+
+        // set the date when professor completes the request
+        if (incoming.getStatus().equals("COMPLETED") || incoming.getStatus().equals("DENIED")) {
+            recommendationRequest.setCompletionDate(LocalDateTime.now());
+        }
+        else if (incoming.getStatus().equals("PENDING") || incoming.getStatus().equals("ACCEPTED")) {
+            recommendationRequest.setCompletionDate(null);
+        }
+        else {
+            throw new IllegalArgumentException(String.format("Unknown Request Status: %s", incoming.getStatus()));
+        }
+
         recommendationRequestRepository.save(recommendationRequest);
 
         return recommendationRequest;
@@ -216,7 +232,6 @@ public class RecommendationRequestController extends ApiController {
         recommendationRequest.setRequester(currentUser.getUser());
         recommendationRequest.setStatus("PENDING");
         recommendationRequest.setDueDate(dueDate);
-
         RecommendationRequest savedRecommendationRequest = recommendationRequestRepository.save(recommendationRequest);
         return savedRecommendationRequest;
     }
