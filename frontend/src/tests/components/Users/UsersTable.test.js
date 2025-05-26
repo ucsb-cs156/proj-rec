@@ -319,7 +319,9 @@ describe("UserTable tests", () => {
       .mockImplementation(() => {});
 
     axiosMock.onPost("/api/admin/users/toggleAdmin").reply(() => {
-      throw new Error("Test error");
+      const error = new Error();
+      error.response = { data: {} };
+      throw error;
     });
 
     render(
