@@ -20,6 +20,12 @@ describe("UserTable tests", () => {
   const queryClient = new QueryClient();
   const axiosMock = new AxiosMockAdapter(axios);
 
+  beforeEach(() => {
+    axiosMock.reset();
+    mockToast.mockClear();
+    queryClient.clear();
+  });
+
   test("renders without crashing for empty table", () => {
     render(
       <QueryClientProvider client={queryClient}>
@@ -148,7 +154,7 @@ describe("UserTable tests", () => {
     const currentUser = usersFixtures.adminUser;
 
     axiosMock
-      .onPost("/api/admin/users/toggleStudent", {
+      .onPost("/api/admin/users/toggleAdmin", {
         params: { id: 1 },
       })
       .reply(200);
@@ -172,11 +178,171 @@ describe("UserTable tests", () => {
     fireEvent.click(adminButton);
 
     await waitFor(() => {
-      expect(axiosMock.history.post.length).toBe(2);
+      expect(axiosMock.history.post.length).toBe(1);
     });
 
-    expect(axiosMock.history.post[1].url).toBe("/api/admin/users/toggleAdmin");
+    expect(axiosMock.history.post[0].url).toBe("/api/admin/users/toggleAdmin");
 
-    expect(axiosMock.history.post[1].params).toEqual({ id: 1 });
+    expect(axiosMock.history.post[0].params).toEqual({ id: 1 });
+  });
+
+  test("toggleAdmin success invalidates queries", async () => {
+    const currentUser = usersFixtures.adminUser;
+    const invalidateQueriesSpy = jest.spyOn(queryClient, "invalidateQueries");
+
+    axiosMock
+      .onPost("/api/admin/users/toggleAdmin")
+      .reply(200, { message: "Admin status toggled successfully" });
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <UsersTable
+            users={usersFixtures.threeUsers}
+            currentUser={currentUser}
+          />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    const adminButton = screen.getByTestId(
+      `UsersTable-cell-row-0-col-Toggle Admin-button`,
+    );
+
+    fireEvent.click(adminButton);
+
+    await waitFor(() => {
+      expect(invalidateQueriesSpy).toHaveBeenCalledWith(["/api/admin/users"]);
+    });
+
+    invalidateQueriesSpy.mockRestore();
+  });
+
+  test("toggleAdmin error invalidates queries", async () => {
+    const currentUser = usersFixtures.adminUser;
+    const invalidateQueriesSpy = jest.spyOn(queryClient, "invalidateQueries");
+
+    axiosMock
+      .onPost("/api/admin/users/toggleAdmin")
+      .reply(500, { message: "Access denied" });
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <UsersTable
+            users={usersFixtures.threeUsers}
+            currentUser={currentUser}
+          />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    const adminButton = screen.getByTestId(
+      `UsersTable-cell-row-0-col-Toggle Admin-button`,
+    );
+
+    fireEvent.click(adminButton);
+
+    await waitFor(() => {
+      expect(mockToast).toHaveBeenCalledWith("Error: Access denied");
+    });
+
+    await waitFor(() => {
+      expect(invalidateQueriesSpy).toHaveBeenCalledWith(["/api/admin/users"]);
+    });
+
+    invalidateQueriesSpy.mockRestore();
+  });
+
+  test("toggleAdmin handles error without response data message", async () => {
+    const currentUser = usersFixtures.adminUser;
+
+    axiosMock.onPost("/api/admin/users/toggleAdmin").reply(500, {});
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <UsersTable
+            users={usersFixtures.threeUsers}
+            currentUser={currentUser}
+          />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    const adminButton = screen.getByTestId(
+      `UsersTable-cell-row-0-col-Toggle Admin-button`,
+    );
+
+    fireEvent.click(adminButton);
+
+    await waitFor(() => {
+      expect(mockToast).toHaveBeenCalledWith(
+        "Error: Request failed with status code 500",
+      );
+    });
+  });
+
+  test("toggleAdmin handles network error", async () => {
+    const currentUser = usersFixtures.adminUser;
+
+    axiosMock.onPost("/api/admin/users/toggleAdmin").networkError();
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <UsersTable
+            users={usersFixtures.threeUsers}
+            currentUser={currentUser}
+          />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    const adminButton = screen.getByTestId(
+      `UsersTable-cell-row-0-col-Toggle Admin-button`,
+    );
+
+    fireEvent.click(adminButton);
+
+    await waitFor(() => {
+      expect(mockToast).toHaveBeenCalledWith("Error: Network Error");
+    });
+  });
+
+  test("toggleAdmin handles error without error message", async () => {
+    const currentUser = usersFixtures.adminUser;
+
+    // Mock console.error to avoid error output in test
+    const consoleSpy = jest
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+
+    axiosMock.onPost("/api/admin/users/toggleAdmin").reply(() => {
+      throw { response: { data: {} } };
+    });
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <UsersTable
+            users={usersFixtures.threeUsers}
+            currentUser={currentUser}
+          />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    const adminButton = screen.getByTestId(
+      `UsersTable-cell-row-0-col-Toggle Admin-button`,
+    );
+
+    fireEvent.click(adminButton);
+
+    await waitFor(() => {
+      expect(mockToast).toHaveBeenCalledWith("Error: Unknown error occurred");
+    });
+
+    consoleSpy.mockRestore();
   });
 });
