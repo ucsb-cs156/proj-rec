@@ -5,9 +5,6 @@ import axios from "axios";
 import { useMutation, useQueryClient } from "react-query";
 
 export default function UsersTable({ users }) {
-  // Stryker disable all : hard to test for query caching
-  // Stryker enable all
-
   const queryClient = useQueryClient();
 
   //toggleAdmin
