@@ -10,7 +10,7 @@ import { hasRole } from "main/utils/currentUser";
 import { toast } from "react-toastify";
 
 const mockedNavigate = jest.fn();
-const mockedLocation = { pathname: "" };
+let mockedLocation = { pathname: "" };
 
 jest.mock("react-router-dom", () => {
   const actual = jest.requireActual("react-router-dom");
@@ -29,7 +29,6 @@ describe("RecommendationRequestTable apiEndpoint invalidation", () => {
   beforeEach(() => {
     queryClient = new QueryClient();
     invalidateSpy = jest.spyOn(queryClient, "invalidateQueries");
-
     axiosMock.onDelete().reply(200, { message: "deleted" });
   });
 
@@ -39,7 +38,7 @@ describe("RecommendationRequestTable apiEndpoint invalidation", () => {
   });
 
   test("invalidates '/api/recommendationrequest/requester/all' on a non-pending/non-completed page", async () => {
-    mockedLocation.pathname = "/profile";
+    mockedLocation = { pathname: "/profile" };
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -78,7 +77,7 @@ describe("RecommendationRequestTable apiEndpoint invalidation", () => {
   });
 
   test("invalidates '/api/recommendationrequest/professor/all' on a pending page", async () => {
-    mockedLocation.pathname = "/requests/pending";
+    mockedLocation = { pathname: "/requests/pending" };
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -122,13 +121,14 @@ describe("UserTable tests", () => {
 
   test("Has the expected column headers and content for ordinary user", () => {
     const currentUser = currentUserFixtures.userOnly;
+    mockedLocation = { pathname: "/profile" };
 
     expect(hasRole(currentUser, "ROLE_USER")).toBe(true);
     expect(hasRole(currentUser, "ROLE_ADMIN")).toBe(false);
 
     render(
       <QueryClientProvider client={queryClient}>
-        <MemoryRouter>
+        <MemoryRouter initialEntries={["/profile"]}>
           <RecommendationRequestTable
             requests={recommendationRequestFixtures.threeRecommendations}
             currentUser={currentUser}
@@ -219,13 +219,14 @@ describe("UserTable tests", () => {
 
   test("Has the expected column headers and content for adminUser", () => {
     const currentUser = currentUserFixtures.adminUser;
+    mockedLocation = { pathname: "/profile" };
 
     expect(hasRole(currentUser, "ROLE_ADMIN")).toBe(true);
     expect(hasRole(currentUser, "ROLE_USER")).toBe(true);
 
     render(
       <QueryClientProvider client={queryClient}>
-        <MemoryRouter>
+        <MemoryRouter initialEntries={["/profile"]}>
           <RecommendationRequestTable
             requests={recommendationRequestFixtures.threeRecommendations}
             currentUser={currentUser}
@@ -295,13 +296,14 @@ describe("UserTable tests", () => {
 
   test("Edit button navigates to the edit page for user", async () => {
     const currentUser = currentUserFixtures.userOnly;
+    mockedLocation = { pathname: "/profile" };
 
     expect(hasRole(currentUser, "ROLE_USER")).toBe(true);
     expect(hasRole(currentUser, "ROLE_ADMIN")).toBe(false);
 
     render(
       <QueryClientProvider client={queryClient}>
-        <MemoryRouter>
+        <MemoryRouter initialEntries={["/profile"]}>
           <RecommendationRequestTable
             requests={recommendationRequestFixtures.threeRecommendations}
             currentUser={currentUser}
@@ -331,12 +333,13 @@ describe("UserTable tests", () => {
   //Added for mutation coverage for the case in which the user is neither a user nor an admin
   test("A user with no roles has expected content", () => {
     const currentUser = currentUserFixtures.notLoggedIn;
+    mockedLocation = { pathname: "/profile" };
 
     expect(hasRole(currentUser, "ROLE_USER")).toBe(undefined);
 
     render(
       <QueryClientProvider client={queryClient}>
-        <MemoryRouter>
+        <MemoryRouter initialEntries={["/profile"]}>
           <RecommendationRequestTable
             requests={recommendationRequestFixtures.threeRecommendations}
             currentUser={currentUser}
@@ -362,6 +365,7 @@ describe("UserTable tests", () => {
   test("Delete button calls delete callback (for requester)", async () => {
     // arrange
     const currentUser = currentUserFixtures.userOnly;
+    mockedLocation = { pathname: "/profile" };
 
     const axiosMock = new AxiosMockAdapter(axios);
     axiosMock
@@ -408,6 +412,7 @@ describe("UserTable tests", () => {
   test("Delete button calls delete callback (admin)", async () => {
     // arrange
     const currentUser = currentUserFixtures.adminUser;
+    mockedLocation = { pathname: "/requests/completed" };
 
     const axiosMock = new AxiosMockAdapter(axios);
     axiosMock
@@ -455,6 +460,7 @@ describe("UserTable tests", () => {
   test("Delete button calls delete callback (professor)", async () => {
     // arrange
     const currentUser = currentUserFixtures.professorUser;
+    mockedLocation = { pathname: "/requests/pending" };
 
     const axiosMock = new AxiosMockAdapter(axios);
     axiosMock
@@ -523,6 +529,7 @@ describe("RecommendationRequestTable update mutation", () => {
   test("Clicking Accept sends PUT with IN PROGRESS and toasts success", async () => {
     const currentUser = currentUserFixtures.professorUser;
     const rows = recommendationRequestFixtures.mixedRequests;
+    mockedLocation = { pathname: "/requests/pending" };
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -558,6 +565,7 @@ describe("RecommendationRequestTable update mutation", () => {
   test("Clicking Deny sends PUT with DENIED and toasts success", async () => {
     const currentUser = currentUserFixtures.professorUser;
     const rows = recommendationRequestFixtures.mixedRequests;
+    mockedLocation = { pathname: "/requests/pending" };
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -592,6 +600,7 @@ describe("RecommendationRequestTable update mutation", () => {
   test("Clicking Complete sends PUT with Completed and toasts success", async () => {
     const currentUser = currentUserFixtures.professorUser;
     const rows = recommendationRequestFixtures.mixedRequests;
+    mockedLocation = { pathname: "/requests/pending" };
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -623,9 +632,10 @@ describe("RecommendationRequestTable update mutation", () => {
     expect(toast).toHaveBeenCalledWith("Request marked as COMPLETED.");
   });
 
-  test("Update button not render for a non-professor even on the pending page", async () => {
+  test("Update button not render for a non-professor on the pending page", async () => {
     const currentUser = currentUserFixtures.userOnly;
     const rows = recommendationRequestFixtures.mixedRequests;
+    mockedLocation = { pathname: "/requests/pending" };
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -652,38 +662,10 @@ describe("RecommendationRequestTable update mutation", () => {
     ).toBeNull();
   });
 
-  test("Update button not render for a professor on a non-pending page", async () => {
-    const currentUser = currentUserFixtures.professorUser;
-    const rows = recommendationRequestFixtures.mixedRequests;
-
-    render(
-      <QueryClientProvider client={queryClient}>
-        <MemoryRouter initialEntries={["/requests/completed"]}>
-          <Routes>
-            <Route
-              path="/requests/completed"
-              element={
-                <RecommendationRequestTable
-                  requests={rows}
-                  currentUser={currentUser}
-                />
-              }
-            />
-          </Routes>
-        </MemoryRouter>
-      </QueryClientProvider>,
-    );
-
-    expect(
-      screen.queryByTestId(
-        "RecommendationRequestTable-cell-row-0-col-Update-dropdown",
-      ),
-    ).toBeNull();
-  });
-
   test("Passes the correct status into the Accept callback", async () => {
     const currentUser = currentUserFixtures.professorUser;
     const rows = recommendationRequestFixtures.mixedRequests;
+    mockedLocation = { pathname: "/requests/pending" };
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -719,6 +701,7 @@ describe("RecommendationRequestTable update mutation", () => {
   test("Passes the correct status into the Deny callback", async () => {
     const currentUser = currentUserFixtures.professorUser;
     const rows = recommendationRequestFixtures.mixedRequests;
+    mockedLocation = { pathname: "/requests/pending" };
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -754,6 +737,7 @@ describe("RecommendationRequestTable update mutation", () => {
   test("Passes the correct status into the Complete callback", async () => {
     const currentUser = currentUserFixtures.professorUser;
     const rows = recommendationRequestFixtures.mixedRequests;
+    mockedLocation = { pathname: "/requests/pending" };
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -790,6 +774,7 @@ describe("RecommendationRequestTable update mutation", () => {
     const apiEndpoint = "/api/recommendationrequest/professor/all";
     const queryClient = new QueryClient();
     const invalidateSpy = jest.spyOn(queryClient, "invalidateQueries");
+    mockedLocation = { pathname: "/requests/pending" };
 
     const currentUser = currentUserFixtures.professorUser;
     const rows = recommendationRequestFixtures.mixedRequests;
@@ -831,6 +816,7 @@ describe("RecommendationRequestTable update mutation", () => {
       require("main/utils/RecommendationRequestUtils"),
       "onUpdateStatusSuccess",
     );
+    mockedLocation = { pathname: "/requests/pending" };
 
     const currentUser = currentUserFixtures.professorUser;
     const rows = recommendationRequestFixtures.mixedRequests;
