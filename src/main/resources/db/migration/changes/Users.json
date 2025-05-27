@@ -110,7 +110,7 @@
                   "column": {
                     "name": "STUDENT",
                     "type": "BOOLEAN",
-                    "defaultValue": "false"
+                    "defaultValue": "true"
                   }
                 }]
               ,

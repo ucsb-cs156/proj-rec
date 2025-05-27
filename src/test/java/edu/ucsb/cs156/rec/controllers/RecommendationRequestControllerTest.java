@@ -547,7 +547,7 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
                 .recommendationType(requestType)
                 .details("details")
                 .status("PENDING")
-                .completionDate(LocalDateTime.parse("2022-01-03T00:00:00"))
+                .completionDate(null)
                 .dueDate(LocalDateTime.parse("2022-01-03T00:00:00"))
                 .submissionDate(LocalDateTime.parse("2022-01-03T00:00:00"))
                 .lastModifiedDate(LocalDateTime.parse("2022-01-03T00:00:00"))

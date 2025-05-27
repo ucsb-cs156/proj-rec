@@ -61,6 +61,14 @@ export default function AppNavbar({
                   </NavDropdown.Item>
                 </NavDropdown>
               )}
+              {(hasRole(currentUser, "ROLE_ADMIN") ||
+                hasRole(currentUser, "ROLE_PROFESSOR")) && (
+                <>
+                  <Nav.Link as={Link} to="/settings">
+                    Settings
+                  </Nav.Link>
+                </>
+              )}
               {(hasRole(currentUser, "ROLE_PROFESSOR") ||
                 hasRole(currentUser, "ROLE_STUDENT")) && (
                 <>
@@ -72,6 +80,13 @@ export default function AppNavbar({
                   </Nav.Link>
                   <Nav.Link as={Link} to="/requests/statistics">
                     Statistics
+                  </Nav.Link>
+                </>
+              )}
+              {hasRole(currentUser, "ROLE_STUDENT") && (
+                <>
+                  <Nav.Link as={Link} to="/requests">
+                    My Requests
                   </Nav.Link>
                 </>
               )}
