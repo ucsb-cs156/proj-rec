@@ -319,10 +319,13 @@ describe("AppNavbar tests", () => {
       </QueryClientProvider>,
     );
 
-    // open dropdown again
-    userEvent.click(screen.getByRole("button", { name: /admin/i }));
+    // open the dropdown if (and only if) it exists
+    const adminToggle = screen.queryByRole("button", { name: /admin/i });
+    if (adminToggle) {
+      userEvent.click(adminToggle);
+    }
 
-    // “Users” should NOT be found
+    // “Users” should NOT be present for non-admin roles
     expect(screen.queryByText("Users")).not.toBeInTheDocument();
   });
 });

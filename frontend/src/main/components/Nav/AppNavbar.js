@@ -52,7 +52,12 @@ export default function AppNavbar({
                   id="appnavbar-admin-dropdown"
                   data-testid="appnavbar-admin-dropdown"
                 >
-                  <NavDropdown.Item href="/admin/users">Users</NavDropdown.Item>
+                  {/* “Users” link ⇢ admins only */}
+                  {isAdmin && (
+                    <NavDropdown.Item href="/admin/users">
+                      Users
+                    </NavDropdown.Item>
+                  )}{" "}
                   <NavDropdown.Item href="/admin/requests">
                     Requests
                   </NavDropdown.Item>
