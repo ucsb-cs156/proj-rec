@@ -73,7 +73,7 @@ function App() {
             />
             <Route
               exact
-              path="/settings/requesttypes/create/:id"
+              path="/settings/requesttypes/edit/:id"
               element={<RequestTypesEditPage />}
             />
           </>

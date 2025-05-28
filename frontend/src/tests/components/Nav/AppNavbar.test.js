@@ -10,6 +10,15 @@ import { systemInfoFixtures } from "fixtures/systemInfoFixtures";
 describe("AppNavbar tests", () => {
   const queryClient = new QueryClient();
 
+  // helper: centralises the “render in router + query-client” boilerplate
+  const renderNavbar = (user, sysInfo = systemInfoFixtures.showingBoth) =>
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <AppNavbar currentUser={user} systemInfo={sysInfo} />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
   test("renders correctly for regular logged in user", async () => {
     const currentUser = currentUserFixtures.userOnly;
     const doLogin = jest.fn();
@@ -327,5 +336,50 @@ describe("AppNavbar tests", () => {
 
     // “Users” should NOT be present for non-admin roles
     expect(screen.queryByText("Users")).not.toBeInTheDocument();
+  });
+ /* ---------- Settings dropdown visibility (new tests) ---------- */
+
+  describe("Settings dropdown visibility", () => {
+    test("renders Settings dropdown and Request Types link for ROLE_ADMIN", async () => {
+      renderNavbar(currentUserFixtures.adminUser);
+
+      // grab the toggle and open the dropdown
+      const settingsToggle = await screen.findByTestId(
+        "appnavbar-settings-dropdown",
+      );
+      userEvent.click(settingsToggle.querySelector("a,button"));
+
+      // now the menu item is present
+      expect(
+        await screen.findByTestId("appnavbar-requesttypes"),
+      ).toBeInTheDocument();
+    });
+
+    test("renders Settings dropdown and Request Types link for ROLE_PROFESSOR", async () => {
+      renderNavbar(currentUserFixtures.professorUser);
+
+      const settingsToggle = await screen.findByTestId(
+        "appnavbar-settings-dropdown",
+      );
+      userEvent.click(settingsToggle.querySelector("a,button"));
+
+      expect(
+        await screen.findByTestId("appnavbar-requesttypes"),
+      ).toBeInTheDocument();
+    });
+
+    test("does NOT render Settings dropdown for normal user", () => {
+      renderNavbar(currentUserFixtures.userOnly);
+      expect(
+        screen.queryByTestId("appnavbar-settings-dropdown"),
+      ).not.toBeInTheDocument();
+    });
+
+    test("does NOT render Settings dropdown when not logged in", () => {
+      renderNavbar(null);
+      expect(
+        screen.queryByTestId("appnavbar-settings-dropdown"),
+      ).not.toBeInTheDocument();
+    });
   });
 });
