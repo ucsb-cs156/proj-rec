@@ -344,10 +344,8 @@ describe("AppNavbar tests", () => {
       renderNavbar(currentUserFixtures.adminUser);
 
       // grab the toggle and open the dropdown
-      const settingsToggle = await screen.findByTestId(
-        "appnavbar-settings-dropdown",
-      );
-      userEvent.click(settingsToggle.querySelector("a,button"));
+      // open the dropdown
+      userEvent.click(await screen.findByRole("button", { name: /settings/i }));
 
       // now the menu item is present
       expect(
@@ -358,10 +356,8 @@ describe("AppNavbar tests", () => {
     test("renders Settings dropdown and Request Types link for ROLE_PROFESSOR", async () => {
       renderNavbar(currentUserFixtures.professorUser);
 
-      const settingsToggle = await screen.findByTestId(
-        "appnavbar-settings-dropdown",
-      );
-      userEvent.click(settingsToggle.querySelector("a,button"));
+      // open the dropdown
+      userEvent.click(await screen.findByRole("button", { name: /settings/i }));
 
       expect(
         await screen.findByTestId("appnavbar-requesttypes"),
