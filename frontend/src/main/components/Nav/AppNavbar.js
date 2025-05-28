@@ -13,7 +13,6 @@ export default function AppNavbar({
   const oauthLogin = systemInfo?.oauthLogin || "/oauth2/authorization/google";
   const isAdmin = hasRole(currentUser, "ROLE_ADMIN");
   const isProfessor = hasRole(currentUser, "ROLE_PROFESSOR");
-  const isStudent = hasRole(currentUser, "ROLE_STUDENT");
   const isLoggedIn = currentUser && currentUser.loggedIn;
 
   return (
@@ -97,7 +96,7 @@ export default function AppNavbar({
               )}
 
               {/* ---------- Professor / Student links ---------- */}
-              {(isProfessor || isStudent) && (
+              {(isProfessor)(
                 <>
                   <Nav.Link as={Link} to="/requests/pending">
                     Pending Requests
