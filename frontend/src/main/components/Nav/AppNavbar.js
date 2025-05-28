@@ -95,8 +95,8 @@ export default function AppNavbar({
                 </NavDropdown>
               )}
 
-              {/* ---------- Professor / Student links ---------- */}
-              {(isProfessor)(
+              {/* ---------- Professor links ---------- */}
+              {isProfessor && (
                 <>
                   <Nav.Link as={Link} to="/requests/pending">
                     Pending Requests
