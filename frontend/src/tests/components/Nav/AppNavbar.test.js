@@ -337,7 +337,7 @@ describe("AppNavbar tests", () => {
     // “Users” should NOT be present for non-admin roles
     expect(screen.queryByText("Users")).not.toBeInTheDocument();
   });
- /* ---------- Settings dropdown visibility (new tests) ---------- */
+  /* ---------- Settings dropdown visibility (new tests) ---------- */
 
   describe("Settings dropdown visibility", () => {
     test("renders Settings dropdown and Request Types link for ROLE_ADMIN", async () => {
