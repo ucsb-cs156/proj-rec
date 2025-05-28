@@ -199,34 +199,19 @@ describe("AppNavbar tests", () => {
     expect(statisticsLink).toBeInTheDocument();
   });
 
-  test("renders the three prof pages correctly for student users", async () => {
-    const currentUser = currentUserFixtures.studentUser;
-    const systemInfo = systemInfoFixtures.showingBoth;
-    const doLogin = jest.fn();
-
+  /* Student users should **not** see professor-only pages */
+  test("professor-only pages do not show for student users", () => {
     render(
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
-          <AppNavbar
-            currentUser={currentUser}
-            systemInfo={systemInfo}
-            doLogin={doLogin}
-          />
+          <AppNavbar currentUser={currentUserFixtures.studentUser} />
         </MemoryRouter>
       </QueryClientProvider>,
     );
 
-    await screen.findByText("Pending Requests");
-    const pendingLink = screen.getByText("Pending Requests");
-    expect(pendingLink).toBeInTheDocument();
-
-    await screen.findByText("Completed Requests");
-    const completedLink = screen.getByText("Completed Requests");
-    expect(completedLink).toBeInTheDocument();
-
-    await screen.findByText("Statistics");
-    const statisticsLink = screen.getByText("Statistics");
-    expect(statisticsLink).toBeInTheDocument();
+    expect(screen.queryByText("Pending Requests")).not.toBeInTheDocument();
+    expect(screen.queryByText("Completed Requests")).not.toBeInTheDocument();
+    expect(screen.queryByText("Statistics")).not.toBeInTheDocument();
   });
 
   test("the three prof pages do not show for normal users", async () => {
