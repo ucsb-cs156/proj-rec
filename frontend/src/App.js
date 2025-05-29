@@ -31,7 +31,8 @@ function App() {
             />
           </>
         )}
-        {(hasRole(currentUser, "ROLE_PROFESSOR")) && (
+        {(hasRole(currentUser, "ROLE_PROFESSOR") ||
+          hasRole(currentUser, "ROLE_USER")) && (
           <>
             <Route
               exact
