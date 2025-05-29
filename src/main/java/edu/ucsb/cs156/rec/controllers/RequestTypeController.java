@@ -39,7 +39,7 @@ public class RequestTypeController extends ApiController {
 
     @Autowired
     public void startupValues() {
-        String[] values = {"CS Department BS/MS program", "Scholarship or Fellowship", "MS program (other than CS Dept BS/MS)", "PhD program", "Other"};
+        String[] values = {"CS Department BS/MS program", "Scholarship or Fellowship", "MS program (other than CS Dept BS/MS)", "PhD program", "Other", "Other"};
         for (String value : values) {
             if (!requestTypeRepository.findByRequestType(value).isPresent()) {
                 requestTypeRepository.save(RequestType.builder().requestType(value).build());
