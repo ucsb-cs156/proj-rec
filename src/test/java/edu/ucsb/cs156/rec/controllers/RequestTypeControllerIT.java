@@ -85,7 +85,7 @@ public class RequestTypeControllerIT extends ControllerTestCase{
                                 .build();
 
                 ArrayList<RequestType> expectedRequests = new ArrayList<>();
-                expectedRequests.addAll(Arrays.asList(requestType1, requestType2, requestType3, requestType4, requestType5));
+                expectedRequests.addAll(Arrays.asList(requestType1, requestType3, requestType5, requestType4, requestType2));
 
                 // act
                 MvcResult response = mockMvc.perform(get("/api/requesttypes/all"))
