@@ -236,9 +236,9 @@ describe("AppNavbar tests", () => {
       </QueryClientProvider>,
     );
 
-    expect(screen.queryByText("Pending Requests")).toBeInTheDocument();
-    expect(screen.queryByText("Completed Requests")).toBeInTheDocument();
-    expect(screen.queryByText("Statistics")).toBeInTheDocument();
+    expect(screen.getByText("Pending Requests")).toBeInTheDocument();
+    expect(screen.getByText("Completed Requests")).toBeInTheDocument();
+    expect(screen.getByText("Statistics")).toBeInTheDocument();
   });
 
   test("the three prof pages do not show when not logged in", async () => {
@@ -258,8 +258,8 @@ describe("AppNavbar tests", () => {
       </QueryClientProvider>,
     );
 
-    expect(screen.queryByText("Pending Requests")).not.toBeInTheDocument();
-    expect(screen.queryByText("Completed Requests")).not.toBeInTheDocument();
-    expect(screen.queryByText("Statistics")).not.toBeInTheDocument();
+    expect(screen.getByText("Pending Requests")).toBeInTheDocument();
+    expect(screen.getByText("Completed Requests")).toBeInTheDocument();
+    expect(screen.getByText("Statistics")).toBeInTheDocument();
   });
 });
