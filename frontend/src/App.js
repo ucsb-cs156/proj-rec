@@ -31,23 +31,25 @@ function App() {
             />
           </>
         )}
-        <>
-          <Route
-            exact
-            path="/requests/pending"
-            element={<PendingRequestsPage />}
-          />
-          <Route
-            exact
-            path="/requests/completed"
-            element={<CompletedRequestsPage />}
-          />
-          <Route
-            exact
-            path="/requests/statistics"
-            element={<StatisticsPage />}
-          />
-        </>
+        {hasRole(currentUser, "ROLE_USER") && (
+          <>
+            <Route
+              exact
+              path="/requests/pending"
+              element={<PendingRequestsPage />}
+            />
+            <Route
+              exact
+              path="/requests/completed"
+              element={<CompletedRequestsPage />}
+            />
+            <Route
+              exact
+              path="/requests/statistics"
+              element={<StatisticsPage />}
+            />
+          </>
+        )}
       </Routes>
     </BrowserRouter>
   );

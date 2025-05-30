@@ -61,17 +61,19 @@ export default function AppNavbar({
                   </NavDropdown.Item>
                 </NavDropdown>
               )}
-              <>
-                <Nav.Link as={Link} to="/requests/pending">
-                  Pending Requests
-                </Nav.Link>
-                <Nav.Link as={Link} to="/requests/completed">
-                  Completed Requests
-                </Nav.Link>
-                <Nav.Link as={Link} to="/requests/statistics">
-                  Statistics
-                </Nav.Link>
-              </>
+              {hasRole(currentUser, "ROLE_USER") && (
+                <>
+                  <Nav.Link as={Link} to="/requests/pending">
+                    Pending Requests
+                  </Nav.Link>
+                  <Nav.Link as={Link} to="/requests/completed">
+                    Completed Requests
+                  </Nav.Link>
+                  <Nav.Link as={Link} to="/requests/statistics">
+                    Statistics
+                  </Nav.Link>
+                </>
+              )}
             </Nav>
 
             <Nav className="ml-auto">
