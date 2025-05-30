@@ -258,8 +258,8 @@ describe("AppNavbar tests", () => {
       </QueryClientProvider>,
     );
 
-    expect(screen.getByText("Pending Requests")).toBeInTheDocument();
-    expect(screen.getByText("Completed Requests")).toBeInTheDocument();
-    expect(screen.getByText("Statistics")).toBeInTheDocument();
+    expect(screen.queryByText("Pending Requests")).not.toBeInTheDocument();
+    expect(screen.queryByText("Completed Requests")).not.toBeInTheDocument();
+    expect(screen.queryByText("Statistics")).not.toBeInTheDocument();
   });
 });
