@@ -118,7 +118,6 @@ const apiCurrentUserFixtures = {
       locale: null,
       hostedDomain: null,
       admin: false,
-      student: false,
       professor: true,
     },
     roles: [
@@ -166,7 +165,6 @@ const apiCurrentUserFixtures = {
       locale: null,
       hostedDomain: null,
       admin: false,
-      student: true,
       professor: false,
     },
     roles: [
