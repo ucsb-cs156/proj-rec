@@ -1,31 +1,37 @@
 {
-    "databaseChangeLog": [
-      {
-        "changeSet": {
-          "id": "RecommendationRequest-002",
-          "author": "ryanchoi07",
-          "changes": [
-            {
-              "renameColumn": {
-                "tableName": "RECOMMENDATIONREQUEST",
-                "oldColumnName": "RECOMMENDATION_TYPE",
-                "newColumnName": "RECOMMENDATION_TYPE_ID",
-                "columnDataType": "BIGINT"
-              }
-            },
-            {
-              "addForeignKeyConstraint": {
-                "baseColumnNames": "RECOMMENDATION_TYPE_ID",
-                "baseTableName": "RECOMMENDATIONREQUEST",
-                "constraintName": "RECOMMENDATIONREQUEST_RECOMMENDATION_TYPE_ID_FK",
-                "referencedColumnNames": "ID",
-                "referencedTableName": "REQUESTTYPE",
-                "onDelete": "RESTRICT",
-                "onUpdate": "RESTRICT"
-              }
+  "databaseChangeLog": [
+    {
+      "changeSet": {
+        "id": "RecommendationRequest-002",
+        "author": "ryanchoi07",
+        "changes": [
+          {
+            "renameColumn": {
+              "tableName": "RECOMMENDATIONREQUEST",
+              "oldColumnName": "RECOMMENDATION_TYPE",
+              "newColumnName": "RECOMMENDATION_TYPE_ID"
             }
-          ]
-        }
+          },
+          {
+            "modifyDataType": {
+              "tableName": "RECOMMENDATIONREQUEST",
+              "columnName": "RECOMMENDATION_TYPE_ID",
+              "newDataType": "BIGINT"
+            }
+          },
+          {
+            "addForeignKeyConstraint": {
+              "baseColumnNames": "RECOMMENDATION_TYPE_ID",
+              "baseTableName": "RECOMMENDATIONREQUEST",
+              "constraintName": "RECOMMENDATIONREQUEST_RECOMMENDATION_TYPE_ID_FK",
+              "referencedColumnNames": "ID",
+              "referencedTableName": "REQUESTTYPE",
+              "onDelete": "RESTRICT",
+              "onUpdate": "RESTRICT"
+            }
+          }
+        ]
       }
-    ]
-  }
+    }
+  ]
+}
