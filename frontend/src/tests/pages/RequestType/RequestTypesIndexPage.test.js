@@ -9,7 +9,9 @@ jest.mock("main/utils/systemInfo", () => ({
   }),
 }));
 
-const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { retry: false } },
+});
 
 describe("RequestTypesIndexPage", () => {
   test("renders placeholder heading", () => {
@@ -18,11 +20,11 @@ describe("RequestTypesIndexPage", () => {
         <MemoryRouter>
           <RequestTypesIndexPage />
         </MemoryRouter>
-      </QueryClientProvider>
+      </QueryClientProvider>,
     );
 
     expect(screen.getByTestId("RequestTypesIndexPage")).toHaveTextContent(
-      "Request Types Index Page"
+      "Request Types Index Page",
     );
   });
 });

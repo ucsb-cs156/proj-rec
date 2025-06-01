@@ -3,7 +3,9 @@ import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import RequestTypesEditPage from "main/pages/RequestType/RequestTypesEditPage";
 
-const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { retry: false } },
+});
 
 describe("RequestTypesEditPage", () => {
   test("renders placeholder with ID", () => {
@@ -17,9 +19,11 @@ describe("RequestTypesEditPage", () => {
             />
           </Routes>
         </MemoryRouter>
-      </QueryClientProvider>
+      </QueryClientProvider>,
     );
 
-    expect(screen.getByTestId("RequestTypesEditPage")).toHaveTextContent("id=123");
+    expect(screen.getByTestId("RequestTypesEditPage")).toHaveTextContent(
+      "id=123",
+    );
   });
 });

@@ -10,7 +10,9 @@ jest.mock("main/utils/systemInfo", () => ({
   }),
 }));
 
-const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { retry: false } },
+});
 
 describe("RequestTypesCreatePage", () => {
   test("renders placeholder heading", () => {
@@ -19,11 +21,11 @@ describe("RequestTypesCreatePage", () => {
         <MemoryRouter>
           <RequestTypesCreatePage />
         </MemoryRouter>
-      </QueryClientProvider>
+      </QueryClientProvider>,
     );
 
     expect(screen.getByTestId("RequestTypesCreatePage")).toHaveTextContent(
-      "Request Types Create Page"
+      "Request Types Create Page",
     );
   });
 });
