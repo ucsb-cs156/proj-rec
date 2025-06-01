@@ -1,4 +1,3 @@
-// frontend/src/main/components/Nav/AppNavbar.js
 import { Button, Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { hasRole } from "main/utils/currentUser";
@@ -10,14 +9,15 @@ export default function AppNavbar({
   doLogout,
   currentUrl = window.location.href,
 }) {
-  const oauthLogin = systemInfo?.oauthLogin || "/oauth2/authorization/google";
-  const isAdmin = hasRole(currentUser, "ROLE_ADMIN");
+  // ---------- role helpers ----------
+  const oauthLogin  = systemInfo?.oauthLogin || "/oauth2/authorization/google";
+  const isAdmin     = hasRole(currentUser, "ROLE_ADMIN");
   const isProfessor = hasRole(currentUser, "ROLE_PROFESSOR");
-  const isLoggedIn = currentUser && currentUser.loggedIn;
+  const isLoggedIn  = currentUser && currentUser.loggedIn;
 
   return (
     <>
-      {/* Show dev-only banner if running on localhost */}
+      {/* ---- dev-only banner ---- */}
       {(currentUrl.startsWith("http://localhost:3000") ||
         currentUrl.startsWith("http://127.0.0.1:3000")) && (
         <AppNavbarLocalhost url={currentUrl} />
@@ -78,7 +78,25 @@ export default function AppNavbar({
                 </NavDropdown>
               )}
 
-              {hasRole(currentUser, "ROLE_USER") && (
+              {/* ---------- Settings dropdown (Request Types) ---------- */}
+              {(isAdmin || isProfessor) && (
+                <NavDropdown
+                  title="Settings"
+                  id="appnavbar-settings-dropdown"
+                  data-testid="appnavbar-settings-dropdown"
+                >
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/settings/requesttypes"
+                    data-testid="appnavbar-requesttypes"
+                  >
+                    Request Types
+                  </NavDropdown.Item>
+                </NavDropdown>
+              )}
+
+              {/* ---------- Request-page links ---------- */}
+              {(hasRole(currentUser, "ROLE_USER") || isProfessor) && (
                 <>
                   <Nav.Link as={Link} to="/requests/pending">
                     Pending Requests

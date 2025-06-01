@@ -93,7 +93,7 @@ describe("AppNavbar tests", () => {
 
   /* ---------- request-page links ---------- */
 
-  test("request links render for professor users", async () => {
+  test("request links render for professor users", () => {
     renderNavbar(currentUserFixtures.professorUser);
     expect(screen.getByText("Pending Requests")).toBeInTheDocument();
     expect(screen.getByText("Completed Requests")).toBeInTheDocument();
@@ -145,5 +145,41 @@ describe("AppNavbar tests", () => {
     const adminToggle = screen.queryByRole("button", { name: /admin/i });
     if (adminToggle) userEvent.click(adminToggle);
     expect(screen.queryByText("Users")).not.toBeInTheDocument();
+  });
+
+  /* ---------- Settings dropdown (kills remaining mutants) ---------- */
+
+  describe("Settings dropdown visibility", () => {
+    test("Settings dropdown and 'Request Types' link render for ROLE_ADMIN", async () => {
+      renderNavbar(currentUserFixtures.adminUser);
+
+      userEvent.click(await screen.findByRole("button", { name: /settings/i }));
+      expect(
+        await screen.findByTestId("appnavbar-requesttypes"),
+      ).toBeInTheDocument();
+    });
+
+    test("Settings dropdown and 'Request Types' link render for ROLE_PROFESSOR", async () => {
+      renderNavbar(currentUserFixtures.professorUser);
+
+      userEvent.click(await screen.findByRole("button", { name: /settings/i }));
+      expect(
+        await screen.findByTestId("appnavbar-requesttypes"),
+      ).toBeInTheDocument();
+    });
+
+    test("Settings dropdown does NOT render for normal user", () => {
+      renderNavbar(currentUserFixtures.userOnly);
+      expect(
+        screen.queryByTestId("appnavbar-settings-dropdown"),
+      ).toBeNull();
+    });
+
+    test("Settings dropdown does NOT render when not logged in", () => {
+      renderNavbar(null);
+      expect(
+        screen.queryByTestId("appnavbar-settings-dropdown"),
+      ).toBeNull();
+    });
   });
 });
