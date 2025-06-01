@@ -170,16 +170,12 @@ describe("AppNavbar tests", () => {
 
     test("Settings dropdown does NOT render for normal user", () => {
       renderNavbar(currentUserFixtures.userOnly);
-      expect(
-        screen.queryByTestId("appnavbar-settings-dropdown"),
-      ).toBeNull();
+      expect(screen.queryByTestId("appnavbar-settings-dropdown")).toBeNull();
     });
 
     test("Settings dropdown does NOT render when not logged in", () => {
       renderNavbar(null);
-      expect(
-        screen.queryByTestId("appnavbar-settings-dropdown"),
-      ).toBeNull();
+      expect(screen.queryByTestId("appnavbar-settings-dropdown")).toBeNull();
     });
   });
 });

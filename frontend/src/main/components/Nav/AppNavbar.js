@@ -10,10 +10,10 @@ export default function AppNavbar({
   currentUrl = window.location.href,
 }) {
   // ---------- role helpers ----------
-  const oauthLogin  = systemInfo?.oauthLogin || "/oauth2/authorization/google";
-  const isAdmin     = hasRole(currentUser, "ROLE_ADMIN");
+  const oauthLogin = systemInfo?.oauthLogin || "/oauth2/authorization/google";
+  const isAdmin = hasRole(currentUser, "ROLE_ADMIN");
   const isProfessor = hasRole(currentUser, "ROLE_PROFESSOR");
-  const isLoggedIn  = currentUser && currentUser.loggedIn;
+  const isLoggedIn = currentUser && currentUser.loggedIn;
 
   return (
     <>
