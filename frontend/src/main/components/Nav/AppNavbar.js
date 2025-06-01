@@ -78,25 +78,7 @@ export default function AppNavbar({
                 </NavDropdown>
               )}
 
-              {/* ---------- Settings dropdown (new) ---------- */}
-              {(isAdmin || isProfessor) && (
-                <NavDropdown
-                  title="Settings"
-                  id="appnavbar-settings-dropdown"
-                  data-testid="appnavbar-settings-dropdown"
-                >
-                  <NavDropdown.Item
-                    as={Link}
-                    to="/settings/requesttypes"
-                    data-testid="appnavbar-requesttypes"
-                  >
-                    Request Types
-                  </NavDropdown.Item>
-                </NavDropdown>
-              )}
-
-              {/* ---------- Professor links ---------- */}
-              {isProfessor && (
+              {hasRole(currentUser, "ROLE_USER") && (
                 <>
                   <Nav.Link as={Link} to="/requests/pending">
                     Pending Requests
