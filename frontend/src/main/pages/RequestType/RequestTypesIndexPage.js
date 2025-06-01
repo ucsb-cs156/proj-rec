@@ -1,11 +1,12 @@
-// frontend/src/main/pages/RequestType/RequestTypesIndexPage.js
-
 import React from "react";
+import BasicLayout from "main/layouts/BasicLayout/BasicLayout";
 
 export default function RequestTypesIndexPage() {
   return (
-    <div data-testid="RequestTypesIndexPage">
-      <h1>Request Types Index Page (Placeholder)</h1>
-    </div>
+    <BasicLayout>
+      <div data-testid="RequestTypesIndexPage">
+        <h1>Request Types Index Page (Placeholder)</h1>
+      </div>
+    </BasicLayout>
   );
 }
