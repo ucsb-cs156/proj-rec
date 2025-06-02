@@ -1,16 +1,5 @@
 package edu.ucsb.cs156.rec.controllers;
 
-import edu.ucsb.cs156.rec.entities.RequestType;
-import edu.ucsb.cs156.rec.errors.EntityNotFoundException;
-import edu.ucsb.cs156.rec.repositories.RequestTypeRepository;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.extern.slf4j.Slf4j;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,7 +11,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import edu.ucsb.cs156.rec.entities.RequestType;
+import edu.ucsb.cs156.rec.errors.EntityNotFoundException;
+import edu.ucsb.cs156.rec.repositories.RequestTypeRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * This is a REST controller for RequestType
@@ -37,7 +36,7 @@ public class RequestTypeController extends ApiController {
     @Autowired
     RequestTypeRepository requestTypeRepository;
 
-    @Autowired
+    @PostConstruct
     public void startupValues() {
         String[] values = {"CS Department BS/MS program", "Scholarship or Fellowship", "MS program (other than CS Dept BS/MS)", "PhD program", "Other", "Other"};
         for (String value : values) {
