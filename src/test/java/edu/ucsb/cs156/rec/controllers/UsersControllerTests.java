@@ -219,40 +219,34 @@ public class UsersControllerTests extends ControllerTestCase {
 
   @WithMockUser(roles = { "ADMIN", "USER" })
   @Test
-  public void admin_can_toggle_student() throws Exception{
-     User user1 = User.builder().email("joegaucho@ucsb.edu").id(17L).student(false).build();
-     when(userRepository.findById(eq(17L))).thenReturn(Optional.of(user1));
-     MvcResult response = mockMvc.perform(post("/api/admin/users/toggleStudent?id=17").with(csrf()))
-             .andExpect(status().isOk()).andReturn();
+  public void admin_cannot_remove_own_admin_status() throws Exception{
+     // Mock the current user to have ID 1 (which is the mock current user ID) and admin status true
+     User currentUser = User.builder().email("user@example.org").id(1L).admin(true).build();
+     when(userRepository.findById(eq(1L))).thenReturn(Optional.of(currentUser));
+     
+     MvcResult response = mockMvc.perform(post("/api/admin/users/toggleAdmin?id=1").with(csrf()))
+             .andExpect(status().isBadRequest()).andReturn();
     
-    verify(userRepository, times(1)).findById(17L);
+    verify(userRepository, times(1)).findById(1L);
+    verify(userRepository, times(0)).save(any(User.class)); // Should not save because exception is thrown
     Map<String, Object> json = responseToJson(response);
-    assertEquals("User with id 17 has toggled student status to true", json.get("message"));
-  }
-  @WithMockUser(roles = { "ADMIN", "USER" })
-  @Test
-  public void admin_can_toggle_student_flip() throws Exception{
-     User user1 = User.builder().email("joegaucho@ucsb.edu").id(17L).student(true).build();
-     when(userRepository.findById(eq(17L))).thenReturn(Optional.of(user1));
-     MvcResult response = mockMvc.perform(post("/api/admin/users/toggleStudent?id=17").with(csrf()))
-             .andExpect(status().isOk()).andReturn();
-    
-    verify(userRepository, times(1)).findById(17L);
-    Map<String, Object> json = responseToJson(response);
-    assertEquals("User with id 17 has toggled student status to false", json.get("message"));
+    assertEquals("Cannot remove admin from currently logged in user; ask another admin to do that.", json.get("message"));
   }
 
   @WithMockUser(roles = { "ADMIN", "USER" })
   @Test
-  public void admin_cant_toggle_student_nonexistent() throws Exception{
-     User user1 = User.builder().email("joegaucho@ucsb.edu").id(17L).build();
-     when(userRepository.findById(eq(17L))).thenReturn(Optional.of(user1));
-     MvcResult response = mockMvc.perform(post("/api/admin/users/toggleStudent?id=15").with(csrf()))
-             .andExpect(status().is(404)).andReturn();
+  public void admin_can_add_admin_status_to_themselves() throws Exception{
+     // Mock the current user to have ID 1 (which is the mock current user ID) and admin status false
+     User currentUser = User.builder().email("user@example.org").id(1L).admin(false).build();
+     when(userRepository.findById(eq(1L))).thenReturn(Optional.of(currentUser));
+     
+     MvcResult response = mockMvc.perform(post("/api/admin/users/toggleAdmin?id=1").with(csrf()))
+             .andExpect(status().isOk()).andReturn();
     
-    verify(userRepository, times(1)).findById(15L);
+    verify(userRepository, times(1)).findById(1L);
+    verify(userRepository, times(1)).save(any(User.class)); // Should save because no exception is thrown
     Map<String, Object> json = responseToJson(response);
-    assertEquals("User with id 15 not found", json.get("message"));
+    assertEquals("User with id 1 has toggled admin status to true", json.get("message"));
   }
 
   @WithMockUser(roles = { "USER" })

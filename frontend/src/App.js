@@ -2,10 +2,17 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "main/pages/HomePage";
 import ProfilePage from "main/pages/ProfilePage";
 import AdminUsersPage from "main/pages/AdminUsersPage";
+import StudentProfilePage from "main/pages/StudentProfilePage";
+import AdminRequestsPage from "main/pages/AdminRequestsPage";
 
+import RequestTypeIndexPage from "main/pages/RequestType/RequestTypeIndexPage";
+import RequestTypeCreatePage from "main/pages/RequestType/RequestTypeCreatePage";
+import RequestTypeEditPage from "main/pages/RequestType/RequestTypeEditPage";
 import PendingRequestsPage from "main/pages/Requests/PendingRequestsPage";
 import CompletedRequestsPage from "main/pages/Requests/CompletedRequestsPage";
 import StatisticsPage from "main/pages/Requests/StatisticsPage";
+import RecommendationRequestCreatePage from "main/pages/Requests/RecommendationRequestCreatePage";
+import RecommendationRequestEditPage from "main/pages/Requests/RecommendationRequestEditPage";
 
 import { hasRole, useCurrentUser } from "main/utils/currentUser";
 
@@ -19,12 +26,29 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route exact path="/" element={<HomePage />} />
-        <Route exact path="/profile" element={<ProfilePage />} />
+        <Route
+          exact
+          path="/profile"
+          element={
+            hasRole(currentUser, "ROLE_USER") ? (
+              <StudentProfilePage />
+            ) : (
+              <ProfilePage />
+            )
+          }
+        />
         {hasRole(currentUser, "ROLE_ADMIN") && (
-          <Route exact path="/admin/users" element={<AdminUsersPage />} />
+          <>
+            <Route exact path="/admin/users" element={<AdminUsersPage />} />
+            <Route
+              exact
+              path="/admin/requests"
+              element={<AdminRequestsPage />}
+            />
+          </>
         )}
         {(hasRole(currentUser, "ROLE_PROFESSOR") ||
-          hasRole(currentUser, "ROLE_STUDENT")) && (
+          hasRole(currentUser, "ROLE_USER")) && (
           <>
             <Route
               exact
@@ -40,6 +64,31 @@ function App() {
               exact
               path="/requests/statistics"
               element={<StatisticsPage />}
+            />
+            <Route
+              exact
+              path="/requests/create"
+              element={<RecommendationRequestCreatePage />}
+            />
+            <Route
+              exact
+              path="/requests/edit/:id"
+              element={<RecommendationRequestEditPage />}
+            />
+            <Route
+              exact
+              path="/requesttypes/all"
+              element={<RequestTypeIndexPage />}
+            />
+            <Route
+              exact
+              path="/requesttypes/post"
+              element={<RequestTypeCreatePage />}
+            />
+            <Route
+              exact
+              path="/requesttypes/edit/:id"
+              element={<RequestTypeEditPage />}
             />
           </>
         )}
