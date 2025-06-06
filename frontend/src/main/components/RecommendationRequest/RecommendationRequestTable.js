@@ -8,6 +8,7 @@ import {
 } from "main/utils/RecommendationRequestUtils";
 import { useNavigate } from "react-router-dom";
 import { hasRole } from "main/utils/currentUser";
+import * as dateutils from "main/utils/dateutils";
 
 export default function RecommendationRequestTable({ requests, currentUser }) {
   const navigate = useNavigate();
@@ -19,7 +20,8 @@ export default function RecommendationRequestTable({ requests, currentUser }) {
   // Stryker disable all : hard to test for query caching
 
   // when delete success, invalidate the correct query key (depending on user role)
-  const apiEndpoint = hasRole(currentUser, "ROLE_PROFESSOR")
+  //Include ROLE_ADMIN to give admin delete access
+  const apiEndpoint = hasRole(currentUser, "ROLE_PROFESSOR" || "ROLE_ADMIN")
     ? "/api/recommendationrequest/professor/all"
     : "/api/recommendationrequest/requester/all";
 
@@ -71,18 +73,22 @@ export default function RecommendationRequestTable({ requests, currentUser }) {
     {
       Header: "Submission Date",
       accessor: "submissionDate",
+      Cell: ({ value }) => dateutils.formatdate(value),
     },
     {
       Header: "Last Modified Date",
       accessor: "lastModifiedDate",
+      Cell: ({ value }) => dateutils.formatdate(value),
     },
     {
       Header: "Completion Date",
       accessor: "completionDate",
+      Cell: ({ value }) => dateutils.formatdate(value),
     },
     {
       Header: "Due Date",
       accessor: "dueDate",
+      Cell: ({ value }) => dateutils.formatdate(value),
     },
   ];
 

@@ -41,7 +41,10 @@ public class RecommendationRequest {
   @JoinColumn(name = "professor_id", referencedColumnName = "id", insertable = true, updatable = true)
   private User professor;
 
-  private String recommendationType;
+  @ManyToOne
+  @JoinColumn(name = "recommendation_type_id", referencedColumnName = "id", insertable = true, updatable = true)
+  private RequestType recommendationType;
+
   private String details;
   private String status;
 
@@ -51,4 +54,6 @@ public class RecommendationRequest {
   private LocalDateTime submissionDate;
   @LastModifiedDate
   private LocalDateTime lastModifiedDate;
+
+  private LocalDateTime dateAcceptedOrDenied;
 }

@@ -132,6 +132,22 @@ public class RecommendationRequestController extends ApiController {
 
         recommendationRequest.setStatus(incoming.getStatus());
 
+        // set the date when professor accepts or denies request
+        if (incoming.getStatus().equals("ACCEPTED") || incoming.getStatus().equals("DENIED")) {
+            recommendationRequest.setDateAcceptedOrDenied(LocalDateTime.now());
+        }
+
+        // set the date when professor completes the request
+        if (incoming.getStatus().equals("COMPLETED") || incoming.getStatus().equals("DENIED")) {
+            recommendationRequest.setCompletionDate(LocalDateTime.now());
+        }
+        else if (incoming.getStatus().equals("PENDING") || incoming.getStatus().equals("ACCEPTED")) {
+            recommendationRequest.setCompletionDate(null);
+        }
+        else {
+            throw new IllegalArgumentException(String.format("Unknown Request Status: %s", incoming.getStatus()));
+        }
+
         recommendationRequestRepository.save(recommendationRequest);
 
         return recommendationRequest;
@@ -188,7 +204,7 @@ public class RecommendationRequestController extends ApiController {
     /**
      * This method creates a new Recommendation Request. Accessible only to users with the role "ROLE_USER" so professors and students can both create.
      * @param professorId id from a dropdown of professors from the form in create page
-     * @param recommendationType recommendation types of request
+     * @param recommendationTypeId id of the recommendation type from the RequestType table
      * @param details details of request
      * @param dueDate submission date of request
      * @return the save recommendationrequests (with it's id field set by the database)
@@ -199,24 +215,23 @@ public class RecommendationRequestController extends ApiController {
     @PostMapping("/post")
     public RecommendationRequest postRecommendationRequests(
             @Parameter(name = "professorId") @RequestParam Long professorId,
-            @Parameter(name = "recommendationType") @RequestParam String recommendationType,
+            @Parameter(name = "recommendationTypeId") @RequestParam Long recommendationTypeId,
             @Parameter(name = "details") @RequestParam String details,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dueDate)
             {
         //get current date right now and set status to pending
         CurrentUser currentUser = getCurrentUser();
         RecommendationRequest recommendationRequest = new RecommendationRequest();
-        if (!recommendationType.equals("Other")) {
-            requestTypeRepository.findByRequestType(recommendationType).orElseThrow(() -> new EntityNotFoundException(RequestType.class, recommendationType));
-        }
-        recommendationRequest.setRecommendationType(recommendationType);
+
+        RequestType requestType = requestTypeRepository.findById(recommendationTypeId).orElseThrow(() -> new IllegalArgumentException(String.format("Unknown Request Type ID: %d", recommendationTypeId)));
+        
+        recommendationRequest.setRecommendationType(requestType);
         recommendationRequest.setDetails(details);
         User professor = userRepository.findById(professorId).orElseThrow(() -> new EntityNotFoundException(User.class, professorId));
         recommendationRequest.setProfessor(professor);
         recommendationRequest.setRequester(currentUser.getUser());
         recommendationRequest.setStatus("PENDING");
         recommendationRequest.setDueDate(dueDate);
-
         RecommendationRequest savedRecommendationRequest = recommendationRequestRepository.save(recommendationRequest);
         return savedRecommendationRequest;
     }
@@ -235,4 +250,16 @@ public class RecommendationRequestController extends ApiController {
         return recommendationRequestRepository.findAllByProfessorIdAndStatus(
             currentUser.getId(), status);
     }
+
+    /**
+     * This methods return a list of all the recommendation requests for the admin.
+     * @return a list of all the recommendation requests.
+     */
+    @Operation(summary = "Get all recommendation requests for the admin")
+    @GetMapping("/admin/all")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public Iterable<RecommendationRequest> getAllRecommendationRequest(){
+        return recommendationRequestRepository.findAll();
+    }
+    
 }

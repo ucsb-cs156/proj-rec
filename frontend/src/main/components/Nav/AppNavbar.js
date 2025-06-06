@@ -25,7 +25,7 @@ export default function AppNavbar({
       >
         <Container>
           <Navbar.Brand as={Link} to="/">
-            Example
+            Rec Manager
           </Navbar.Brand>
 
           <Navbar.Toggle />
@@ -56,11 +56,19 @@ export default function AppNavbar({
                   data-testid="appnavbar-admin-dropdown"
                 >
                   <NavDropdown.Item href="/admin/users">Users</NavDropdown.Item>
+                  <NavDropdown.Item href="/admin/requests">
+                    Requests
+                  </NavDropdown.Item>
                 </NavDropdown>
               )}
               {(hasRole(currentUser, "ROLE_PROFESSOR") ||
                 hasRole(currentUser, "ROLE_STUDENT")) && (
                 <>
+                  {hasRole(currentUser, "ROLE_STUDENT") && (
+                    <Nav.Link as={Link} to="/studentprofile">
+                      Student Profile
+                    </Nav.Link>
+                  )}
                   <Nav.Link as={Link} to="/requests/pending">
                     Pending Requests
                   </Nav.Link>
@@ -69,6 +77,14 @@ export default function AppNavbar({
                   </Nav.Link>
                   <Nav.Link as={Link} to="/requests/statistics">
                     Statistics
+                  </Nav.Link>
+                </>
+              )}
+              {(hasRole(currentUser, "ROLE_ADMIN") ||
+                hasRole(currentUser, "ROLE_PROFESSOR")) && (
+                <>
+                  <Nav.Link as={Link} to="/settings/requesttypes">
+                    Settings
                   </Nav.Link>
                 </>
               )}
