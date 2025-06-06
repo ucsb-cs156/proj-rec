@@ -2,6 +2,8 @@ package edu.ucsb.cs156.rec.controllers;
 
 import edu.ucsb.cs156.rec.entities.User;
 import edu.ucsb.cs156.rec.repositories.UserRepository;
+import edu.ucsb.cs156.rec.entities.RequestType;
+import edu.ucsb.cs156.rec.repositories.RequestTypeRepository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -62,13 +64,15 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
                 .emailVerified(true)
                 .professor(true)
                 .build();
-
+        RequestType requestType = RequestType.builder()
+                .requestType("PhDprogram")
+                .build();
         // arrange
         RecommendationRequest recReq = RecommendationRequest.builder()
                 .id(15L)
                 .requester(user)
                 .professor(prof)
-                .recommendationType("PhDprogram")
+                .recommendationType(requestType)
                 .details("details")
                 .status("PENDING")
                 .completionDate(LocalDateTime.parse("2022-01-03T00:00:00"))
@@ -111,12 +115,15 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
                 .emailVerified(true)
                 .professor(true)
                 .build();
+        RequestType requestType = RequestType.builder()
+                .requestType("PhDprogram")
+                .build();
 
         RecommendationRequest rec1 = RecommendationRequest.builder()
                 .id(15L)
                 .requester(user1)
                 .professor(prof)
-                .recommendationType("PhDprogram")
+                .recommendationType(requestType)
                 .details("details")
                 .status("PENDING")
                 .completionDate(LocalDateTime.parse("2022-01-03T00:00:00"))
@@ -157,13 +164,16 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
                 .emailVerified(true)
                 .professor(true)
                 .build();
+        RequestType requestType = RequestType.builder()
+                .requestType("PhDprogram")
+                .build();
         
 
         RecommendationRequest rec1 = RecommendationRequest.builder()
                 .id(67L)
                 .requester(user2)
                 .professor(prof)
-                .recommendationType("PhDprogram")
+                .recommendationType(requestType)
                 .details("details")
                 .status("PENDING")
                 .completionDate(LocalDateTime.parse("2022-01-03T00:00:00"))
@@ -203,12 +213,15 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
                 .emailVerified(true)
                 .professor(true)
                 .build();
+        RequestType requestType = RequestType.builder()
+                .requestType("PhDprogram")
+                .build();
 
         RecommendationRequest rec1 = RecommendationRequest.builder()
                 .id(67L)
                 .requester(user2)
                 .professor(prof)
-                .recommendationType("PhDprogram")
+                .recommendationType(requestType)
                 .details("details")
                 .status("PENDING")
                 .completionDate(LocalDateTime.parse("2022-01-03T00:00:00"))
@@ -230,6 +243,58 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
         Map<String, Object> json = responseToJson(response);
         assertEquals("RecommendationRequest with id 67 deleted", json.get("message"));
 
+    }
+
+    //Admin can get all recommendation requests
+    @WithMockUser(roles = { "ADMIN", "USER" })
+    @Test
+    public void admin_can_get_all_recommendation_requests() throws Exception {
+        // arrange
+
+        User user2 = User.builder().id(44).build(); 
+        User prof = User.builder()
+                .id(22L)
+                .email("profA@ucsb.edu")
+                .googleSub("googleSub")
+                .fullName("Prof A")
+                .givenName("Prof")
+                .familyName("A")
+                .emailVerified(true)
+                .professor(true)
+                .build();
+        RequestType requestType = RequestType.builder()
+                .requestType("PhDprogram")
+                .build();
+
+        RecommendationRequest rec1 = RecommendationRequest.builder()
+                .id(67L)
+                .requester(user2)
+                .professor(prof)
+                .recommendationType(requestType)
+                .details("details")
+                .status("PENDING")
+                .completionDate(LocalDateTime.parse("2022-01-03T00:00:00"))
+                .dueDate(LocalDateTime.parse("2022-01-03T00:00:00"))
+                .submissionDate(LocalDateTime.parse("2022-01-03T00:00:00"))
+                .lastModifiedDate(LocalDateTime.parse("2022-01-03T00:00:00"))
+                .build();
+
+        ArrayList<RecommendationRequest> allRequests = new ArrayList<>();
+        allRequests.add(rec1);
+
+        when(recommendationRequestRepository.findAll()).thenReturn(allRequests);
+        // act
+        MvcResult response = mockMvc.perform(
+                get("/api/recommendationrequest/admin/all")
+                        .with(csrf()))
+                .andExpect(status().isOk()).andReturn();
+
+        // assert
+        verify(recommendationRequestRepository, times(1)).findAll();
+        
+        String expected = mapper.writeValueAsString(allRequests);
+        String actual = response.getResponse().getContentAsString();
+        assertEquals(expected, actual);
     }
 
     //Admin can't delete a recommendation request that dne
@@ -268,12 +333,15 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
                 .emailVerified(true)
                 .professor(true)
                 .build();
+        RequestType requestType = RequestType.builder()
+                .requestType("PhDprogram")
+                .build();
 
         RecommendationRequest rec = RecommendationRequest.builder()
                 .id(63L)
                 .requester(user1)
                 .professor(prof1)
-                .recommendationType("PhDprogram")
+                .recommendationType(requestType)
                 .details("details")
                 .status("PENDING")
                 .completionDate(LocalDateTime.parse("2022-01-03T00:00:00"))
@@ -286,7 +354,7 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
                 .id(63L)
                 .requester(user1)
                 .professor(prof1)
-                .recommendationType("PhDprogram")
+                .recommendationType(requestType)
                 .details("more details")
                 .status("PENDING")
                 .completionDate(LocalDateTime.parse("2022-01-03T00:00:00"))
@@ -299,7 +367,7 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
                 .id(63L)
                 .requester(user1)
                 .professor(prof1)
-                .recommendationType("PhDprogram")
+                .recommendationType(requestType)
                 .details("more details")
                 .status("PENDING")
                 .completionDate(LocalDateTime.parse("2022-01-03T00:00:00"))
@@ -349,12 +417,15 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
                 .emailVerified(true)
                 .professor(true)
                 .build();
+        RequestType requestType = RequestType.builder()
+                .requestType("PhDprogram")
+                .build();
 
         RecommendationRequest rec = RecommendationRequest.builder()
                 .id(67L)
                 .requester(user1)
                 .professor(prof)
-                .recommendationType("PhDprogram")
+                .recommendationType(requestType)
                 .details("details")
                 .status("PENDING")
                 .completionDate(LocalDateTime.parse("2022-01-03T00:00:00"))
@@ -398,12 +469,15 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
                 .emailVerified(true)
                 .professor(true)
                 .build();
+        RequestType requestType = RequestType.builder()
+                .requestType("PhDprogram")
+                .build();
         
         RecommendationRequest rec = RecommendationRequest.builder()
                 .id(67L)
                 .requester(user2)
                 .professor(prof)
-                .recommendationType("PhDprogram")
+                .recommendationType(requestType)
                 .details("details")
                 .status("PENDING")
                 .completionDate(LocalDateTime.parse("2022-01-03T00:00:00"))
@@ -415,7 +489,7 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
                 .id(67L)
                 .requester(user1)
                 .professor(prof)
-                .recommendationType("PhDprogram")
+                .recommendationType(requestType)
                 .details("more details")
                 .status("PENDING")
                 .completionDate(LocalDateTime.parse("2022-01-03T00:00:00"))
@@ -462,15 +536,18 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
                 .emailVerified(true)
                 .professor(true)
                 .build();
+        RequestType requestType = RequestType.builder()
+                .requestType("PhDprogram")
+                .build();
 
         RecommendationRequest rec = RecommendationRequest.builder()
                 .id(67L)
                 .requester(student)
                 .professor(prof)
-                .recommendationType("PhDprogram")
+                .recommendationType(requestType)
                 .details("details")
                 .status("PENDING")
-                .completionDate(LocalDateTime.parse("2022-01-03T00:00:00"))
+                .completionDate(null)
                 .dueDate(LocalDateTime.parse("2022-01-03T00:00:00"))
                 .submissionDate(LocalDateTime.parse("2022-01-03T00:00:00"))
                 .lastModifiedDate(LocalDateTime.parse("2022-01-03T00:00:00"))
@@ -480,7 +557,7 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
                 .id(67L)
                 .requester(student)
                 .professor(prof)
-                .recommendationType("PhDprogram")
+                .recommendationType(requestType)
                 .details("details")
                 .status("COMPLETED")
                 .completionDate(LocalDateTime.parse("2022-01-03T00:00:00"))
@@ -492,7 +569,7 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
                 .id(67L)
                 .requester(student)
                 .professor(prof)
-                .recommendationType("PhDprogram")
+                .recommendationType(requestType)
                 .details("details")
                 .status("COMPLETED")
                 .completionDate(LocalDateTime.parse("2022-01-03T00:00:00"))
@@ -541,12 +618,15 @@ public class RecommendationRequestControllerTest extends ControllerTestCase {
                 .emailVerified(true)
                 .professor(true)
                 .build();
+        RequestType requestType = RequestType.builder()
+                .requestType("PhDprogram")
+                .build();
 
         RecommendationRequest rec_updated = RecommendationRequest.builder()
                 .id(67L)
                 .requester(user2)
                 .professor(prof)
-                .recommendationType("PhDprogram")
+                .recommendationType(requestType)
                 .details("details")
                 .status("COMPLETED")
                 .completionDate(LocalDateTime.parse("2022-01-03T00:00:00"))
