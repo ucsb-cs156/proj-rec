@@ -7,11 +7,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Component
 public class RoleInterceptorConfig implements WebMvcConfigurer {
-    @Autowired
-    RoleInterceptor roleAdminProfessorInterceptor;
+  @Autowired RoleInterceptor roleAdminProfessorInterceptor;
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(roleAdminProfessorInterceptor);
-    }
+  @Override
+  public void addInterceptors(InterceptorRegistry registry) {
+    registry.addInterceptor(roleAdminProfessorInterceptor);
+  }
 }

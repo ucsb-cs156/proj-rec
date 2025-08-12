@@ -6,15 +6,15 @@ import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-/**
- * The RecommendationRequestRepository is a repository for RecommendationRequest entities.
- */
-
+/** The RecommendationRequestRepository is a repository for RecommendationRequest entities. */
 @Repository
-public interface RecommendationRequestRepository extends CrudRepository<RecommendationRequest, Long> {
+public interface RecommendationRequestRepository
+    extends CrudRepository<RecommendationRequest, Long> {
   Optional<RecommendationRequest> findByIdAndRequester(long id, User requester_id);
- /**
+
+  /**
    * This method returns an iterable of recommendation requests with given requester_id.
+   *
    * @param requester_id requester_id within RecommendationRequest that maps to id in User table
    * @return iterable of RecommendationRequests with requester_id == requester_id
    */
@@ -22,6 +22,7 @@ public interface RecommendationRequestRepository extends CrudRepository<Recommen
 
   /**
    * This method returns an iterable of recommendation requests with given professor_id.
+   *
    * @param professor_id professor_id within RecommendationRequest that maps to id in User table
    * @return iterable of RecommendationRequests with professor_id == professor_id
    */
@@ -29,6 +30,7 @@ public interface RecommendationRequestRepository extends CrudRepository<Recommen
 
   /**
    * This method returns an iterable of recommendation requests with given professor_id.
+   *
    * @param id id of the RecommendationRequest
    * @param professor_id professor (User object)
    * @return instance of RecommendationRequest with id == id, professor_id == professor_id
@@ -43,5 +45,4 @@ public interface RecommendationRequestRepository extends CrudRepository<Recommen
    * @return a list of recommendation requests matching the criteria
    */
   Iterable<RecommendationRequest> findAllByProfessorIdAndStatus(Long professor_id, String status);
-
 }
