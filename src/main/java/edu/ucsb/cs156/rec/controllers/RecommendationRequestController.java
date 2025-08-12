@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -85,6 +86,28 @@ public class RecommendationRequestController extends ApiController {
     }
 
     /**
+     * The professor can delete incoming RecommendationRequests
+     * 
+     * @param id the id of the RecommendationRequest to delete
+     * @return a message indicating that the RecommendationRequest was deleted
+     */
+    @Operation(summary = "Professor can delete their incoming RecommendationRequest")
+    @PreAuthorize("hasRole('ROLE_PROFESSOR')")
+    @DeleteMapping("/professor")
+    public Object deleteRecommendationRequestAsProfessor(@Parameter(name = "id") @RequestParam Long id) {
+        User currentUser = getCurrentUser().getUser(); 
+        RecommendationRequest recommendationRequest = 
+        recommendationRequestRepository
+            .findByIdAndProfessor(id, currentUser)
+            .orElseThrow(() -> new EntityNotFoundException(RecommendationRequest.class, id));
+
+        recommendationRequestRepository.delete(recommendationRequest);
+
+        return genericMessage("RecommendationRequest with id %s deleted".formatted(id));
+    }
+
+
+    /**
      * The user who posted a RecommendationRequest can update their RecommendationRequest
      * 
      * @param id       the id of the Recommendation Request to update
@@ -130,7 +153,13 @@ public class RecommendationRequestController extends ApiController {
                 .findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(RecommendationRequest.class, id));
 
+                
+
         recommendationRequest.setStatus(incoming.getStatus());
+
+        if ("COMPLETED".equalsIgnoreCase(incoming.getStatus())) {
+        recommendationRequest.setCompletionDate(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
+    }
 
         recommendationRequestRepository.save(recommendationRequest);
 
@@ -146,7 +175,6 @@ public class RecommendationRequestController extends ApiController {
     @GetMapping("/requester/all")
     public Iterable<RecommendationRequest> allRequesterRecommendationRequests(
     ) {
-        // toyed with having this only be ROLE_STUDENT but I think even professors should be able to submit requests so they can see which ones they have submitted too
         User currentUser = getCurrentUser().getUser();
         Iterable<RecommendationRequest> recommendationRequests = recommendationRequestRepository.findAllByRequesterId(currentUser.getId());
         return recommendationRequests;
@@ -234,5 +262,15 @@ public class RecommendationRequestController extends ApiController {
 
         return recommendationRequestRepository.findAllByProfessorIdAndStatus(
             currentUser.getId(), status);
+    }
+    /**
+     * This method returns a list of all recommendation requests viewable by an admin user.
+     * @return a list of all recommendation requests
+     */
+    @Operation(summary = "Get all recommendation requests viewable by an admin user")
+    @GetMapping("/admin")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public Iterable<RecommendationRequest> getAllRecommendationRequests() {
+        return recommendationRequestRepository.findAll();
     }
 }
