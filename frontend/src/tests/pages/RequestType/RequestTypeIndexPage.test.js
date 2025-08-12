@@ -1,7 +1,7 @@
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import RequestTypeIndexPage from "main/pages/RequestType/RequestTypeIndexPage";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter } from "react-router";
 import mockConsole from "jest-mock-console";
 import { requestFixtures } from "fixtures/requestFixtures";
 

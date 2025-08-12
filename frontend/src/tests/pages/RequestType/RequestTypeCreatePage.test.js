@@ -1,7 +1,7 @@
 import { render, waitFor, fireEvent, screen } from "@testing-library/react";
 import RequestTypeCreatePage from "main/pages/RequestType/RequestTypeCreatePage";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter } from "react-router";
 
 import { apiCurrentUserFixtures } from "fixtures/currentUserFixtures";
 import { systemInfoFixtures } from "fixtures/systemInfoFixtures";
@@ -19,8 +19,8 @@ jest.mock("react-toastify", () => {
 });
 
 const mockNavigate = jest.fn();
-jest.mock("react-router-dom", () => {
-  const originalModule = jest.requireActual("react-router-dom");
+jest.mock("react-router", () => {
+  const originalModule = jest.requireActual("react-router");
   return {
     __esModule: true,
     ...originalModule,

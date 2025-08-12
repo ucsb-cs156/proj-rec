@@ -1,7 +1,7 @@
 import { Button, Form, Row, Col } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 function RecommendationRequestForm({
   initialContents,

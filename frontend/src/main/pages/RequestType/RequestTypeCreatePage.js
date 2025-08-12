@@ -1,6 +1,6 @@
 import BasicLayout from "main/layouts/BasicLayout/BasicLayout";
 import RequestTypeForm from "main/components/RequestType/RequestTypeForm";
-import { Navigate } from "react-router-dom";
+import { Navigate } from "react-router";
 import { useBackendMutation } from "main/utils/useBackend";
 import { toast } from "react-toastify";
 

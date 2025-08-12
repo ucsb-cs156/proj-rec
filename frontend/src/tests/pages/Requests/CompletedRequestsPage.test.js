@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import CompletedRequestsPage from "main/pages/Requests/CompletedRequestsPage";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter } from "react-router";
 import { apiCurrentUserFixtures } from "fixtures/currentUserFixtures";
 import { systemInfoFixtures } from "fixtures/systemInfoFixtures";
 import axios from "axios";

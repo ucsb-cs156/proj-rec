@@ -2,7 +2,7 @@ import { fireEvent, render, waitFor, screen } from "@testing-library/react";
 import { recommendationRequestFixtures } from "fixtures/recommendationRequestFixtures";
 import RecommendationRequestTable from "main/components/RecommendationRequest/RecommendationRequestTable";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { MemoryRouter, Routes, Route } from "react-router-dom";
+import { MemoryRouter, Routes, Route } from "react-router";
 import { currentUserFixtures } from "fixtures/currentUserFixtures";
 import axios from "axios";
 import AxiosMockAdapter from "axios-mock-adapter";
@@ -12,8 +12,8 @@ import { toast } from "react-toastify";
 const mockedNavigate = jest.fn();
 let mockedLocation = { pathname: "" };
 
-jest.mock("react-router-dom", () => {
-  const actual = jest.requireActual("react-router-dom");
+jest.mock("react-router", () => {
+  const actual = jest.requireActual("react-router");
   return {
     ...actual,
     useNavigate: () => mockedNavigate,

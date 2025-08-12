@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { MemoryRouter, useNavigate } from "react-router-dom";
+import { MemoryRouter, useNavigate } from "react-router";
 import { apiCurrentUserFixtures } from "fixtures/currentUserFixtures";
 
 import axios from "axios";
@@ -28,8 +28,8 @@ jest.mock("main/layouts/BasicLayout/BasicLayout", () => {
 });
 
 // Mock useNavigate
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
+jest.mock("react-router", () => ({
+  ...jest.requireActual("react-router"),
   useNavigate: jest.fn(),
 }));
 

@@ -1,5 +1,5 @@
 import { Row, Col, Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { useCurrentUser } from "main/utils/currentUser";
 import BasicLayout from "main/layouts/BasicLayout/BasicLayout";
 import RecommendationRequestTable from "main/components/RecommendationRequest/RecommendationRequestTable";
