@@ -46,7 +46,6 @@ describe("StudentProfilePage tests", () => {
   });
 
   afterEach(() => {
-    axiosMock.restore();
     vi.clearAllMocks();
   });
 
@@ -195,7 +194,9 @@ describe("StudentProfilePage tests", () => {
     );
     fireEvent.click(editButton);
 
-    expect(navigateMock).toHaveBeenCalledWith("/requests/edit/1");
+    await waitFor(() =>
+      expect(navigateMock).toHaveBeenCalledWith("/requests/edit/1"),
+    );
   });
 
   test("checks create new request button", async () => {
@@ -232,6 +233,8 @@ describe("StudentProfilePage tests", () => {
     const createButton = await screen.findByText("Create New Request");
     fireEvent.click(createButton);
 
-    expect(navigateMock).toHaveBeenCalledWith("/requests/create");
+    await waitFor(() =>
+      expect(navigateMock).toHaveBeenCalledWith("/requests/create"),
+    );
   });
 });
