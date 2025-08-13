@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "engines": {
     "node": "^22.18.0"
@@ -25,11 +25,15 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "coverage": "react-scripts test --watchAll=false --coverage; echo \"Coverage report is available at file://`pwd`/coverage/lcov-report/index.html\"",
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "start": "vite",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage",
+    "test:watch:coverage": "vitest --coverage",
     "check-format": "prettier --check \"src/**/*.{js,jsx}\"",
     "format": "prettier --write \"src/**/*.{js,jsx}\"",
     "storybook": "storybook dev -p 6006",
@@ -62,6 +66,8 @@
     "@storybook/test": "^8.3.6",
     "@stryker-mutator/jest-runner": "^8.5.0",
     "@testing-library/react": "^16.0.0",
+    "@vitejs/plugin-react": "^4.6.0",
+    "@vitejs/plugin-react-swc": "^4.0.0",
     "axios-mock-adapter": "^2.0.0",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.35.0",
@@ -73,9 +79,10 @@
     "nyc": "^17.0.0",
     "prettier": "^3.3.3",
     "prop-types": "^15.8.1",
+    "rollup-plugin-visualizer": "^6.0.3",
     "storybook": "^8.3.6",
     "typescript-eslint": "^8.2.0",
-    "webpack": "^5.93.0"
+    "vite": "^7.0.0"
   },
   "nyc": {
     "check-coverage": true,
