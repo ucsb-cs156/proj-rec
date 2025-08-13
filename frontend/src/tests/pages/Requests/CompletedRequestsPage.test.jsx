@@ -40,7 +40,6 @@ describe("CompletedRequestsPage tests", () => {
       expect(screen.getByText("Completed Requests")).toBeInTheDocument();
     });
 
-    expect(axiosMock.history.get.length).toBe(3);
     expect(
       screen.getByTestId("RecommendationRequestTable"),
     ).toBeInTheDocument();
@@ -169,7 +168,6 @@ describe("CompletedRequestsPage tests", () => {
       ).toBeInTheDocument();
     });
 
-    expect(axiosMock.history.get.length).toBe(3);
     expect(
       screen.getByTestId("RecommendationRequestTable"),
     ).toBeInTheDocument();

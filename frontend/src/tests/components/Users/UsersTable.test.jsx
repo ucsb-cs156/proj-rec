@@ -5,13 +5,12 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter } from "react-router";
 import axios from "axios";
 import AxiosMockAdapter from "axios-mock-adapter";
+import { vi } from "vitest";
 
-const mockToast = jest.fn();
-jest.mock("react-toastify", () => {
-  const originalModule = jest.requireActual("react-toastify");
+const mockToast = vi.fn();
+vi.mock("react-toastify", async (importOriginal) => {
   return {
-    __esModule: true,
-    ...originalModule,
+    ...(await importOriginal()),
     toast: (x) => mockToast(x),
   };
 });
@@ -188,7 +187,7 @@ describe("UserTable tests", () => {
 
   test("toggleAdmin success invalidates queries", async () => {
     const currentUser = usersFixtures.adminUser;
-    const invalidateQueriesSpy = jest.spyOn(queryClient, "invalidateQueries");
+    const invalidateQueriesSpy = vi.spyOn(queryClient, "invalidateQueries");
 
     axiosMock
       .onPost("/api/admin/users/toggleAdmin")
@@ -220,7 +219,7 @@ describe("UserTable tests", () => {
 
   test("toggleAdmin error invalidates queries", async () => {
     const currentUser = usersFixtures.adminUser;
-    const invalidateQueriesSpy = jest.spyOn(queryClient, "invalidateQueries");
+    const invalidateQueriesSpy = vi.spyOn(queryClient, "invalidateQueries");
 
     axiosMock
       .onPost("/api/admin/users/toggleAdmin")
@@ -314,9 +313,7 @@ describe("UserTable tests", () => {
     const currentUser = usersFixtures.adminUser;
 
     // Mock console.error to avoid error output in test
-    const consoleSpy = jest
-      .spyOn(console, "error")
-      .mockImplementation(() => {});
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
     axiosMock.onPost("/api/admin/users/toggleAdmin").reply(() => {
       const error = new Error();

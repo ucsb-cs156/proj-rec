@@ -22,10 +22,6 @@ const StudentProfilePage = () => {
 
   const { email, pictureUrl, fullName } = currentUser.root.user;
 
-  const handleEdit = (request) => {
-    navigate(`/requests/edit/${request.id}`);
-  };
-
   return (
     <BasicLayout>
       <Row className="align-items-center profile-header mb-5 text-center text-md-left">
@@ -56,7 +52,6 @@ const StudentProfilePage = () => {
           <RecommendationRequestTable
             requests={requests}
             currentUser={currentUser}
-            onEdit={handleEdit}
           />
         </Col>
       </Row>

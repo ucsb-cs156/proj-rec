@@ -10,18 +10,19 @@ import axios from "axios";
 import AxiosMockAdapter from "axios-mock-adapter";
 import usersFixtures from "fixtures/usersFixtures";
 import recommendationTypeFixtures from "fixtures/recommendationTypeFixtures";
+import { vi } from "vitest";
 
-const mockedNavigate = jest.fn();
+const mockedNavigate = vi.fn();
 
-jest.mock("react-router", () => ({
-  ...jest.requireActual("react-router"),
+vi.mock("react-router", async (importOriginal) => ({
+  ...(await importOriginal()),
   useNavigate: () => mockedNavigate,
 }));
 
 describe("RecommendationRequestForm tests", () => {
   const axiosMock = new AxiosMockAdapter(axios);
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     axiosMock.reset();
     axiosMock.resetHistory();
     axiosMock
@@ -30,10 +31,10 @@ describe("RecommendationRequestForm tests", () => {
     axiosMock
       .onGet("/api/requesttypes/all")
       .reply(200, recommendationTypeFixtures.fourTypes);
-    global.fetch = jest.fn();
+    global.fetch = vi.fn();
   });
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
   const queryClient = new QueryClient();
 
@@ -113,10 +114,10 @@ describe("RecommendationRequestForm tests", () => {
   });
 
   test("that the correct error appears when the gets are called for the options", async () => {
-    const consoleErrorMock = jest
+    const consoleErrorMock = vi
       .spyOn(console, "error")
       .mockImplementation(() => {});
-    global.fetch = jest.fn().mockRejectedValueOnce(new Error("Network error"));
+    global.fetch = vi.fn().mockRejectedValueOnce(new Error("Network error"));
     render(
       <QueryClientProvider client={queryClient}>
         <Router>
@@ -201,7 +202,7 @@ describe("RecommendationRequestForm tests", () => {
   describe("onSubmit tests", () => {
     beforeEach(() => {
       // Mock fetch for professors and recommendation types
-      global.fetch = jest.fn((url) => {
+      global.fetch = vi.fn((url) => {
         if (url === "/api/admin/users/professors") {
           return Promise.resolve({
             json: () => Promise.resolve(usersFixtures.twoProfessors),
@@ -217,7 +218,7 @@ describe("RecommendationRequestForm tests", () => {
     });
 
     test("calls submitAction with formatted dueDate when dueDate is YYYY-MM-DD", async () => {
-      const submitAction = jest.fn();
+      const submitAction = vi.fn();
       render(
         <QueryClientProvider client={queryClient}>
           <Router>
@@ -268,7 +269,7 @@ describe("RecommendationRequestForm tests", () => {
     });
 
     test("calls submitAction with data when dueDate is not present", async () => {
-      const submitAction = jest.fn();
+      const submitAction = vi.fn();
       render(
         <QueryClientProvider client={queryClient}>
           <Router>

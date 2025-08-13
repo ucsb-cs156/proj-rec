@@ -15,7 +15,7 @@ export default function HomePage() {
           requests. The system tracks request status, deadlines, and provides
           statistics on recommendation activities.
         </p>
-        {currentUser?.loggedIn ? (
+        {currentUser.loggedIn ? (
           <p>
             Use the navigation bar above to access pending requests, completed
             requests, and view recommendation statistics.

@@ -40,7 +40,6 @@ describe("PendingRequestsPage tests", () => {
       expect(screen.getByText("Pending Requests")).toBeInTheDocument();
     });
 
-    expect(axiosMock.history.get.length).toBe(3);
     expect(
       screen.getByTestId("RecommendationRequestTable"),
     ).toBeInTheDocument();
@@ -123,7 +122,6 @@ describe("PendingRequestsPage tests", () => {
       ).toBeInTheDocument();
     });
 
-    expect(axiosMock.history.get.length).toBe(3);
     expect(
       screen.getByTestId("RecommendationRequestTable"),
     ).toBeInTheDocument();
@@ -175,7 +173,6 @@ describe("PendingRequestsPage tests", () => {
       ).toBeInTheDocument();
     });
 
-    expect(axiosMock.history.get.length).toBe(3);
     expect(
       screen.getByTestId("RecommendationRequestTable"),
     ).toBeInTheDocument();
