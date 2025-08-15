@@ -9,24 +9,21 @@ import usersFixtures from "fixtures/usersFixtures";
 import recommendationTypeFixtures from "fixtures/recommendationTypeFixtures";
 import axios from "axios";
 import AxiosMockAdapter from "axios-mock-adapter";
-import mockConsole from "jest-mock-console";
+import mockConsole from "tests/testutils/mockConsole";
+import { vi } from "vitest";
 
-const mockToast = jest.fn();
-jest.mock("react-toastify", () => {
-  const originalModule = jest.requireActual("react-toastify");
+const mockToast = vi.fn();
+vi.mock("react-toastify", async (importOriginal) => {
   return {
-    __esModule: true,
-    ...originalModule,
+    ...(await importOriginal()),
     toast: (x) => mockToast(x),
   };
 });
 
-const mockNavigate = jest.fn();
-jest.mock("react-router", () => {
-  const originalModule = jest.requireActual("react-router");
+const mockNavigate = vi.fn();
+vi.mock("react-router", async (importOriginal) => {
   return {
-    __esModule: true,
-    ...originalModule,
+    ...(await importOriginal()),
     useParams: () => ({
       id: 17,
     }),
@@ -56,29 +53,27 @@ describe("RecommendationRequestEditPage tests", () => {
         .timeout();
 
       // Add fetch mock here too, as the form might still try to render and fetch
-      fetchMock = jest
-        .spyOn(global, "fetch")
-        .mockImplementation(async (url) => {
-          if (url === "/api/admin/users/professors") {
-            return {
-              ok: true,
-              status: 200,
-              json: async () => usersFixtures.twoProfessors,
-            };
-          }
-          if (url === "/api/requesttypes/all") {
-            return {
-              ok: true,
-              status: 200,
-              json: async () => recommendationTypeFixtures.fourTypes,
-            };
-          }
-          // Fallback for unexpected fetch calls
-          console.error(
-            `Unhandled fetch call in 'backend doesn't return data' suite: ${url}`,
-          );
-          return Promise.reject(new Error(`Unhandled fetch call to ${url}`));
-        });
+      fetchMock = vi.spyOn(global, "fetch").mockImplementation(async (url) => {
+        if (url === "/api/admin/users/professors") {
+          return {
+            ok: true,
+            status: 200,
+            json: async () => usersFixtures.twoProfessors,
+          };
+        }
+        if (url === "/api/requesttypes/all") {
+          return {
+            ok: true,
+            status: 200,
+            json: async () => recommendationTypeFixtures.fourTypes,
+          };
+        }
+        // Fallback for unexpected fetch calls
+        console.error(
+          `Unhandled fetch call in 'backend doesn't return data' suite: ${url}`,
+        );
+        return Promise.reject(new Error(`Unhandled fetch call to ${url}`));
+      });
     });
 
     afterEach(() => {
@@ -120,28 +115,26 @@ describe("RecommendationRequestEditPage tests", () => {
         .onGet("/api/systemInfo")
         .reply(200, systemInfoFixtures.showingNeither);
 
-      fetchMock = jest
-        .spyOn(global, "fetch")
-        .mockImplementation(async (url) => {
-          if (url === "/api/admin/users/professors") {
-            return {
-              ok: true,
-              status: 200,
-              json: async () => usersFixtures.twoProfessors,
-            };
-          }
-          if (url === "/api/requesttypes/all") {
-            return {
-              ok: true,
-              status: 200,
-              json: async () => recommendationTypeFixtures.fourTypes,
-            };
-          }
-          console.error(
-            `Unhandled fetch call in 'backend working normally' suite: ${url}`,
-          );
-          return Promise.reject(new Error(`Unhandled fetch call to ${url}`));
-        });
+      fetchMock = vi.spyOn(global, "fetch").mockImplementation(async (url) => {
+        if (url === "/api/admin/users/professors") {
+          return {
+            ok: true,
+            status: 200,
+            json: async () => usersFixtures.twoProfessors,
+          };
+        }
+        if (url === "/api/requesttypes/all") {
+          return {
+            ok: true,
+            status: 200,
+            json: async () => recommendationTypeFixtures.fourTypes,
+          };
+        }
+        console.error(
+          `Unhandled fetch call in 'backend working normally' suite: ${url}`,
+        );
+        return Promise.reject(new Error(`Unhandled fetch call to ${url}`));
+      });
     });
 
     afterEach(() => {

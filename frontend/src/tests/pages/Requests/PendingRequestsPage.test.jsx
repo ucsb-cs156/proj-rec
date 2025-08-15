@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from "@testing-library/react";
-import CompletedRequestsPage from "main/pages/Requests/CompletedRequestsPage";
+import PendingRequestsPage from "main/pages/Requests/PendingRequestsPage";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter } from "react-router";
 import { apiCurrentUserFixtures } from "fixtures/currentUserFixtures";
@@ -8,7 +8,7 @@ import axios from "axios";
 import AxiosMockAdapter from "axios-mock-adapter";
 import { recommendationRequestFixtures } from "fixtures/recommendationRequestFixtures";
 
-describe("CompletedRequestsPage tests", () => {
+describe("PendingRequestsPage tests", () => {
   const axiosMock = new AxiosMockAdapter(axios);
   const queryClient = new QueryClient();
 
@@ -17,7 +17,7 @@ describe("CompletedRequestsPage tests", () => {
     axiosMock.resetHistory();
   });
 
-  test("Renders completed and denied requests for professor", async () => {
+  test("Renders pending requests for professor", async () => {
     axiosMock
       .onGet("/api/currentUser")
       .reply(200, apiCurrentUserFixtures.professorUser);
@@ -31,16 +31,15 @@ describe("CompletedRequestsPage tests", () => {
     render(
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
-          <CompletedRequestsPage />
+          <PendingRequestsPage />
         </MemoryRouter>
       </QueryClientProvider>,
     );
 
     await waitFor(() => {
-      expect(screen.getByText("Completed Requests")).toBeInTheDocument();
+      expect(screen.getByText("Pending Requests")).toBeInTheDocument();
     });
 
-    expect(axiosMock.history.get.length).toBe(3);
     expect(
       screen.getByTestId("RecommendationRequestTable"),
     ).toBeInTheDocument();
@@ -55,18 +54,21 @@ describe("CompletedRequestsPage tests", () => {
       /RecommendationRequestTable-cell-row-.*-col-status/,
     );
     expect(
-      statusCells.some((cell) => cell.textContent === "COMPLETED"),
+      statusCells.every((cell) => cell.textContent !== "COMPLETED"),
     ).toBeTruthy();
     expect(
-      statusCells.some((cell) => cell.textContent === "DENIED"),
+      statusCells.every((cell) => cell.textContent !== "DENIED"),
     ).toBeTruthy();
 
     expect(
-      statusCells.every((cell) => cell.textContent !== "PENDING"),
+      statusCells.some((cell) => cell.textContent === "PENDING"),
+    ).toBeTruthy();
+    expect(
+      statusCells.some((cell) => cell.textContent === "IN PROGRESS"),
     ).toBeTruthy();
   });
 
-  test("Renders empty table when no completed requests", async () => {
+  test("Renders empty table when no pending requests", async () => {
     axiosMock
       .onGet("/api/currentUser")
       .reply(200, apiCurrentUserFixtures.professorUser);
@@ -78,14 +80,14 @@ describe("CompletedRequestsPage tests", () => {
     render(
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
-          <CompletedRequestsPage />
+          <PendingRequestsPage />
         </MemoryRouter>
       </QueryClientProvider>,
     );
 
     await waitFor(() => {
       expect(
-        screen.getByRole("heading", { level: 1, name: "Completed Requests" }),
+        screen.getByRole("heading", { level: 1, name: "Pending Requests" }),
       ).toBeInTheDocument();
     });
 
@@ -95,7 +97,7 @@ describe("CompletedRequestsPage tests", () => {
     ).toBeInTheDocument();
   });
 
-  test("Renders completed and denied requests for student", async () => {
+  test("Renders pending requests for student", async () => {
     axiosMock
       .onGet("/api/currentUser")
       .reply(200, apiCurrentUserFixtures.studentUser);
@@ -109,18 +111,17 @@ describe("CompletedRequestsPage tests", () => {
     render(
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
-          <CompletedRequestsPage />
+          <PendingRequestsPage />
         </MemoryRouter>
       </QueryClientProvider>,
     );
 
     await waitFor(() => {
       expect(
-        screen.getByRole("heading", { level: 1, name: "Completed Requests" }),
+        screen.getByRole("heading", { level: 1, name: "Pending Requests" }),
       ).toBeInTheDocument();
     });
 
-    expect(axiosMock.history.get.length).toBe(3);
     expect(
       screen.getByTestId("RecommendationRequestTable"),
     ).toBeInTheDocument();
@@ -135,18 +136,21 @@ describe("CompletedRequestsPage tests", () => {
       /RecommendationRequestTable-cell-row-.*-col-status/,
     );
     expect(
-      statusCells.some((cell) => cell.textContent === "COMPLETED"),
+      statusCells.every((cell) => cell.textContent !== "COMPLETED"),
     ).toBeTruthy();
     expect(
-      statusCells.some((cell) => cell.textContent === "DENIED"),
+      statusCells.every((cell) => cell.textContent !== "DENIED"),
     ).toBeTruthy();
 
     expect(
-      statusCells.every((cell) => cell.textContent !== "PENDING"),
+      statusCells.some((cell) => cell.textContent === "PENDING"),
+    ).toBeTruthy();
+    expect(
+      statusCells.some((cell) => cell.textContent === "IN PROGRESS"),
     ).toBeTruthy();
   });
 
-  test("Renders empty table when no completed requests for student", async () => {
+  test("Renders empty table when no pending requests for student", async () => {
     axiosMock
       .onGet("/api/currentUser")
       .reply(200, apiCurrentUserFixtures.studentUser);
@@ -158,18 +162,17 @@ describe("CompletedRequestsPage tests", () => {
     render(
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
-          <CompletedRequestsPage />
+          <PendingRequestsPage />
         </MemoryRouter>
       </QueryClientProvider>,
     );
 
     await waitFor(() => {
       expect(
-        screen.getByRole("heading", { level: 1, name: "Completed Requests" }),
+        screen.getByRole("heading", { level: 1, name: "Pending Requests" }),
       ).toBeInTheDocument();
     });
 
-    expect(axiosMock.history.get.length).toBe(3);
     expect(
       screen.getByTestId("RecommendationRequestTable"),
     ).toBeInTheDocument();

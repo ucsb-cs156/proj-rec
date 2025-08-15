@@ -4,27 +4,27 @@ import { renderHook, waitFor, act } from "@testing-library/react";
 import axios from "axios";
 import AxiosMockAdapter from "axios-mock-adapter";
 import { useBackend, useBackendMutation } from "main/utils/useBackend";
+import { vi } from "vitest";
 
-jest.mock("react-router");
+vi.mock("react-router");
 
-const mockToast = jest.fn();
-jest.mock("react-toastify", () => {
-  const originalModule = jest.requireActual("react-toastify");
+const mockToast = vi.fn();
+vi.mock("react-toastify", async (importOriginal) => {
   return {
-    __esModule: true,
-    ...originalModule,
+    ...(await importOriginal()),
     toast: (x) => mockToast(x),
   };
 });
 
 describe("utils/useBackend tests", () => {
   beforeEach(() => {
-    jest.spyOn(console, "error");
+    vi.spyOn(console, "error");
     console.error.mockImplementation(() => null);
   });
 
   afterEach(() => {
     console.error.mockRestore();
+    mockToast.mockClear();
   });
 
   describe("utils/useBackend useBackend tests", () => {
@@ -114,7 +114,7 @@ describe("utils/useBackend tests", () => {
         },
       });
 
-      const onSuccess = jest.fn().mockImplementation((request) => {
+      const onSuccess = vi.fn().mockImplementation((request) => {
         mockToast(
           `New recommendation Created - id: ${request.id} requester name: ${request.requesterName}`,
         );
@@ -181,7 +181,7 @@ describe("utils/useBackend tests", () => {
         },
       });
 
-      const onSuccess = jest.fn().mockImplementation((request) => {
+      const onSuccess = vi.fn().mockImplementation((request) => {
         mockToast(
           `New recommendation Created - id: ${request.id} requester name: ${request.requesterName}`,
         );

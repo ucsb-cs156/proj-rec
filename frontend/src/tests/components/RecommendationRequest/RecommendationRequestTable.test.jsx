@@ -8,14 +8,15 @@ import axios from "axios";
 import AxiosMockAdapter from "axios-mock-adapter";
 import { hasRole } from "main/utils/currentUser";
 import { toast } from "react-toastify";
+import { vi } from "vitest";
+import { onUpdateStatusSuccess } from "main/utils/RecommendationRequestUtils";
 
-const mockedNavigate = jest.fn();
+const mockedNavigate = vi.fn();
 let mockedLocation = { pathname: "" };
 
-jest.mock("react-router", () => {
-  const actual = jest.requireActual("react-router");
+vi.mock("react-router", async (importOriginal) => {
   return {
-    ...actual,
+    ...(await importOriginal()),
     useNavigate: () => mockedNavigate,
     useLocation: () => mockedLocation,
   };
@@ -28,13 +29,13 @@ describe("RecommendationRequestTable apiEndpoint invalidation", () => {
 
   beforeEach(() => {
     queryClient = new QueryClient();
-    invalidateSpy = jest.spyOn(queryClient, "invalidateQueries");
+    invalidateSpy = vi.spyOn(queryClient, "invalidateQueries");
     axiosMock.onDelete().reply(200, { message: "deleted" });
   });
 
   afterEach(() => {
     axiosMock.resetHistory();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test("invalidates '/api/recommendationrequest/requester/all' on a non-pending/non-completed page", async () => {
@@ -505,8 +506,8 @@ describe("UserTable tests", () => {
   });
 });
 
-jest.mock("react-toastify", () => ({
-  toast: jest.fn(),
+vi.mock("react-toastify", () => ({
+  toast: vi.fn(),
 }));
 
 describe("RecommendationRequestTable update mutation", () => {
@@ -522,7 +523,7 @@ describe("RecommendationRequestTable update mutation", () => {
 
   afterEach(() => {
     axiosMock.restore();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     queryClient.clear();
   });
 
@@ -773,7 +774,7 @@ describe("RecommendationRequestTable update mutation", () => {
   test("On success it invalidates the correct apiEndpoint", async () => {
     const apiEndpoint = "/api/recommendationrequest/professor/all";
     const queryClient = new QueryClient();
-    const invalidateSpy = jest.spyOn(queryClient, "invalidateQueries");
+    const invalidateSpy = vi.spyOn(queryClient, "invalidateQueries");
     mockedLocation = { pathname: "/requests/pending" };
 
     const currentUser = currentUserFixtures.professorUser;
@@ -812,10 +813,7 @@ describe("RecommendationRequestTable update mutation", () => {
   });
 
   test("Fires onUpdateStatusSuccess when Accept completes", async () => {
-    const successSpy = jest.spyOn(
-      require("main/utils/RecommendationRequestUtils"),
-      "onUpdateStatusSuccess",
-    );
+    vi.mock("main/utils/RecommendationRequestUtils", { spy: true });
     mockedLocation = { pathname: "/requests/pending" };
 
     const currentUser = currentUserFixtures.professorUser;
@@ -850,7 +848,9 @@ describe("RecommendationRequestTable update mutation", () => {
       expect(toast).toHaveBeenCalledWith("Request marked as IN PROGRESS."),
     );
 
-    expect(successSpy).toHaveBeenCalledWith("Request marked as IN PROGRESS.");
-    expect(successSpy).toHaveBeenCalledTimes(2);
+    expect(onUpdateStatusSuccess).toHaveBeenCalledWith(
+      "Request marked as IN PROGRESS.",
+    );
+    expect(onUpdateStatusSuccess).toHaveBeenCalledTimes(2);
   });
 });

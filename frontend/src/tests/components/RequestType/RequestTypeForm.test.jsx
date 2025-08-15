@@ -4,11 +4,12 @@ import { QueryClient, QueryClientProvider } from "react-query";
 
 import RequestTypeForm from "main/components/RequestType/RequestTypeForm";
 import requestTypeFixtures from "fixtures/requestTypeFixtures";
+import { vi } from "vitest";
 
-const mockedNavigate = jest.fn();
+const mockedNavigate = vi.fn();
 
-jest.mock("react-router", () => ({
-  ...jest.requireActual("react-router"),
+vi.mock("react-router", async (importOriginal) => ({
+  ...(await importOriginal()),
   useNavigate: () => mockedNavigate,
 }));
 
@@ -20,7 +21,7 @@ describe("RequestTypeForm tests", () => {
     render(
       <QueryClientProvider client={queryClient}>
         <Router>
-          <RequestTypeForm submitAction={jest.fn()} {...props} />
+          <RequestTypeForm submitAction={vi.fn()} {...props} />
         </Router>
       </QueryClientProvider>,
     );
@@ -47,7 +48,7 @@ describe("RequestTypeForm tests", () => {
   });
 
   test("calls submitAction with correct data on valid input", async () => {
-    const mockSubmitAction = jest.fn();
+    const mockSubmitAction = vi.fn();
     renderForm({ submitAction: mockSubmitAction });
 
     const requestTypeInput = await screen.findByTestId(`${testId}-requestType`);

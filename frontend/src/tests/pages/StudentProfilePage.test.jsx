@@ -11,77 +11,30 @@ import usersFixtures from "fixtures/usersFixtures";
 import { recommendationRequestFixtures } from "fixtures/recommendationRequestFixtures";
 import recommendationTypeFixtures from "fixtures/recommendationTypeFixtures";
 import { useBackend } from "main/utils/useBackend";
+import { vi } from "vitest";
 
 // Mock useBackend to verify the correct parameters
-jest.mock("main/utils/useBackend", () => {
-  const originalModule = jest.requireActual("main/utils/useBackend");
+vi.mock("main/utils/useBackend", async (importOriginal) => {
   return {
-    __esModule: true,
-    ...originalModule,
-    useBackend: jest.fn(),
+    ...(await importOriginal()),
+    useBackend: vi.fn(),
   };
 });
 
-// Mock the BasicLayout and AppNavbar components
-jest.mock("main/layouts/BasicLayout/BasicLayout", () => {
-  return ({ children }) => <div data-testid="BasicLayout">{children}</div>;
-});
-
 // Mock useNavigate
-jest.mock("react-router", () => ({
-  ...jest.requireActual("react-router"),
-  useNavigate: jest.fn(),
+vi.mock("react-router", async (importOriginal) => ({
+  ...(await importOriginal()),
+  useNavigate: vi.fn(),
 }));
-
-// Mock window.location.reload
-const mockReload = jest.fn();
-Object.defineProperty(window, "location", {
-  writable: true,
-  value: { reload: mockReload },
-});
-
-// Mock fetch
-global.fetch = jest.fn(() => Promise.resolve({ ok: true }));
-
-// Mock RecommendationRequestTable
-jest.mock(
-  "main/components/RecommendationRequest/RecommendationRequestTable",
-  () => {
-    return ({ requests, _currentUser, onEdit, onDelete }) => (
-      <div data-testid="RecommendationRequestTable">
-        {requests?.map((request) => (
-          <div key={request.id}>
-            <span>{request.requester.email}</span>
-            <button
-              data-testid={`edit-button-${request.id}`}
-              onClick={() => onEdit && onEdit(request)}
-            >
-              Edit
-            </button>
-            <button
-              data-testid={`delete-button-${request.id}`}
-              onClick={() => onDelete && onDelete(request)}
-            >
-              Delete
-            </button>
-          </div>
-        ))}
-      </div>
-    );
-  },
-);
 
 describe("StudentProfilePage tests", () => {
   const queryClient = new QueryClient();
-  const navigateMock = jest.fn();
+  const navigateMock = vi.fn();
   let axiosMock;
-  let fetchMock;
 
   beforeEach(() => {
     axiosMock = new AxiosMockAdapter(axios);
     useNavigate.mockReturnValue(navigateMock);
-    global.fetch.mockClear();
-    mockReload.mockClear();
     navigateMock.mockClear();
 
     // Reset the mock implementation to return a default value
@@ -93,8 +46,7 @@ describe("StudentProfilePage tests", () => {
   });
 
   afterEach(() => {
-    if (fetchMock) fetchMock.mockRestore();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test("useBackend is called with the correct parameters", async () => {
@@ -113,26 +65,12 @@ describe("StudentProfilePage tests", () => {
     axiosMock
       .onGet("/api/systemInfo")
       .reply(200, systemInfoFixtures.showingNeither);
-
-    fetchMock = jest.spyOn(global, "fetch").mockImplementation(async (url) => {
-      if (url === "/api/admin/users/professors") {
-        return {
-          ok: true,
-          status: 200,
-          json: async () => usersFixtures.twoProfessors,
-        };
-      }
-      if (url === "/api/requesttypes/all") {
-        return {
-          ok: true,
-          status: 200,
-          json: async () => recommendationTypeFixtures.fourTypes,
-        };
-      }
-      // Fallback for unexpected fetch calls
-      console.error(`Unhandled fetch call to ${url}`);
-      return Promise.reject(new Error(`Unhandled fetch call to ${url}`));
-    });
+    axiosMock
+      .onGet("/api/admin/users/professors")
+      .reply(200, usersFixtures.twoProfessors);
+    axiosMock
+      .onGet("/api/requesttypes/all")
+      .reply(200, recommendationTypeFixtures.fourTypes);
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -189,26 +127,12 @@ describe("StudentProfilePage tests", () => {
     axiosMock
       .onGet("/api/systemInfo")
       .reply(200, systemInfoFixtures.showingNeither);
-
-    fetchMock = jest.spyOn(global, "fetch").mockImplementation(async (url) => {
-      if (url === "/api/admin/users/professors") {
-        return {
-          ok: true,
-          status: 200,
-          json: async () => usersFixtures.twoProfessors,
-        };
-      }
-      if (url === "/api/requesttypes/all") {
-        return {
-          ok: true,
-          status: 200,
-          json: async () => recommendationTypeFixtures.fourTypes,
-        };
-      }
-      // Fallback for unexpected fetch calls
-      console.error(`Unhandled fetch call to ${url}`);
-      return Promise.reject(new Error(`Unhandled fetch call to ${url}`));
-    });
+    axiosMock
+      .onGet("/api/admin/users/professors")
+      .reply(200, usersFixtures.twoProfessors);
+    axiosMock
+      .onGet("/api/requesttypes/all")
+      .reply(200, recommendationTypeFixtures.fourTypes);
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -218,8 +142,7 @@ describe("StudentProfilePage tests", () => {
       </QueryClientProvider>,
     );
 
-    await screen.findByTestId("BasicLayout");
-    expect(screen.getByText("Create New Request")).toBeInTheDocument();
+    expect(await screen.findByText("Create New Request")).toBeInTheDocument();
   });
 
   test("renders request data and checks edit functionality", async () => {
@@ -248,26 +171,12 @@ describe("StudentProfilePage tests", () => {
     axiosMock
       .onGet("/api/systemInfo")
       .reply(200, systemInfoFixtures.showingNeither);
-
-    fetchMock = jest.spyOn(global, "fetch").mockImplementation(async (url) => {
-      if (url === "/api/admin/users/professors") {
-        return {
-          ok: true,
-          status: 200,
-          json: async () => usersFixtures.twoProfessors,
-        };
-      }
-      if (url === "/api/requesttypes/all") {
-        return {
-          ok: true,
-          status: 200,
-          json: async () => recommendationTypeFixtures.fourTypes,
-        };
-      }
-      // Fallback for unexpected fetch calls
-      console.error(`Unhandled fetch call to ${url}`);
-      return Promise.reject(new Error(`Unhandled fetch call to ${url}`));
-    });
+    axiosMock
+      .onGet("/api/admin/users/professors")
+      .reply(200, usersFixtures.twoProfessors);
+    axiosMock
+      .onGet("/api/requesttypes/all")
+      .reply(200, recommendationTypeFixtures.fourTypes);
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -277,13 +186,17 @@ describe("StudentProfilePage tests", () => {
       </QueryClientProvider>,
     );
 
-    await screen.findByTestId("RecommendationRequestTable");
+    await screen.findByTestId("RecommendationRequestTable-header-group-0");
 
     // Find and click the edit button
-    const editButton = await screen.findByTestId("edit-button-1");
+    const editButton = await screen.findByTestId(
+      "RecommendationRequestTable-cell-row-0-col-Edit-button",
+    );
     fireEvent.click(editButton);
 
-    expect(navigateMock).toHaveBeenCalledWith("/requests/edit/1");
+    await waitFor(() =>
+      expect(navigateMock).toHaveBeenCalledWith("/requests/edit/1"),
+    );
   });
 
   test("checks create new request button", async () => {
@@ -301,6 +214,12 @@ describe("StudentProfilePage tests", () => {
     axiosMock
       .onGet("/api/systemInfo")
       .reply(200, systemInfoFixtures.showingNeither);
+    axiosMock
+      .onGet("/api/admin/users/professors")
+      .reply(200, usersFixtures.twoProfessors);
+    axiosMock
+      .onGet("/api/requesttypes/all")
+      .reply(200, recommendationTypeFixtures.fourTypes);
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -310,12 +229,12 @@ describe("StudentProfilePage tests", () => {
       </QueryClientProvider>,
     );
 
-    await screen.findByTestId("BasicLayout");
-
     // Find and click the create new request button
-    const createButton = screen.getByText("Create New Request");
+    const createButton = await screen.findByText("Create New Request");
     fireEvent.click(createButton);
 
-    expect(navigateMock).toHaveBeenCalledWith("/requests/create");
+    await waitFor(() =>
+      expect(navigateMock).toHaveBeenCalledWith("/requests/create"),
+    );
   });
 });

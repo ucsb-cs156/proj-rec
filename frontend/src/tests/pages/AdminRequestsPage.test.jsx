@@ -4,7 +4,7 @@ import { MemoryRouter } from "react-router";
 
 import { apiCurrentUserFixtures } from "fixtures/currentUserFixtures";
 import { systemInfoFixtures } from "fixtures/systemInfoFixtures";
-import mockConsole from "jest-mock-console";
+import mockConsole from "tests/testutils/mockConsole";
 
 import axios from "axios";
 import AxiosMockAdapter from "axios-mock-adapter";

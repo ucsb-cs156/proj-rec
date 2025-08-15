@@ -3,6 +3,7 @@ import OurTable, {
   ButtonColumn,
   ButtonDropdownColumn,
 } from "main/components/OurTable";
+import { vi } from "vitest";
 
 describe("OurTable tests", () => {
   const threeRows = [
@@ -20,7 +21,7 @@ describe("OurTable tests", () => {
     },
   ];
 
-  const clickMeCallback = jest.fn();
+  const clickMeCallback = vi.fn();
 
   const columns = [
     {
@@ -94,9 +95,9 @@ describe("OurTable tests", () => {
 });
 
 describe("ButtonDropdownColumn tests", () => {
-  const mockAccept = jest.fn();
-  const mockDeny = jest.fn();
-  const mockComplete = jest.fn();
+  const mockAccept = vi.fn();
+  const mockDeny = vi.fn();
+  const mockComplete = vi.fn();
 
   const columns = [
     {
@@ -116,7 +117,7 @@ describe("ButtonDropdownColumn tests", () => {
   ];
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test("The dropdown appears in the table", async () => {
