@@ -12,7 +12,7 @@ import {
   cellToAxiosParamsUpdateStatus,
   onUpdateStatusSuccess,
 } from "main/utils/RecommendationRequestUtils";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router";
 import { hasRole } from "main/utils/currentUser";
 
 export default function RecommendationRequestTable({ requests, currentUser }) {
