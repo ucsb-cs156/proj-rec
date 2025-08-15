@@ -143,3 +143,11 @@ To run full mutation test coverage, as usual, use:
 ```
 mvn pitest:mutationCoverage
 ```
+
+## Code Formatting
+
+This repo has a pre-commit hook that runs the formatter for backend code.
+
+To skip this formatting hook, use `git commit --no-verify ...`
+
+To format at any time, run: `mvn git-code-format:format-code`
