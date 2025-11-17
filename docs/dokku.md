@@ -18,6 +18,8 @@ The lines in the instructions where you need to modify something are marked with
 
 The other line you can copy/paste as is, except for changing `rec` to whatever your app name will be (e.g. `rec-qa`, `rec-dev-cgaucho`, `rec-pr235`).
 
+### rec
+
 ```
 # Create app
 dokku apps:create rec
@@ -36,17 +38,51 @@ dokku config:set --no-restart rec GOOGLE_CLIENT_SECRET=get-value-from-google-dev
 
 # Set SOURCE_REPO to your repo (modify the url)
 # This is for the link in the footer, and for the link to currently deployed branch in /api/systemInfo
-dokku config:set --no-restart rec SOURCE_REPO=https://github.com/ucsb-cs156-s25/proj-rec-s25-xx 
+dokku config:set --no-restart rec SOURCE_REPO=https://github.com/ucsb-cs156-f25/proj-rec-f25-xx 
 
 # Set ADMIN_EMAILS to staff emails and team emails
 dokku config:set --no-restart rec ADMIN_EMAILS=list-of-admin-emails # modify this
 
 # git sync for first deploy (http)
-dokku git:sync rec https://github.com/ucsb-cs156-s25/proj-rec-s25-xx main  # modify this 
+dokku git:sync rec https://github.com/ucsb-cs156-f25/proj-rec-f25-xx main  # modify this 
 dokku ps:rebuild rec
 
 # Enable https
 dokku letsencrypt:set rec email yourEmail@ucsb.edu # modify email
 dokku letsencrypt:enable rec
+```
+
+### rec-qa
+
+```
+# Create app
+dokku apps:create rec-qa
+
+# Create and link postgres database
+dokku postgres:create rec-qa-db
+dokku postgres:link rec-qa-db rec-qa --no-restart
+
+# Modify dokku settings
+dokku git:set rec-qa keep-git-dir true
+
+# Set config vars
+dokku config:set --no-restart rec-qa PRODUCTION=true
+dokku config:set --no-restart rec-qa GOOGLE_CLIENT_ID=get-value-from-google-developer-console # modify this
+dokku config:set --no-restart rec-qa GOOGLE_CLIENT_SECRET=get-value-from-google-developer-console # modify this
+
+# Set SOURCE_REPO to your repo (modify the url)
+# This is for the link in the footer, and for the link to currently deployed branch in /api/systemInfo
+dokku config:set --no-restart rec-qa SOURCE_REPO=https://github.com/ucsb-cs156-f25/proj-rec-f25-xx 
+
+# Set ADMIN_EMAILS to staff emails and team emails
+dokku config:set --no-restart rec-qa ADMIN_EMAILS=list-of-admin-emails # modify this
+
+# git sync for first deploy (http)
+dokku git:sync rec-qa https://github.com/ucsb-cs156-f25/proj-rec-f25-xx main  # modify this 
+dokku ps:rebuild rec-qa
+
+# Enable https
+dokku letsencrypt:set rec-qa email yourEmail@ucsb.edu # modify email
+dokku letsencrypt:enable rec-qa
 ```
 
