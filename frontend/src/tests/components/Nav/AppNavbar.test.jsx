@@ -42,6 +42,120 @@ describe("AppNavbar tests", () => {
     expect(adminMenu).toBeInTheDocument();
   });
 
+  test("renders the recommendation requests for logged in users", async () => {
+    const currentUser = currentUserFixtures.userOnly;
+    const systemInfo = systemInfoFixtures.showingBoth;
+    const doLogin = vi.fn();
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <AppNavbar
+            currentUser={currentUser}
+            systemInfo={systemInfo}
+            doLogin={doLogin}
+          />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    await screen.findByText("Recommendation Request");
+    const pendingLink = screen.getByText("Recommendation Request");
+    expect(pendingLink).toBeInTheDocument();
+  });
+
+  test("does not render the recommendation requests for unlogged users", async () => {
+    const currentUser = null;
+    const systemInfo = systemInfoFixtures.showingBoth;
+    const doLogin = vi.fn();
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <AppNavbar
+            currentUser={currentUser}
+            systemInfo={systemInfo}
+            doLogin={doLogin}
+          />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    expect(
+      screen.queryByText("Recommendation Request"),
+    ).not.toBeInTheDocument();
+  });
+
+  test("request types renders correctly for admin user", async () => {
+    const currentUser = currentUserFixtures.adminUser;
+    const doLogin = vi.fn();
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <AppNavbar currentUser={currentUser} doLogin={doLogin} />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    await screen.findByText("Request Types");
+    const pendingLink = screen.getByText("Request Types");
+    expect(pendingLink).toBeInTheDocument();
+  });
+
+  test("request types does Not render for normal users", async () => {
+    const currentUser = currentUserFixtures.userOnly;
+    const systemInfo = systemInfoFixtures.showingBoth;
+    const doLogin = vi.fn();
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <AppNavbar
+            currentUser={currentUser}
+            systemInfo={systemInfo}
+            doLogin={doLogin}
+          />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    expect(screen.queryByText("Request Types")).not.toBeInTheDocument();
+  });
+  test("UCSB Rec renders correctly for regular logged in user", async () => {
+    const currentUser = currentUserFixtures.userOnly;
+    const doLogin = vi.fn();
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <AppNavbar currentUser={currentUser} doLogin={doLogin} />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    await screen.findByText("UCSB Rec");
+    const pendingLink = screen.getByText("UCSB Rec");
+    expect(pendingLink).toBeInTheDocument();
+  });
+
+  test("UCSB Rec renders correctly for admin user", async () => {
+    const currentUser = currentUserFixtures.adminUser;
+    const doLogin = vi.fn();
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <AppNavbar currentUser={currentUser} doLogin={doLogin} />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+
+    await screen.findByText("UCSB Rec");
+    const pendingLink = screen.getByText("UCSB Rec");
+    expect(pendingLink).toBeInTheDocument();
+  });
+
   test("renders H2Console and Swagger links correctly", async () => {
     const currentUser = currentUserFixtures.adminUser;
     const systemInfo = systemInfoFixtures.showingBoth;
